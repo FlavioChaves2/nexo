@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import { answerQuestion, askQuestion, updateProfile, type SocialState } from "@/app/actions/social";
 import { imageUrl } from "@/lib/images-url";
 import { Icon } from "./Icon";
+import { shrinkInput } from "@/lib/shrink-images";
 
 function Feedback({ s }: { s: SocialState }) {
   if (s?.error) return <p className="alert" role="alert">{s.error}</p>;
@@ -62,7 +63,7 @@ export function ProfileForm({ username, storeName, bio, avatarId }: { username: 
         <label className="file-drop" style={{ flex: 1 }}>
           <Icon name="camera" />
           <span className="small">Foto de perfil (JPG, PNG ou WEBP · até 3 MB)</span>
-          <input type="file" name="avatar" accept="image/jpeg,image/png,image/webp" onChange={(e) => { const f = e.target.files?.[0]; if (f) setPreview(URL.createObjectURL(f)); }} />
+          <input type="file" name="avatar" accept="image/jpeg,image/png,image/webp" onChange={async (e) => { const f = await shrinkInput(e.currentTarget); if (f) setPreview(URL.createObjectURL(f)); }} />
         </label>
       </div>
       {avatarId && <label className="check"><input type="checkbox" name="removeAvatar" />Remover foto atual</label>}

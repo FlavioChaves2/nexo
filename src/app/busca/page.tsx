@@ -29,7 +29,7 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
 
   const where: Prisma.ListingWhereInput = {
     ...visibleListing,
-    ...(q && { OR: [{ title: { contains: q } }, { description: { contains: q } }, { game: { name: { contains: q } } }] }),
+    ...(q && { OR: [{ title: { contains: q, mode: "insensitive" } }, { description: { contains: q, mode: "insensitive" } }, { game: { name: { contains: q, mode: "insensitive" } } }] }),
     ...(sp.jogo && { gameSlug: sp.jogo }),
     ...(tipo && { type: tipo }),
     ...(sp.auto === "1" && { autoDelivery: true }),

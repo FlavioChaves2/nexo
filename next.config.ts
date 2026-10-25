@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
   // Permite testar por um link temporário do Cloudflare Tunnel.
   allowedDevOrigins: ["*.trycloudflare.com"],
   experimental: {
-    serverActions: { allowedOrigins: ["*.trycloudflare.com"] },
+    serverActions: { allowedOrigins: ["*.trycloudflare.com"], bodySizeLimit: "4mb" },
   },
 };
 

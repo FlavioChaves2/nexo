@@ -1,6 +1,6 @@
 // Banco de dados da Nexo.
-// Em desenvolvimento usa SQLite (arquivo local). Para produção, troque o
-// provider para "postgresql" e aponte DATABASE_URL para o Supabase/Neon.
+// Postgres (Neon). DATABASE_URL usa a conexão com pooler (-pooler no endereço)
+// e DIRECT_URL a conexão direta, usada só para criar as tabelas (db push).
 // Valores em dinheiro são sempre centavos (Int) para evitar erro de arredondamento.
 
 generator client {
@@ -8,8 +8,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -253,7 +254,7 @@ model LoginAttempt {
   @@index([ip, createdAt])
 }
 
-// Foto enviada por usuário. O arquivo fica em uploads/<id> e é servido por /api/imagens/<id>.
+// Foto enviada por usuário, servida por /api/imagens/<id>.
 model Image {
   id        String   @id @default(cuid())
   ownerId   String
@@ -263,6 +264,7 @@ model Image {
   kind      String // ANUNCIO | AVATAR
   mime      String
   size      Int
+  data      Bytes // o arquivo em si (a Vercel não guarda arquivos em disco)
   sort      Int      @default(0)
   createdAt DateTime @default(now())
 

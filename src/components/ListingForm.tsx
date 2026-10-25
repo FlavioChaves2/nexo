@@ -6,6 +6,7 @@ import { createListing, updateListing, type ListingFormState } from "@/app/actio
 import { LISTING_TYPES, TYPE_LABEL } from "@/lib/constants";
 import { imageUrl } from "@/lib/images-url";
 import { ListingCard } from "./ListingCard";
+import { shrinkInput } from "@/lib/shrink-images";
 import { Icon } from "./Icon";
 
 const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
@@ -93,8 +94,8 @@ export function ListingForm({ games, seller, feeBps, edit }: { games: Game[]; se
                 name="images"
                 accept="image/jpeg,image/png,image/webp"
                 multiple
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
+                onChange={async (e) => {
+                  const f = await shrinkInput(e.currentTarget);
                   if (f) setPhoto(URL.createObjectURL(f));
                 }}
               />

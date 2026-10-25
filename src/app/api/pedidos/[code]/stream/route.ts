@@ -2,9 +2,11 @@ import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 
 // Chat em tempo real por Server-Sent Events: o servidor empurra mensagens novas
-// assim que chegam. A conexão dura até 5 min e o navegador reconecta sozinho.
+// assim que chegam. A conexão dura até 55 s e o navegador reconecta sozinho.
 
 export const dynamic = "force-dynamic";
+// Na Vercel cada conexão vive no máximo 60 s; o navegador reconecta sozinho.
+export const maxDuration = 60;
 
 export async function GET(req: Request, { params }: { params: Promise<{ code: string }> }) {
   const user = await getCurrentUser();
@@ -41,7 +43,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ code: st
         }
       };
       const timer = setInterval(tick, 1000);
-      const stop = setTimeout(() => end(), 5 * 60_000);
+      const stop = setTimeout(() => end(), 55_000);
       const end = () => {
         if (closed) return;
         closed = true;

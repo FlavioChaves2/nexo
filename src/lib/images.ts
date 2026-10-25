@@ -1,12 +1,9 @@
-import { mkdir, readFile, unlink, writeFile } from "node:fs/promises";
-import path from "node:path";
 import { db } from "./db";
 import { OrderError } from "./orders";
 
-// Fotos ficam em uploads/ na raiz do projeto. Em produção, troque por um
-// armazenamento de arquivos (Supabase Storage, S3, Cloudflare R2).
+// Fotos ficam no próprio banco (coluna Image.data), porque a Vercel não guarda
+// arquivos em disco. Com muito volume, troque por Supabase Storage, S3 ou R2.
 
-const DIR = path.join(process.cwd(), "uploads");
 export const MAX_IMAGE_BYTES = 3 * 1024 * 1024;
 export const MAX_LISTING_IMAGES = 5;
 
@@ -25,26 +22,17 @@ export async function saveImage(file: File, ownerId: string, kind: "ANUNCIO" | "
   const buf = Buffer.from(await file.arrayBuffer());
   const mime = sniff(buf);
   if (!mime) throw new OrderError(`"${file.name}" não é JPG, PNG ou WEBP.`);
-  const img = await db.image.create({ data: { ownerId, kind, listingId, mime, size: buf.length, sort } });
-  await mkdir(DIR, { recursive: true });
-  await writeFile(path.join(DIR, img.id), buf);
-  return img;
+  return db.image.create({ data: { ownerId, kind, listingId, mime, size: buf.length, sort, data: buf }, select: { id: true } });
 }
 
 export async function readImage(id: string) {
   if (!/^[a-z0-9]+$/i.test(id)) return null;
-  const img = await db.image.findUnique({ where: { id } });
-  if (!img) return null;
-  try {
-    return { img, data: await readFile(path.join(DIR, img.id)) };
-  } catch {
-    return null;
-  }
+  const img = await db.image.findUnique({ where: { id }, select: { mime: true, data: true } });
+  return img ? { img, data: img.data } : null;
 }
 
 export async function deleteImage(id: string) {
   await db.image.delete({ where: { id } }).catch(() => null);
-  await unlink(path.join(DIR, id)).catch(() => null);
 }
 
 /** Arquivos válidos enviados num campo <input type="file" multiple>. */

@@ -24,7 +24,7 @@ export default async function AdminAnunciosPage({ searchParams }: { searchParams
     ...(ver === "recentes" && { createdAt: { gte: new Date(Date.now() - 7 * 86_400_000) } }),
     ...(ver === "ativos" && { status: "ATIVO" }),
     ...(ver === "removidos" && { status: "REMOVIDO" }),
-    ...(q && { OR: [{ title: { contains: q } }, { description: { contains: q } }, { seller: { username: { contains: q } } }] }),
+    ...(q && { OR: [{ title: { contains: q, mode: "insensitive" } }, { description: { contains: q, mode: "insensitive" } }, { seller: { username: { contains: q, mode: "insensitive" } } }] }),
   };
   const listings = await db.listing.findMany({
     where,

@@ -24,7 +24,7 @@ export default async function UsuariosPage({ searchParams }: { searchParams: Pro
   const where: Prisma.UserWhereInput = {
     ...(ver === "verificacao" && { verification: "PENDENTE" }),
     ...(ver === "suspensos" && { suspendedAt: { not: null } }),
-    ...(q && { OR: [{ username: { contains: q } }, { email: { contains: q } }, { fullName: { contains: q } }] }),
+    ...(q && { OR: [{ username: { contains: q, mode: "insensitive" } }, { email: { contains: q, mode: "insensitive" } }, { fullName: { contains: q, mode: "insensitive" } }] }),
   };
   const users = await db.user.findMany({ where, orderBy: { createdAt: "desc" }, take: ver === "alertas" ? 300 : 100 });
   const withRisk = await Promise.all(users.map(async (u) => ({ u, risk: await riskFlags(u.id) })));
