@@ -457,9 +457,17 @@ body { background:
 .cards > .card:nth-child(4) { animation-delay: .12s; } .cards > .card:nth-child(5) { animation-delay: .16s; }
 .cards > .card:nth-child(6) { animation-delay: .2s; } .cards > .card:nth-child(7) { animation-delay: .24s; }
 .cards > .card:nth-child(8) { animation-delay: .28s; }
-.card::before { content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; background: linear-gradient(140deg, rgba(197, 240, 74, .7), transparent 40%, transparent 60%, rgba(197, 240, 74, .35)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity .25s; pointer-events: none; z-index: 2; }
+/* tom da borda por tipo de produto */
+.card { --tone: 197, 240, 74; border-color: rgba(var(--tone), .28); }
+.card[data-type="MOEDA"] { --tone: 242, 201, 76; }
+.card[data-type="ITEM"] { --tone: 79, 214, 190; }
+.card[data-type="GIFT"] { --tone: 255, 138, 101; }
+.card[data-type="SERVICO"] { --tone: 167, 150, 255; }
+.card::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: linear-gradient(90deg, transparent, rgb(var(--tone)), transparent); opacity: .75; pointer-events: none; z-index: 2; }
+.card .eyebrow { color: rgb(var(--tone)); }
+.card::before { content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; background: linear-gradient(140deg, rgba(var(--tone), .8), transparent 40%, transparent 60%, rgba(var(--tone), .4)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity .25s; pointer-events: none; z-index: 2; }
 .card:hover::before { opacity: 1; }
-.card:hover { box-shadow: 0 18px 40px -12px rgba(0, 0, 0, .7), 0 0 0 1px rgba(197, 240, 74, .08), 0 12px 40px -18px rgba(197, 240, 74, .45); }
+.card:hover { border-color: rgba(var(--tone), .55); box-shadow: 0 18px 40px -12px rgba(0, 0, 0, .7), 0 0 0 1px rgba(var(--tone), .08), 0 12px 40px -18px rgba(var(--tone), .45); }
 .thumb .art, .thumb img.photo { transition: transform .5s cubic-bezier(.2, .8, .2, 1); }
 .card:hover .thumb .art, .card:hover .thumb img.photo { transform: scale(1.06); }
 .card:hover .art .glyph { text-shadow: 3px 4px 0 rgba(0, 0, 0, .38), 0 0 26px rgba(255, 255, 255, .35); }

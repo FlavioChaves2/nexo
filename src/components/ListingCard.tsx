@@ -19,7 +19,7 @@ export function ListingCard({ l, fav = false, preview = false, previewImage }: {
   const photo = previewImage ?? (l.images?.[0] ? imageUrl(l.images[0].id) : null);
   const s = l.seller;
   return (
-    <article className="card">
+    <article className="card" data-type={l.type}>
       {!preview && <Link className="card-link" href={`/anuncio/${l.id}`} aria-label={l.title} />}
       <div className="thumb">
         {photo ? <img className="photo" src={photo} alt="" loading="lazy" /> : <Art game={l.game} glyph={l.glyph} />}
