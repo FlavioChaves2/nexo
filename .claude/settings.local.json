@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(winget install --id Cloudflare.cloudflared --accept-package-agreements --accept-source-agreements --silent)"
+    ]
+  }
+}

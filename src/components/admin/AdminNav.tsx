@@ -1,0 +1,30 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+export function AdminNav({ disputes, withdrawals, reports, verifications }: { disputes: number; withdrawals: number; reports: number; verifications: number }) {
+  const path = usePathname();
+  const items = [
+    { href: "/admin", label: "Visão geral", n: 0 },
+    { href: "/admin/disputas", label: "Disputas", n: disputes },
+    { href: "/admin/saques", label: "Saques", n: withdrawals },
+    { href: "/admin/denuncias", label: "Denúncias", n: reports },
+    { href: "/admin/usuarios", label: "Usuários", n: verifications },
+    { href: "/admin/anuncios", label: "Anúncios", n: 0 },
+    { href: "/admin/cupons", label: "Cupons", n: 0 },
+  ];
+  return (
+    <nav className="tabs" aria-label="Painel de admin">
+      {items.map((i) => {
+        const on = i.href === "/admin" ? path === "/admin" : path.startsWith(i.href);
+        return (
+          <Link key={i.href} href={i.href} className={on ? "on" : undefined}>
+            {i.label}
+            {i.n > 0 && <span className="badge">{i.n}</span>}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}

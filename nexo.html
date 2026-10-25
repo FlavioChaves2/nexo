@@ -1,0 +1,1305 @@
+<title>Nexo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: marketplace escuro de tema único. Faixa de conceito, cabeçalho fixo com busca e abas por tipo, hero em painel com o asterisco 3D, vitrines em grade; páginas internas em duas colunas que empilham no celular */
+:root {
+  --bg: #111311;
+  --surface: #181B17;
+  --surface-2: #20241F;
+  --surface-3: #282D26;
+  --ink: #F1F4EC;
+  --muted: #959C8F;
+  --line: #2A2F28;
+  --accent: #C5F04A;
+  --accent-hover: #D5F86E;
+  --accent-ink: #12160A;
+  --accent-soft: #232B13;
+  --accent-deep: #4F6B1C;
+  --moss: #1B2414;
+  --ok: #5BD68B;
+  --ok-soft: #16301F;
+  --danger: #FF6B6B;
+  --danger-soft: #3A1C1C;
+  --shadow: 0 16px 40px rgba(0, 0, 0, .45);
+  --qr-bg: #FFFFFF;
+  --qr-ink: #111311;
+
+  --f-display: "Sora", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 18px;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 30; background: var(--bg);
+}
+a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font: inherit; color: inherit; }
+h1, h2, h3 { font-family: var(--f-display); line-height: 1.12; text-wrap: balance; margin: 0; letter-spacing: -0.025em; font-weight: 600; }
+h1 { font-size: clamp(32px, 5vw, 52px); }
+h2 { font-size: clamp(22px, 2.8vw, 26px); }
+h3 { font-size: 17px; }
+p { margin: 0; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.num { font-variant-numeric: tabular-nums; }
+.mono { font-family: var(--f-mono); }
+.muted { color: var(--muted); }
+.lime { color: var(--accent); }
+.eyebrow { font-family: var(--f-display); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.eyebrow.dim { color: var(--muted); }
+
+.wrap {
+  max-width: 1260px; margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+.ic { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ic.fill { fill: currentColor; stroke: none; }
+
+/* ---------- Logo ---------- */
+.logo { display: inline-flex; align-items: flex-start; gap: 3px; color: var(--ink); }
+.logo svg { height: 26px; width: auto; display: block; }
+.logo sup { font-size: 10px; font-weight: 700; line-height: 1; margin-top: -3px; }
+
+/* ---------- Faixa de conceito ---------- */
+.concept { background: var(--moss); border-bottom: 1px solid var(--line); font-size: 11.5px; }
+.concept .wrap { display: flex; justify-content: center; gap: 6px 18px; flex-wrap: wrap; padding-block: 8px; text-align: center; }
+.concept b { font-family: var(--f-display); letter-spacing: .14em; font-size: 10.5px; color: var(--accent); }
+.concept span { color: color-mix(in srgb, var(--accent) 70%, var(--ink)); font-weight: 600; }
+
+/* ---------- Cabeçalho ---------- */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+.top-inner { display: grid; grid-template-columns: auto 1fr auto; grid-template-areas: "logo busca acoes"; align-items: center; gap: 28px; padding-block: 16px; }
+.top-inner > .logo { grid-area: logo; }
+.search { grid-area: busca; display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 0 14px; min-width: 0; transition: border-color .15s; }
+.search:focus-within { border-color: var(--accent); }
+.search .ic { color: var(--muted); width: 17px; height: 17px; }
+.search input { flex: 1; min-width: 0; border: 0; background: transparent; padding: 13px 0; outline: none; }
+.search input::placeholder { color: var(--muted); }
+.search kbd { font-family: var(--f-mono); font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; }
+.acoes { grid-area: acoes; display: flex; align-items: center; gap: 6px; }
+.icon-btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 12px; border-radius: 10px; border: 0; background: transparent; font-weight: 600; cursor: pointer; white-space: nowrap; font-size: 14.5px; }
+.icon-btn:hover { background: var(--surface-2); }
+.icon-btn sub { font-size: 11px; font-weight: 700; color: var(--muted); }
+.icon-btn.has sub { color: var(--accent); }
+.btn-vender { margin-left: 8px; }
+.tabs-nav { border-top: 1px solid var(--line); }
+.tabs-nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.tabs-nav ul { display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; overflow-x: auto; scrollbar-width: none; }
+.tabs-nav ul a { display: block; padding: 14px 8px 12px; font-size: 14.5px; font-weight: 500; color: var(--muted); white-space: nowrap; border-bottom: 2px solid transparent; }
+.tabs-nav ul a:hover { color: var(--ink); }
+.tabs-nav ul a.on { color: var(--accent); border-color: var(--accent); font-weight: 600; }
+.tagline { font-family: var(--f-display); font-size: 10.5px; font-weight: 700; letter-spacing: .16em; white-space: nowrap; display: inline-flex; gap: 10px; align-items: center; }
+.tagline .ic { width: 13px; height: 13px; color: var(--accent); }
+
+@media (max-width: 860px) {
+  .top-inner { grid-template-columns: auto 1fr; grid-template-areas: "logo acoes" "busca busca"; gap: 12px; padding-block: 12px; }
+  .acoes { justify-content: flex-end; }
+  .icon-btn .lbl, .search kbd, .tagline { display: none; }
+  .btn-vender { margin-left: 0; }
+}
+
+/* ---------- Botões e chips ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; border: 0; cursor: pointer; border-radius: 8px; padding: 13px 20px; font-weight: 700; font-size: 15px; transition: background .15s, transform .15s; white-space: nowrap; }
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-ghost { background: var(--surface-2); color: var(--ink); border: 1px solid var(--line); }
+.btn-ghost:hover { background: var(--surface-3); }
+.btn-block { width: 100%; }
+.btn:active { transform: translateY(1px); }
+.btn .ic { width: 16px; height: 16px; }
+.chip { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 800; letter-spacing: .04em; padding: 3px 8px; border-radius: 6px; background: var(--surface-3); color: var(--muted); white-space: nowrap; }
+.chip.auto { background: var(--accent-soft); color: var(--accent); }
+.chip.ok { background: var(--ok-soft); color: var(--ok); }
+.chip.bad { background: var(--danger-soft); color: var(--danger); }
+.chip .ic { width: 12px; height: 12px; }
+.linkish { color: var(--ink); font-weight: 600; background: none; border: 0; padding: 0; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.linkish:hover { color: var(--accent); }
+.linkish .ic { width: 14px; height: 14px; }
+.pill { border: 1px solid var(--line); background: transparent; border-radius: 99px; padding: 8px 16px; font-size: 13.5px; font-weight: 500; cursor: pointer; transition: border-color .15s, background .15s; }
+.pill:hover { border-color: var(--muted); }
+.pill[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.input, select.input, textarea.input { width: 100%; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 11px 13px; outline: none; }
+.input:focus { border-color: var(--accent); }
+select.input { cursor: pointer; }
+
+/* ---------- Seções ---------- */
+main { min-height: 60vh; }
+.section { padding-block: 26px; display: grid; gap: 20px; }
+.section-head { display: flex; align-items: end; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.section-head h2 { display: flex; align-items: center; gap: 10px; }
+.section-head h2 .ic { color: var(--accent); width: 20px; height: 20px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); }
+
+/* Hero */
+.hero { margin-top: 30px; position: relative; overflow: hidden; border-radius: 22px; border: 1px solid #2E3A22;
+  background: radial-gradient(60% 90% at 78% 45%, #2C3D16 0%, transparent 70%), radial-gradient(50% 80% at 10% 100%, #1A2412 0%, transparent 70%), #151A12;
+  display: grid; grid-template-columns: 1.05fr 1fr; align-items: center; min-height: 400px; }
+.hero-copy { padding: 44px 0 34px 44px; display: grid; gap: 22px; position: relative; z-index: 1; min-width: 0; }
+.hero-copy .eyebrow { display: inline-flex; align-items: center; gap: 10px; }
+.hero-copy .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+.hero-copy h1 em { font-style: normal; color: var(--accent); }
+.hero-copy > p { font-size: 16px; color: color-mix(in srgb, var(--ink) 80%, transparent); max-width: 46ch; }
+.hero-ctas { display: flex; gap: 10px; flex-wrap: wrap; }
+.hero-meta { display: flex; gap: 28px; font-family: var(--f-display); font-size: 10px; letter-spacing: .16em; color: var(--muted); font-weight: 600; padding-top: 6px; }
+.hero-art { position: relative; height: 100%; min-height: 360px; }
+.hero-art svg.star { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero-art .float { transform-box: fill-box; transform-origin: 50% 50%; animation: flutua 7s ease-in-out infinite; }
+@keyframes flutua { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-10px) rotate(4deg); } }
+.htag { position: absolute; font-family: var(--f-display); font-size: 10.5px; font-weight: 700; letter-spacing: .12em; padding: 8px 14px; border: 1px solid #4A5E2A; border-radius: 6px; background: rgba(20, 26, 16, .75); color: #E6F3C4; white-space: nowrap; backdrop-filter: blur(4px); }
+.htag.t1 { top: 13%; right: 6%; transform: rotate(6deg); }
+.htag.t2 { bottom: 20%; left: 6%; transform: rotate(-7deg); }
+.hero-art .corner { position: absolute; bottom: 26px; font-family: var(--f-display); font-size: 10px; letter-spacing: .18em; color: var(--muted); font-weight: 600; }
+.hero-art .c1 { left: 6%; }
+.hero-art .c2 { right: 28px; }
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-copy { padding: 30px 22px 6px; }
+  .hero-art { min-height: 280px; }
+}
+
+/* Faixa de vantagens */
+.perks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding-block: 26px; border-bottom: 1px solid var(--line); }
+.perk { display: flex; gap: 14px; align-items: flex-start; }
+.perk .ic { color: var(--accent); width: 24px; height: 24px; margin-top: 4px; }
+.perk b { display: block; font-size: 14px; }
+.perk span { font-size: 13px; color: var(--muted); }
+@media (max-width: 760px) { .perks { grid-template-columns: 1fr; gap: 16px; } }
+
+/* Universos (jogos) */
+.unis { display: grid; grid-template-columns: repeat(auto-fill, minmax(178px, 1fr)); gap: 12px; }
+.uni { display: flex; align-items: center; gap: 12px; padding: 16px 14px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); transition: border-color .15s, transform .15s; min-width: 0; }
+.uni:hover { border-color: color-mix(in srgb, var(--c1) 60%, var(--line)); transform: translateY(-2px); }
+.uni .letra { font-family: var(--f-display); font-weight: 800; font-size: 26px; line-height: 1; color: var(--c1); letter-spacing: -0.04em; flex: none; min-width: 26px; }
+.uni b { display: block; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.uni small { font-size: 12px; color: var(--muted); display: inline-flex; align-items: center; gap: 3px; }
+.uni small .ic { width: 11px; height: 11px; }
+.uni > div { min-width: 0; }
+
+/* Arte gerada das miniaturas */
+.art { position: absolute; inset: 0; overflow: hidden;
+  background:
+    radial-gradient(55% 75% at 55% 38%, color-mix(in srgb, var(--c1) 55%, transparent) 0%, transparent 72%),
+    linear-gradient(150deg, var(--c2) 0%, #121412 100%);
+}
+.art::before { content: ""; position: absolute; width: 74%; aspect-ratio: 1; left: 13%; top: -12%; border: 1.5px solid rgba(255, 255, 255, .16); border-radius: 22%; transform: rotate(45deg); }
+.art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(10, 12, 10, .55)); }
+.art .glyph { position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%) rotate(-7deg) skewX(-6deg); font-family: var(--f-display); font-weight: 800; font-size: clamp(34px, 5vw, 56px); letter-spacing: -0.05em; color: #F4F5F0; text-shadow: 3px 4px 0 rgba(0, 0, 0, .38); line-height: 1; white-space: nowrap; z-index: 1; }
+.art .gname { position: absolute; left: 14px; bottom: 11px; font-family: var(--f-display); font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: rgba(255, 255, 255, .78); z-index: 1; }
+
+/* Cards de anúncio */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(158px, 1fr)); gap: 12px; }
+@media (min-width: 600px) { .cards { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 18px; } }
+.card { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; display: flex; flex-direction: column; transition: transform .18s, border-color .18s, box-shadow .18s; min-width: 0; }
+.card:hover { transform: translateY(-3px); border-color: #3E4A2E; box-shadow: var(--shadow); }
+.card-link { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.thumb { position: relative; aspect-ratio: 16 / 9; max-width: 100%; overflow: hidden; }
+.fav { position: absolute; top: 10px; right: 10px; z-index: 2; width: 30px; height: 30px; border-radius: 50%; border: 0; display: grid; place-items: center; background: rgba(12, 14, 12, .7); color: #F1F4EC; cursor: pointer; transition: transform .15s; }
+.fav:hover { transform: scale(1.08); }
+.fav .ic { width: 15px; height: 15px; }
+.fav[aria-pressed="true"] { color: var(--accent); }
+.fav[aria-pressed="true"] .ic { fill: currentColor; }
+.card-body { padding: 16px 16px 0; display: grid; gap: 10px; flex: 1; align-content: start; }
+.card-title { font-weight: 600; font-size: 15px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.7em; }
+.card-seller { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); min-width: 0; }
+.card-seller .nome { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
+.card-seller .rate { font-weight: 700; color: var(--ink); white-space: nowrap; font-size: 11.5px; }
+.card-foot { display: flex; align-items: end; justify-content: space-between; gap: 10px; margin: 14px 16px 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.card-foot small { display: block; font-size: 11px; color: var(--muted); }
+.price { font-family: var(--f-display); font-weight: 700; font-size: 22px; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; line-height: 1.15; }
+.price-old { font-size: 12px; color: var(--muted); text-decoration: line-through; margin-left: 4px; font-weight: 500; }
+.go { width: 38px; height: 38px; border-radius: 8px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); flex: none; border: 1px solid #34431B; transition: background .15s, color .15s; }
+.card:hover .go { background: var(--accent); color: var(--accent-ink); }
+.go .ic { width: 15px; height: 15px; }
+.avatar { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 10px; font-weight: 800; color: var(--ink); background: var(--surface-3); flex: none; font-family: var(--f-display); border: 1px solid var(--line); }
+.verified { color: var(--accent); display: inline-flex; }
+.verified .ic { width: 14px; height: 14px; }
+@media (max-width: 599px) {
+  .card-body { padding: 12px 12px 0; }
+  .card-foot { margin: 10px 12px 12px; padding-top: 10px; }
+  .price { font-size: 18px; }
+  .go { width: 32px; height: 32px; }
+  .card-title { font-size: 13.5px; }
+}
+
+/* Garantia */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.step { padding: 20px; display: grid; gap: 10px; align-content: start; position: relative; }
+.step .n { font-family: var(--f-mono); font-size: 12px; font-weight: 700; color: var(--accent); }
+.step b { font-family: var(--f-display); font-size: 16px; font-weight: 600; }
+.step p { font-size: 13.5px; color: var(--muted); }
+.step.hl { border-color: #3E4A2E; background: linear-gradient(160deg, #1D2614, var(--surface)); }
+@media (max-width: 900px) { .steps { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .steps { grid-template-columns: 1fr; } }
+
+/* Faixa de vendedor */
+.sell-band { display: grid; grid-template-columns: 1.2fr 1fr; gap: 28px; padding: 34px; align-items: center; border-radius: 22px; border: 1px solid #2E3A22; background: radial-gradient(70% 120% at 100% 0%, #26341A, transparent 70%), #151A12; }
+.sell-band p { color: color-mix(in srgb, var(--ink) 75%, transparent); }
+.sell-facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.sell-facts div { padding: 16px 14px; border-radius: 12px; border: 1px solid #34431B; background: rgba(12, 14, 10, .4); }
+.sell-facts b { display: block; font-family: var(--f-display); font-size: 24px; color: var(--accent); letter-spacing: -0.03em; }
+.sell-facts span { font-size: 12.5px; color: var(--muted); }
+@media (max-width: 760px) { .sell-band { grid-template-columns: 1fr; padding: 24px; } }
+@media (max-width: 420px) { .sell-facts { grid-template-columns: 1fr; } }
+
+/* ---------- Busca ---------- */
+.catalog { display: grid; grid-template-columns: 250px 1fr; gap: 24px; align-items: start; padding-block: 26px; }
+.filters { padding: 18px; display: grid; gap: 18px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 140px); }
+.filters fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; }
+.filters legend { font-weight: 700; font-size: 13px; margin-bottom: 6px; padding: 0; }
+.check { display: flex; align-items: center; gap: 9px; font-size: 14px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; }
+.check small { margin-left: auto; color: var(--muted); font-family: var(--f-mono); font-size: 11px; }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.filters .pill { padding: 6px 12px; font-size: 13px; }
+.field { display: grid; gap: 6px; }
+.field label { font-size: 13px; font-weight: 600; }
+.results-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.results-head select { width: auto; }
+.empty { padding: 40px 20px; text-align: center; display: grid; gap: 10px; justify-items: center; }
+.filters-toggle { display: none; }
+@media (max-width: 860px) {
+  .catalog { grid-template-columns: 1fr; }
+  .filters { position: static; }
+  .filters[data-open="false"] > :not(.filters-toggle) { display: none; }
+  .filters-toggle { display: flex; justify-content: space-between; align-items: center; background: none; border: 0; padding: 0; font-weight: 700; cursor: pointer; }
+}
+
+/* ---------- Anúncio ---------- */
+.crumbs { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--muted); padding-top: 22px; }
+.crumbs a:hover { color: var(--accent); }
+.two-col { display: grid; grid-template-columns: minmax(0, 1fr) 370px; gap: 24px; align-items: start; padding-block: 16px 32px; }
+.two-col > * { min-width: 0; }
+.stack { display: grid; gap: 18px; }
+.media { position: relative; aspect-ratio: 16 / 8; max-width: 100%; border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--line); }
+.media .art .glyph { font-size: clamp(70px, 12vw, 140px); }
+.media .tags { position: absolute; right: 16px; bottom: 14px; display: flex; gap: 8px; flex-wrap: wrap; z-index: 2; }
+.box { padding: 22px; display: grid; gap: 14px; }
+.buybox { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 140px); }
+.buybox .price { font-size: 32px; }
+.stepper { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 8px; }
+.stepper button { width: 38px; height: 38px; border: 0; background: transparent; font-size: 18px; cursor: pointer; }
+.stepper output { min-width: 36px; text-align: center; font-family: var(--f-mono); font-weight: 700; }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 9px 16px; font-size: 14px; margin: 0; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; text-align: right; font-weight: 600; }
+.note { display: flex; gap: 10px; padding: 12px 14px; border-radius: 10px; font-size: 13.5px; background: var(--accent-soft); border: 1px solid #34431B; }
+.note .ic { color: var(--accent); margin-top: 2px; }
+.note.warn { background: var(--danger-soft); border-color: #522828; }
+.note.warn .ic { color: var(--danger); }
+.prose { display: grid; gap: 10px; max-width: 68ch; }
+.prose ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.prose li::marker { color: var(--accent); }
+.seller-mini { display: flex; align-items: center; gap: 12px; }
+.seller-mini .avatar { width: 46px; height: 46px; font-size: 18px; border-radius: 12px; }
+.seller-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; }
+.seller-stats div { padding: 10px 6px; border-radius: 8px; background: var(--surface-2); }
+.seller-stats b { display: block; font-family: var(--f-display); font-size: 15px; }
+.seller-stats span { font-size: 11.5px; color: var(--muted); }
+.level { font-family: var(--f-display); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 3px 8px; border-radius: 5px; }
+.level.diamante { background: var(--accent); color: var(--accent-ink); }
+.level.ouro { background: var(--accent-soft); color: var(--accent); }
+.level.prata { background: var(--surface-3); color: var(--muted); }
+.review { display: grid; gap: 6px; padding-block: 14px; border-top: 1px solid var(--line); }
+.review:first-of-type { border-top: 0; padding-top: 0; }
+.stars { color: var(--accent); display: inline-flex; gap: 1px; }
+.stars .ic { width: 14px; height: 14px; }
+.stars .off { color: var(--surface-3); }
+@media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } .buybox { position: static; } }
+
+/* ---------- Checkout ---------- */
+.methods { display: grid; gap: 10px; }
+.method { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; background: var(--surface); }
+.method:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.method input { accent-color: var(--accent); width: 18px; height: 18px; }
+.method small { color: var(--muted); display: block; font-size: 13px; }
+.method.off { opacity: .5; cursor: not-allowed; }
+.pix { display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: center; padding: 18px; border-radius: 12px; background: var(--surface-2); }
+.pix canvas { width: 168px; height: 168px; border-radius: 10px; display: block; max-width: 100%; }
+.pix-code { display: flex; gap: 8px; min-width: 0; }
+.pix-code input { font-family: var(--f-mono); font-size: 12px; min-width: 0; }
+.timer { font-family: var(--f-mono); font-weight: 700; color: var(--accent); }
+.mini { display: grid; grid-template-columns: 72px 1fr; gap: 12px; align-items: center; }
+.mini .thumb { border-radius: 8px; }
+.mini .art .glyph { font-size: 18px; }
+.mini .art::before { display: none; }
+@media (max-width: 520px) { .pix { grid-template-columns: 1fr; justify-items: center; text-align: center; } .pix > div { width: 100%; } }
+
+/* ---------- Pedido ---------- */
+.order-head { display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; padding-top: 26px; }
+.chat { display: grid; grid-template-rows: auto 1fr auto; height: 520px; overflow: hidden; }
+.chat-head { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+.online { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; box-shadow: 0 0 8px var(--accent); }
+.msgs { overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+.msg { max-width: 78%; padding: 10px 14px; border-radius: 14px; font-size: 14px; overflow-wrap: anywhere; }
+.msg time { display: block; font-size: 11px; opacity: .65; margin-top: 3px; font-family: var(--f-mono); }
+.msg.vend { background: var(--surface-2); border-bottom-left-radius: 4px; align-self: flex-start; }
+.msg.eu { background: var(--accent); color: var(--accent-ink); border-bottom-right-radius: 4px; align-self: flex-end; font-weight: 500; }
+.msg.sis { align-self: center; max-width: 92%; text-align: center; font-size: 12.5px; color: var(--muted); background: transparent; border: 1px dashed var(--line); border-radius: 10px; }
+.typing { align-self: flex-start; font-size: 12.5px; color: var(--muted); }
+.chat-form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line); }
+.chat-form input { flex: 1; min-width: 0; }
+.flow { list-style: none; margin: 0; padding: 0; display: grid; counter-reset: passo; }
+.flow li { display: grid; grid-template-columns: 34px 1fr auto; gap: 12px; align-items: start; padding-block: 10px; position: relative; }
+.flow li::before { counter-increment: passo; content: counter(passo); width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-family: var(--f-mono); font-weight: 700; font-size: 12px; background: var(--surface-2); color: var(--muted); position: relative; z-index: 1; border: 1px solid var(--line); }
+.flow li:not(:last-child)::after { content: ""; position: absolute; left: 14.5px; top: 40px; bottom: -10px; width: 1px; background: var(--line); }
+.flow li.done::before { content: "✓"; background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.flow li.now::before { border-color: var(--accent); color: var(--accent); }
+.flow strong { display: block; font-size: 14.5px; }
+.flow span { font-size: 13px; color: var(--muted); }
+.flow time { font-family: var(--f-mono); font-size: 12px; color: var(--muted); padding-top: 5px; }
+.hold { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; background: var(--surface-2); font-size: 14px; flex-wrap: wrap; }
+.hold b { font-family: var(--f-display); }
+.delivery { font-family: var(--f-mono); font-size: 13px; display: grid; gap: 8px; padding: 14px; border-radius: 10px; background: var(--surface-2); }
+.delivery div { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.rate-row { display: flex; gap: 4px; }
+.rate-row button { background: none; border: 0; padding: 2px; cursor: pointer; color: var(--surface-3); }
+.rate-row button.on { color: var(--accent); }
+.rate-row .ic { width: 28px; height: 28px; }
+
+/* ---------- Vendedor ---------- */
+.profile { padding: 28px; display: grid; grid-template-columns: auto 1fr auto; gap: 22px; align-items: center; margin-top: 26px; background: radial-gradient(60% 140% at 100% 0%, #222E16, transparent 70%), var(--surface); }
+.profile .avatar { width: 84px; height: 84px; border-radius: 20px; font-size: 34px; background: var(--accent); color: var(--accent-ink); border: 0; }
+.profile-stats { display: flex; gap: 26px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.profile-stats b { display: block; color: var(--ink); font-family: var(--f-display); font-size: 18px; }
+.tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--line); }
+.tabs button { background: none; border: 0; padding: 12px 10px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tabs button[aria-selected="true"] { color: var(--accent); border-color: var(--accent); }
+@media (max-width: 680px) { .profile { grid-template-columns: auto 1fr; } .profile > .btn { grid-column: 1 / -1; } .profile .avatar { width: 62px; height: 62px; font-size: 26px; border-radius: 16px; } }
+
+/* ---------- Vender ---------- */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-grid .full { grid-column: 1 / -1; }
+.switch { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; }
+.switch input { accent-color: var(--accent); width: 18px; height: 18px; }
+.calc { font-family: var(--f-mono); font-size: 13.5px; display: grid; gap: 6px; padding: 14px; border-radius: 10px; background: var(--surface-2); }
+.calc div { display: flex; justify-content: space-between; gap: 8px; }
+.calc .total { border-top: 1px dashed var(--line); padding-top: 8px; font-weight: 700; color: var(--accent); }
+@media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+
+/* ---------- Identidade ---------- */
+.brand-hero { padding-block: 36px 8px; display: grid; gap: 14px; }
+.brand-hero p { max-width: 64ch; color: var(--muted); font-size: 16px; }
+.logo-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+.logo-tile { border-radius: var(--r-lg); padding: 36px 24px 22px; display: grid; place-items: center; gap: 18px; min-height: 210px; border: 1px solid var(--line); }
+.logo-tile svg { height: 52px; width: auto; max-width: 100%; }
+.logo-tile small { font-size: 11px; font-family: var(--f-mono); opacity: .7; }
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+.swatch { border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); background: var(--surface); }
+.swatch .chipc { height: 96px; border-bottom: 1px solid var(--line); }
+.swatch div:last-child { padding: 12px; display: grid; gap: 2px; font-size: 13px; }
+.swatch b { font-size: 14px; }
+.swatch code { font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+.type-specimen { display: grid; gap: 12px; }
+.type-row { display: grid; grid-template-columns: 210px 1fr; gap: 20px; padding: 22px; align-items: baseline; }
+.type-row > div:last-child { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 640px) { .type-row { grid-template-columns: 1fr; gap: 8px; } }
+.voice { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.voice .box p { font-size: 14px; }
+@media (max-width: 640px) { .voice { grid-template-columns: 1fr; } }
+
+/* ---------- Rodapé, toast ---------- */
+footer { margin-top: 44px; border-top: 1px solid var(--line); background: var(--surface); }
+.foot { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 24px; padding-block: 36px; font-size: 14px; }
+.foot h4 { margin: 0 0 12px; font-family: var(--f-display); font-size: 10.5px; text-transform: uppercase; letter-spacing: .16em; color: var(--accent); }
+.foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; color: var(--muted); }
+.foot a:hover { color: var(--ink); }
+.foot-bottom { border-top: 1px solid var(--line); padding-block: 16px; font-size: 12.5px; color: var(--muted); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+@media (max-width: 760px) { .foot { grid-template-columns: 1fr 1fr; } .foot > div:first-child { grid-column: 1 / -1; } }
+
+.toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px); background: var(--accent); color: var(--accent-ink); padding: 12px 18px; border-radius: 10px; font-weight: 700; font-size: 14px; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 50; max-width: calc(100% - 32px); text-align: center; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="concept">
+  <div class="wrap"><b>VERSÃO CONCEITO</b><span>Explore o marketplace · Produtos e vendedores fictícios · Sem transações reais</span></div>
+</div>
+
+<header class="top">
+  <div class="wrap top-inner">
+    <a class="logo" href="#home" aria-label="Nexo, página inicial"><span class="logo-slot"></span><sup>®</sup></a>
+    <form class="search" id="topSearch" role="search">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="topQ" type="search" placeholder="O que você quer encontrar hoje?" aria-label="Buscar na Nexo">
+      <kbd>↵</kbd>
+    </form>
+    <nav class="acoes" aria-label="Conta">
+      <button class="icon-btn" type="button" id="favBtn" aria-label="Favoritos"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><sub id="favCount">0</sub></button>
+      <a class="icon-btn" href="#pedido"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="lbl">Pedidos</span></a>
+      <a class="icon-btn" href="#vendedor-1"><span class="lbl">Área do vendedor</span></a>
+      <a class="btn btn-primary btn-vender" href="#vender">+ Vender</a>
+    </nav>
+  </div>
+  <nav class="tabs-nav" aria-label="Categorias">
+    <div class="wrap">
+      <ul id="tabsNav"></ul>
+      <span class="tagline">FEITO PARA QUEM JOGA <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+    </div>
+  </nav>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <div class="wrap foot">
+    <div style="display:grid;gap:14px;align-content:start">
+      <a class="logo" href="#home" aria-label="Nexo"><span class="logo-slot"></span><sup>®</sup></a>
+      <p class="muted" style="max-width:36ch">De jogador para jogador. O dinheiro só chega ao vendedor depois que você recebe.</p>
+    </div>
+    <div><h4>Comprar</h4><ul><li><a href="#busca">Todos os anúncios</a></li><li><a href="#tipo-gift">Gift cards</a></li><li><a href="#pedido">Meus pedidos</a></li></ul></div>
+    <div><h4>Vender</h4><ul><li><a href="#vender">Criar anúncio</a></li><li><a href="#vendedor-1">Exemplo de loja</a></li><li><a href="#" data-toast="Página de taxas entra na etapa do MVP.">Taxas e saques</a></li></ul></div>
+    <div><h4>Nexo</h4><ul><li><a href="#identidade">Identidade visual</a></li><li><a href="#" data-toast="Termos de uso serão escritos com um advogado.">Termos de uso</a></li><li><a href="#" data-toast="Política de privacidade (LGPD) entra no lançamento.">Privacidade</a></li></ul></div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span>Versão conceito. Anúncios, lojas, números e pagamentos são exemplos; nada aqui é real.</span>
+    <span>© 2026 Nexo · Play. Trade. Repeat.</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const BRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+const fmt = v => BRL.format(v);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const $ = s => document.querySelector(s);
+
+/* Logo: N com a diagonal em lima (a conexão), E, X e O geométricos */
+const logoSVG = (ink = 'currentColor', lima = 'var(--accent)') => `<svg viewBox="0 0 106 28" aria-hidden="true">
+  <rect x="0" y="0" width="6" height="28" fill="${ink}"/><rect x="18" y="0" width="6" height="28" fill="${ink}"/>
+  <polygon points="0,0 6.6,0 24,28 17.4,28" fill="${lima}"/>
+  <rect x="30" y="0" width="6" height="28" fill="${ink}"/><rect x="30" y="0" width="18" height="6" fill="${ink}"/><rect x="30" y="11" width="15" height="6" fill="${ink}"/><rect x="30" y="22" width="18" height="6" fill="${ink}"/>
+  <polygon points="52,0 59,0 75,28 68,28" fill="${ink}"/><polygon points="75,0 68,0 52,28 59,28" fill="${ink}"/>
+  <rect x="82" y="3" width="21" height="22" rx="10" fill="none" stroke="${ink}" stroke-width="6"/>
+</svg>`;
+document.querySelectorAll('.logo-slot').forEach(el => el.outerHTML = logoSVG());
+
+const ICONS = {
+  search: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
+  shield: '<path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+  check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  chat: '<path d="M4 5h16v11H9l-5 4z"/>',
+  alert: '<path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17.5v.01"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  arrow: '<path d="M7 17L17 7M9 7h8v8"/>',
+  copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
+  send: '<path d="M4 12l16-8-6 16-2.5-6.5z"/>',
+  eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  heart: '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',
+  diamond: '<path d="M12 3l9 9-9 9-9-9z"/>',
+  swap: '<path d="M4 8h15l-4-4M20 16H5l4 4"/>',
+  verified: '<path d="M12 2.5l2.4 1.8 3-.2.9 2.9 2.4 1.8-1 2.8 1 2.8-2.4 1.8-.9 2.9-3-.2L12 21.5l-2.4-1.8-3 .2-.9-2.9-2.4-1.8 1-2.8-1-2.8 2.4-1.8.9-2.9 3 .2z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>'
+};
+const FILLED = {
+  bolt: '<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',
+  star: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
+  spark: '<path d="M12 2c.6 4.6 2.4 6.9 7 8-4.6 1.1-6.4 3.4-7 8-.6-4.6-2.4-6.9-7-8 4.6-1.1 6.4-3.4 7-8z"/>'
+};
+const ic = n => FILLED[n]
+  ? `<svg class="ic fill" viewBox="0 0 24 24" aria-hidden="true">${FILLED[n]}</svg>`
+  : `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]}</svg>`;
+
+/* ---------- Dados de exemplo ---------- */
+const JOGOS = [
+  { id: 'roblox', nome: 'Roblox', letra: 'R', sigla: 'RBX', c1: '#9C7BFF', c2: '#2A1F4D', qtd: 5240 },
+  { id: 'valorant', nome: 'Valorant', letra: 'V', sigla: 'V', c1: '#FF5A6A', c2: '#4A1620', qtd: 4120 },
+  { id: 'lol', nome: 'League of Legends', letra: 'L', sigla: 'L', c1: '#D4B26A', c2: '#3A3018', qtd: 3310 },
+  { id: 'freefire', nome: 'Free Fire', letra: 'FF', sigla: 'FF', c1: '#FF9A3D', c2: '#4D2A10', qtd: 9870 },
+  { id: 'minecraft', nome: 'Minecraft', letra: 'M', sigla: 'M', c1: '#6CCB5A', c2: '#1E3D1A', qtd: 1490 },
+  { id: 'steam', nome: 'Steam', letra: 'S', sigla: 'STEAM', c1: '#5DB4E8', c2: '#163246', qtd: 2210 },
+  { id: 'fortnite', nome: 'Fortnite', letra: 'F', sigla: 'FN', c1: '#C27BFF', c2: '#33184F', qtd: 2780 },
+  { id: 'cs2', nome: 'Counter-Strike 2', letra: 'CS', sigla: 'CS2', c1: '#F0B43A', c2: '#3D3016', qtd: 6150 },
+  { id: 'genshin', nome: 'Genshin Impact', letra: 'G', sigla: 'GI', c1: '#5FD6CF', c2: '#163C42', qtd: 1120 }
+];
+const jogo = id => JOGOS.find(j => j.id === id);
+
+const VENDEDORES = [
+  { id: 1, nome: 'Vortex Store', nivel: 'diamante', vendas: 3412, pos: 99.4, resp: '~6 min', desde: 'mar/2022', sobre: 'Contas de FPS e battle royale revisadas uma a uma. Todas com e-mail trocável e garantia de 7 dias contra recuperação.' },
+  { id: 2, nome: 'ffcenter', nivel: 'ouro', vendas: 1208, pos: 98.9, resp: '~12 min', desde: 'jan/2023', sobre: 'Recargas de Free Fire por ID em poucos minutos e contas raras com skins de passe antigo.' },
+  { id: 3, nome: 'Lumina Contas', nivel: 'ouro', vendas: 864, pos: 99.1, resp: '~20 min', desde: 'ago/2023', sobre: 'Contas de RPG e MOBA com histórico limpo. Envio vídeo da conta antes da venda se você pedir.' },
+  { id: 4, nome: 'Pixel Store', nivel: 'diamante', vendas: 12940, pos: 99.8, resp: 'Automática', desde: 'nov/2021', sobre: 'Gift cards e códigos digitais com entrega automática 24h. O código aparece no seu pedido assim que o Pix é aprovado.' },
+  { id: 5, nome: 'skinlab.br', nivel: 'prata', vendas: 312, pos: 97.6, resp: '~35 min', desde: 'fev/2024', sobre: 'Skins de CS2 entregues por oferta de troca na Steam. Confira o float na descrição de cada anúncio.' },
+  { id: 6, nome: 'Level Up', nivel: 'ouro', vendas: 540, pos: 98.3, resp: '~15 min', desde: 'mai/2023', sobre: 'Coaching e elojob com jogadores de elo alto. Agenda combinada pelo chat do pedido.' }
+];
+const vend = id => VENDEDORES.find(v => v.id === id);
+
+const ANUNCIOS = [
+  { id: 1, t: 'Conta Valorant Imortal 2 · 47 skins', j: 'valorant', tipo: 'Conta', p: 489.90, v: 1, auto: false, est: 1, vendidos: 0, dest: true, d: 'Conta full acesso com e-mail original trocável. Rank Imortal 2 no último ato, 47 skins incluindo Vandal Reaver, Phantom Prime e faca Karambit Elderflame.' },
+  { id: 2, t: '1.060 Diamantes Free Fire · recarga por ID', j: 'freefire', tipo: 'Moeda', g: '1060', p: 39.90, old: 44.90, v: 2, auto: true, est: 999, vendidos: 4820, dest: true, d: 'Recarga direto no seu ID, sem precisar de senha. Informe o ID no checkout e os diamantes caem em até 10 minutos.' },
+  { id: 3, t: 'Conta LoL Esmeralda · 182 campeões', j: 'lol', tipo: 'Conta', p: 259.00, v: 3, auto: false, est: 1, vendidos: 0, d: 'Servidor BR, elo Esmeralda III, 182 campeões e 96 skins (3 lendárias). Sem punições no histórico.' },
+  { id: 4, t: 'Gift card Roblox · R$ 50', j: 'roblox', tipo: 'Gift card', g: 'R$', p: 50.00, v: 4, auto: true, est: 999, vendidos: 9311, dest: true, d: 'Código digital oficial para resgatar créditos na sua conta Roblox. Entrega automática assim que o pagamento é aprovado.' },
+  { id: 5, t: 'Gift card Steam · R$ 100', j: 'steam', tipo: 'Gift card', g: '100', p: 97.50, old: 100.00, v: 4, auto: true, est: 999, vendidos: 6120, dest: true, d: 'Cartão digital da Steam no valor de R$ 100 para a região Brasil. Resgate na carteira da Steam.' },
+  { id: 6, t: 'Fortnite · conta com 210 skins', j: 'fortnite', tipo: 'Conta', p: 1290.00, v: 1, auto: false, est: 1, vendidos: 0, d: 'Conta da temporada 1 com Renegade Raider, Aerial Assault e 210 skins. Vinculação de e-mail trocável, sem PSN ou Xbox atrelados.' },
+  { id: 7, t: 'AK-47 Redline · Testada em Campo', j: 'cs2', tipo: 'Item', g: 'AK', p: 112.00, v: 5, auto: false, est: 3, vendidos: 41, d: 'Float 0,21. Entrega por oferta de troca na Steam: envie seu link de troca no chat do pedido.' },
+  { id: 8, t: 'Elojob Valorant · Ouro para Platina', j: 'valorant', tipo: 'Serviço', p: 149.90, v: 6, auto: false, est: 10, vendidos: 212, d: 'Jogador Radiante sobe sua conta do Ouro à Platina em até 5 dias. Acompanhe cada partida pelo chat do pedido.' },
+  { id: 9, t: 'Genshin Impact · AR 58 · 9 personagens 5★', j: 'genshin', tipo: 'Conta', p: 349.00, v: 3, auto: false, est: 1, vendidos: 0, d: 'Servidor América, Adventure Rank 58, 9 personagens 5 estrelas incluindo Raiden e Nahida. E-mail trocável.' },
+  { id: 10, t: 'Construção personalizada · Minecraft', j: 'minecraft', tipo: 'Serviço', p: 80.00, v: 6, auto: false, est: 5, vendidos: 64, d: 'Construo sua base, castelo ou cidade no seu servidor ou mundo. Escopo combinado pelo chat.' },
+  { id: 11, t: 'Gift card Steam · R$ 50', j: 'steam', tipo: 'Gift card', g: '50', p: 49.00, v: 4, auto: true, est: 999, vendidos: 2015, d: 'Cartão digital da Steam no valor de R$ 50 para a região Brasil.' },
+  { id: 12, t: 'Free Fire · conta com Calça Angelical', j: 'freefire', tipo: 'Conta', p: 189.90, v: 2, auto: false, est: 1, vendidos: 0, d: 'Conta nível 72 com Calça Angelical, 14 passes de elite e 3 armas evoluídas no máximo.' },
+  { id: 13, t: 'Coaching de LoL · sessão de 1 hora', j: 'lol', tipo: 'Serviço', p: 45.00, v: 6, auto: false, est: 8, vendidos: 98, dest: true, d: 'Análise de replay, rotas e macro com jogador Mestre. Horário combinado pelo chat depois da compra.' },
+  { id: 14, t: 'Arte para seu avatar · Roblox', j: 'roblox', tipo: 'Serviço', p: 35.00, v: 3, auto: false, est: 10, vendidos: 77, d: 'Ilustração do seu avatar em alta resolução, pronta para perfil e miniatura.' },
+  { id: 15, t: '1.000 Valorant Points · código Riot', j: 'valorant', tipo: 'Moeda', g: 'VP', p: 42.00, v: 4, auto: true, est: 999, vendidos: 5102, dest: true, d: 'Código de pré-pago Riot para 1.000 VP. Resgate na loja do cliente.' },
+  { id: 16, t: 'Roblox · conta com Headless Horseman', j: 'roblox', tipo: 'Conta', p: 1890.00, v: 1, auto: false, est: 1, vendidos: 0, d: 'Conta de 2019 com Headless Horseman, Korblox e 38 mil Robux gastos no histórico.' },
+  { id: 17, t: 'Karambit Doppler · Nova de Fábrica', j: 'cs2', tipo: 'Item', g: 'KAR', p: 2650.00, v: 5, auto: false, est: 1, vendidos: 3, d: 'Fase 2, float 0,01. Entrega por oferta de troca na Steam.' },
+  { id: 18, t: 'Minecraft Java Edition · conta original', j: 'minecraft', tipo: 'Conta', p: 79.90, v: 2, auto: true, est: 25, vendidos: 732, d: 'Conta Microsoft com Minecraft Java & Bedrock. Entrega automática com instruções para trocar o e-mail.' }
+];
+const anuncio = id => ANUNCIOS.find(a => a.id === id);
+
+const AVALIACOES = [
+  { v: 1, a: 'gu***', n: 5, t: 'Conta exatamente como na descrição. Vendedor me ajudou a trocar o e-mail pelo chat.', q: 'há 2 dias' },
+  { v: 1, a: 'ma***', n: 5, t: 'Entregou em 7 minutos. Já é a terceira compra.', q: 'há 5 dias' },
+  { v: 1, a: 'th***', n: 4, t: 'Tudo certo, só demorou um pouco para responder de madrugada.', q: 'há 1 semana' },
+  { v: 2, a: 'ka***', n: 5, t: 'Diamantes caíram em 3 minutos.', q: 'há 1 dia' },
+  { v: 2, a: 'jp***', n: 5, t: 'Rápido e sem pedir senha. Recomendo.', q: 'há 4 dias' },
+  { v: 3, a: 'le***', n: 5, t: 'Mandou vídeo da conta antes. Muito confiável.', q: 'há 3 dias' },
+  { v: 4, a: 'ra***', n: 5, t: 'Código chegou na hora, resgatei sem problema.', q: 'há 6 horas' },
+  { v: 4, a: 'bi***', n: 5, t: 'Melhor preço de gift card que achei.', q: 'há 2 dias' },
+  { v: 5, a: 'vi***', n: 4, t: 'Skin certinha, float igual ao anúncio.', q: 'há 1 semana' },
+  { v: 6, a: 'du***', n: 5, t: 'Subiu meu elo em 3 dias e ainda deu dicas.', q: 'há 5 dias' }
+];
+
+const TIPOS = ['Conta', 'Moeda', 'Item', 'Gift card', 'Serviço'];
+const TIPO_ROTA = { conta: 'Conta', moeda: 'Moeda', item: 'Item', gift: 'Gift card', servico: 'Serviço' };
+const TIPO_PLURAL = { 'Conta': 'Contas', 'Moeda': 'Moedas', 'Item': 'Itens', 'Gift card': 'Gift cards', 'Serviço': 'Serviços' };
+const TAXA = 0.099;
+
+/* ---------- Estado da sessão ---------- */
+const filtros = { q: '', jogos: new Set(), tipos: new Set(), auto: false, max: '', ordem: 'relevancia' };
+const vitrine = { tipo: 'todos', ordem: 'destaque' };
+const favs = new Set();
+let compra = { id: 1, qtd: 1 };
+let pedido = null;
+let pixTimer = null;
+
+/* ---------- Componentes ---------- */
+const arte = (j, glyph = j.sigla, nome = true) => `<div class="art" style="--c1:${j.c1};--c2:${j.c2}">${glyph ? `<span class="glyph">${esc(glyph)}</span>` : ''}${nome ? `<span class="gname">${j.nome}</span>` : ''}</div>`;
+const avatar = v => `<span class="avatar">${esc(v.nome[0].toUpperCase())}</span>`;
+const nivel = v => `<span class="level ${v.nivel}">${v.nivel}</span>`;
+const pct = n => n.toFixed(1).replace('.', ',') + '%';
+const estrelas = n => `<span class="stars" aria-label="${n} de 5 estrelas">${[1, 2, 3, 4, 5].map(i => `<span class="${i <= n ? '' : 'off'}">${ic('star')}</span>`).join('')}</span>`;
+
+function card(a) {
+  const j = jogo(a.j), v = vend(a.v);
+  return `<article class="card">
+    <a class="card-link" href="#anuncio-${a.id}" aria-label="${esc(a.t)}"></a>
+    <div class="thumb">${arte(j, a.g || j.sigla)}
+      <button class="fav" type="button" data-fav="${a.id}" aria-pressed="${favs.has(a.id)}" aria-label="Favoritar">${ic('heart')}</button>
+    </div>
+    <div class="card-body">
+      <span class="eyebrow">${TIPO_PLURAL[a.tipo]}</span>
+      <div class="card-title">${esc(a.t)}</div>
+      <div class="card-seller">${avatar(v)}<span class="nome">${esc(v.nome)}</span>${a.auto ? `<span class="chip auto">${ic('bolt')}AUTO</span>` : `<span class="rate">★ ${pct(v.pos)}</span>`}</div>
+    </div>
+    <div class="card-foot">
+      <div><small>${a.vendidos ? `${a.vendidos.toLocaleString('pt-BR')} vendidos` : 'Unidade única'}</small><span class="price">${fmt(a.p)}</span>${a.old ? `<span class="price-old">${fmt(a.old)}</span>` : ''}</div>
+      <span class="go" aria-hidden="true">${ic('arrow')}</span>
+    </div>
+  </article>`;
+}
+
+function fluxo(passos, feitos) {
+  return `<ol class="flow">${passos.map((p, i) => `<li class="${i < feitos ? 'done' : i === feitos ? 'now' : ''}"><div><strong>${p[0]}</strong><span>${p[1]}</span></div><time>${p[2] || ''}</time></li>`).join('')}</ol>`;
+}
+
+/* Asterisco 3D do hero: barras com extrusão em verde-musgo, órbitas finas */
+function heroArt() {
+  const angs = [18, 63, 108, 153];
+  const bar = (a, fill, dx, dy) => `<rect x="${-17 + dx}" y="${-140 + dy}" width="34" height="280" rx="3" fill="${fill}" transform="rotate(${a})"/>`;
+  return `<svg class="star" viewBox="0 0 520 400" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+    <defs>
+      <linearGradient id="lima" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D9FA7A"/><stop offset="1" stop-color="#9ED12C"/></linearGradient>
+      <radialGradient id="brilho"><stop offset="0" stop-color="#C5F04A" stop-opacity=".28"/><stop offset="1" stop-color="#C5F04A" stop-opacity="0"/></radialGradient>
+    </defs>
+    <circle cx="275" cy="200" r="170" fill="url(#brilho)"/>
+    <ellipse cx="275" cy="200" rx="185" ry="120" fill="none" stroke="#C5F04A" stroke-opacity=".22" stroke-width="1.2" transform="rotate(-35 275 200)"/>
+    <ellipse cx="275" cy="200" rx="195" ry="88" fill="none" stroke="#C5F04A" stroke-opacity=".14" stroke-width="1" transform="rotate(28 275 200)"/>
+    <g transform="translate(275 200)"><g class="float">
+      ${angs.map(a => bar(a, '#3F5A17', 9, 9)).join('')}
+      ${angs.map(a => bar(a, '#5E8222', 4.5, 4.5)).join('')}
+      ${angs.map(a => bar(a, 'url(#lima)', 0, 0)).join('')}
+    </g></g>
+  </svg>`;
+}
+
+/* ---------- Páginas ---------- */
+function vitrineLista() {
+  let r = ANUNCIOS.filter(a => vitrine.tipo === 'todos' || a.tipo === vitrine.tipo);
+  if (vitrine.ordem === 'destaque') r = [...r.filter(a => a.dest), ...r.filter(a => !a.dest)];
+  if (vitrine.ordem === 'menor') r.sort((a, b) => a.p - b.p);
+  if (vitrine.ordem === 'maior') r.sort((a, b) => b.p - a.p);
+  if (vitrine.ordem === 'vendidos') r.sort((a, b) => b.vendidos - a.vendidos);
+  return r.slice(0, 8);
+}
+
+function pgHome() {
+  return `
+  <div class="wrap">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">O seu universo, conectado.</span>
+        <h1>Seu próximo nível<br>começa <em>aqui.</em></h1>
+        <p>Contas, skins, moedas e gift cards de jogador para jogador. O pagamento fica protegido até você receber.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#busca">Explorar ofertas ${ic('arrow')}</a>
+          <button class="btn btn-ghost" type="button" data-scroll="garantia">${ic('shield')}Como funciona</button>
+        </div>
+        <div class="hero-meta"><span>MARKETPLACE GAMER</span><span>01 — PREVIEW</span></div>
+      </div>
+      <div class="hero-art">
+        ${heroArt()}
+        <span class="htag t1">+1 NOVA CONQUISTA</span>
+        <span class="htag t2">PLAYER TO PLAYER ↗</span>
+        <span class="corner c1">PLAY. TRADE. REPEAT.</span>
+        <span class="corner c2">N / 001</span>
+      </div>
+    </section>
+
+    <div class="perks">
+      <div class="perk">${ic('diamond')}<div><b>Encontre seu próximo upgrade</b><span>Contas, itens, moedas e serviços de 9 jogos</span></div></div>
+      <div class="perk">${ic('swap')}<div><b>De jogador para jogador</b><span>Chat direto com o vendedor em cada pedido</span></div></div>
+      <div class="perk">${ic('shield')}<div><b>Dinheiro protegido</b><span>O vendedor só recebe depois que você confirma</span></div></div>
+    </div>
+
+    <section class="section">
+      <div class="section-head"><h2>Escolha seu universo ${ic('spark')}</h2><a class="linkish" href="#busca">Ver todos ${ic('arrow')}</a></div>
+      <div class="unis">${JOGOS.map(j => `<a class="uni" href="#jogo-${j.id}" style="--c1:${j.c1}"><span class="letra">${j.letra}</span><div><b>${j.nome}</b><small>Explorar ${ic('arrow')}</small></div></a>`).join('')}</div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div style="display:grid;gap:6px"><span class="eyebrow">O próximo drop é seu</span><h2>Explore os destaques</h2></div>
+        <select class="input" id="vOrdem" aria-label="Ordenar destaques" style="width:auto">
+          <option value="destaque">Em destaque</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option><option value="vendidos">Mais vendidos</option>
+        </select>
+      </div>
+      <div class="pills" id="vTipos">${['todos', ...TIPOS].map(t => `<button type="button" class="pill" data-vt="${t}" aria-pressed="${vitrine.tipo === t}">${t === 'todos' ? 'Todos' : TIPO_PLURAL[t]}</button>`).join('')}</div>
+      <div class="cards" id="vitrine">${vitrineLista().map(card).join('')}</div>
+    </section>
+
+    <section class="section" id="garantia">
+      <div class="section-head"><div style="display:grid;gap:6px"><span class="eyebrow">Garantia Nexo</span><h2>Seu dinheiro fica com a gente até você receber</h2></div></div>
+      <div class="steps">
+        <div class="panel step"><span class="n">01</span><b>Você paga via Pix</b><p>O valor fica retido na Nexo, não vai direto para o vendedor.</p></div>
+        <div class="panel step"><span class="n">02</span><b>O vendedor entrega</b><p>Pelo chat do pedido ou de forma automática, em segundos.</p></div>
+        <div class="panel step hl"><span class="n">03</span><b>Você confirma</b><p>Testou e está tudo certo? Confirme o recebimento. Deu problema? Abra uma disputa.</p></div>
+        <div class="panel step"><span class="n">04</span><b>O vendedor recebe</b><p>Só então o valor é liberado para saque via Pix.</p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sell-band">
+        <div style="display:grid;gap:14px">
+          <span class="eyebrow">Sua loja começa aqui</span>
+          <h2 style="font-size:clamp(24px,3.2vw,32px)">Anuncie de graça e saque por Pix quando a venda for confirmada.</h2>
+          <p>Você só paga a taxa quando vende. Suba de nível com boas avaliações e ganhe destaque nas buscas.</p>
+          <div><a class="btn btn-primary" href="#vender">Criar meu anúncio ${ic('arrow')}</a></div>
+        </div>
+        <div class="sell-facts">
+          <div><b>R$ 0</b><span>para anunciar</span></div>
+          <div><b>9,9%</b><span>por venda concluída</span></div>
+          <div><b>1 dia</b><span>para o saque cair</span></div>
+        </div>
+      </div>
+    </section>
+  </div>`;
+}
+
+function ligarHome() {
+  const upd = () => { $('#vitrine').innerHTML = vitrineLista().map(card).join(''); };
+  $('#vOrdem').value = vitrine.ordem;
+  $('#vOrdem').onchange = e => { vitrine.ordem = e.target.value; upd(); };
+  document.querySelectorAll('[data-vt]').forEach(b => b.onclick = () => {
+    vitrine.tipo = b.dataset.vt;
+    document.querySelectorAll('[data-vt]').forEach(x => x.setAttribute('aria-pressed', x === b));
+    upd();
+  });
+}
+
+function pgBusca() {
+  const cont = j => ANUNCIOS.filter(a => a.j === j.id).length;
+  return `
+  <div class="wrap catalog">
+    <aside class="panel filters" id="filtros" data-open="false" aria-label="Filtros">
+      <button class="filters-toggle" type="button" id="toggleFiltros" aria-expanded="false">Filtros <span class="muted">${ic('search')}</span></button>
+      <div class="field"><label for="fQ">Palavra-chave</label><input class="input" id="fQ" type="search" value="${esc(filtros.q)}" placeholder="Ex.: skins, VP, nível"></div>
+      <fieldset><legend>Jogo</legend>
+        ${JOGOS.map(j => `<label class="check"><input type="checkbox" data-jogo="${j.id}" ${filtros.jogos.has(j.id) ? 'checked' : ''}>${j.nome}<small>${cont(j)}</small></label>`).join('')}
+      </fieldset>
+      <fieldset><legend>Tipo</legend>
+        <div class="pills">${TIPOS.map(t => `<button type="button" class="pill" data-tipo="${t}" aria-pressed="${filtros.tipos.has(t)}">${TIPO_PLURAL[t]}</button>`).join('')}</div>
+      </fieldset>
+      <label class="check"><input type="checkbox" id="fAuto" ${filtros.auto ? 'checked' : ''}>Só entrega automática</label>
+      <div class="field"><label for="fMax">Preço máximo (R$)</label><input class="input" id="fMax" type="number" min="0" step="10" inputmode="numeric" value="${esc(filtros.max)}" placeholder="Sem limite"></div>
+      <button class="btn btn-ghost" type="button" id="limpar">Limpar filtros</button>
+    </aside>
+    <section>
+      <div class="results-head">
+        <div style="display:grid;gap:4px"><span class="eyebrow" id="resQtd"></span><h2 id="resTitulo">Anúncios</h2></div>
+        <select class="input" id="fOrdem" aria-label="Ordenar">
+          <option value="relevancia">Mais relevantes</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option><option value="vendidos">Mais vendidos</option>
+        </select>
+      </div>
+      <div class="cards" id="resultados"></div>
+    </section>
+  </div>`;
+}
+
+function filtrar() {
+  const q = filtros.q.trim().toLowerCase();
+  let r = ANUNCIOS.filter(a =>
+    (!q || (a.t + ' ' + jogo(a.j).nome + ' ' + a.tipo + ' ' + vend(a.v).nome).toLowerCase().includes(q)) &&
+    (!filtros.jogos.size || filtros.jogos.has(a.j)) &&
+    (!filtros.tipos.size || filtros.tipos.has(a.tipo)) &&
+    (!filtros.auto || a.auto) &&
+    (!filtros.max || a.p <= Number(filtros.max)));
+  const o = filtros.ordem;
+  if (o === 'menor') r.sort((a, b) => a.p - b.p);
+  if (o === 'maior') r.sort((a, b) => b.p - a.p);
+  if (o === 'vendidos') r.sort((a, b) => b.vendidos - a.vendidos);
+  if (o === 'relevancia') r.sort((a, b) => (b.dest ? 1 : 0) - (a.dest ? 1 : 0));
+  return r;
+}
+
+function atualizarResultados() {
+  const r = filtrar();
+  const titulo = filtros.jogos.size === 1 ? jogo([...filtros.jogos][0]).nome
+    : filtros.tipos.size === 1 ? TIPO_PLURAL[[...filtros.tipos][0]]
+    : filtros.q ? `Resultados para “${filtros.q}”` : 'Todos os anúncios';
+  $('#resTitulo').textContent = titulo;
+  $('#resQtd').textContent = `${r.length} ${r.length === 1 ? 'anúncio' : 'anúncios'}`;
+  $('#resultados').innerHTML = r.length ? r.map(card).join('') :
+    `<div class="panel empty" style="grid-column:1/-1"><h3>Nenhum anúncio com esses filtros</h3><p class="muted">Tente remover um filtro ou buscar outro termo.</p><button class="btn btn-ghost" type="button" id="limpar2">Limpar filtros</button></div>`;
+  const l2 = $('#limpar2'); if (l2) l2.onclick = limpar;
+}
+
+function limpar() {
+  filtros.q = ''; filtros.jogos.clear(); filtros.tipos.clear(); filtros.auto = false; filtros.max = ''; filtros.ordem = 'relevancia';
+  render('busca');
+}
+
+function ligarBusca() {
+  $('#fOrdem').value = filtros.ordem;
+  $('#fQ').oninput = e => { filtros.q = e.target.value; atualizarResultados(); };
+  $('#fMax').oninput = e => { filtros.max = e.target.value; atualizarResultados(); };
+  $('#fAuto').onchange = e => { filtros.auto = e.target.checked; atualizarResultados(); };
+  $('#fOrdem').onchange = e => { filtros.ordem = e.target.value; atualizarResultados(); };
+  $('#limpar').onclick = limpar;
+  document.querySelectorAll('[data-jogo]').forEach(el => el.onchange = () => { el.checked ? filtros.jogos.add(el.dataset.jogo) : filtros.jogos.delete(el.dataset.jogo); atualizarResultados(); });
+  document.querySelectorAll('[data-tipo]').forEach(el => el.onclick = () => {
+    const t = el.dataset.tipo; filtros.tipos.has(t) ? filtros.tipos.delete(t) : filtros.tipos.add(t);
+    el.setAttribute('aria-pressed', filtros.tipos.has(t)); atualizarResultados();
+  });
+  const box = $('#filtros'), tg = $('#toggleFiltros');
+  tg.onclick = () => { const open = box.dataset.open !== 'true'; box.dataset.open = open; tg.setAttribute('aria-expanded', open); };
+  atualizarResultados();
+}
+
+function pgAnuncio(id) {
+  const a = anuncio(id) || ANUNCIOS[0], j = jogo(a.j), v = vend(a.v);
+  if (compra.id !== a.id) compra = { id: a.id, qtd: 1 };
+  const avs = AVALIACOES.filter(x => x.v === v.id);
+  const recebe = {
+    'Conta': ['Login e senha da conta no quadro de entrega do pedido', 'E-mail original para você trocar e assumir a conta', 'Garantia de 7 dias contra recuperação pelo antigo dono'],
+    'Moeda': ['Crédito direto no seu ID ou código de resgate', 'Comprovante da recarga no pedido'],
+    'Gift card': ['Código digital exibido no pedido', 'Instruções de resgate da plataforma'],
+    'Item': ['Oferta de troca enviada para sua conta', 'Item com as mesmas características do anúncio'],
+    'Serviço': ['Execução combinada pelo chat do pedido', 'Valor liberado ao vendedor só quando você confirmar a conclusão']
+  }[a.tipo];
+  const parecidos = ANUNCIOS.filter(x => x.j === a.j && x.id !== a.id).slice(0, 4);
+  return `
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Você está em"><a href="#home">Início</a><span>/</span><a href="#jogo-${j.id}">${j.nome}</a><span>/</span><span>${TIPO_PLURAL[a.tipo]}</span></nav>
+    <div class="two-col">
+      <div class="stack">
+        <div class="media">${arte(j, a.g || j.sigla)}<div class="tags">${a.auto ? `<span class="chip auto">${ic('bolt')}ENTREGA AUTOMÁTICA</span>` : ''}</div></div>
+        <div style="display:grid;gap:8px"><span class="eyebrow">${TIPO_PLURAL[a.tipo]} · ${j.nome}</span><h1 style="font-size:clamp(24px,3.4vw,34px)">${esc(a.t)}</h1></div>
+        <div class="panel box prose">
+          <h3>Descrição</h3>
+          <p>${esc(a.d)}</p>
+          <h3 style="margin-top:6px">O que você recebe</h3>
+          <ul>${recebe.map(x => `<li>${x}</li>`).join('')}</ul>
+        </div>
+        <div class="panel box">
+          <div class="row"><h3>Avaliações de ${esc(v.nome)}</h3><span class="muted num">${pct(v.pos)} positivas</span></div>
+          <div>${avs.map(r => `<div class="review"><div class="row"><b>${r.a}</b>${estrelas(r.n)}</div><p>${esc(r.t)}</p><span class="muted" style="font-size:12px">${r.q}</span></div>`).join('')}</div>
+        </div>
+      </div>
+      <aside class="stack buybox">
+        <div class="panel box">
+          <div><span class="price" id="bbPreco">${fmt(a.p * compra.qtd)}</span>${a.old ? `<span class="price-old">${fmt(a.old)}</span> <span class="chip auto">-${Math.round((1 - a.p / a.old) * 100)}%</span>` : ''}</div>
+          <dl class="kv">
+            <dt>Entrega</dt><dd>${a.auto ? 'Automática, em segundos' : `Manual, ${v.resp}`}</dd>
+            <dt>Disponível</dt><dd class="num">${a.est === 1 ? 'Unidade única' : a.est >= 999 ? 'Em estoque' : `${a.est} unidades`}</dd>
+            <dt>Vendidos</dt><dd class="num">${a.vendidos.toLocaleString('pt-BR')}</dd>
+          </dl>
+          ${a.est > 1 ? `<div class="row"><span style="font-weight:600">Quantidade</span><div class="stepper"><button type="button" id="menos" aria-label="Diminuir">−</button><output id="qtd">${compra.qtd}</output><button type="button" id="mais" aria-label="Aumentar">+</button></div></div>` : ''}
+          <a class="btn btn-primary btn-block" href="#checkout-${a.id}">Comprar agora ${ic('arrow')}</a>
+          <button class="btn btn-ghost btn-block" type="button" data-toast="Perguntas ao vendedor entram na etapa do MVP.">${ic('chat')}Perguntar ao vendedor</button>
+          <div class="note">${ic('shield')}<span><b>Garantia Nexo:</b> o vendedor só recebe depois que você confirmar a entrega.${a.tipo === 'Conta' ? ' Contas têm 7 dias extras contra recuperação.' : ''}</span></div>
+        </div>
+        <a class="panel box" href="#vendedor-${v.id}">
+          <div class="seller-mini">${avatar(v)}<div style="min-width:0"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><b>${esc(v.nome)}</b>${nivel(v)}</div><span class="muted" style="font-size:13px">Na Nexo desde ${v.desde}</span></div></div>
+          <div class="seller-stats"><div><b>${v.vendas.toLocaleString('pt-BR')}</b><span>vendas</span></div><div><b>${pct(v.pos)}</b><span>positivas</span></div><div><b>${v.resp}</b><span>resposta</span></div></div>
+        </a>
+      </aside>
+    </div>
+    ${parecidos.length ? `<section class="section" style="padding-top:0"><div class="section-head"><h2>Mais de ${j.nome}</h2></div><div class="cards">${parecidos.map(card).join('')}</div></section>` : ''}
+  </div>`;
+}
+
+function ligarAnuncio() {
+  const a = anuncio(compra.id);
+  const upd = () => { $('#qtd').textContent = compra.qtd; $('#bbPreco').textContent = fmt(a.p * compra.qtd); };
+  const m = $('#menos'), p = $('#mais');
+  if (m) m.onclick = () => { compra.qtd = Math.max(1, compra.qtd - 1); upd(); };
+  if (p) p.onclick = () => { compra.qtd = Math.min(a.est >= 999 ? 20 : a.est, compra.qtd + 1); upd(); };
+}
+
+function pgCheckout(id) {
+  const a = anuncio(id) || ANUNCIOS[0], j = jogo(a.j), v = vend(a.v);
+  if (compra.id !== a.id) compra = { id: a.id, qtd: 1 };
+  return `
+  <div class="wrap">
+    <nav class="crumbs"><a href="#anuncio-${a.id}">← Voltar ao anúncio</a></nav>
+    <div class="two-col">
+      <div class="stack">
+        <div style="display:grid;gap:8px"><span class="eyebrow">Checkout</span><h1 style="font-size:clamp(26px,3.4vw,36px)">Finalizar compra</h1></div>
+        <div class="panel box">
+          <h3>Forma de pagamento</h3>
+          <div class="methods">
+            <label class="method"><input type="radio" name="metodo" value="pix" id="mPix" checked><div><b>Pix</b><small>Aprovação na hora, sem taxa</small></div><span class="chip auto">RECOMENDADO</span></label>
+            <label class="method"><input type="radio" name="metodo" value="cartao" id="mCartao"><div><b>Cartão de crédito</b><small>Até 12x · taxa de 4,99%</small></div><span class="chip">+4,99%</span></label>
+            <label class="method off"><input type="radio" name="metodo" value="saldo" id="mSaldo" disabled><div><b>Saldo Nexo</b><small>Seu saldo: R$ 12,40 (insuficiente)</small></div><span></span></label>
+          </div>
+          <div id="metodoArea"></div>
+        </div>
+        ${a.tipo === 'Moeda' ? `<div class="panel box"><div class="field"><label for="idJogo">ID do jogador no ${j.nome}</label><input class="input mono" id="idJogo" inputmode="numeric" placeholder="Ex.: 1234567890"></div></div>` : ''}
+      </div>
+      <aside class="stack buybox">
+        <div class="panel box">
+          <h3>Resumo</h3>
+          <div class="mini"><div class="thumb">${arte(j, a.g || j.sigla, false)}</div><div style="min-width:0"><b style="font-size:14px;line-height:1.3;display:block">${esc(a.t)}</b><span class="muted" style="font-size:13px">${esc(v.nome)} · ${compra.qtd}×</span></div></div>
+          <div class="field"><label for="cupom">Cupom</label><div style="display:flex;gap:8px"><input class="input mono" id="cupom" placeholder="NEXO10" style="text-transform:uppercase"><button class="btn btn-ghost" type="button" id="aplicarCupom">Aplicar</button></div></div>
+          <dl class="kv" id="totais"></dl>
+          <div class="note">${ic('shield')}<span>Seu pagamento fica retido na Nexo até você confirmar o recebimento.</span></div>
+        </div>
+      </aside>
+    </div>
+  </div>`;
+}
+
+function ligarCheckout() {
+  const a = anuncio(compra.id);
+  let desconto = 0;
+  const metodo = () => document.querySelector('input[name="metodo"]:checked').value;
+  const totais = () => {
+    const sub = a.p * compra.qtd;
+    const taxa = metodo() === 'cartao' ? (sub - desconto) * 0.0499 : 0;
+    const total = sub - desconto + taxa;
+    $('#totais').innerHTML = `<dt>Subtotal</dt><dd class="num">${fmt(sub)}</dd>${desconto ? `<dt>Cupom NEXO10</dt><dd class="num lime">−${fmt(desconto)}</dd>` : ''}<dt>Taxa do cartão</dt><dd class="num">${taxa ? fmt(taxa) : 'Grátis'}</dd><dt style="font-weight:700;color:var(--ink)">Total</dt><dd class="price" style="font-size:22px">${fmt(total)}</dd>`;
+    return total;
+  };
+  const area = () => {
+    clearInterval(pixTimer);
+    if (metodo() === 'pix') {
+      $('#metodoArea').innerHTML = `<button class="btn btn-primary btn-block" type="button" id="gerarPix">Gerar código Pix</button>`;
+      $('#gerarPix').onclick = gerarPix;
+    } else {
+      $('#metodoArea').innerHTML = `<div class="note warn">${ic('alert')}<span>O formulário do cartão entra junto com o gateway de pagamento, na etapa do MVP.</span></div>
+        <div class="field"><label for="parcelas">Parcelas</label><select class="input" id="parcelas">${[1, 2, 3, 6, 10, 12].map(n => `<option>${n}x de ${fmt(totais() / n)}</option>`).join('')}</select></div>`;
+    }
+    totais();
+  };
+  const gerarPix = () => {
+    const codigo = 'NEXO-PIX-EXEMPLO-' + Math.random().toString(36).slice(2, 10).toUpperCase() + '-' + Math.round(totais() * 100);
+    $('#metodoArea').innerHTML = `<div class="pix">
+        <canvas id="qr" width="336" height="336" aria-label="QR code de exemplo"></canvas>
+        <div style="display:grid;gap:10px;min-width:0">
+          <b>Escaneie no app do seu banco</b>
+          <span class="muted" style="font-size:13px">Ou copie o código. Expira em <span class="timer" id="timer">30:00</span></span>
+          <div class="pix-code"><input class="input" id="pixCode" readonly value="${codigo}" aria-label="Código Pix copia e cola"><button class="btn btn-ghost" type="button" id="copiar" aria-label="Copiar código">${ic('copy')}</button></div>
+          <button class="btn btn-primary" type="button" id="simular">Simular pagamento aprovado</button>
+        </div>
+      </div>`;
+    desenharQR($('#qr'), codigo);
+    let s = 1800;
+    pixTimer = setInterval(() => { s--; const t = $('#timer'); if (!t) return clearInterval(pixTimer); t.textContent = `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; }, 1000);
+    $('#copiar').onclick = async () => {
+      try { await navigator.clipboard.writeText(codigo); toast('Código Pix copiado'); }
+      catch { $('#pixCode').select(); toast('Selecionei o código: use Ctrl+C para copiar'); }
+    };
+    $('#simular').onclick = () => { clearInterval(pixTimer); novoPedido(totais()); go('pedido'); };
+  };
+  document.querySelectorAll('input[name="metodo"]').forEach(r => r.onchange = area);
+  $('#aplicarCupom').onclick = () => {
+    if ($('#cupom').value.trim().toUpperCase() === 'NEXO10') { desconto = Math.round(a.p * compra.qtd * 0.10 * 100) / 100; toast('Cupom aplicado: 10% de desconto'); }
+    else { desconto = 0; toast('Cupom inválido. Teste com NEXO10'); }
+    area();
+  };
+  area();
+}
+
+function desenharQR(cv, seed) {
+  const css = getComputedStyle(document.documentElement);
+  const bg = css.getPropertyValue('--qr-bg').trim() || '#FFFFFF';
+  const ink = css.getPropertyValue('--qr-ink').trim() || '#111311';
+  const ctx = cv.getContext('2d'), N = 29, pad = 2, cell = cv.width / (N + pad * 2);
+  let h = 0; for (const ch of seed) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  const rnd = () => (h = (h * 1664525 + 1013904223) >>> 0) / 4294967296;
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, cv.width, cv.height);
+  const finder = (x, y) => {
+    for (let i = 0; i < 7; i++) for (let k = 0; k < 7; k++) {
+      const edge = i === 0 || i === 6 || k === 0 || k === 6, core = i >= 2 && i <= 4 && k >= 2 && k <= 4;
+      if (edge || core) { ctx.fillStyle = ink; ctx.fillRect((x + i + pad) * cell, (y + k + pad) * cell, cell + .5, cell + .5); }
+    }
+  };
+  const inFinder = (x, y) => (x < 8 && y < 8) || (x > N - 9 && y < 8) || (x < 8 && y > N - 9);
+  for (let x = 0; x < N; x++) for (let y = 0; y < N; y++) {
+    if (inFinder(x, y) || (x - 14) ** 2 + (y - 14) ** 2 < 10) continue;
+    if (rnd() > .52) { ctx.fillStyle = ink; ctx.fillRect((x + pad) * cell, (y + pad) * cell, cell + .5, cell + .5); }
+  }
+  finder(0, 0); finder(N - 7, 0); finder(0, N - 7);
+  const cx = (14.5 + pad) * cell, r = cell * 3;
+  ctx.fillStyle = '#111311'; ctx.beginPath(); ctx.roundRect(cx - r, cx - r, r * 2, r * 2, cell); ctx.fill();
+  ctx.lineWidth = cell * .7; ctx.lineCap = 'butt'; ctx.lineJoin = 'miter';
+  const s = r * .42;
+  ctx.strokeStyle = '#F1F4EC'; ctx.beginPath(); ctx.moveTo(cx - s, cx + s); ctx.lineTo(cx - s, cx - s); ctx.moveTo(cx + s, cx + s); ctx.lineTo(cx + s, cx - s); ctx.stroke();
+  ctx.strokeStyle = '#C5F04A'; ctx.beginPath(); ctx.moveTo(cx - s, cx - s); ctx.lineTo(cx + s, cx + s); ctx.stroke();
+}
+
+function agora(offsetMin = 0) {
+  return new Date(Date.now() + offsetMin * 60000).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+}
+
+function novoPedido(total) {
+  const a = anuncio(compra.id);
+  const entregaMsg = a.auto ? 'Entrega automática concluída. O código está no quadro "Entrega".' : 'Pronto! Coloquei os dados no quadro "Entrega". Troque o e-mail assim que entrar.';
+  pedido = {
+    num: 'NX-' + (40000 + Math.floor(Math.random() * 9999)),
+    id: a.id, qtd: compra.qtd, total, passo: 2, disputa: false, nota: 0, revelado: false,
+    horas: [agora(-7), agora(0)],
+    msgs: [
+      { de: 'sis', t: `Pagamento aprovado. ${fmt(total)} ficam retidos pela Nexo até você confirmar o recebimento.`, h: agora(-7) },
+      ...(a.auto ? [] : [{ de: 'vend', t: 'Opa! Vi seu pedido, já estou separando aqui.', h: agora(-6) }]),
+      { de: a.auto ? 'sis' : 'vend', t: entregaMsg, h: agora(0) }
+    ]
+  };
+}
+
+function pgPedido() {
+  if (!pedido) { compra = { id: 1, qtd: 1 }; novoPedido(489.90); }
+  const a = anuncio(pedido.id), j = jogo(a.j), v = vend(a.v), p = pedido;
+  const entrega = a.tipo === 'Conta'
+    ? [['Login', 'nexo_demo_' + p.num.slice(3)], ['Senha', 'Exemplo#2026'], ['E-mail de recuperação', 'troque-este@exemplo.com']]
+    : a.tipo === 'Gift card' || a.tipo === 'Moeda' ? [['Código', 'XXXX-EXEM-PLO0-' + p.num.slice(3)]] : [['Status', 'Combinado pelo chat']];
+  const status = p.disputa ? `<span class="chip bad">${ic('alert')}EM DISPUTA</span>`
+    : p.passo >= 4 ? `<span class="chip ok">${ic('check')}CONCLUÍDO</span>` : `<span class="chip auto">${ic('clock')}AGUARDANDO SUA CONFIRMAÇÃO</span>`;
+  return `
+  <div class="wrap">
+    <div class="order-head">
+      <div style="display:grid;gap:8px"><span class="eyebrow">Meus pedidos</span><h1 style="font-size:clamp(26px,3.6vw,38px)">Pedido <span class="mono" style="font-weight:700">#${p.num}</span></h1></div>
+      ${status}
+    </div>
+    <div class="two-col">
+      <div class="stack">
+        <div class="panel chat">
+          <div class="chat-head">${avatar(v)}<div style="min-width:0"><b>${esc(v.nome)}</b> <span class="online" aria-hidden="true"></span><div class="muted" style="font-size:12px">Responde em ${v.resp} · conversa gravada para segurança</div></div></div>
+          <div class="msgs" id="msgs">${p.msgs.map(m => `<div class="msg ${m.de}">${esc(m.t)}<time>${m.h}</time></div>`).join('')}</div>
+          <form class="chat-form" id="chatForm"><input class="input" id="chatIn" placeholder="Escreva para ${esc(v.nome)}…" autocomplete="off" aria-label="Mensagem"><button class="btn btn-primary" type="submit" aria-label="Enviar">${ic('send')}</button></form>
+        </div>
+        <div class="note warn">${ic('alert')}<span>Nunca combine pagamento por fora da Nexo. Fora daqui o seu dinheiro não tem garantia.</span></div>
+      </div>
+      <aside class="stack buybox">
+        <div class="panel box">
+          <h3>Garantia do pedido</h3>
+          ${fluxo([
+            ['Pagamento aprovado', 'Pix recebido e retido pela Nexo.', p.horas[0]],
+            ['Vendedor entregou', a.auto ? 'Entrega automática.' : 'Entrega pelo quadro abaixo.', p.horas[1]],
+            ['Você confirma', p.passo >= 3 ? 'Recebimento confirmado.' : 'Automático em 3 dias se não houver disputa.', p.passo >= 3 ? agora() : ''],
+            ['Valor liberado', p.passo >= 4 ? `${fmt(p.total * (1 - TAXA))} para ${esc(v.nome)}.` : 'O vendedor recebe depois da sua confirmação.', p.passo >= 4 ? agora() : '']
+          ], p.disputa ? 2 : p.passo)}
+          <div class="hold"><span>${p.passo >= 4 ? 'Liberado ao vendedor' : 'Retido pela Nexo'}</span><b>${fmt(p.total)}</b></div>
+        </div>
+        <div class="panel box">
+          <div class="row"><h3>Entrega</h3><button class="linkish" type="button" id="revelar">${ic('eye')} ${p.revelado ? 'Ocultar' : 'Mostrar'}</button></div>
+          <div class="delivery">${entrega.map(([k, val]) => `<div><span class="muted">${k}</span><b>${p.revelado ? val : '••••••••••'}</b></div>`).join('')}</div>
+          <span class="muted" style="font-size:12px">Dados fictícios de exemplo.</span>
+        </div>
+        <div class="panel box">
+          ${p.disputa ? `<div class="note warn">${ic('alert')}<span><b>Disputa aberta.</b> A equipe Nexo entra no chat em até 24 h. O valor continua retido até a decisão.</span></div>`
+            : p.passo >= 4 ? `<b>Como foi a compra?</b><div class="rate-row">${[1, 2, 3, 4, 5].map(n => `<button type="button" data-n="${n}" class="${n <= p.nota ? 'on' : ''}" aria-label="${n} estrelas">${ic('star')}</button>`).join('')}</div><a class="btn btn-ghost btn-block" href="#busca">Continuar explorando</a>`
+            : `<button class="btn btn-primary btn-block" type="button" id="confirmar">${ic('check')}Recebi e está tudo certo</button>
+               <button class="btn btn-ghost btn-block" type="button" id="disputa">Tive um problema</button>
+               <p class="muted" style="font-size:12.5px">Ao confirmar, o valor é liberado ao vendedor e o pedido não pode mais ser contestado.</p>`}
+        </div>
+        <a class="panel box" href="#anuncio-${a.id}"><div class="mini" style="grid-template-columns:64px 1fr"><div class="thumb">${arte(j, a.g || j.sigla, false)}</div><div style="min-width:0"><b style="font-size:14px;line-height:1.3;display:block">${esc(a.t)}</b><span class="muted" style="font-size:13px">${p.qtd}× · ${fmt(p.total)}</span></div></div></a>
+      </aside>
+    </div>
+  </div>`;
+}
+
+function ligarPedido() {
+  const v = vend(anuncio(pedido.id).v);
+  const box = $('#msgs'); box.scrollTop = box.scrollHeight;
+  const respostas = ['Qualquer dúvida é só chamar por aqui.', 'Conseguiu entrar? Se precisar te ajudo a trocar o e-mail.', 'Perfeito! Quando estiver tudo certo, confirma o recebimento, por favor.', 'Tô por aqui, pode mandar.'];
+  $('#chatForm').onsubmit = e => {
+    e.preventDefault();
+    const inp = $('#chatIn'), t = inp.value.trim(); if (!t) return;
+    pedido.msgs.push({ de: 'eu', t, h: agora() }); inp.value = '';
+    box.insertAdjacentHTML('beforeend', `<div class="msg eu">${esc(t)}<time>${agora()}</time></div><div class="typing" id="typing">${esc(v.nome)} está digitando…</div>`);
+    box.scrollTop = box.scrollHeight;
+    setTimeout(() => {
+      const r = respostas[pedido.msgs.length % respostas.length];
+      pedido.msgs.push({ de: 'vend', t: r, h: agora() });
+      const ty = $('#typing'); if (ty) ty.remove();
+      if ($('#msgs') === box) { box.insertAdjacentHTML('beforeend', `<div class="msg vend">${esc(r)}<time>${agora()}</time></div>`); box.scrollTop = box.scrollHeight; }
+    }, 1400);
+  };
+  $('#revelar').onclick = () => { pedido.revelado = !pedido.revelado; rerender(); };
+  const c = $('#confirmar'), d = $('#disputa');
+  if (c) c.onclick = () => {
+    pedido.passo = 4;
+    pedido.msgs.push({ de: 'sis', t: `Recebimento confirmado. ${fmt(pedido.total * (1 - TAXA))} foram liberados para ${v.nome}.`, h: agora() });
+    rerender(); toast('Pedido concluído. Valor liberado ao vendedor.');
+  };
+  if (d) d.onclick = () => {
+    pedido.disputa = true;
+    pedido.msgs.push({ de: 'sis', t: 'Disputa aberta. Um mediador da Nexo vai entrar nesta conversa. O valor continua retido.', h: agora() });
+    rerender();
+  };
+  document.querySelectorAll('.rate-row button').forEach(b => b.onclick = () => { pedido.nota = +b.dataset.n; rerender(); toast(`Avaliação de ${pedido.nota} estrela${pedido.nota > 1 ? 's' : ''} enviada`); });
+}
+
+function pgVendedor(id) {
+  const v = vend(id) || VENDEDORES[0];
+  const anuncios = ANUNCIOS.filter(a => a.v === v.id);
+  const avs = AVALIACOES.filter(x => x.v === v.id);
+  return `
+  <div class="wrap">
+    <div class="panel profile">
+      ${avatar(v)}
+      <div style="display:grid;gap:10px;min-width:0">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><h1 style="font-size:clamp(24px,3.4vw,34px)">${esc(v.nome)}</h1>${v.nivel === 'diamante' ? `<span class="verified">${ic('verified')}</span>` : ''}${nivel(v)}</div>
+        <p class="muted" style="max-width:62ch">${esc(v.sobre)}</p>
+        <div class="profile-stats"><div><b>${v.vendas.toLocaleString('pt-BR')}</b>vendas</div><div><b>${pct(v.pos)}</b>positivas</div><div><b>${v.resp}</b>resposta</div><div><b>${v.desde}</b>na Nexo</div></div>
+      </div>
+      <button class="btn btn-ghost" type="button" data-toast="Seguir lojas entra na etapa do MVP.">Seguir loja</button>
+    </div>
+    <section class="section">
+      <div class="tabs" role="tablist"><button role="tab" aria-selected="true" data-tab="anuncios">Anúncios (${anuncios.length})</button><button role="tab" aria-selected="false" data-tab="avaliacoes">Avaliações (${avs.length})</button></div>
+      <div id="tab-anuncios" class="cards">${anuncios.map(card).join('')}</div>
+      <div id="tab-avaliacoes" class="panel box" hidden>${avs.map(r => `<div class="review"><div class="row"><b>${r.a}</b>${estrelas(r.n)}</div><p>${esc(r.t)}</p><span class="muted" style="font-size:12px">${r.q}</span></div>`).join('')}</div>
+    </section>
+  </div>`;
+}
+
+function ligarVendedor() {
+  document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => {
+    document.querySelectorAll('[data-tab]').forEach(x => x.setAttribute('aria-selected', x === b));
+    $('#tab-anuncios').hidden = b.dataset.tab !== 'anuncios';
+    $('#tab-avaliacoes').hidden = b.dataset.tab !== 'avaliacoes';
+  });
+}
+
+function pgVender() {
+  return `
+  <div class="wrap">
+    <div class="order-head"><div style="display:grid;gap:8px"><span class="eyebrow">Sua loja começa aqui</span><h1 style="font-size:clamp(26px,3.6vw,38px)">Criar anúncio</h1></div></div>
+    <div class="two-col">
+      <form class="panel box" id="formVender">
+        <div class="form-grid">
+          <div class="field"><label for="vJogo">Jogo</label><select class="input" id="vJogo">${JOGOS.map(j => `<option value="${j.id}">${j.nome}</option>`).join('')}</select></div>
+          <div class="field"><label for="vTipo">Tipo</label><select class="input" id="vTipo">${TIPOS.map(t => `<option>${t}</option>`).join('')}</select></div>
+          <div class="field full"><label for="vTitulo">Título</label><input class="input" id="vTitulo" maxlength="80" value="Conta Valorant Diamante 3 · 22 skins"></div>
+          <div class="field full"><label for="vDesc">Descrição</label><textarea class="input" id="vDesc" rows="4">Conta com e-mail trocável, 22 skins (Prime Vandal e Reaver Sheriff). Sem punições.</textarea></div>
+          <div class="field"><label for="vPreco">Preço (R$)</label><input class="input mono" id="vPreco" type="number" min="1" step="0.01" value="220"></div>
+          <div class="field"><label for="vEst">Estoque</label><input class="input mono" id="vEst" type="number" min="1" value="1"></div>
+          <label class="switch full" for="vAuto"><span><b>Entrega automática</b><br><span class="muted" style="font-size:13px">Cadastre os códigos e a Nexo entrega sozinha após o Pix.</span></span><input type="checkbox" id="vAuto"></label>
+          <div class="calc full" id="calc"></div>
+          <button class="btn btn-primary full" type="submit">Publicar anúncio ${ic('arrow')}</button>
+        </div>
+      </form>
+      <aside class="stack buybox">
+        <span class="eyebrow dim">Prévia do anúncio</span>
+        <div id="previa"></div>
+        <div class="note">${ic('shield')}<span>Anúncios novos passam por uma revisão rápida antes de aparecer na busca.</span></div>
+      </aside>
+    </div>
+  </div>`;
+}
+
+function ligarVender() {
+  const ids = ['vJogo', 'vTipo', 'vTitulo', 'vDesc', 'vPreco', 'vEst', 'vAuto'];
+  const upd = () => {
+    const preco = Math.max(0, Number($('#vPreco').value) || 0);
+    const a = { id: 0, t: $('#vTitulo').value || 'Título do anúncio', j: $('#vJogo').value, tipo: $('#vTipo').value, p: preco, v: 1, auto: $('#vAuto').checked, vendidos: 0 };
+    $('#previa').innerHTML = card(a).replace('href="#anuncio-0"', 'href="#vender"');
+    $('#calc').innerHTML = `<div><span>Preço de venda</span><span>${fmt(preco)}</span></div><div><span>Taxa Nexo (9,9%)</span><span>−${fmt(preco * TAXA)}</span></div><div class="total"><span>Você recebe por venda</span><span>${fmt(preco * (1 - TAXA))}</span></div>`;
+  };
+  ids.forEach(i => { $('#' + i).oninput = upd; $('#' + i).onchange = upd; });
+  $('#formVender').onsubmit = e => { e.preventDefault(); toast('Anúncio enviado para revisão (simulação)'); };
+  upd();
+}
+
+function pgIdentidade() {
+  const cores = [
+    ['Lima Nexo', '#C5F04A', 'Ações, destaques e a diagonal do N'],
+    ['Grafite', '#111311', 'Fundo principal'],
+    ['Superfície', '#181B17', 'Cards e painéis'],
+    ['Musgo', '#2C3D16', 'Brilho do hero e faixas especiais'],
+    ['Névoa', '#F1F4EC', 'Texto principal'],
+    ['Cinza-folha', '#959C8F', 'Texto secundário']
+  ];
+  return `
+  <div class="wrap">
+    <section class="brand-hero">
+      <span class="eyebrow">Identidade visual · v2</span>
+      <h1>A diagonal do N é a <em class="lime" style="font-style:normal">conexão.</em></h1>
+      <p>O logo da Nexo é desenhado com formas retas e geométricas. A diagonal do N, em lima, é a única parte colorida: ela liga quem vende a quem compra. O lima aparece no site só onde há ação ou conquista, como botões, destaques e etapas concluídas, para o olho saber sempre onde clicar.</p>
+    </section>
+    <section class="section">
+      <h2>Logo</h2>
+      <div class="logo-tiles">
+        <div class="logo-tile" style="background:#111311;color:#F1F4EC">${logoSVG('#F1F4EC', '#C5F04A')}<small>Principal · fundo grafite</small></div>
+        <div class="logo-tile" style="background:#C5F04A;color:#12160A">${logoSVG('#12160A', '#12160A')}<small>Sobre o lima</small></div>
+        <div class="logo-tile" style="background:#F1F4EC;color:#111311">${logoSVG('#111311', '#6E9A12')}<small>Sobre fundo claro</small></div>
+      </div>
+    </section>
+    <section class="section">
+      <h2>Cores</h2>
+      <div class="swatches">${cores.map(([n, hex, uso]) => `<div class="swatch"><div class="chipc" style="background:${hex}"></div><div><b>${n}</b><code>${hex}</code><span class="muted">${uso}</span></div></div>`).join('')}</div>
+    </section>
+    <section class="section">
+      <h2>Tipografia</h2>
+      <div class="type-specimen">
+        <div class="panel type-row"><div><b>Sora</b><div class="muted" style="font-size:13px">Títulos, preços e rótulos · 600–800</div></div><div style="font-family:var(--f-display);font-weight:600;font-size:clamp(28px,4vw,42px);letter-spacing:-0.03em;line-height:1.1">Seu próximo nível começa <span class="lime">aqui.</span></div></div>
+        <div class="panel type-row"><div><b>Manrope</b><div class="muted" style="font-size:13px">Textos e interface · 400–700</div></div><div style="font-size:16px">O pagamento fica retido até você confirmar que recebeu. Se algo der errado, a equipe resolve a disputa.</div></div>
+        <div class="panel type-row"><div><b>Sora · rótulos</b><div class="muted" style="font-size:13px">Caixa alta com espaçamento largo</div></div><div class="eyebrow" style="font-size:13px">O próximo drop é seu</div></div>
+        <div class="panel type-row"><div><b>JetBrains Mono</b><div class="muted" style="font-size:13px">Códigos de pedido e Pix</div></div><div class="mono" style="font-size:20px;font-weight:700">#NX-48213</div></div>
+      </div>
+    </section>
+    <section class="section">
+      <h2>Como a Nexo fala</h2>
+      <div class="voice">
+        <div class="panel box"><span class="chip ok">${ic('check')}ASSIM</span><p><b>“Seu próximo nível começa aqui.” · “Pix aprovado. O valor fica retido até você confirmar.”</b></p><p class="muted">Curto, com cara de jogo, e claro quando o assunto é dinheiro.</p></div>
+        <div class="panel box"><span class="chip bad">${ic('alert')}EVITAR</span><p><b>“Eita, gamer! Bora finalizar essa compra brabíssima? 🔥🔥”</b></p><p class="muted">Gíria forçada e exagero tiram a confiança na hora de pagar.</p></div>
+      </div>
+    </section>
+  </div>`;
+}
+
+/* ---------- Roteamento ---------- */
+const ROTAS = {
+  home: [pgHome, ligarHome],
+  busca: [pgBusca, ligarBusca],
+  anuncio: [pgAnuncio, ligarAnuncio],
+  checkout: [pgCheckout, ligarCheckout],
+  pedido: [pgPedido, ligarPedido],
+  vendedor: [pgVendedor, ligarVendedor],
+  vender: [pgVender, ligarVender],
+  identidade: [pgIdentidade, () => {}]
+};
+let rotaAtual = 'home';
+
+function render(rota) {
+  clearInterval(pixTimer);
+  let [nome, arg] = (rota || 'home').split('-');
+  if (nome === 'jogo') { filtros.jogos = new Set(jogo(arg) ? [arg] : []); filtros.tipos.clear(); filtros.q = ''; nome = 'busca'; }
+  if (nome === 'tipo') { filtros.tipos = new Set(TIPO_ROTA[arg] ? [TIPO_ROTA[arg]] : []); filtros.jogos.clear(); filtros.q = ''; nome = 'busca'; }
+  if (!ROTAS[nome]) nome = 'home';
+  rotaAtual = rota || 'home';
+  const [pg, ligar] = ROTAS[nome];
+  $('#app').innerHTML = pg(Number(arg));
+  ligar();
+  marcarAbas();
+}
+function rerender() { const y = window.scrollY; render(rotaAtual); window.scrollTo(0, y); }
+function go(rota) {
+  try { history.pushState(null, '', '#' + rota); } catch (e) {}
+  render(rota);
+  window.scrollTo(0, 0);
+}
+
+const ABAS = [['home', 'Explorar'], ['tipo-conta', 'Contas'], ['tipo-moeda', 'Moedas'], ['tipo-item', 'Itens'], ['tipo-gift', 'Gift cards'], ['tipo-servico', 'Serviços']];
+$('#tabsNav').innerHTML = ABAS.map(([r, n]) => `<li><a href="#${r}" data-aba="${r}">${n}</a></li>`).join('');
+function marcarAbas() {
+  document.querySelectorAll('[data-aba]').forEach(a => a.classList.toggle('on', a.dataset.aba === rotaAtual));
+}
+
+function atualizarFavs() {
+  $('#favCount').textContent = favs.size;
+  $('#favBtn').classList.toggle('has', favs.size > 0);
+}
+
+document.addEventListener('click', e => {
+  const f = e.target.closest('[data-fav]');
+  if (f) {
+    e.preventDefault();
+    const id = +f.dataset.fav;
+    favs.has(id) ? favs.delete(id) : favs.add(id);
+    document.querySelectorAll(`[data-fav="${id}"]`).forEach(b => b.setAttribute('aria-pressed', favs.has(id)));
+    atualizarFavs();
+    toast(favs.has(id) ? 'Adicionado aos favoritos' : 'Removido dos favoritos');
+    return;
+  }
+  const sc = e.target.closest('[data-scroll]');
+  if (sc) { const alvo = document.getElementById(sc.dataset.scroll); if (alvo) alvo.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+  const t = e.target.closest('[data-toast]');
+  if (t) { e.preventDefault(); toast(t.dataset.toast); return; }
+  const a = e.target.closest('a[href^="#"]');
+  if (a) {
+    e.preventDefault();
+    const r = a.getAttribute('href').slice(1);
+    if (!r) return;
+    if (r === 'busca') { filtros.jogos.clear(); filtros.tipos.clear(); }
+    go(r);
+  }
+});
+window.addEventListener('popstate', () => render(location.hash.slice(1) || 'home'));
+
+$('#favBtn').onclick = e => {
+  e.stopPropagation();
+  if (!favs.size) { toast('Toque no coração de um anúncio para favoritar'); return; }
+  filtros.q = ''; filtros.jogos.clear(); filtros.tipos.clear();
+  go('busca');
+  $('#resTitulo').textContent = 'Favoritos';
+  const r = ANUNCIOS.filter(a => favs.has(a.id));
+  $('#resQtd').textContent = `${r.length} ${r.length === 1 ? 'anúncio' : 'anúncios'}`;
+  $('#resultados').innerHTML = r.map(card).join('');
+};
+
+$('#topSearch').onsubmit = e => {
+  e.preventDefault();
+  filtros.q = $('#topQ').value; filtros.jogos.clear(); filtros.tipos.clear();
+  go('busca');
+};
+
+let toastT;
+function toast(msg) {
+  const el = $('#toast'); el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+render(location.hash.slice(1) || 'home');
+</script>

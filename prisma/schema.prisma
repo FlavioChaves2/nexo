@@ -1,0 +1,312 @@
+// Banco de dados da Nexo.
+// Em desenvolvimento usa SQLite (arquivo local). Para produção, troque o
+// provider para "postgresql" e aponte DATABASE_URL para o Supabase/Neon.
+// Valores em dinheiro são sempre centavos (Int) para evitar erro de arredondamento.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  username     String   @unique
+  passwordHash String
+  bio          String   @default("")
+  balanceCents Int      @default(0) // saldo disponível para saque
+  role         String   @default("USER") // USER | ADMIN
+  createdAt    DateTime @default(now())
+
+  // Suspensão pela equipe: a pessoa não entra e os anúncios somem.
+  suspendedAt   DateTime?
+  suspendReason String    @default("")
+
+  // Verificação de vendedor (exigida para sacar).
+  fullName         String  @default("")
+  cpf              String? @unique
+  birthDate        String  @default("")
+  verification     String  @default("NAO_ENVIADO") // NAO_ENVIADO | PENDENTE | APROVADO | RECUSADO
+  verificationNote String  @default("")
+
+  // Login em duas etapas (TOTP, app autenticador). Obrigatório para admin.
+  totpSecret  String?
+  totpEnabled Boolean @default(false)
+
+  reports Report[]
+
+  // Perfil público e reputação (contadores atualizados a cada venda e avaliação).
+  storeName      String  @default("")
+  avatarId       String?
+  completedSales Int     @default(0)
+  ratingSum      Int     @default(0)
+  ratingCount    Int     @default(0)
+
+  notifications Notification[]
+  questions     Question[]
+  images        Image[]
+
+  listings        Listing[]
+  purchases       Order[]      @relation("buyer")
+  sales           Order[]      @relation("seller")
+  messages        Message[]
+  reviewsGiven    Review[]     @relation("author")
+  reviewsReceived Review[]     @relation("sellerReviews")
+  favorites       Favorite[]
+  withdrawals     Withdrawal[]
+  adminActions    AdminAction[]
+}
+
+model Game {
+  slug     String    @id
+  name     String
+  letter   String // letra exibida em "Escolha seu universo"
+  glyph    String // texto grande na arte dos cards
+  c1       String // cor de brilho
+  c2       String // cor de fundo
+  sort     Int       @default(0)
+  listings Listing[]
+}
+
+model Listing {
+  id            String   @id @default(cuid())
+  sellerId      String
+  seller        User     @relation(fields: [sellerId], references: [id])
+  gameSlug      String
+  game          Game     @relation(fields: [gameSlug], references: [slug])
+  type          String // CONTA | MOEDA | ITEM | GIFT | SERVICO
+  title         String
+  description   String
+  glyph         String?
+  priceCents    Int
+  oldPriceCents Int?
+  stock         Int
+  autoDelivery  Boolean  @default(false)
+  featured      Boolean  @default(false)
+  status        String   @default("ATIVO") // ATIVO | PAUSADO | REMOVIDO (pela moderação)
+  moderationNote String  @default("") // motivo da remoção, visível para o vendedor
+  soldCount     Int      @default(0)
+  createdAt     DateTime @default(now())
+
+  codes     AutoCode[]
+  orders    Order[]
+  favorites Favorite[]
+  reports   Report[]
+  images    Image[]
+  questions Question[]
+
+  @@index([gameSlug])
+  @@index([type])
+  @@index([sellerId])
+}
+
+// Códigos para entrega automática (gift cards, recargas). Um por unidade.
+model AutoCode {
+  id        String   @id @default(cuid())
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  code      String
+  orderId   String?
+  createdAt DateTime @default(now())
+
+  @@index([listingId, orderId])
+}
+
+// Ciclo do pedido (Garantia Nexo):
+// AGUARDANDO_PAGAMENTO -> PAGO -> ENTREGUE -> CONCLUIDO
+//                           \--------\-> DISPUTA -> CONCLUIDO (admin libera ao vendedor)
+//                                               \-> REEMBOLSADO (admin devolve ao comprador)
+// AGUARDANDO_PAGAMENTO -> CANCELADO (Pix expirou ou comprador cancelou)
+model Order {
+  id             String    @id @default(cuid())
+  code           String    @unique
+  buyerId        String
+  buyer          User      @relation("buyer", fields: [buyerId], references: [id])
+  sellerId       String
+  seller         User      @relation("seller", fields: [sellerId], references: [id])
+  listingId      String
+  listing        Listing   @relation(fields: [listingId], references: [id])
+  quantity       Int
+  unitPriceCents Int
+  totalCents     Int
+  feeCents       Int
+  status         String    @default("AGUARDANDO_PAGAMENTO")
+  buyerNote      String    @default("") // ex.: ID do jogador para recargas
+  deliveryText   String    @default("")
+  disputeReason  String    @default("")
+  paymentId      String?
+  pixCode        String?
+  pixExpiresAt   DateTime?
+  paidAt         DateTime?
+  deliveredAt    DateTime?
+  autoConfirmAt  DateTime?
+  completedAt    DateTime?
+  disputedAt     DateTime?
+  resolution     String    @default("") // decisão do mediador, visível para as duas partes
+  resolvedAt     DateTime?
+  refundedAt     DateTime?
+  refundId       String?
+  discountCents  Int       @default(0) // desconto de cupom, pago pela Nexo (o vendedor recebe sobre o preço cheio)
+  couponCode     String?
+  createdAt      DateTime  @default(now())
+
+  messages Message[]
+  review   Review?
+
+  @@index([buyerId])
+  @@index([sellerId])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  senderId  String? // null = mensagem do sistema
+  sender    User?    @relation(fields: [senderId], references: [id])
+  body      String
+  createdAt DateTime @default(now())
+
+  @@index([orderId, createdAt])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  orderId   String   @unique
+  order     Order    @relation(fields: [orderId], references: [id])
+  authorId  String
+  author    User     @relation("author", fields: [authorId], references: [id])
+  sellerId  String
+  seller    User     @relation("sellerReviews", fields: [sellerId], references: [id])
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+
+  @@index([sellerId])
+}
+
+model Favorite {
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([userId, listingId])
+}
+
+model Withdrawal {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  amountCents Int
+  pixKey      String
+  status      String   @default("PENDENTE") // PENDENTE | PAGO | RECUSADO
+  note        String   @default("") // motivo da recusa
+  payoutId    String?
+  processedAt DateTime?
+  createdAt   DateTime @default(now())
+}
+
+// Registro de tudo que um admin faz (auditoria).
+model AdminAction {
+  id        String   @id @default(cuid())
+  adminId   String
+  admin     User     @relation(fields: [adminId], references: [id])
+  kind      String // DISPUTA_LIBERADA | DISPUTA_REEMBOLSADA | SAQUE_PAGO | SAQUE_RECUSADO | ANUNCIO_REMOVIDO | ANUNCIO_RESTAURADO
+  targetId  String
+  label     String // descrição curta para a lista (ex.: "#NX-12345")
+  note      String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+// Denúncia de anúncio feita por um usuário. 3 denúncias abertas tiram o anúncio do ar até a análise.
+model Report {
+  id         String   @id @default(cuid())
+  listingId  String
+  listing    Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  reporterId String
+  reporter   User     @relation(fields: [reporterId], references: [id])
+  reason     String
+  details    String   @default("")
+  status     String   @default("ABERTA") // ABERTA | PROCEDENTE | DESCARTADA
+  createdAt  DateTime @default(now())
+
+  @@unique([listingId, reporterId])
+  @@index([status])
+}
+
+// Tentativas de login, para bloquear quem tenta adivinhar senhas.
+model LoginAttempt {
+  id        String   @id @default(cuid())
+  email     String
+  ip        String
+  ok        Boolean
+  createdAt DateTime @default(now())
+
+  @@index([email, createdAt])
+  @@index([ip, createdAt])
+}
+
+// Foto enviada por usuário. O arquivo fica em uploads/<id> e é servido por /api/imagens/<id>.
+model Image {
+  id        String   @id @default(cuid())
+  ownerId   String
+  owner     User     @relation(fields: [ownerId], references: [id])
+  listingId String?
+  listing   Listing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  kind      String // ANUNCIO | AVATAR
+  mime      String
+  size      Int
+  sort      Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([listingId, sort])
+}
+
+model Question {
+  id         String    @id @default(cuid())
+  listingId  String
+  listing    Listing   @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  askerId    String
+  asker      User      @relation(fields: [askerId], references: [id])
+  body       String
+  answer     String    @default("")
+  answeredAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([listingId, createdAt])
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  body      String    @default("")
+  href      String    @default("/")
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, readAt])
+}
+
+// Cupom da Nexo: o desconto sai da receita da plataforma.
+model Coupon {
+  id             String    @id @default(cuid())
+  code           String    @unique
+  percentOff     Int       @default(0) // 10 = 10%
+  amountOffCents Int       @default(0)
+  maxDiscountCents Int?    // teto para cupons percentuais
+  minOrderCents  Int       @default(0)
+  maxUses        Int?
+  uses           Int       @default(0)
+  expiresAt      DateTime?
+  active         Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+}
