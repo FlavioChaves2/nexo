@@ -9,6 +9,7 @@ import { parseReais } from "@/lib/format";
 import { LISTING_TYPES } from "@/lib/constants";
 import { MAX_LISTING_IMAGES, deleteImage, filesFrom, saveImage } from "@/lib/images";
 import { OrderError } from "@/lib/orders";
+import { emailBlock } from "@/lib/email";
 
 export type ListingFormState = { error?: string } | undefined;
 
@@ -53,6 +54,8 @@ export async function createListing(_: ListingFormState, form: FormData): Promis
   const user = await getCurrentUser();
   if (!user) redirect("/entrar?next=/vender");
   return guard(async () => {
+    const blocked = await emailBlock(user.id);
+    if (blocked) throw new OrderError(blocked);
     const parsed = schema.safeParse(Object.fromEntries(form));
     if (!parsed.success) throw new OrderError(parsed.error.issues[0].message);
     const d = parsed.data;

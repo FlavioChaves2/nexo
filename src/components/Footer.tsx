@@ -30,9 +30,9 @@ export function Footer() {
         <div>
           <h4>Nexo</h4>
           <ul>
-            <li><Link href="/#garantia">Garantia Nexo</Link></li>
-            <li><span>Termos de uso (em breve)</span></li>
-            <li><span>Privacidade (em breve)</span></li>
+            <li><Link href="/ajuda">Central de ajuda</Link></li>
+            <li><Link href="/termos">Termos de uso</Link></li>
+            <li><Link href="/privacidade">Privacidade</Link></li>
           </ul>
         </div>
       </div>

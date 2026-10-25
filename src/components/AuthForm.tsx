@@ -34,6 +34,7 @@ export function AuthForm({ mode, next }: { mode: "login" | "register"; next: str
           minLength={mode === "register" ? 8 : undefined}
         />
       </div>
+      {mode === "login" && <Link className="linkish small" href="/esqueci-senha" style={{ justifySelf: "end" }}>Esqueci a senha</Link>}
       {state?.error && <p className="alert" role="alert">{state.error}</p>}
       <button className="btn btn-primary btn-block" type="submit" disabled={pending}>
         {pending ? "Aguarde…" : mode === "login" ? "Entrar" : "Criar conta"}

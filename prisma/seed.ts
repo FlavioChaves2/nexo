@@ -90,7 +90,7 @@ async function main() {
   const passwordHash = await bcrypt.hash(TEST_PASSWORD, 10);
   const users = new Map<string, string>();
   const mk = async (username: string, bio = "") => {
-    const u = await db.user.create({ data: { username, bio, email: `${username}@nexo.test`, passwordHash } });
+    const u = await db.user.create({ data: { username, bio, email: `${username}@nexo.test`, passwordHash, emailVerifiedAt: new Date() } });
     users.set(username, u.id);
   };
   await mk("admin");

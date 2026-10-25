@@ -10,6 +10,8 @@ import { ListingCard } from "@/components/ListingCard";
 import { WithdrawForm } from "@/components/WithdrawForm";
 import { VerificationForm } from "@/components/TrustForms";
 import { Icon } from "@/components/Icon";
+import { VerifyBanner } from "@/components/EmailForms";
+import { emailEnabled } from "@/lib/email";
 import { logout } from "@/app/actions/auth";
 import { toggleListingStatus } from "@/app/actions/listings";
 
@@ -51,6 +53,7 @@ export default async function ContaPage({ searchParams }: { searchParams: Promis
       </div>
 
       <section className="section">
+        {emailEnabled() && !fresh.emailVerifiedAt && <VerifyBanner email={fresh.email} />}
         <div className="stat-tiles">
           <div className="panel"><span className="eyebrow dim">Saldo disponível</span><b className="lime">{money(fresh.balanceCents)}</b><span className="muted small">Pronto para saque</span></div>
           <div className="panel"><span className="eyebrow dim">A liberar</span><b>{money(pendingCents)}</b><span className="muted small">Vendas aguardando confirmação</span></div>

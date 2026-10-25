@@ -16,8 +16,10 @@ import { Avatar } from "@/components/Avatar";
 import { SellerBadges } from "@/components/SellerBadges";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
-  const l = await db.listing.findUnique({ where: { id: (await params).id }, select: { title: true } });
-  return { title: l?.title ?? "Anúncio" };
+  const l = await db.listing.findUnique({ where: { id: (await params).id }, select: { title: true, description: true, priceCents: true, images: { select: { id: true }, take: 1 } } });
+  if (!l) return { title: "Anúncio" };
+  const description = `${money(l.priceCents)} · ${l.description.slice(0, 150)}`;
+  return { title: l.title, description, openGraph: { title: l.title, description, images: l.images[0] ? [`/api/imagens/${l.images[0].id}`] : undefined } };
 }
 
 export default async function AnuncioPage({ params }: { params: Promise<{ id: string }> }) {

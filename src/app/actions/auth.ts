@@ -16,6 +16,7 @@ import {
   startPending2fa,
 } from "@/lib/auth";
 import { newTotpSecret, verifyTotp } from "@/lib/totp";
+import { consumeToken, emailEnabled, sendResetEmail, sendVerifyEmail } from "@/lib/email";
 
 export type FormState = { error?: string; ok?: string } | undefined;
 
@@ -58,6 +59,7 @@ export async function register(_: FormState, form: FormData): Promise<FormState>
   if (taken) return { error: taken.email === email ? "Este e-mail já tem conta." : "Este nome de usuário já existe." };
 
   const user = await db.user.create({ data: { email, username, passwordHash: await bcrypt.hash(password, 10) } });
+  await sendVerifyEmail(user).catch(() => false);
   await record(email, ip, true);
   await createSession(user.id);
   redirect(safeNext(form.get("next")));
@@ -128,4 +130,31 @@ export async function confirm2faSetup(_: FormState, form: FormData): Promise<For
 export async function logout() {
   await destroySession();
   redirect("/");
+}
+
+export async function requestPasswordReset(_: FormState, form: FormData): Promise<FormState> {
+  if (!emailEnabled()) return { error: "A recuperação por e-mail ainda não está ativa. Fale com o suporte." };
+  const email = String(form.get("email") ?? "").trim().toLowerCase();
+  const user = await db.user.findUnique({ where: { email } });
+  if (user && !user.suspendedAt) await sendResetEmail(user);
+  // Mesma resposta exista ou não a conta, para não revelar quem é cadastrado.
+  return { ok: "Se existir uma conta com esse e-mail, enviamos um link. Confira também o spam." };
+}
+
+export async function resetPassword(_: FormState, form: FormData): Promise<FormState> {
+  const password = String(form.get("password") ?? "");
+  if (password.length < 8 || password.length > 72) return { error: "A senha precisa ter pelo menos 8 caracteres." };
+  if (password !== String(form.get("confirm") ?? "")) return { error: "As senhas não são iguais." };
+  const userId = await consumeToken(String(form.get("token") ?? ""), "RESET");
+  if (!userId) return { error: "Link inválido ou vencido. Peça um novo." };
+  await db.user.update({ where: { id: userId }, data: { passwordHash: await bcrypt.hash(password, 10), emailVerifiedAt: new Date() } });
+  await db.emailToken.updateMany({ where: { userId, kind: "RESET", usedAt: null }, data: { usedAt: new Date() } });
+  redirect("/entrar?senha=nova");
+}
+
+export async function resendVerification(): Promise<FormState> {
+  const me = await requireUser("/conta");
+  const user = await db.user.findUniqueOrThrow({ where: { id: me.id } });
+  if (user.emailVerifiedAt) return { ok: "Seu e-mail já está confirmado." };
+  return (await sendVerifyEmail(user)) ? { ok: `Enviamos um link para ${user.email}.` } : { error: "Você pediu muitos e-mails. Tente daqui a 1 hora." };
 }

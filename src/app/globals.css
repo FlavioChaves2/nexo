@@ -400,3 +400,14 @@ img.avatar { object-fit: cover; padding: 0; }
 .qa { display: grid; gap: 6px; padding-block: 14px; border-top: 1px solid var(--line); }
 .qa:first-child { border-top: 0; padding-top: 0; }
 .qa .a { padding-left: 14px; border-left: 2px solid var(--accent); color: var(--ink); }
+
+/* Páginas de texto */
+.doc { max-width: 760px; margin-inline: auto; padding-block: 32px 16px; display: grid; gap: 18px; }
+.doc h1 { font-size: clamp(28px, 4vw, 40px); }
+.doc h2 { font-size: 20px; margin-top: 12px; }
+.doc p, .doc li { color: #CBD0C4; line-height: 1.7; }
+.doc ul, .doc ol { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
+.doc li::marker { color: var(--accent); }
+.doc details { border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; background: var(--surface); }
+.doc summary { cursor: pointer; font-weight: 700; }
+.doc details p { margin-top: 10px; }

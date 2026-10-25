@@ -21,6 +21,8 @@ model User {
   bio          String   @default("")
   balanceCents Int      @default(0) // saldo disponível para saque
   role         String   @default("USER") // USER | ADMIN
+  emailVerifiedAt DateTime?
+  emailTokens     EmailToken[]
   createdAt    DateTime @default(now())
 
   // Suspensão pela equipe: a pessoa não entra e os anúncios somem.
@@ -311,4 +313,18 @@ model Coupon {
   expiresAt      DateTime?
   active         Boolean   @default(true)
   createdAt      DateTime  @default(now())
+}
+
+// Links enviados por e-mail (confirmar e-mail, redefinir senha). Guarda só o hash do token.
+model EmailToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind      String // VERIFY | RESET
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, kind])
 }

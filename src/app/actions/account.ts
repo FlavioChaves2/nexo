@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { getCurrentUser, requireUser } from "@/lib/auth";
 import { money, parseReais } from "@/lib/format";
 import { OrderError } from "@/lib/orders";
+import { emailBlock } from "@/lib/email";
 import { reportListing, submitVerification, withdrawalBlock } from "@/lib/trust";
 
 export type WithdrawState = { error?: string; ok?: string } | undefined;
@@ -17,7 +18,7 @@ export async function requestWithdrawal(_: WithdrawState, form: FormData): Promi
   const pixKey = String(form.get("pixKey") ?? "").trim().slice(0, 120);
   if (!Number.isFinite(amount) || amount < MIN_WITHDRAW) return { error: `Saque mínimo: ${money(MIN_WITHDRAW)}.` };
   if (pixKey.length < 5) return { error: "Informe uma chave Pix válida." };
-  const block = await withdrawalBlock(user.id, amount);
+  const block = (await emailBlock(user.id)) ?? (await withdrawalBlock(user.id, amount));
   if (block) return { error: block };
 
   // Desconta só se houver saldo, na mesma operação (evita saque duplo).
