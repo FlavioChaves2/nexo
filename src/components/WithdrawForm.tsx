@@ -21,7 +21,7 @@ export function WithdrawForm() {
       {state?.error && <p className="alert" role="alert">{state.error}</p>}
       {state?.ok && <p className="note">{state.ok}</p>}
       <button className="btn btn-primary" type="submit" disabled={pending}>{pending ? "Solicitando…" : "Solicitar saque"}</button>
-      <p className="hint">No modo de teste o saque fica pendente; com o gateway conectado, ele é pago por Pix automaticamente.</p>
+      <p className="hint">A equipe Nexo confere cada saque e, ao aprovar, o Pix é enviado na hora pelo Asaas para a sua chave.</p>
     </form>
   );
 }
