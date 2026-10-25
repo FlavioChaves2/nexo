@@ -29,6 +29,8 @@ async function run(paths: string[], fn: (adminId: string) => Promise<unknown>, o
     await fn(admin.id);
   } catch (e) {
     if (e instanceof OrderError) return { error: e.message };
+    // Recusa do gateway (saldo, chave Pix inválida...): só admin vê, então mostra o motivo.
+    if (e instanceof Error && e.message.startsWith("Asaas:")) return { error: e.message };
     throw e;
   }
   for (const p of [...paths, "/admin"]) revalidatePath(p);
