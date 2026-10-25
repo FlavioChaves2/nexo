@@ -18,7 +18,8 @@ export async function POST(req: Request) {
 
   const body = (await req.json().catch(() => null)) as { event?: string; payment?: { id?: string } } | null;
   const paymentId = body?.payment?.id;
-  if (!paymentId || (body?.event !== "PAYMENT_RECEIVED" && body?.event !== "PAYMENT_CONFIRMED")) return NextResponse.json({ ok: true });
+  // Qualquer evento de cobrança serve de gatilho: quem decide se está pago é a consulta à API.
+  if (!paymentId || !body?.event?.startsWith("PAYMENT_")) return NextResponse.json({ ok: true });
 
   const order = await db.order.findFirst({ where: { paymentId } });
   if (!order || !(await isPixPaid(paymentId))) return NextResponse.json({ ok: true });

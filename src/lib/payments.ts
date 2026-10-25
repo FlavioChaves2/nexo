@@ -55,7 +55,9 @@ export async function createPixCharge(order: { code: string; totalCents: number 
 export async function isPixPaid(paymentId: string) {
   if (isMockPayments()) return false;
   const p = await asaas<{ status: string }>("GET", `/payments/${paymentId}`);
-  return p.status === "RECEIVED" || p.status === "CONFIRMED";
+  if (p.status === "RECEIVED" || p.status === "CONFIRMED") return true;
+  // No sandbox a conta não tem saldo para pagar o Pix; "receber em dinheiro" no painel simula o pagamento.
+  return process.env.ASAAS_ENV !== "production" && p.status === "RECEIVED_IN_CASH";
 }
 
 /** Devolve um Pix ao comprador (disputa decidida a favor dele). */
