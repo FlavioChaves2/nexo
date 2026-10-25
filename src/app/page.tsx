@@ -8,6 +8,7 @@ import { feeBps } from "@/lib/format";
 import { HeroArt } from "@/components/HeroArt";
 import { ListingCard } from "@/components/ListingCard";
 import { Icon } from "@/components/Icon";
+import { Ticker } from "@/components/Ticker";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,11 @@ export default async function Home() {
     }),
     favoriteIds(user?.id),
   ]);
+  const [listingsCount, sellersCount] = await Promise.all([
+    db.listing.count({ where: visibleListing }),
+    db.user.count({ where: { listings: { some: visibleListing } } }),
+  ]);
+  const stats = { listings: listingsCount.toLocaleString("pt-BR"), sellers: sellersCount.toLocaleString("pt-BR") };
   const fee = (feeBps() / 100).toString().replace(".", ",");
 
   return (
@@ -46,12 +52,15 @@ export default async function Home() {
             </a>
           </div>
           <div className="hero-meta">
-            <span>MARKETPLACE GAMER</span>
-            <span>01 — BETA</span>
+            <span><b>{stats.listings}</b> ANÚNCIOS</span>
+            <span><b>{stats.sellers}</b> LOJAS</span>
+            <span><b>{games.length}</b> JOGOS</span>
           </div>
         </div>
         <HeroArt />
       </section>
+
+      <div style={{ marginTop: 22 }}><Ticker /></div>
 
       <div className="perks">
         <div className="perk"><Icon name="diamond" /><div><b>Encontre seu próximo upgrade</b><span>Contas, itens, moedas e serviços de {games.length} jogos</span></div></div>

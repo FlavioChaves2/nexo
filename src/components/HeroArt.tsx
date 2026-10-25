@@ -18,8 +18,8 @@ export function HeroArt() {
           </radialGradient>
         </defs>
         <circle cx="275" cy="200" r="170" fill="url(#brilho)" />
-        <ellipse cx="275" cy="200" rx="185" ry="120" fill="none" stroke="#C5F04A" strokeOpacity=".22" strokeWidth="1.2" transform="rotate(-35 275 200)" />
-        <ellipse cx="275" cy="200" rx="195" ry="88" fill="none" stroke="#C5F04A" strokeOpacity=".14" strokeWidth="1" transform="rotate(28 275 200)" />
+        <ellipse className="orbit" cx="275" cy="200" rx="185" ry="120" fill="none" stroke="#C5F04A" strokeOpacity=".22" strokeWidth="1.2" transform="rotate(-35 275 200)" />
+        <ellipse className="orbit rev" cx="275" cy="200" rx="195" ry="88" fill="none" stroke="#C5F04A" strokeOpacity=".14" strokeWidth="1" transform="rotate(28 275 200)" />
         <g transform="translate(275 200)">
           <g className="float">
             {angles.map((a) => bar(a, "#3F5A17", 9))}
