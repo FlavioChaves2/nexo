@@ -2,7 +2,7 @@ import { randomInt } from "node:crypto";
 import type { Order, Prisma } from "@prisma/client";
 import { db } from "./db";
 import { feeFor, money } from "./format";
-import { createPixCharge } from "./payments";
+import { createPixCharge, type Payer } from "./payments";
 import { AUTO_CONFIRM_DAYS } from "./constants";
 import { notify } from "./notify";
 import { applyCoupon } from "./coupons";
@@ -29,7 +29,7 @@ async function newOrderCode() {
   throw new Error("Não foi possível gerar o código do pedido.");
 }
 
-export async function createOrder(input: { buyerId: string; listingId: string; quantity: number; buyerNote: string; couponCode?: string }) {
+export async function createOrder(input: { buyerId: string; listingId: string; quantity: number; buyerNote: string; couponCode?: string; payer?: Payer }) {
   const listing = await db.listing.findUnique({ where: { id: input.listingId }, include: { seller: { select: { suspendedAt: true } } } });
   if (!listing || listing.status !== "ATIVO" || listing.seller.suspendedAt) throw new OrderError("Este anúncio não está disponível.");
   if (listing.sellerId === input.buyerId) throw new OrderError("Você não pode comprar o próprio anúncio.");
@@ -41,7 +41,13 @@ export async function createOrder(input: { buyerId: string; listingId: string; q
   const discountCents = coupon?.discountCents ?? 0;
   const totalCents = grossCents - discountCents; // o que o comprador paga
   const code = await newOrderCode();
-  const charge = await createPixCharge({ code, totalCents });
+  let charge;
+  try {
+    charge = await createPixCharge({ code, totalCents }, input.payer);
+  } catch (e) {
+    console.error("Falha ao gerar Pix:", e);
+    throw new OrderError("Não foi possível gerar o Pix agora. Confira seus dados e tente de novo.");
+  }
 
   const order = await db.order.create({
     data: {

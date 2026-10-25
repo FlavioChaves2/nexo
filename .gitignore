@@ -11,3 +11,6 @@ prisma/*.db-journal
 .env.local
 
 uploads/
+
+.vercel
+.env*

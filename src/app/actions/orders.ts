@@ -4,7 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
-import { isMockPayments } from "@/lib/payments";
+import { isMockPayments, needsPayerDocument, type Payer } from "@/lib/payments";
+import { validCpf } from "@/lib/trust";
 import {
   OrderError,
   cancelOrder,
@@ -36,6 +37,14 @@ async function run(code: string, fn: (orderId: string, userId: string) => Promis
 export async function startCheckout(_: ActionState, form: FormData): Promise<ActionState> {
   const listingId = String(form.get("listingId") ?? "");
   const user = await requireUser(`/anuncio/${listingId}`);
+  let payer: Payer | undefined;
+  if (needsPayerDocument()) {
+    const name = String(form.get("payerName") ?? "").trim().replace(/\s+/g, " ").slice(0, 120);
+    const cpf = String(form.get("payerCpf") ?? "").replace(/\D/g, "");
+    if (name.split(" ").length < 2) return { error: "Informe seu nome completo." };
+    if (!validCpf(cpf)) return { error: "CPF inválido." };
+    payer = { name, cpf, email: user.email };
+  }
   let code: string;
   try {
     const order = await createOrder({
@@ -44,6 +53,7 @@ export async function startCheckout(_: ActionState, form: FormData): Promise<Act
       quantity: Number(form.get("qty")) || 1,
       buyerNote: String(form.get("note") ?? "").trim().slice(0, 40),
       couponCode: String(form.get("coupon") ?? "") || undefined,
+      payer,
     });
     code = order.code;
   } catch (e) {

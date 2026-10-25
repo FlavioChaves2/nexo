@@ -5,6 +5,7 @@ import { requireUser } from "@/lib/auth";
 import { money } from "@/lib/format";
 import { applyCoupon } from "@/lib/coupons";
 import { OrderError } from "@/lib/orders";
+import { needsPayerDocument } from "@/lib/payments";
 import { Art } from "@/components/Art";
 import { Icon } from "@/components/Icon";
 import { CheckoutForm } from "@/components/CheckoutForm";
@@ -42,7 +43,7 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
           {blocked ? (
             <div className="note warn"><Icon name="alert" /><span>{blocked}</span></div>
           ) : (
-            <CheckoutForm listingId={l.id} qty={qty} needsPlayerId={l.type === "MOEDA"} gameName={l.game.name} couponCode={coupon?.code} />
+            <CheckoutForm listingId={l.id} qty={qty} needsPlayerId={l.type === "MOEDA"} gameName={l.game.name} couponCode={coupon?.code} askPayer={needsPayerDocument()} />
           )}
         </div>
         <aside className="stack buybox">
