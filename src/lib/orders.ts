@@ -29,7 +29,7 @@ async function newOrderCode() {
   throw new Error("Não foi possível gerar o código do pedido.");
 }
 
-export async function createOrder(input: { buyerId: string; listingId: string; quantity: number; buyerNote: string; couponCode?: string; payer?: Payer }) {
+export async function createOrder(input: { buyerId: string; listingId: string; quantity: number; buyerNote: string; couponCode?: string; payer?: Payer; method?: "pix" | "saldo" }) {
   const listing = await db.listing.findUnique({ where: { id: input.listingId }, include: { seller: { select: { suspendedAt: true } } } });
   if (!listing || listing.status !== "ATIVO" || listing.seller.suspendedAt) throw new OrderError("Este anúncio não está disponível.");
   if (listing.sellerId === input.buyerId) throw new OrderError("Você não pode comprar o próprio anúncio.");
@@ -41,12 +41,19 @@ export async function createOrder(input: { buyerId: string; listingId: string; q
   const discountCents = coupon?.discountCents ?? 0;
   const totalCents = grossCents - discountCents; // o que o comprador paga
   const code = await newOrderCode();
-  let charge;
-  try {
-    charge = await createPixCharge({ code, totalCents }, input.payer);
-  } catch (e) {
-    console.error("Falha ao gerar Pix:", e);
-    throw new OrderError("Não foi possível gerar o Pix agora. Confira seus dados e tente de novo.");
+  const bySaldo = input.method === "saldo";
+  if (bySaldo) {
+    const buyer = await db.user.findUniqueOrThrow({ where: { id: input.buyerId }, select: { balanceCents: true } });
+    if (buyer.balanceCents < totalCents) throw new OrderError("Saldo insuficiente para esta compra.");
+  }
+  let charge: { id: string; copyPaste: string | null; expiresAt: Date | null } = { id: `saldo_${code}`, copyPaste: null, expiresAt: null };
+  if (!bySaldo) {
+    try {
+      charge = await createPixCharge({ code, totalCents }, input.payer);
+    } catch (e) {
+      console.error("Falha ao gerar Pix:", e);
+      throw new OrderError("Não foi possível gerar o Pix agora. Confira seus dados e tente de novo.");
+    }
   }
 
   const order = await db.order.create({
@@ -65,54 +72,93 @@ export async function createOrder(input: { buyerId: string; listingId: string; q
       paymentId: charge.id,
       pixCode: charge.copyPaste,
       pixExpiresAt: charge.expiresAt,
-      messages: { create: { body: `Pedido criado. Pague o Pix de ${money(totalCents)} para iniciar.` } },
+      messages: { create: { body: bySaldo ? "Pedido criado." : `Pedido criado. Pague o Pix de ${money(totalCents)} para iniciar.` } },
     },
   });
+  if (bySaldo) {
+    try {
+      await payWithBalance(order.id, input.buyerId, totalCents);
+    } catch (e) {
+      // Saldo mudou entre a checagem e o débito: o pedido não segue.
+      await db.order.update({ where: { id: order.id }, data: { status: "CANCELADO" } });
+      throw e;
+    }
+  }
   return order;
+}
+
+/** Pedido pago com o saldo da Nexo (sem Pix): estornos voltam para o saldo do comprador. */
+export const paidWithBalance = (o: { paymentId: string | null }) => !!o.paymentId?.startsWith("saldo_");
+
+/** Devolve ao saldo do comprador um pedido pago com saldo. */
+export async function refundToBalance(tx: Tx, order: { id: string; buyerId: string; totalCents: number }) {
+  await tx.user.update({ where: { id: order.buyerId }, data: { balanceCents: { increment: order.totalCents } } });
+  return { id: `saldo_refund_${order.id}` };
 }
 
 /** Chamado pelo webhook do gateway (ou pelo botão de simulação no modo mock). */
 export async function markOrderPaid(orderId: string) {
-  return db.$transaction(async (tx) => {
-    const order = await tx.order.findUniqueOrThrow({ where: { id: orderId }, include: { listing: true } });
-    if (order.status !== "AGUARDANDO_PAGAMENTO") return order;
+  return db.$transaction((tx) => payInTx(tx, orderId));
+}
 
-    const reserved = await tx.listing.updateMany({
-      where: { id: order.listingId, stock: { gte: order.quantity } },
-      data: { stock: { decrement: order.quantity }, soldCount: { increment: order.quantity } },
-    });
-    if (reserved.count !== 1) {
-      // Sem estoque: em produção, aqui entra o estorno automático do Pix.
-      await transition(tx, order.id, ["AGUARDANDO_PAGAMENTO"], { status: "CANCELADO" });
+async function payInTx(tx: Tx, orderId: string) {
+  const order = await tx.order.findUniqueOrThrow({ where: { id: orderId }, include: { listing: true } });
+  if (order.status !== "AGUARDANDO_PAGAMENTO") return order;
+
+  const reserved = await tx.listing.updateMany({
+    where: { id: order.listingId, stock: { gte: order.quantity } },
+    data: { stock: { decrement: order.quantity }, soldCount: { increment: order.quantity } },
+  });
+  if (reserved.count !== 1) {
+    await transition(tx, order.id, ["AGUARDANDO_PAGAMENTO"], { status: "CANCELADO" });
+    if (paidWithBalance(order)) {
+      const r = await refundToBalance(tx, order);
+      await tx.order.update({ where: { id: order.id }, data: { refundedAt: new Date(), refundId: r.id } });
+      await sysMsg(tx, order.id, "O anúncio esgotou. O valor voltou para o seu saldo na Nexo.");
+    } else {
+      // Pix: o webhook vê o pedido cancelado e estorna no gateway.
       await sysMsg(tx, order.id, "Pagamento recebido, mas o anúncio esgotou. O valor será estornado.");
-      return order;
-    }
-
-    const now = new Date();
-    await transition(tx, order.id, ["AGUARDANDO_PAGAMENTO"], { status: "PAGO", paidAt: now });
-    await sysMsg(tx, order.id, `Pagamento aprovado. ${money(order.totalCents)} ficam retidos pela Nexo até você confirmar o recebimento.`);
-    if (order.couponCode) await tx.coupon.update({ where: { code: order.couponCode }, data: { uses: { increment: 1 } } });
-    await notify(order.sellerId, "Você vendeu!", `${order.listing.title} · ${order.listing.autoDelivery ? "entrega automática feita" : "entregue pelo pedido"}`, `/pedido/${order.code}`, tx);
-
-    if (order.listing.autoDelivery) {
-      const codes = await tx.autoCode.findMany({
-        where: { listingId: order.listingId, orderId: null },
-        take: order.quantity,
-        orderBy: { createdAt: "asc" },
-      });
-      if (codes.length === order.quantity) {
-        await tx.autoCode.updateMany({ where: { id: { in: codes.map((c) => c.id) } }, data: { orderId: order.id } });
-        await transition(tx, order.id, ["PAGO"], {
-          status: "ENTREGUE",
-          deliveryText: codes.map((c) => c.code).join("\n"),
-          deliveredAt: now,
-          autoConfirmAt: addDays(now, AUTO_CONFIRM_DAYS),
-        });
-        await sysMsg(tx, order.id, 'Entrega automática concluída. O código está no quadro "Entrega".');
-        await notify(order.buyerId, "Pedido entregue", `${order.listing.title}: o código já está no pedido.`, `/pedido/${order.code}`, tx);
-      }
     }
     return order;
+  }
+
+  const now = new Date();
+  await transition(tx, order.id, ["AGUARDANDO_PAGAMENTO"], { status: "PAGO", paidAt: now });
+  await sysMsg(tx, order.id, `Pagamento aprovado. ${money(order.totalCents)} ficam retidos pela Nexo até você confirmar o recebimento.`);
+  if (order.couponCode) await tx.coupon.update({ where: { code: order.couponCode }, data: { uses: { increment: 1 } } });
+  await notify(order.sellerId, "Você vendeu!", `${order.listing.title} · ${order.listing.autoDelivery ? "entrega automática feita" : "entregue pelo pedido"}`, `/pedido/${order.code}`, tx);
+
+  if (order.listing.autoDelivery) {
+    const codes = await tx.autoCode.findMany({
+      where: { listingId: order.listingId, orderId: null },
+      take: order.quantity,
+      orderBy: { createdAt: "asc" },
+    });
+    if (codes.length === order.quantity) {
+      await tx.autoCode.updateMany({ where: { id: { in: codes.map((c) => c.id) } }, data: { orderId: order.id } });
+      await transition(tx, order.id, ["PAGO"], {
+        status: "ENTREGUE",
+        deliveryText: codes.map((c) => c.code).join("\n"),
+        deliveredAt: now,
+        autoConfirmAt: addDays(now, AUTO_CONFIRM_DAYS),
+      });
+      await sysMsg(tx, order.id, 'Entrega automática concluída. O código está no quadro "Entrega".');
+      await notify(order.buyerId, "Pedido entregue", `${order.listing.title}: o código já está no pedido.`, `/pedido/${order.code}`, tx);
+    }
+  }
+  return order;
+}
+
+/** Paga o pedido com o saldo do comprador: débito e aprovação na mesma transação. */
+async function payWithBalance(orderId: string, buyerId: string, totalCents: number) {
+  await db.$transaction(async (tx) => {
+    const { count } = await tx.user.updateMany({
+      where: { id: buyerId, balanceCents: { gte: totalCents } },
+      data: { balanceCents: { decrement: totalCents } },
+    });
+    if (count !== 1) throw new OrderError("Saldo insuficiente para esta compra.");
+    await sysMsg(tx, orderId, `Pago com saldo da Nexo (${money(totalCents)}).`);
+    await payInTx(tx, orderId);
   });
 }
 

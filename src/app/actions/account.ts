@@ -15,11 +15,13 @@ const MIN_WITHDRAW = 1000; // R$ 10,00
 export async function requestWithdrawal(_: WithdrawState, form: FormData): Promise<WithdrawState> {
   const user = await requireUser("/conta?aba=saldo");
   const amount = parseReais(String(form.get("amount") ?? ""));
-  const pixKey = String(form.get("pixKey") ?? "").trim().slice(0, 120);
   if (!Number.isFinite(amount) || amount < MIN_WITHDRAW) return { error: `Saque mínimo: ${money(MIN_WITHDRAW)}.` };
-  if (pixKey.length < 5) return { error: "Informe uma chave Pix válida." };
   const block = (await emailBlock(user.id)) ?? (await withdrawalBlock(user.id, amount));
   if (block) return { error: block };
+  // Saque só para a chave Pix CPF do próprio titular verificado (evita golpe e lavagem com contas de terceiros).
+  const { cpf } = await db.user.findUniqueOrThrow({ where: { id: user.id }, select: { cpf: true } });
+  if (!cpf) return { error: "Verifique sua identidade antes de sacar." };
+  const pixKey = cpf;
 
   // Desconta só se houver saldo, na mesma operação (evita saque duplo).
   const ok = await db.$transaction(async (tx) => {

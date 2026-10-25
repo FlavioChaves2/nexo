@@ -134,12 +134,12 @@ async function Aba({ aba, userId }: { aba: string; userId: string }) {
   // saldo
   const [withdrawals, me] = await Promise.all([
     db.withdrawal.findMany({ where: { userId }, orderBy: { createdAt: "desc" }, take: 20 }),
-    db.user.findUniqueOrThrow({ where: { id: userId }, select: { verification: true, verificationNote: true } }),
+    db.user.findUniqueOrThrow({ where: { id: userId }, select: { verification: true, verificationNote: true, cpf: true } }),
   ]);
   return (
     <div className="stack">
       {me.verification === "APROVADO" ? (
-        <WithdrawForm />
+        <WithdrawForm cpfMasked={me.cpf ? `${me.cpf.slice(0, 3)}.${me.cpf.slice(3, 6)}.${me.cpf.slice(6, 9)}-${me.cpf.slice(9)}` : ""} />
       ) : me.verification === "PENDENTE" ? (
         <div className="note"><Icon name="clock" /><span><b>Identidade em análise.</b> Os saques são liberados assim que a equipe aprovar.</span></div>
       ) : (

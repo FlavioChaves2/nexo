@@ -687,3 +687,9 @@ body { background:
 .hold-label svg { width: 16px; height: 16px; color: var(--accent); }
 .msg time { white-space: nowrap; }
 .order-head { margin-bottom: 10px; }
+.co-pay:not(.on) { border-color: var(--line); background: var(--surface-2); }
+.co-pay:not(.on)::after { display: none; }
+.co-pay:not(.on) .co-pix { background: var(--surface-3); color: var(--muted); }
+.co-pay.off { opacity: .55; cursor: not-allowed; }
+.co-pay .co-pix svg { width: 22px; height: 22px; }
+.co-pay { transition: border-color .2s, background .2s; }

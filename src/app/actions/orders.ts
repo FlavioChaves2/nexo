@@ -37,8 +37,9 @@ async function run(code: string, fn: (orderId: string, userId: string) => Promis
 export async function startCheckout(_: ActionState, form: FormData): Promise<ActionState> {
   const listingId = String(form.get("listingId") ?? "");
   const user = await requireUser(`/anuncio/${listingId}`);
+  const method = form.get("method") === "saldo" ? "saldo" : "pix";
   let payer: Payer | undefined;
-  if (needsPayerDocument()) {
+  if (method === "pix" && needsPayerDocument()) {
     const name = String(form.get("payerName") ?? "").trim().replace(/\s+/g, " ").slice(0, 120);
     const cpf = String(form.get("payerCpf") ?? "").replace(/\D/g, "");
     if (name.split(" ").length < 2) return { error: "Informe seu nome completo." };
@@ -54,6 +55,7 @@ export async function startCheckout(_: ActionState, form: FormData): Promise<Act
       buyerNote: String(form.get("note") ?? "").trim().slice(0, 40),
       couponCode: String(form.get("coupon") ?? "") || undefined,
       payer,
+      method,
     });
     code = order.code;
   } catch (e) {

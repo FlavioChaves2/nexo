@@ -2,8 +2,9 @@
 
 import { useActionState } from "react";
 import { requestWithdrawal, type WithdrawState } from "@/app/actions/account";
+import { Icon } from "./Icon";
 
-export function WithdrawForm() {
+export function WithdrawForm({ cpfMasked }: { cpfMasked: string }) {
   const [state, action, pending] = useActionState<WithdrawState, FormData>(requestWithdrawal, undefined);
   return (
     <form action={action} className="panel box">
@@ -14,10 +15,11 @@ export function WithdrawForm() {
           <input className="input mono" id="amount" name="amount" inputMode="decimal" required placeholder="50,00" />
         </div>
         <div className="field">
-          <label htmlFor="pixKey">Chave Pix</label>
-          <input className="input" id="pixKey" name="pixKey" required placeholder="CPF, e-mail, telefone ou aleatória" />
+          <label htmlFor="pixKey">Chave Pix (seu CPF)</label>
+          <input className="input mono" id="pixKey" value={cpfMasked} readOnly aria-readonly="true" />
         </div>
       </div>
+      <p className="hint"><Icon name="shield" /> Por segurança, o saque só vai para a chave Pix do <b>seu CPF</b>, o mesmo da verificação de identidade. Cadastre essa chave no seu banco se ainda não tiver.</p>
       {state?.error && <p className="alert" role="alert">{state.error}</p>}
       {state?.ok && <p className="note">{state.ok}</p>}
       <button className="btn btn-primary" type="submit" disabled={pending}>{pending ? "Solicitando…" : "Solicitar saque"}</button>

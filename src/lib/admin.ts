@@ -1,7 +1,7 @@
 import { db } from "./db";
 import { money } from "./format";
 import { payoutPix, refundPix } from "./payments";
-import { OrderError, payoutSeller, sysMsg, transition, type Tx } from "./orders";
+import { OrderError, paidWithBalance, payoutSeller, refundToBalance, sysMsg, transition, type Tx } from "./orders";
 import { notify } from "./notify";
 
 // Decisões do painel de admin. Cada uma muda o status de forma atômica
@@ -36,12 +36,14 @@ export async function refundDispute(orderId: string, adminId: string, note: stri
   const why = needNote(note);
   const order = await db.order.findUniqueOrThrow({ where: { id: orderId } });
   if (order.status !== "DISPUTA") throw new AdminError("Esta disputa já foi resolvida.");
+  const bySaldo = paidWithBalance(order);
   // O estorno no gateway acontece antes de gravar; se o gateway falhar, nada muda aqui.
-  const refund = await refundPix(order);
+  const pixRefund = bySaldo ? null : await refundPix(order);
   await db.$transaction(async (tx) => {
     const now = new Date();
+    const refund = pixRefund ?? (await refundToBalance(tx, order));
     await transition(tx, orderId, ["DISPUTA"], { status: "REEMBOLSADO", refundedAt: now, refundId: refund.id, resolvedAt: now, resolution: why });
-    await sysMsg(tx, orderId, `Mediador Nexo decidiu a favor do comprador: ${why}\n${money(order.totalCents)} estornados por Pix.`);
+    await sysMsg(tx, orderId, `Mediador Nexo decidiu a favor do comprador: ${why}\n${money(order.totalCents)} ${bySaldo ? "devolvidos ao seu saldo na Nexo" : "estornados por Pix"}.`);
     await notify(order.buyerId, "Reembolso aprovado", `Pedido #${order.code}: ${money(order.totalCents)} estornados.`, `/pedido/${order.code}`, tx);
     await notify(order.sellerId, "Disputa decidida", `Pedido #${order.code}: a favor do comprador.`, `/pedido/${order.code}`, tx);
     await log(tx, adminId, "DISPUTA_REEMBOLSADA", orderId, `#${order.code}`, why);
@@ -56,8 +58,10 @@ export async function mediatorMessage(orderId: string, adminId: string, text: st
 }
 
 export async function approveWithdrawal(id: string, adminId: string) {
-  const w = await db.withdrawal.findUniqueOrThrow({ where: { id }, include: { user: { select: { username: true } } } });
+  const w = await db.withdrawal.findUniqueOrThrow({ where: { id }, include: { user: { select: { username: true, cpf: true } } } });
   if (w.status !== "PENDENTE") throw new AdminError("Este saque já foi processado.");
+  if (!w.user.cpf || w.pixKey.replace(/\D/g, "") !== w.user.cpf || w.pixKey.includes("@"))
+    throw new AdminError("A chave Pix não é o CPF verificado do vendedor. Recuse este saque para devolver o valor ao saldo.");
   const payout = await payoutPix(w);
   await db.$transaction(async (tx) => {
     const { count } = await tx.withdrawal.updateMany({

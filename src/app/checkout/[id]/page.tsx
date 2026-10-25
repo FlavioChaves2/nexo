@@ -52,7 +52,7 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
           {blocked ? (
             <div className="note warn"><Icon name="alert" /><span>{blocked}</span></div>
           ) : (
-            <CheckoutForm listingId={l.id} qty={qty} needsPlayerId={l.type === "MOEDA"} gameName={l.game.name} couponCode={coupon?.code} askPayer={needsPayerDocument()} total={money(total)} />
+            <CheckoutForm listingId={l.id} qty={qty} needsPlayerId={l.type === "MOEDA"} gameName={l.game.name} couponCode={coupon?.code} askPayer={needsPayerDocument()} total={money(total)} totalCents={total} balanceCents={user.balanceCents} />
           )}
         </div>
         <aside className="stack buybox">
