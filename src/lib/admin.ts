@@ -24,8 +24,8 @@ export async function releaseDispute(orderId: string, adminId: string, note: str
   await db.$transaction(async (tx) => {
     const order = await tx.order.findUniqueOrThrow({ where: { id: orderId } });
     await transition(tx, orderId, ["DISPUTA"], { status: "CONCLUIDO", completedAt: new Date(), resolvedAt: new Date(), resolution: why });
-    const net = await payoutSeller(tx, order);
-    await sysMsg(tx, orderId, `Mediador Nexo decidiu a favor do vendedor: ${why}\n${money(net)} liberados para o vendedor.`);
+    await payoutSeller(tx, order);
+    await sysMsg(tx, orderId, `Mediador Nexo decidiu a favor do vendedor: ${why}\nPagamento liberado ao vendedor.`);
     await notify(order.buyerId, "Disputa decidida", `Pedido #${order.code}: a favor do vendedor.`, `/pedido/${order.code}`, tx);
     await log(tx, adminId, "DISPUTA_LIBERADA", orderId, `#${order.code}`, why);
   });

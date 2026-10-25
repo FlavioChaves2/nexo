@@ -46,7 +46,7 @@ export default async function PedidoPage({ params }: { params: Promise<{ code: s
     ["Pagamento aprovado", "Pix recebido e retido pela Nexo.", o.paidAt],
     ["Vendedor entregou", o.listing.autoDelivery ? "Entrega automática." : "Dados no quadro de entrega.", o.deliveredAt],
     ["Comprador confirma", o.autoConfirmAt && status === "ENTREGUE" ? `Automático em ${dateTime(o.autoConfirmAt)}.` : "Ou abre uma disputa.", o.completedAt],
-    ["Valor liberado", status === "CONCLUIDO" ? `${money(sellerNet(o))} para ${o.seller.username}.` : "O vendedor recebe depois da confirmação.", o.completedAt],
+    ["Valor liberado", status !== "CONCLUIDO" ? "O vendedor recebe depois da confirmação." : role === "seller" ? `${money(sellerNet(o))} no seu saldo.` : "Pagamento liberado ao vendedor.", o.completedAt],
   ];
   const chip =
     status === "CONCLUIDO" ? "ok" : closedBad ? "bad" : "auto";
@@ -99,7 +99,7 @@ export default async function PedidoPage({ params }: { params: Promise<{ code: s
                 ))}
               </ol>
               <div className="hold">
-                <span>{status === "CONCLUIDO" ? "Liberado ao vendedor" : status === "AGUARDANDO_PAGAMENTO" ? "A pagar" : "Retido pela Nexo"}</span>
+                <span>{status === "CONCLUIDO" ? (role === "seller" ? "Venda concluída" : "Total pago") : status === "AGUARDANDO_PAGAMENTO" ? "A pagar" : "Retido pela Nexo"}</span>
                 <b>{money(o.totalCents)}</b>
               </div>
               {role === "seller" && <span className="muted small">Taxa Nexo: {money(o.feeCents)} · Você recebe {money(sellerNet(o))}</span>}

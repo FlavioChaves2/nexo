@@ -488,3 +488,70 @@ body { background:
 
 /* Contadores do hero */
 .hero-meta b { color: var(--accent); font-family: var(--f-display); font-size: 13px; letter-spacing: 0; }
+
+/* Checkout */
+.co-steps { list-style: none; display: flex; gap: 6px; margin: 4px 0 22px; padding: 0; counter-reset: s; }
+.co-steps li { flex: 1; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--muted); padding-bottom: 10px; border-bottom: 2px solid var(--line); }
+.co-steps li span { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--surface-2); border: 1px solid var(--line); flex: none; }
+.co-steps li span svg { width: 13px; height: 13px; }
+.co-steps .done { color: var(--ink); border-color: var(--accent-line); }
+.co-steps .done span { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent); }
+.co-steps .on { color: var(--ink); border-image: linear-gradient(90deg, var(--accent), transparent) 1; }
+.co-steps .on span { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); box-shadow: 0 0 0 4px rgba(197, 240, 74, .15); animation: pulse-ring 2s ease-out infinite; }
+@keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(197, 240, 74, .45); } 100% { box-shadow: 0 0 0 10px rgba(197, 240, 74, 0); } }
+.checkout { display: grid; gap: 14px; }
+.co-step { animation: rise .5s cubic-bezier(.2, .8, .2, 1) both; transition: border-color .2s; }
+.co-step:nth-of-type(2) { animation-delay: .06s; } .co-step:nth-of-type(3) { animation-delay: .12s; }
+.co-step:focus-within { border-color: var(--accent-line); }
+.co-step h3 { display: flex; align-items: center; gap: 10px; }
+.co-n { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-family: var(--f-mono); border: 1px solid var(--accent-line); }
+.co-row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; }
+@media (max-width: 620px) { .co-row { grid-template-columns: 1fr; } .co-steps li { font-size: 0; gap: 0; justify-content: center; } }
+.co-step .hint svg { width: 13px; height: 13px; vertical-align: -2px; color: var(--accent); }
+.co-pay { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--accent); background: linear-gradient(120deg, var(--accent-soft), var(--surface)); cursor: pointer; position: relative; overflow: hidden; }
+.co-pay input { position: absolute; opacity: 0; }
+.co-pay::after { content: ""; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 35%, rgba(197, 240, 74, .12) 50%, transparent 65%); transform: translateX(-100%); animation: sweep 3.5s ease-in-out infinite; pointer-events: none; }
+@keyframes sweep { 60%, 100% { transform: translateX(100%); } }
+.co-pix { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); flex: none; }
+.co-pay-txt { display: grid; gap: 2px; flex: 1; }
+.co-pay-txt span { font-size: 13px; color: var(--muted); }
+.co-perks { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.co-perks li { display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; color: var(--muted); padding: 10px; border-radius: 10px; background: var(--surface-2); }
+.co-perks svg { width: 15px; height: 15px; color: var(--accent); flex: none; margin-top: 1px; }
+@media (max-width: 620px) { .co-perks { grid-template-columns: 1fr; } }
+.co-go { font-size: 16px; padding-block: 16px; }
+.co-spin { width: 16px; height: 16px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: spin .7s linear infinite; display: inline-block; margin-right: 8px; vertical-align: -3px; }
+.co-legal { text-align: center; }
+.co-legal a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+.co-summary .co-item { display: grid; grid-template-columns: 76px 1fr; gap: 12px; align-items: center; }
+.co-summary .co-item .thumb { width: 76px; height: 76px; border-radius: 12px; overflow: hidden; }
+.co-title { display: block; font-size: 14.5px; line-height: 1.3; margin: 2px 0; }
+.co-seller { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--surface-2); }
+.co-seller > div { flex: 1; display: grid; }
+.co-seller-name { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; }
+.co-summary .price { animation: pop .4s cubic-bezier(.2, .8, .2, 1.4); }
+@keyframes pop { from { transform: scale(.9); opacity: .4; } }
+.co-guarantee { background: linear-gradient(160deg, var(--moss), var(--surface) 70%); border-color: var(--accent-line); }
+.co-guarantee h3 { display: flex; align-items: center; gap: 8px; color: var(--accent); }
+.co-guarantee h3 svg { width: 18px; height: 18px; }
+.co-guarantee ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.co-guarantee li { display: flex; gap: 10px; font-size: 13.5px; color: var(--ink); }
+.co-guarantee li svg { width: 16px; height: 16px; color: var(--accent); flex: none; margin-top: 2px; }
+
+/* Revelar ao rolar (só movimento: se o JS não rodar, nada fica escondido) */
+.reveal { transition: transform .7s cubic-bezier(.2, .8, .2, 1), opacity .7s; }
+.reveal.pre { transform: translateY(24px); opacity: .001; }
+/* Brilho que segue o mouse nos painéis */
+.panel { position: relative; }
+.glow::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(260px circle at var(--mx, -100px) var(--my, -100px), rgba(197, 240, 74, .07), transparent 70%); pointer-events: none; }
+/* Botões e links com resposta ao toque */
+.btn { transition: transform .15s, box-shadow .2s, background .2s; }
+.btn:active { transform: scale(.97); }
+.pill { transition: background .2s, color .2s, transform .2s; }
+.pill:hover { transform: translateY(-1px); }
+.buybox > * { min-width: 0; }
+.co-seller { flex-wrap: wrap; }
+.co-seller > div { min-width: 0; }
+.co-seller .chip { margin-left: auto; }
+.co-seller > div { flex: 1 1 150px; }
+.co-seller-name { flex-wrap: wrap; }

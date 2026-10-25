@@ -147,13 +147,14 @@ export async function payoutSeller(tx: Tx, order: Order) {
 
 async function complete(tx: Tx, order: Order, auto: boolean) {
   await transition(tx, order.id, ["ENTREGUE"], { status: "CONCLUIDO", completedAt: new Date() });
-  const net = await payoutSeller(tx, order);
+  await payoutSeller(tx, order);
+  // O chat é visto pelas duas partes: o valor líquido do vendedor fica só na visão dele.
   await sysMsg(
     tx,
     order.id,
     auto
-      ? `Confirmação automática após ${AUTO_CONFIRM_DAYS} dias. ${money(net)} liberados para o vendedor.`
-      : `Recebimento confirmado. ${money(net)} liberados para o vendedor.`,
+      ? `Confirmação automática após ${AUTO_CONFIRM_DAYS} dias. Pagamento liberado ao vendedor.`
+      : "Recebimento confirmado. Pagamento liberado ao vendedor.",
   );
 }
 
