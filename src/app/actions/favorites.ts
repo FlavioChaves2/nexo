@@ -12,6 +12,7 @@ export async function toggleFavorite(listingId: string): Promise<{ on: boolean; 
     await db.favorite.delete({ where: key });
     return { on: false };
   }
-  await db.favorite.create({ data: { userId: user.id, listingId } });
-  return { on: true };
+  // Anúncio apagado ou id inválido: não derruba a página.
+  const ok = await db.favorite.create({ data: { userId: user.id, listingId } }).catch(() => null);
+  return { on: !!ok };
 }

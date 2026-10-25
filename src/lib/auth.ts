@@ -92,7 +92,9 @@ export async function requireAdmin(next = "/admin"): Promise<CurrentUser> {
 
 export async function clientIp() {
   const h = await headers();
-  return (h.get("cf-connecting-ip") ?? h.get("x-forwarded-for")?.split(",")[0] ?? "local").trim();
+  // Na Vercel o x-forwarded-for é preenchido pela própria plataforma; cf-connecting-ip
+  // viria do navegador e poderia ser forjado para driblar o limite de tentativas.
+  return (h.get("x-forwarded-for")?.split(",")[0] ?? h.get("x-real-ip") ?? "local").trim();
 }
 
 /** Só aceita caminhos internos, para não virar redirecionamento aberto. */

@@ -23,7 +23,8 @@ export async function applyCoupon(rawCode: string, buyerId: string, subtotal: nu
   if (c.expiresAt && c.expiresAt < new Date()) throw new OrderError("Este cupom expirou.");
   if (c.maxUses !== null && c.uses >= c.maxUses) throw new OrderError("Este cupom esgotou.");
   if (subtotal < c.minOrderCents) throw new OrderError(`Este cupom vale para compras a partir de ${money(c.minOrderCents)}.`);
-  const used = await db.order.count({ where: { buyerId, couponCode: code, paidAt: { not: null } } });
+  // Conta também pedidos ainda não pagos: senão dá para abrir vários Pix com o mesmo cupom e pagar todos.
+  const used = await db.order.count({ where: { buyerId, couponCode: code, status: { not: "CANCELADO" } } });
   if (used) throw new OrderError("Você já usou este cupom.");
   const discountCents = discountFor(c, subtotal);
   if (!discountCents) throw new OrderError("Este cupom não dá desconto neste pedido.");
