@@ -58,14 +58,20 @@ export default async function PedidoPage({ params }: { params: Promise<{ code: s
           <span className="eyebrow">{role === "buyer" ? "Sua compra" : "Sua venda"}</span>
           <h1 style={{ fontSize: "clamp(26px,3.6vw,38px)" }}>Pedido <span className="mono" style={{ fontWeight: 700 }}>#{o.code}</span></h1>
         </div>
-        <span className={`chip ${chip}`}><Icon name={status === "CONCLUIDO" ? "check" : closedBad ? "alert" : "clock"} />{ORDER_STATUS[status]}</span>
+        <span className={`chip ${chip} o-status`}><Icon name={status === "CONCLUIDO" ? "check" : closedBad ? "alert" : "clock"} />{ORDER_STATUS[status]}</span>
       </div>
+      {!closedBad && (
+        <div className="o-progress" role="progressbar" aria-valuenow={done} aria-valuemin={0} aria-valuemax={4} aria-label="Andamento do pedido">
+          <span style={{ width: `${(done / 4) * 100}%` }} />
+        </div>
+      )}
       <div className="two-col">
         <div className="stack">
           <Chat
             code={o.code}
             meId={user.id}
             other={other}
+            role={role}
             status={status}
             initial={o.messages.map((m) => ({ id: m.id, senderId: m.senderId, body: m.body, at: m.createdAt.toISOString() }))}
           />
@@ -80,6 +86,7 @@ export default async function PedidoPage({ params }: { params: Promise<{ code: s
             qr={qr}
             pixCode={o.pixCode}
             pixExpiresAt={o.pixExpiresAt ? time(o.pixExpiresAt) : null}
+            pixExpiresIso={o.pixExpiresAt?.toISOString() ?? null}
             deliveryText={o.deliveryText}
             buyerNote={o.buyerNote}
             reviewed={!!o.review}
@@ -88,8 +95,8 @@ export default async function PedidoPage({ params }: { params: Promise<{ code: s
             total={money(o.totalCents)}
           />
           {status !== "CANCELADO" && status !== "REEMBOLSADO" && (
-            <div className="panel box">
-              <h3>Garantia do pedido</h3>
+            <div className="panel box o-guarantee">
+              <h3 className="l-h"><Icon name="shield" />Garantia do pedido</h3>
               <ol className="flow">
                 {steps.map(([t, s, at], i) => (
                   <li key={t} className={i < done ? "done" : i === done ? "now" : ""}>
@@ -99,7 +106,7 @@ export default async function PedidoPage({ params }: { params: Promise<{ code: s
                 ))}
               </ol>
               <div className="hold">
-                <span>{status === "CONCLUIDO" ? (role === "seller" ? "Venda concluída" : "Total pago") : status === "AGUARDANDO_PAGAMENTO" ? "A pagar" : "Retido pela Nexo"}</span>
+                <span className="hold-label"><Icon name={status === "CONCLUIDO" ? "check" : "shield"} />{status === "CONCLUIDO" ? (role === "seller" ? "Venda concluída" : "Total pago") : status === "AGUARDANDO_PAGAMENTO" ? "A pagar" : "Retido pela Nexo"}</span>
                 <b>{money(o.totalCents)}</b>
               </div>
               {role === "seller" && <span className="muted small">Taxa Nexo: {money(o.feeCents)} · Você recebe {money(sellerNet(o))}</span>}

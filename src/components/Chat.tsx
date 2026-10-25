@@ -9,7 +9,20 @@ type Msg = { id: string; senderId: string | null; body: string; at: string };
 const hhmm = (iso: string) => new Date(iso).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 
 /** Chat do pedido. Busca mensagens novas a cada 4 s (trocar por tempo real depois). */
-export function Chat({ code, meId, other, status, initial }: { code: string; meId: string; other: string; status: string; initial: Msg[] }) {
+/** Atalhos de mensagem conforme quem fala e em que ponto o pedido está. */
+function quickReplies(role: "buyer" | "seller", status: string) {
+  if (role === "buyer") {
+    if (status === "PAGO") return ["Olá! Já paguei, pode entregar?", "Qual o prazo de entrega?"];
+    if (status === "ENTREGUE") return ["Recebi, obrigado!", "Não consegui acessar, pode me ajudar?"];
+    return [];
+  }
+  if (status === "PAGO") return ["Olá! Já estou preparando sua entrega.", "Entrego em poucos minutos."];
+  if (status === "ENTREGUE") return ["Entregue! Confira e confirme, por favor.", "Qualquer dúvida é só chamar."];
+  return [];
+}
+
+export function Chat({ code, meId, other, role, status, initial }: { code: string; meId: string; other: string; role: "buyer" | "seller"; status: string; initial: Msg[] }) {
+  const seen = useRef(new Set(initial.map((m) => m.id)));
   const [msgs, setMsgs] = useState(initial);
   const [text, setText] = useState("");
   const [error, setError] = useState("");
@@ -68,9 +81,9 @@ export function Chat({ code, meId, other, status, initial }: { code: string; meI
     };
   }, [code, status, router]);
 
-  async function send(e: React.FormEvent) {
+  async function send(e: React.FormEvent, preset?: string) {
     e.preventDefault();
-    const body = text.trim();
+    const body = (preset ?? text).trim();
     if (!body) return;
     setText("");
     setError("");
@@ -81,7 +94,7 @@ export function Chat({ code, meId, other, status, initial }: { code: string; meI
     });
     if (!res.ok) {
       setError((await res.json().catch(() => null))?.error ?? "Não foi possível enviar. Tente de novo.");
-      setText(body);
+      if (!preset) setText(body);
       return;
     }
     const msg: Msg = await res.json();
@@ -92,20 +105,33 @@ export function Chat({ code, meId, other, status, initial }: { code: string; meI
   return (
     <div className="panel chat">
       <div className="chat-head">
-        <span className="avatar">{other[0]}</span>
-        <div style={{ minWidth: 0 }}>
+        <span className="avatar chat-avatar">{other[0]}</span>
+        <div style={{ minWidth: 0, flex: 1 }}>
           <b>{other}</b> <span className="online" aria-hidden="true" />
-          <div className="muted" style={{ fontSize: 12 }}>Conversa gravada para segurança da negociação</div>
+          <div className="muted" style={{ fontSize: 12 }}>{role === "buyer" ? "Vendedor" : "Comprador"} · conversa gravada para sua segurança</div>
         </div>
+        <span className="chip chat-safe"><Icon name="shield" />Protegido</span>
       </div>
       <div className="msgs" ref={box} aria-live="polite">
-        {msgs.map((m) => (
-          <div key={m.id} className={`msg ${m.senderId === null ? "sys" : m.senderId === meId ? "me" : "them"}`}>
-            {m.body}
-            <time>{hhmm(m.at)}</time>
-          </div>
-        ))}
+        {msgs.map((m) => {
+          const kind = m.senderId === null ? "sys" : m.senderId === meId ? "me" : "them";
+          const fresh = !seen.current.has(m.id);
+          return (
+            <div key={m.id} className={`msg ${kind}${fresh ? " fresh" : ""}`}>
+              {kind === "sys" && <Icon name="shield" />}
+              <span>{m.body}</span>
+              <time>{hhmm(m.at)}</time>
+            </div>
+          );
+        })}
       </div>
+      {!closed && quickReplies(role, status).length > 0 && (
+        <div className="quick">
+          {quickReplies(role, status).map((q) => (
+            <button key={q} type="button" onClick={(e) => send(e, q)}>{q}</button>
+          ))}
+        </div>
+      )}
       <form className="chat-form" onSubmit={send}>
         <input
           className="input"
@@ -116,7 +142,7 @@ export function Chat({ code, meId, other, status, initial }: { code: string; meI
           disabled={closed}
           aria-label="Mensagem"
         />
-        <button className="btn btn-primary" type="submit" aria-label="Enviar" disabled={closed}><Icon name="send" /></button>
+        <button className="btn btn-primary" type="submit" aria-label="Enviar" disabled={closed || !text.trim()}><Icon name="send" /></button>
       </form>
       {error && <p className="error" style={{ padding: "0 12px 12px" }}>{error}</p>}
     </div>

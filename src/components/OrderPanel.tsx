@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState, useTransition } from "react";
+import { useActionState, useEffect, useState, useTransition } from "react";
 import {
   cancelAction,
   confirmAction,
@@ -10,7 +10,7 @@ import {
   simulatePayment,
   type ActionState,
 } from "@/app/actions/orders";
-import type { OrderStatus } from "@/lib/constants";
+import { PIX_MINUTES, type OrderStatus } from "@/lib/constants";
 import { Icon } from "./Icon";
 
 type Props = {
@@ -21,6 +21,7 @@ type Props = {
   qr: string | null;
   pixCode: string | null;
   pixExpiresAt: string | null;
+  pixExpiresIso: string | null;
   deliveryText: string;
   buyerNote: string;
   reviewed: boolean;
@@ -50,23 +51,43 @@ function ActionButton({ fn, className, children }: { fn: () => Promise<ActionSta
 function CopyField({ value }: { value: string }) {
   const [copied, setCopied] = useState(false);
   return (
-    <div className="copy-row">
-      <input className="input" readOnly value={value} aria-label="Código Pix copia e cola" onFocus={(e) => e.currentTarget.select()} />
+    <div className="stack" style={{ gap: 8 }}>
+      <input className="input mono pix-code" readOnly value={value} aria-label="Código Pix copia e cola" onFocus={(e) => e.currentTarget.select()} />
       <button
-        className="btn btn-ghost btn-sm"
+        className={`btn btn-block ${copied ? "btn-ghost pix-copied" : "btn-primary"}`}
         type="button"
         onClick={async () => {
           try {
             await navigator.clipboard.writeText(value);
             setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
+            setTimeout(() => setCopied(false), 2500);
           } catch {
             /* o campo continua selecionável */
           }
         }}
       >
-        {copied ? <Icon name="check" /> : <Icon name="copy" />}
+        {copied ? <><Icon name="check" />Código copiado! Cole no app do banco</> : <><Icon name="copy" />Copiar código Pix</>}
       </button>
+    </div>
+  );
+}
+
+/** Contagem regressiva do Pix, com barra que esvazia. */
+function PixTimer({ until, minutes }: { until: string; minutes: number }) {
+  const end = new Date(until).getTime();
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const left = Math.max(0, end - now);
+  const mm = String(Math.floor(left / 60000)).padStart(2, "0");
+  const ss = String(Math.floor((left % 60000) / 1000)).padStart(2, "0");
+  const pct = Math.min(100, (left / (minutes * 60000)) * 100);
+  return (
+    <div className={`pix-timer ${left < 5 * 60000 ? "low" : ""}`}>
+      <div className="row"><span className="small muted"><Icon name="clock" /> {left ? "Expira em" : "Código expirado"}</span><b className="mono" suppressHydrationWarning>{mm}:{ss}</b></div>
+      <div className="pix-bar"><span style={{ width: `${pct}%` }} /></div>
     </div>
   );
 }
@@ -83,15 +104,24 @@ export function OrderPanel(p: Props) {
   if (p.status === "AGUARDANDO_PAGAMENTO") {
     if (!buyer) return <div className="panel box"><h3>Aguardando pagamento</h3><p className="muted small">O comprador ainda não pagou o Pix. Não entregue nada antes do pagamento aprovado.</p></div>;
     return (
-      <div className="panel box">
-        <h3>Pague com Pix</h3>
+      <div className="panel box pix-panel">
+        <div className="row">
+          <h3>Pague com Pix</h3>
+          <span className="pix-wait"><span />Aguardando pagamento</span>
+        </div>
+        <div className="pix-amount"><span className="muted small">Valor</span><b>{p.total}</b></div>
+        {p.pixExpiresIso && <PixTimer until={p.pixExpiresIso} minutes={PIX_MINUTES} />}
         <div className="pix">
-          {p.qr && <img src={p.qr} alt="QR code do Pix" />}
+          {p.qr && <div className="pix-qr"><img src={p.qr} alt="QR code do Pix" /><span className="pix-scan" aria-hidden="true" /></div>}
           <div className="stack" style={{ gap: 10, minWidth: 0 }}>
-            <span className="muted small">Escaneie no app do seu banco ou copie o código. Válido até <b className="lime">{p.pixExpiresAt}</b>.</span>
             {p.pixCode && <CopyField value={p.pixCode} />}
           </div>
         </div>
+        <ol className="pix-how">
+          <li><span>1</span>Abra o app do seu banco e entre em <b>Pix</b></li>
+          <li><span>2</span>Escaneie o QR ou escolha <b>Pix copia e cola</b></li>
+          <li><span>3</span>Confirme: esta página atualiza sozinha</li>
+        </ol>
         {p.isMock && (
           <>
             <ActionButton className="btn btn-primary btn-block" fn={() => simulatePayment(p.code)}>Simular pagamento aprovado</ActionButton>
