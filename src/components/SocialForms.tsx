@@ -39,7 +39,16 @@ export function GalleryViewer({ ids, alt }: { ids: string[]; alt: string }) {
   const [i, setI] = useState(0);
   return (
     <div className="stack" style={{ gap: 8 }}>
-      <div className="media"><img className="photo" src={imageUrl(ids[i])} alt={alt} /></div>
+      <div className="media">
+        <img className="photo fade-in" key={ids[i]} src={imageUrl(ids[i])} alt={alt} />
+        {ids.length > 1 && (
+          <>
+            <button type="button" className="g-nav prev" aria-label="Foto anterior" onClick={() => setI((i - 1 + ids.length) % ids.length)}>‹</button>
+            <button type="button" className="g-nav next" aria-label="Próxima foto" onClick={() => setI((i + 1) % ids.length)}>›</button>
+            <span className="g-count">{i + 1} / {ids.length}</span>
+          </>
+        )}
+      </div>
       {ids.length > 1 && (
         <div className="gallery">
           {ids.map((id, n) => (
