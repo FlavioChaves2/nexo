@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mascote 3D Nexo</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #111311; color: #F1F4EC; font-family: system-ui, sans-serif; overflow: hidden; }
+  #stage { position: fixed; inset: 0; }
+  .hint { position: fixed; left: 50%; bottom: 22px; translate: -50% 0; font-size: 13px; color: #959C8F; letter-spacing: .02em; }
+  .hint b { color: #C5F04A; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<p class="hint">Mexa o mouse: o <b>Nexinho</b> olha para você · clique nele</p>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }</script>
+<script type="module">
+import * as THREE from "three";
+import { RoundedBoxGeometry } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/geometries/RoundedBoxGeometry.js";
+
+const LIME = 0xC5F04A, LIME_DARK = 0x8FBF22, INK = 0x12160A, GLOW = 0xE4FF8F;
+const stage = document.getElementById("stage");
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+stage.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+camera.position.set(0, 0.6, 9);
+
+scene.add(new THREE.HemisphereLight(0xeaffc0, 0x1b2414, 1.1));
+const key = new THREE.DirectionalLight(0xffffff, 2.2);
+key.position.set(3, 5, 4); key.castShadow = true; key.shadow.mapSize.set(1024, 1024);
+scene.add(key);
+const rim = new THREE.PointLight(LIME, 30, 12); rim.position.set(-3, 1, -2); scene.add(rim);
+
+const mat = (color, o = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.35, metalness: 0.1, ...o });
+const limeMat = mat(LIME), darkMat = mat(LIME_DARK), inkMat = mat(INK, { roughness: 0.2, metalness: 0.4 });
+const glowMat = new THREE.MeshStandardMaterial({ color: GLOW, emissive: LIME, emissiveIntensity: 1.6 });
+
+const bot = new THREE.Group(); scene.add(bot);
+
+// Corpo e cabeça
+const body = new THREE.Mesh(new RoundedBoxGeometry(1.7, 1.5, 1.2, 6, 0.38), limeMat);
+body.position.y = -0.9; body.castShadow = true; bot.add(body);
+const head = new THREE.Group(); head.position.y = 0.55; bot.add(head);
+const skull = new THREE.Mesh(new RoundedBoxGeometry(2.3, 1.75, 1.6, 8, 0.5), limeMat);
+skull.castShadow = true; head.add(skull);
+const screen = new THREE.Mesh(new RoundedBoxGeometry(1.8, 1.15, 0.2, 6, 0.18), inkMat);
+screen.position.z = 0.74; head.add(screen);
+
+// Olhos e boca (emissivos, na tela)
+const eyeGeo = new THREE.CapsuleGeometry(0.11, 0.18, 6, 12);
+const eyeL = new THREE.Mesh(eyeGeo, glowMat), eyeR = new THREE.Mesh(eyeGeo, glowMat);
+eyeL.position.set(-0.38, 0.08, 0.86); eyeR.position.set(0.38, 0.08, 0.86);
+head.add(eyeL, eyeR);
+const mouth = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.045, 8, 24, Math.PI), glowMat);
+mouth.rotation.z = Math.PI; mouth.position.set(0, -0.2, 0.86); head.add(mouth);
+
+// Antena com faísca
+const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.55, 12), darkMat);
+stem.position.y = 1.12; head.add(stem);
+const spark = new THREE.Group(); spark.position.y = 1.5; head.add(spark);
+for (let i = 0; i < 4; i++) {
+  const ray = new THREE.Mesh(new THREE.ConeGeometry(0.07, 0.42, 4), glowMat);
+  ray.rotation.z = (i * Math.PI) / 2; ray.position.set(Math.sin(-ray.rotation.z) * 0.12, Math.cos(ray.rotation.z) * 0.12, 0);
+  spark.add(ray);
+}
+spark.add(new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 16), glowMat));
+
+// Escudo da garantia no peito, com o N
+const shieldShape = new THREE.Shape();
+shieldShape.moveTo(0, 0.42); shieldShape.lineTo(0.36, 0.28); shieldShape.lineTo(0.36, 0.0);
+shieldShape.quadraticCurveTo(0.36, -0.3, 0, -0.46); shieldShape.quadraticCurveTo(-0.36, -0.3, -0.36, 0.0);
+shieldShape.lineTo(-0.36, 0.28); shieldShape.closePath();
+const shield = new THREE.Mesh(new THREE.ExtrudeGeometry(shieldShape, { depth: 0.08, bevelEnabled: true, bevelSize: 0.03, bevelThickness: 0.03, bevelSegments: 3 }), inkMat);
+shield.position.set(0, -0.85, 0.6); bot.add(shield);
+const nMat = glowMat;
+const bar = (w, h, x, y, rz = 0) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.05), nMat); m.position.set(x, y, 0.13); m.rotation.z = rz; shield.add(m); };
+bar(0.07, 0.4, -0.13, -0.02); bar(0.07, 0.4, 0.13, -0.02); bar(0.07, 0.46, 0, -0.02, 0.58);
+
+// Braços (o direito acena)
+const arm = (side) => {
+  const g = new THREE.Group(); g.position.set(side * 1.0, -0.55, 0);
+  const a = new THREE.Mesh(new THREE.CapsuleGeometry(0.17, 0.55, 6, 12), darkMat);
+  a.position.y = -0.38; a.castShadow = true; g.add(a);
+  const hand = new THREE.Mesh(new THREE.SphereGeometry(0.22, 20, 20), limeMat); hand.position.y = -0.78; g.add(hand);
+  g.rotation.z = side * 0.25; bot.add(g); return g;
+};
+const armL = arm(-1), armR = arm(1);
+
+// Pés
+for (const s of [-1, 1]) {
+  const f = new THREE.Mesh(new RoundedBoxGeometry(0.5, 0.3, 0.6, 4, 0.12), darkMat);
+  f.position.set(s * 0.45, -1.82, 0.05); f.castShadow = true; bot.add(f);
+}
+
+// Sombra no chão e partículas
+const floor = new THREE.Mesh(new THREE.CircleGeometry(1.6, 48), new THREE.ShadowMaterial({ opacity: 0.35 }));
+floor.rotation.x = -Math.PI / 2; floor.position.y = -2.3; floor.receiveShadow = true; scene.add(floor);
+const pts = new THREE.BufferGeometry();
+const N = 60, pos = new Float32Array(N * 3);
+for (let i = 0; i < N; i++) { pos[i * 3] = (Math.random() - 0.5) * 8; pos[i * 3 + 1] = (Math.random() - 0.5) * 6; pos[i * 3 + 2] = (Math.random() - 0.5) * 4 - 1; }
+pts.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+const dust = new THREE.Points(pts, new THREE.PointsMaterial({ color: LIME, size: 0.05, transparent: true, opacity: 0.6 }));
+scene.add(dust);
+
+// Interação: olha para o mouse, clique faz pular e comemorar
+const target = new THREE.Vector2(), look = new THREE.Vector2();
+addEventListener("pointermove", (e) => target.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1));
+let hop = 0;
+const ray = new THREE.Raycaster();
+renderer.domElement.addEventListener("click", (e) => {
+  ray.setFromCamera(new THREE.Vector2((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1), camera);
+  if (ray.intersectObject(bot, true).length) hop = 1;
+});
+
+function resize() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  renderer.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+addEventListener("resize", resize); resize();
+
+const clock = new THREE.Clock();
+let nextBlink = 2;
+renderer.setAnimationLoop(() => {
+  const t = clock.getElapsedTime();
+  look.lerp(target, 0.08);
+  // flutuar
+  hop = Math.max(0, hop - 0.025);
+  const jump = Math.sin(hop * Math.PI) * 0.9;
+  bot.position.y = Math.sin(t * 1.6) * 0.12 + jump;
+  bot.rotation.y = look.x * 0.35 + Math.sin(t * 0.5) * 0.05;
+  head.rotation.y = look.x * 0.35; head.rotation.x = -look.y * 0.25;
+  // acenar (mais animado depois do clique)
+  armR.rotation.z = 0.25 + 2.4 + Math.sin(t * (hop > 0 ? 14 : 5)) * 0.35;
+  armL.rotation.z = -0.25 + Math.sin(t * 1.6 + 1) * 0.08 - jump * 0.8;
+  // piscar
+  if (t > nextBlink) { const k = Math.min(1, (t - nextBlink) / 0.14); const s = k < 0.5 ? 1 - k * 1.8 : 0.1 + (k - 0.5) * 1.8; eyeL.scale.y = eyeR.scale.y = Math.max(0.1, s); if (k >= 1) { nextBlink = t + 2 + Math.random() * 3; eyeL.scale.y = eyeR.scale.y = 1; } }
+  mouth.scale.setScalar(1 + jump * 0.6);
+  // faísca e poeira
+  spark.rotation.z = t * 1.5; spark.scale.setScalar(1 + Math.sin(t * 4) * 0.15);
+  glowMat.emissiveIntensity = 1.4 + Math.sin(t * 3) * 0.4;
+  dust.rotation.y = t * 0.03; dust.position.y = Math.sin(t * 0.4) * 0.1;
+  floor.scale.setScalar(1 - bot.position.y * 0.25);
+  renderer.render(scene, camera);
+});
+</script>
+</body>
+</html>
