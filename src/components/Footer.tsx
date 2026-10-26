@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
+import { TrustBadges } from "./TrustBadges";
 
 export function Footer() {
   return (
     <footer>
+      <div className="wrap foot-trust"><TrustBadges /></div>
       <div className="wrap foot">
         <div style={{ display: "grid", gap: 14, alignContent: "start" }}>
           <Logo />
@@ -38,7 +40,7 @@ export function Footer() {
       </div>
       <div className="wrap foot-bottom">
         <span>© 2026 Nexo · Play. Trade. Repeat.</span>
-        <span>Marketplace gamer com pagamento protegido</span>
+        <span className="foot-pay">Pagamento via <b>Pix</b> ou <b>saldo Nexo</b> · processado pelo Asaas</span>
       </div>
     </footer>
   );

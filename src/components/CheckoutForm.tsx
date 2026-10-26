@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import { startCheckout, type ActionState } from "@/app/actions/orders";
 import { PIX_MINUTES } from "@/lib/constants";
 import { Icon } from "./Icon";
+import { TrustBadges } from "./TrustBadges";
 
 const maskCpf = (v: string) =>
   v
@@ -95,6 +96,7 @@ export function CheckoutForm({ listingId, qty, needsPlayerId, gameName, couponCo
       <button className="btn btn-primary btn-block co-go" type="submit" disabled={pending}>
         {pending ? <><span className="co-spin" aria-hidden="true" />{method === "saldo" ? "Pagando…" : "Gerando seu Pix…"}</> : <>Pagar {total} com {method === "saldo" ? "saldo" : "Pix"} <Icon name="arrow" /></>}
       </button>
+      <TrustBadges compact />
       <p className="hint co-legal">Ao continuar você concorda com os <a href="/termos">Termos</a> e a <a href="/privacidade">Política de privacidade</a>.</p>
     </form>
   );
