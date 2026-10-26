@@ -7,7 +7,16 @@ import { LISTING_TYPES, TYPE_PLURAL } from "@/lib/constants";
 import { ListingCard } from "@/components/ListingCard";
 import { AutoSubmitForm } from "@/components/AutoSubmitForm";
 
-export const metadata = { title: "Buscar" };
+export async function generateMetadata({ searchParams }: { searchParams: Promise<SP> }) {
+  const sp = await searchParams;
+  const game = sp.jogo ? await db.game.findUnique({ where: { slug: sp.jogo }, select: { name: true } }) : null;
+  const tipo = sp.tipo && TYPE_PLURAL[sp.tipo] ? TYPE_PLURAL[sp.tipo] : null;
+  if (sp.q) return { title: `“${sp.q.slice(0, 40)}” à venda` };
+  if (tipo && game) return { title: `${tipo} de ${game.name} à venda` };
+  if (game) return { title: `${game.name}: contas, itens e moedas` };
+  if (tipo) return { title: `${tipo} de jogos à venda` };
+  return { title: "Todos os anúncios" };
+}
 
 type SP = { q?: string; jogo?: string; tipo?: string; auto?: string; max?: string; ordem?: string };
 
