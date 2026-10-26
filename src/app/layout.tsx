@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Motion } from "@/components/Motion";
 import { NavProgress } from "@/components/NavProgress";
+import { HelperBot } from "@/components/HelperBot";
 import { Suspense } from "react";
 import "./globals.css";
 
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main>{children}</main>
         <Footer />
         <Motion />
+        <HelperBot />
       </body>
     </html>
   );

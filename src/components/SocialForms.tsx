@@ -53,7 +53,7 @@ export function GalleryViewer({ ids, alt }: { ids: string[]; alt: string }) {
         <div className="gallery">
           {ids.map((id, n) => (
             <button key={id} type="button" className={n === i ? "on" : ""} onClick={() => setI(n)} aria-label={`Foto ${n + 1}`}>
-              <img src={imageUrl(id)} alt="" />
+              <img src={imageUrl(id)} alt="" loading="lazy" decoding="async" />
             </button>
           ))}
         </div>

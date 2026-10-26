@@ -14,7 +14,8 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const user = await getCurrentUser();
-  const [games, featured, favs] = await Promise.all([
+  // Uma rodada só de consultas: cada ida ao banco custa uma viagem de rede.
+  const [games, featured, favs, listingsCount, sellersCount] = await Promise.all([
     db.game.findMany({ orderBy: { sort: "asc" } }),
     db.listing.findMany({
       where: visibleListing,
@@ -23,8 +24,6 @@ export default async function Home() {
       take: 8,
     }),
     favoriteIds(user?.id),
-  ]);
-  const [listingsCount, sellersCount] = await Promise.all([
     db.listing.count({ where: visibleListing }),
     db.user.count({ where: { listings: { some: visibleListing } } }),
   ]);

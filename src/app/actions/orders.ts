@@ -62,7 +62,8 @@ export async function startCheckout(_: ActionState, form: FormData): Promise<Act
     if (e instanceof OrderError) return { error: e.message };
     throw e;
   }
-  redirect(`/pedido/${code}`);
+  // Pago com saldo já chega aprovado: o ?pago=1 dispara a comemoração na página do pedido.
+  redirect(`/pedido/${code}${method === "saldo" ? "?pago=1" : ""}`);
 }
 
 export async function simulatePayment(code: string) {

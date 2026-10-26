@@ -55,16 +55,45 @@ export function Motion() {
 
   useEffect(() => {
     if (matchMedia("(hover: none)").matches) return;
+    let tilted: HTMLElement | null = null;
+    const reset = (el: HTMLElement) => {
+      el.style.removeProperty("--rx");
+      el.style.removeProperty("--ry");
+      el.classList.remove("tilting");
+    };
     const move = (e: PointerEvent) => {
-      const panel = (e.target as HTMLElement).closest?.<HTMLElement>("main .panel");
-      if (!panel) return;
-      const r = panel.getBoundingClientRect();
-      panel.classList.add("glow");
-      panel.style.setProperty("--mx", `${e.clientX - r.left}px`);
-      panel.style.setProperty("--my", `${e.clientY - r.top}px`);
+      const t = e.target as HTMLElement;
+      const panel = t.closest?.<HTMLElement>("main .panel");
+      if (panel) {
+        const r = panel.getBoundingClientRect();
+        panel.classList.add("glow");
+        panel.style.setProperty("--mx", `${e.clientX - r.left}px`);
+        panel.style.setProperty("--my", `${e.clientY - r.top}px`);
+      }
+      // Cartas de jogo e anúncios holográficos inclinam em 3D seguindo o mouse
+      const card = t.closest?.<HTMLElement>(".uni, .card.holo");
+      if (tilted && tilted !== card) reset(tilted);
+      tilted = card;
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      const max = card.classList.contains("uni") ? 14 : 7;
+      card.classList.add("tilting");
+      card.style.setProperty("--rx", `${(0.5 - y) * max}deg`);
+      card.style.setProperty("--ry", `${(x - 0.5) * max}deg`);
+      card.style.setProperty("--px", `${x * 100}%`);
+      card.style.setProperty("--py", `${y * 100}%`);
+    };
+    const leave = () => {
+      if (tilted) reset(tilted);
+      tilted = null;
     };
     addEventListener("pointermove", move, { passive: true });
-    return () => removeEventListener("pointermove", move);
+    document.addEventListener("pointerleave", leave);
+    return () => {
+      removeEventListener("pointermove", move);
+      document.removeEventListener("pointerleave", leave);
+    };
   }, []);
 
   return null;

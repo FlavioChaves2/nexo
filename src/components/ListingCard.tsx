@@ -19,10 +19,10 @@ export function ListingCard({ l, fav = false, preview = false, previewImage }: {
   const photo = previewImage ?? (l.images?.[0] ? imageUrl(l.images[0].id) : null);
   const s = l.seller;
   return (
-    <article className="card" data-type={l.type}>
+    <article className={`card${l.oldPriceCents && l.oldPriceCents > l.priceCents ? " holo" : ""}`} data-type={l.type}>
       {!preview && <Link className="card-link" href={`/anuncio/${l.id}`} aria-label={l.title} />}
       <div className="thumb">
-        {photo ? <img className="photo" src={photo} alt="" loading="lazy" /> : <Art game={l.game} glyph={l.glyph} />}
+        {photo ? <img className="photo" src={photo} alt="" loading="lazy" decoding="async" /> : <Art game={l.game} glyph={l.glyph} />}
         {!preview && <FavButton listingId={l.id} initial={fav} />}
       </div>
       <div className="card-body">

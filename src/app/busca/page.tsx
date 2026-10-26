@@ -6,6 +6,8 @@ import { cardInclude, favoriteIds, visibleListing } from "@/lib/queries";
 import { LISTING_TYPES, TYPE_PLURAL } from "@/lib/constants";
 import { ListingCard } from "@/components/ListingCard";
 import { AutoSubmitForm } from "@/components/AutoSubmitForm";
+import { GameBanner } from "@/components/GameBanner";
+import { Nexinho3D } from "@/components/Nexinho3D";
 
 export async function generateMetadata({ searchParams }: { searchParams: Promise<SP> }) {
   const sp = await searchParams;
@@ -93,6 +95,7 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
       </AutoSubmitForm>
 
       <section>
+        {game && <GameBanner game={game} count={results.length} />}
         <div className="results-head">
           <div className="grid-gap" style={{ gap: 4 }}>
             <span className="eyebrow">{results.length} {results.length === 1 ? "anúncio" : "anúncios"}</span>
@@ -113,6 +116,7 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
           <div className="cards">{results.map((l) => <ListingCard key={l.id} l={l} fav={favs.has(l.id)} />)}</div>
         ) : (
           <div className="panel empty">
+            <Nexinho3D className="sad-bot" mood="sad" decor={false} interactive={false} zoom={11} label="Nexinho triste: nada encontrado" />
             <h3>Nenhum anúncio com esses filtros</h3>
             <p className="muted">Tente remover um filtro ou buscar outro termo.</p>
             <Link className="btn btn-ghost" href="/busca">Limpar filtros</Link>

@@ -11,6 +11,8 @@ import { Art } from "@/components/Art";
 import { Icon } from "@/components/Icon";
 import { Chat } from "@/components/Chat";
 import { OrderPanel } from "@/components/OrderPanel";
+import { PaidCelebration } from "@/components/PaidCelebration";
+import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
 
@@ -53,6 +55,7 @@ export default async function PedidoPage({ params }: { params: Promise<{ code: s
 
   return (
     <div className="wrap">
+      {role === "buyer" && <Suspense fallback={null}><PaidCelebration code={o.code} status={status} /></Suspense>}
       <div className="order-head">
         <div className="grid-gap">
           <span className="eyebrow">{role === "buyer" ? "Sua compra" : "Sua venda"}</span>
