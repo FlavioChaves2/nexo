@@ -119,7 +119,11 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
             <Nexinho3D className="sad-bot" mood="sad" decor={false} interactive={false} zoom={11} label="Nexinho triste: nada encontrado" />
             <h3>Nenhum anúncio com esses filtros</h3>
             <p className="muted">Tente remover um filtro ou buscar outro termo.</p>
-            <Link className="btn btn-ghost" href="/busca">Limpar filtros</Link>
+            <p className="muted">Ou publique um pedido e deixe os vendedores virem até você.</p>
+            <div className="copy-row" style={{ justifyContent: "center", flexWrap: "wrap" }}>
+              <Link className="btn btn-ghost" href="/busca">Limpar filtros</Link>
+              <Link className="btn btn-primary" href="/quero-comprar/novo">Quero comprar</Link>
+            </div>
           </div>
         )}
       </section>

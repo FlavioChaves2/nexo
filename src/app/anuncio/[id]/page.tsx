@@ -17,8 +17,8 @@ import { SellerBadges } from "@/components/SellerBadges";
 import { BuyForm } from "@/components/BuyForm";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
-  const l = await db.listing.findUnique({ where: { id: (await params).id }, select: { title: true, description: true, priceCents: true, images: { select: { id: true }, take: 1 } } });
-  if (!l) return { title: "Anúncio" };
+  const l = await db.listing.findUnique({ where: { id: (await params).id }, select: { title: true, description: true, reservedForId: true, priceCents: true, images: { select: { id: true }, take: 1 } } });
+  if (!l || l.reservedForId) return { title: "Anúncio" };
   const description = `${money(l.priceCents)} · ${l.description.slice(0, 150)}`;
   return { title: l.title, description, openGraph: { title: l.title, description, images: l.images[0] ? [`/api/imagens/${l.images[0].id}`] : undefined } };
 }
@@ -35,6 +35,8 @@ export default async function AnuncioPage({ params }: { params: Promise<{ id: st
   if (!l) notFound();
 
   const user = await getCurrentUser();
+  // Anúncio reservado (oferta aceita em "Quero comprar"): só o comprador e o vendedor veem.
+  if (l.reservedForId && user?.id !== l.reservedForId && user?.id !== l.sellerId) notFound();
   const mine = user?.id === l.sellerId;
   const [stats, reviews, similar, favs] = await Promise.all([
     sellerStats(l.sellerId),

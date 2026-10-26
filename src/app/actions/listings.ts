@@ -92,6 +92,7 @@ export async function updateListing(listingId: string, _: ListingFormState, form
   return guard(async () => {
     const listing = await db.listing.findUnique({ where: { id: listingId }, include: { images: { select: { id: true } } } });
     if (!listing || listing.sellerId !== user.id) throw new OrderError("Anúncio não encontrado.");
+    if (listing.reservedForId) throw new OrderError("Este anúncio veio de uma oferta aceita e não pode ser editado.");
     if (listing.status === "REMOVIDO") throw new OrderError("Anúncio removido pela moderação não pode ser editado.");
 
     // Tipo de entrega não muda na edição; o resto segue as mesmas regras da criação.

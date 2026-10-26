@@ -7,6 +7,8 @@ export const REPORT_REASONS = ["Golpe ou fraude", "Item proibido ou roubado", "D
 /** Denúncias abertas de pessoas diferentes que tiram o anúncio do ar até a análise. */
 export const AUTO_HIDE_REPORTS = 3;
 export const NEW_ACCOUNT_DAYS = 7;
+/** Bloqueia telefone, e-mail e links em textos públicos (negociação por fora tira a garantia). */
+export const CONTACT = /(\d[\s.-]?){8,}|@[a-z0-9-]+\.|https?:\/\/|wa\.me|whats|telegram|discord\.gg/i;
 export const NEW_ACCOUNT_MAX_WITHDRAW = 30000; // R$ 300,00
 
 export async function reportListing(listingId: string, reporterId: string, reason: string, details: string) {

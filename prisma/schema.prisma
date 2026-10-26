@@ -14,16 +14,16 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  username     String   @unique
-  passwordHash String
-  bio          String   @default("")
-  balanceCents Int      @default(0) // saldo disponível para saque
-  role         String   @default("USER") // USER | ADMIN
+  id              String       @id @default(cuid())
+  email           String       @unique
+  username        String       @unique
+  passwordHash    String
+  bio             String       @default("")
+  balanceCents    Int          @default(0) // saldo disponível para saque
+  role            String       @default("USER") // USER | ADMIN
   emailVerifiedAt DateTime?
   emailTokens     EmailToken[]
-  createdAt    DateTime @default(now())
+  createdAt       DateTime     @default(now())
 
   // Suspensão pela equipe: a pessoa não entra e os anúncios somem.
   suspendedAt   DateTime?
@@ -53,15 +53,18 @@ model User {
   questions     Question[]
   images        Image[]
 
-  listings        Listing[]
-  purchases       Order[]      @relation("buyer")
-  sales           Order[]      @relation("seller")
-  messages        Message[]
-  reviewsGiven    Review[]     @relation("author")
-  reviewsReceived Review[]     @relation("sellerReviews")
-  favorites       Favorite[]
-  withdrawals     Withdrawal[]
-  adminActions    AdminAction[]
+  listings         Listing[]
+  purchases        Order[]       @relation("buyer")
+  sales            Order[]       @relation("seller")
+  messages         Message[]
+  reviewsGiven     Review[]      @relation("author")
+  reviewsReceived  Review[]      @relation("sellerReviews")
+  favorites        Favorite[]
+  withdrawals      Withdrawal[]
+  adminActions     AdminAction[]
+  wanted           Wanted[]
+  wantedOffers     WantedOffer[]
+  reservedListings Listing[]     @relation("reservedFor")
 }
 
 model Game {
@@ -73,27 +76,31 @@ model Game {
   c2       String // cor de fundo
   sort     Int       @default(0)
   listings Listing[]
+  wanted   Wanted[]
 }
 
 model Listing {
-  id            String   @id @default(cuid())
-  sellerId      String
-  seller        User     @relation(fields: [sellerId], references: [id])
-  gameSlug      String
-  game          Game     @relation(fields: [gameSlug], references: [slug])
-  type          String // CONTA | MOEDA | ITEM | GIFT | SERVICO
-  title         String
-  description   String
-  glyph         String?
-  priceCents    Int
-  oldPriceCents Int?
-  stock         Int
-  autoDelivery  Boolean  @default(false)
-  featured      Boolean  @default(false)
-  status        String   @default("ATIVO") // ATIVO | PAUSADO | REMOVIDO (pela moderação)
-  moderationNote String  @default("") // motivo da remoção, visível para o vendedor
-  soldCount     Int      @default(0)
-  createdAt     DateTime @default(now())
+  id             String   @id @default(cuid())
+  sellerId       String
+  seller         User     @relation(fields: [sellerId], references: [id])
+  gameSlug       String
+  game           Game     @relation(fields: [gameSlug], references: [slug])
+  type           String // CONTA | MOEDA | ITEM | GIFT | SERVICO
+  title          String
+  description    String
+  glyph          String?
+  priceCents     Int
+  oldPriceCents  Int?
+  stock          Int
+  autoDelivery   Boolean  @default(false)
+  featured       Boolean  @default(false)
+  status         String   @default("ATIVO") // ATIVO | PAUSADO | REMOVIDO (pela moderação)
+  moderationNote String   @default("") // motivo da remoção, visível para o vendedor
+  soldCount      Int      @default(0)
+  createdAt      DateTime @default(now())
+  // Anúncio criado de uma oferta aceita em "Quero comprar": só esse comprador vê e compra.
+  reservedForId  String?
+  reservedFor    User?    @relation("reservedFor", fields: [reservedForId], references: [id])
 
   codes     AutoCode[]
   orders    Order[]
@@ -202,16 +209,16 @@ model Favorite {
 }
 
 model Withdrawal {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   userId      String
-  user        User     @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
   amountCents Int
   pixKey      String
-  status      String   @default("PENDENTE") // PENDENTE | PAGO | RECUSADO
-  note        String   @default("") // motivo da recusa
+  status      String    @default("PENDENTE") // PENDENTE | PAGO | RECUSADO
+  note        String    @default("") // motivo da recusa
   payoutId    String?
   processedAt DateTime?
-  createdAt   DateTime @default(now())
+  createdAt   DateTime  @default(now())
 }
 
 // Registro de tudo que um admin faz (auditoria).
@@ -302,17 +309,17 @@ model Notification {
 
 // Cupom da Nexo: o desconto sai da receita da plataforma.
 model Coupon {
-  id             String    @id @default(cuid())
-  code           String    @unique
-  percentOff     Int       @default(0) // 10 = 10%
-  amountOffCents Int       @default(0)
-  maxDiscountCents Int?    // teto para cupons percentuais
-  minOrderCents  Int       @default(0)
-  maxUses        Int?
-  uses           Int       @default(0)
-  expiresAt      DateTime?
-  active         Boolean   @default(true)
-  createdAt      DateTime  @default(now())
+  id               String    @id @default(cuid())
+  code             String    @unique
+  percentOff       Int       @default(0) // 10 = 10%
+  amountOffCents   Int       @default(0)
+  maxDiscountCents Int? // teto para cupons percentuais
+  minOrderCents    Int       @default(0)
+  maxUses          Int?
+  uses             Int       @default(0)
+  expiresAt        DateTime?
+  active           Boolean   @default(true)
+  createdAt        DateTime  @default(now())
 }
 
 // Links enviados por e-mail (confirmar e-mail, redefinir senha). Guarda só o hash do token.
@@ -327,4 +334,41 @@ model EmailToken {
   createdAt DateTime  @default(now())
 
   @@index([userId, kind])
+}
+
+// "Quero comprar": o comprador publica o que procura e os vendedores mandam ofertas.
+// Oferta aceita vira um anúncio reservado ao comprador e segue o checkout normal (Garantia Nexo).
+model Wanted {
+  id          String   @id @default(cuid())
+  buyerId     String
+  buyer       User     @relation(fields: [buyerId], references: [id])
+  gameSlug    String
+  game        Game     @relation(fields: [gameSlug], references: [slug])
+  type        String // CONTA | MOEDA | ITEM | GIFT | SERVICO
+  title       String
+  description String
+  maxCents    Int
+  status      String   @default("ABERTO") // ABERTO | FECHADO (oferta aceita) | CANCELADO
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+
+  offers WantedOffer[]
+
+  @@index([status, expiresAt])
+  @@index([buyerId])
+}
+
+model WantedOffer {
+  id         String   @id @default(cuid())
+  wantedId   String
+  wanted     Wanted   @relation(fields: [wantedId], references: [id], onDelete: Cascade)
+  sellerId   String
+  seller     User     @relation(fields: [sellerId], references: [id])
+  priceCents Int
+  message    String
+  status     String   @default("ENVIADA") // ENVIADA | ACEITA | RECUSADA
+  listingId  String? // anúncio reservado criado ao aceitar
+  createdAt  DateTime @default(now())
+
+  @@unique([wantedId, sellerId])
 }

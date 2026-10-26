@@ -6,12 +6,11 @@ import { db } from "@/lib/db";
 import { getCurrentUser, requireUser } from "@/lib/auth";
 import { notify } from "@/lib/notify";
 import { OrderError } from "@/lib/orders";
+import { CONTACT } from "@/lib/trust";
 import { deleteImage, filesFrom, saveImage } from "@/lib/images";
 
 export type SocialState = { error?: string; ok?: string } | undefined;
 
-/** Bloqueia telefone, e-mail e links nas perguntas públicas (negociação por fora tira a garantia). */
-const CONTACT = /(\d[\s.-]?){8,}|@[a-z0-9-]+\.|https?:\/\/|wa\.me|whats|telegram|discord\.gg/i;
 
 export async function askQuestion(listingId: string, _: SocialState, form: FormData): Promise<SocialState> {
   const user = await getCurrentUser();

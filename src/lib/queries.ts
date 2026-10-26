@@ -17,6 +17,6 @@ export async function favoriteIds(userId: string | undefined) {
   return new Set(favs.map((f) => f.listingId));
 }
 
-export const visibleListing = { status: "ATIVO", stock: { gt: 0 }, seller: { suspendedAt: null } } as const;
+export const visibleListing = { status: "ATIVO", stock: { gt: 0 }, reservedForId: null, seller: { suspendedAt: null } } as const;
 
 export const displayName = (u: { username: string; storeName?: string | null }) => u.storeName || u.username;

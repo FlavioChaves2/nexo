@@ -18,7 +18,7 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
   const { id } = await params;
   const user = await requireUser(`/anuncio/${id}`);
   const l = await db.listing.findUnique({ where: { id }, include: { game: true, seller: { select: { username: true, storeName: true, avatarId: true, verification: true, completedSales: true, ratingSum: true, ratingCount: true } } } });
-  if (!l) notFound();
+  if (!l || (l.reservedForId && l.reservedForId !== user.id && l.sellerId !== user.id)) notFound();
 
   const sp = await searchParams;
   const qty = Math.max(1, Math.min(Number(sp.qtd) || 1, l.stock || 1));

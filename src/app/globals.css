@@ -804,3 +804,13 @@ body:has(.buy-bar) .helper { bottom: 96px; }
 @media (hover: none) { .uni.tilting, .card.holo.tilting { transform: none; } }
 /* O brilho dos painéis precisa de position: relative, mas os filtros da busca continuam grudados ao rolar */
 .panel.filters { position: sticky; }
+
+/* Quero comprar */
+.wanted-games { display: flex; flex-wrap: wrap; gap: 8px; }
+.wanted-games .chip { padding: 6px 10px; }
+.wanted-row:hover { background: var(--surface-2, var(--surface-3)); }
+.wanted-offer .avatar { margin-top: 2px; }
+@media (max-width: 640px) {
+  .wanted-row, .wanted-offer { grid-template-columns: auto 1fr; }
+  .wanted-row > :last-child, .wanted-offer > :last-child { grid-column: 2; justify-items: start !important; }
+}

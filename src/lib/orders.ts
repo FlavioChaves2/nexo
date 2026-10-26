@@ -32,6 +32,7 @@ async function newOrderCode() {
 export async function createOrder(input: { buyerId: string; listingId: string; quantity: number; buyerNote: string; couponCode?: string; payer?: Payer; method?: "pix" | "saldo" }) {
   const listing = await db.listing.findUnique({ where: { id: input.listingId }, include: { seller: { select: { suspendedAt: true } } } });
   if (!listing || listing.status !== "ATIVO" || listing.seller.suspendedAt) throw new OrderError("Este anúncio não está disponível.");
+  if (listing.reservedForId && listing.reservedForId !== input.buyerId) throw new OrderError("Este anúncio não está disponível.");
   if (listing.sellerId === input.buyerId) throw new OrderError("Você não pode comprar o próprio anúncio.");
   if (!Number.isInteger(input.quantity) || input.quantity < 1) throw new OrderError("Quantidade inválida.");
   if (input.quantity > listing.stock) throw new OrderError(`Só há ${listing.stock} unidade(s) disponível(is).`);

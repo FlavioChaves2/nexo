@@ -10,6 +10,7 @@ const TABS = [
   { href: "/busca?tipo=ITEM", label: "Itens", tipo: "ITEM" },
   { href: "/busca?tipo=GIFT", label: "Gift cards", tipo: "GIFT" },
   { href: "/busca?tipo=SERVICO", label: "Serviços", tipo: "SERVICO" },
+  { href: "/quero-comprar", label: "Quero comprar", tipo: null },
 ];
 
 export function TabsNav() {
@@ -18,7 +19,7 @@ export function TabsNav() {
   return (
     <ul>
       {TABS.map((t) => {
-        const on = t.tipo ? path === "/busca" && tipo === t.tipo : path === "/";
+        const on = t.tipo ? path === "/busca" && tipo === t.tipo : t.href === "/" ? path === "/" : path.startsWith(t.href);
         return (
           <li key={t.label}>
             <Link href={t.href} className={on ? "on" : undefined}>
