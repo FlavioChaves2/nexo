@@ -22,17 +22,24 @@ const KIND: Record<string, string> = {
 
 export default async function AdminHome() {
   const since = new Date(Date.now() - 30 * 86_400_000);
-  const [disputes, pendingW, completed, held, actions] = await Promise.all([
+  const [disputes, pendingW, completed, held, actions, orbit, waiting] = await Promise.all([
     db.order.count({ where: { status: "DISPUTA" } }),
     db.withdrawal.aggregate({ where: { status: "PENDENTE" }, _sum: { amountCents: true }, _count: true }),
     db.order.aggregate({ where: { status: "CONCLUIDO", completedAt: { gte: since } }, _sum: { totalCents: true, feeCents: true }, _count: true }),
     db.order.aggregate({ where: { status: { in: ["PAGO", "ENTREGUE", "DISPUTA"] } }, _sum: { totalCents: true } }),
     db.adminAction.findMany({ include: { admin: { select: { username: true } } }, orderBy: { createdAt: "desc" }, take: 15 }),
+    db.boost.aggregate({ where: { createdAt: { gte: since } }, _sum: { amountCents: true }, _count: true }),
+    db.supportTicket.count({ where: { status: "ABERTO", waiting: true } }),
   ]);
 
   return (
     <div className="stack">
       <div className="stat-tiles">
+        <Link className="panel" href="/admin/suporte">
+          <span className="eyebrow dim">Suporte</span>
+          <b className={waiting ? "lime" : undefined}>{waiting}</b>
+          <span className="muted small">Conversas esperando resposta</span>
+        </Link>
         <Link className="panel" href="/admin/disputas">
           <span className="eyebrow dim">Disputas abertas</span>
           <b className={disputes ? "lime" : undefined}>{disputes}</b>
@@ -52,6 +59,11 @@ export default async function AdminHome() {
           <span className="eyebrow dim">Vendas · 30 dias</span>
           <b>{money(completed._sum.totalCents ?? 0)}</b>
           <span className="muted small">{completed._count} pedidos · taxa {money(completed._sum.feeCents ?? 0)}</span>
+        </div>
+        <div className="panel">
+          <span className="eyebrow dim">Órbita · 30 dias</span>
+          <b>{money(orbit._sum.amountCents ?? 0)}</b>
+          <span className="muted small">{orbit._count} destaque(s) vendido(s)</span>
         </div>
       </div>
 

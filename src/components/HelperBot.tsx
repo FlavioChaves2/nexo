@@ -19,6 +19,7 @@ const TIPS: { match: (p: string) => boolean; tips: { q: string; a: string; href?
     tips: [
       { q: "O vendedor não entregou?", a: "Use o botão “Tive um problema” para abrir uma disputa. O valor continua retido até a equipe decidir." },
       { q: "Já recebi, e agora?", a: "Confirme o recebimento e avalie o vendedor. Isso ajuda toda a comunidade." },
+      { q: "Quero falar com uma pessoa", a: "A equipe Nexo atende por chat. Conte o que aconteceu e alguém responde por lá.", href: "/suporte?assunto=PEDIDO", cta: "Falar com o suporte" },
     ],
   },
   {
@@ -31,9 +32,10 @@ const TIPS: { match: (p: string) => boolean; tips: { q: string; a: string; href?
   {
     match: () => true,
     tips: [
-      { q: "Como funciona a garantia?", a: "Você paga, o dinheiro fica com a Nexo, o vendedor entrega e só recebe quando você confirma.", href: "/ajuda", cta: "Saiba mais" },
+      { q: "Como funciona a garantia?", a: "Você paga, o dinheiro fica com a Nexo, o vendedor entrega e só recebe quando você confirma.", href: "/como-funciona", cta: "Ver em 3 passos" },
       { q: "Quero vender algo", a: "Criar anúncio é grátis. A taxa só é cobrada quando você vende.", href: "/vender", cta: "Criar anúncio" },
       { q: "Preciso de ajuda", a: "Veja as dúvidas mais comuns na central de ajuda.", href: "/ajuda", cta: "Central de ajuda" },
+      { q: "Quero falar com uma pessoa", a: "A equipe Nexo atende por chat aqui no site. Você recebe um aviso quando responderem.", href: "/suporte", cta: "Falar com o suporte" },
     ],
   },
 ];

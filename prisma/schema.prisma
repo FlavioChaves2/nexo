@@ -58,6 +58,9 @@ model User {
   referredBy       User?             @relation("referrals", fields: [referredById], references: [id])
   referrals        User[]            @relation("referrals")
   referralEarnings ReferralEarning[]
+  boosts           Boost[]
+  supportTickets   SupportTicket[]
+  supportMessages  SupportMessage[]
   questions     Question[]
   images        Image[]
 
@@ -106,6 +109,9 @@ model Listing {
   moderationNote String   @default("") // motivo da remoção, visível para o vendedor
   soldCount      Int      @default(0)
   createdAt      DateTime @default(now())
+  // Órbita (destaque pago): até esta data o anúncio aparece no topo da página inicial e da busca.
+  orbitUntil     DateTime?
+  boosts         Boost[]
   // Anúncio criado de uma oferta aceita em "Quero comprar": só esse comprador vê e compra.
   reservedForId  String?
   reservedFor    User?    @relation("reservedFor", fields: [reservedForId], references: [id])
@@ -120,6 +126,7 @@ model Listing {
   @@index([gameSlug])
   @@index([type])
   @@index([sellerId])
+  @@index([orbitUntil])
 }
 
 // Códigos para entrega automática (gift cards, recargas). Um por unidade.
@@ -441,4 +448,51 @@ model ReferralEarning {
 
   @@unique([orderId, side])
   @@index([referrerId, createdAt])
+}
+
+// Órbita: o vendedor paga com o saldo para o anúncio aparecer no topo por alguns dias.
+model Boost {
+  id          String   @id @default(cuid())
+  listingId   String
+  listing     Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  days        Int
+  amountCents Int
+  endsAt      DateTime // fim da Órbita depois desta compra (somado ao tempo que ainda faltava)
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([userId])
+}
+
+// Chat com o suporte. Uma conversa aberta por pessoa; a equipe responde em /admin/suporte.
+model SupportTicket {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic     String // PEDIDO | PAGAMENTO | CONTA | VENDER | OUTRO
+  orderCode String?
+  status    String           @default("ABERTO") // ABERTO | FECHADO
+  waiting   Boolean          @default(true) // true = a última mensagem é do cliente (a equipe precisa responder)
+  lastAt    DateTime         @default(now())
+  closedAt  DateTime?
+  createdAt DateTime         @default(now())
+  messages  SupportMessage[]
+
+  @@index([status, waiting, lastAt])
+  @@index([userId, status])
+}
+
+model SupportMessage {
+  id        String        @id @default(cuid())
+  ticketId  String
+  ticket    SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  senderId  String? // null = mensagem automática do Nexinho
+  sender    User?         @relation(fields: [senderId], references: [id])
+  staff     Boolean       @default(false) // escrita por alguém da equipe
+  body      String
+  createdAt DateTime      @default(now())
+
+  @@index([ticketId, createdAt])
 }

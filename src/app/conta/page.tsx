@@ -4,6 +4,7 @@ import { requireUser } from "@/lib/auth";
 import { money, dateTime } from "@/lib/format";
 import { sellerNet, settleExpired } from "@/lib/orders";
 import { cardInclude } from "@/lib/queries";
+import { inOrbit } from "@/lib/orbit-plans";
 import { ORDER_STATUS, TYPE_LABEL, type OrderStatus } from "@/lib/constants";
 import { Art } from "@/components/Art";
 import { ListingCard } from "@/components/ListingCard";
@@ -66,7 +67,7 @@ export default async function ContaPage({ searchParams }: { searchParams: Promis
           ))}
         </nav>
         <ScrollToActive selector=".acct-nav a.on" />
-        <Link className="acct-help" href="/ajuda"><Icon name="chat" />Central de ajuda</Link>
+        <Link className="acct-help" href="/suporte"><Icon name="headset" />Falar com o suporte</Link>
         <form action={logout}><button className="acct-out" type="submit">Sair da conta</button></form>
       </aside>
 
@@ -121,6 +122,11 @@ async function Aba({ aba, userId }: { aba: string; userId: string }) {
             <div>
               <Link href={`/anuncio/${l.id}`}><b>{l.title}</b></Link>
               <span className="muted small">{TYPE_LABEL[l.type]} · {money(l.priceCents)} · estoque {l.stock} · {l.soldCount} vendidos</span>
+              {l.status === "ATIVO" && l.stock > 0 && !l.reservedForId && (
+                <Link className={`orbit-link${inOrbit(l) ? " on" : ""}`} href={`/anuncio/${l.id}/orbita`}>
+                  <Icon name="orbit" />{inOrbit(l) ? `Em órbita até ${dateTime(l.orbitUntil!)}` : "Colocar em órbita"}
+                </Link>
+              )}
               {l.status === "REMOVIDO" && <span className="error" style={{ display: "block" }}>Removido pela moderação: {l.moderationNote}</span>}
             </div>
             {l.status === "REMOVIDO" ? (

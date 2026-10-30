@@ -43,7 +43,7 @@ export function ListingForm({ games, seller, feeBps, edit }: { games: Game[]; se
   const preview = {
     id: "preview", sellerId: "", gameSlug: game.slug, game, seller, type: v.type,
     title: v.title || "Título do seu anúncio", description: "", glyph: null, priceCents: cents, oldPriceCents: null,
-    stock: 1, autoDelivery: v.auto, featured: false, status: "ATIVO", moderationNote: "", soldCount: 0, reservedForId: null, createdAt: new Date(),
+    stock: 1, autoDelivery: v.auto, featured: false, status: "ATIVO", moderationNote: "", soldCount: 0, reservedForId: null, orbitUntil: null, createdAt: new Date(),
   };
 
   return (

@@ -2,7 +2,8 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
-import { cardInclude, favoriteIds, visibleListing } from "@/lib/queries";
+import { favoriteIds, visibleListing } from "@/lib/queries";
+import { withOrbitFirst } from "@/lib/orbit";
 import { LISTING_TYPES, TYPE_PLURAL } from "@/lib/constants";
 import { feeBps } from "@/lib/format";
 import { HeroArt } from "@/components/HeroArt";
@@ -17,12 +18,7 @@ export default async function Home() {
   // Uma rodada só de consultas: cada ida ao banco custa uma viagem de rede.
   const [games, featured, favs, listingsCount, sellersCount] = await Promise.all([
     db.game.findMany({ orderBy: { sort: "asc" } }),
-    db.listing.findMany({
-      where: visibleListing,
-      include: cardInclude,
-      orderBy: [{ featured: "desc" }, { soldCount: "desc" }, { createdAt: "desc" }],
-      take: 8,
-    }),
+    withOrbitFirst(visibleListing, [{ featured: "desc" }, { soldCount: "desc" }, { createdAt: "desc" }], 8, 4),
     favoriteIds(user?.id),
     db.listing.count({ where: visibleListing }),
     db.user.count({ where: { listings: { some: visibleListing } } }),
@@ -45,10 +41,10 @@ export default async function Home() {
             <Link className="btn btn-primary" href="/busca">
               Explorar ofertas <Icon name="arrow" />
             </Link>
-            <a className="btn btn-ghost" href="#garantia">
+            <Link className="btn btn-ghost" href="/como-funciona">
               <Icon name="shield" />
               Como funciona
-            </a>
+            </Link>
           </div>
           <div className="hero-meta">
             <span><b>{stats.listings}</b> ANÚNCIOS</span>

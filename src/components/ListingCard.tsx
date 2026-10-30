@@ -4,6 +4,7 @@ import type { Game, Listing } from "@prisma/client";
 import { money } from "@/lib/format";
 import { TYPE_PLURAL } from "@/lib/constants";
 import { imageUrl } from "@/lib/images-url";
+import { inOrbit } from "@/lib/orbit-plans";
 import { Art } from "./Art";
 import { Avatar } from "./Avatar";
 import { FavButton } from "./FavButton";
@@ -19,11 +20,13 @@ export type CardListing = Listing & {
 export function ListingCard({ l, fav = false, preview = false, previewImage }: { l: CardListing; fav?: boolean; preview?: boolean; previewImage?: string }) {
   const photo = previewImage ?? (l.images?.[0] ? imageUrl(l.images[0].id, true) : null);
   const s = l.seller;
+  const orbit = !preview && inOrbit(l);
   return (
-    <article className={`card${l.oldPriceCents && l.oldPriceCents > l.priceCents ? " holo" : ""}`} data-type={l.type}>
+    <article className={`card${l.oldPriceCents && l.oldPriceCents > l.priceCents ? " holo" : ""}${orbit ? " in-orbit" : ""}`} data-type={l.type}>
       {!preview && <Link className="card-link" href={`/anuncio/${l.id}`} aria-label={l.title} />}
       <div className="thumb">
         {photo ? <img className="photo" src={photo} alt="" loading="lazy" decoding="async" /> : <Art game={l.game} glyph={l.glyph} />}
+        {orbit && <span className="orbit-tag" title="Anúncio impulsionado pelo vendedor"><Icon name="orbit" />Em órbita</span>}
         {!preview && <FavButton listingId={l.id} initial={fav} />}
       </div>
       <div className="card-body">

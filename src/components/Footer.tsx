@@ -33,7 +33,9 @@ export function Footer() {
           <h4>Nexo</h4>
           <ul>
             <li><Link href="/app" className="foot-app">📲 Baixe o app</Link></li>
+            <li><Link href="/como-funciona">Como funciona</Link></li>
             <li><Link href="/ajuda">Central de ajuda</Link></li>
+            <li><Link href="/suporte">Falar com o suporte</Link></li>
             <li><Link href="/termos">Termos de uso</Link></li>
             <li><Link href="/privacidade">Privacidade</Link></li>
           </ul>

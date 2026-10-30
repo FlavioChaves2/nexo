@@ -3,6 +3,7 @@ import type { Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { cardInclude, favoriteIds, visibleListing } from "@/lib/queries";
+import { withOrbitFirst } from "@/lib/orbit";
 import { LISTING_TYPES, TYPE_PLURAL } from "@/lib/constants";
 import { ListingCard } from "@/components/ListingCard";
 import { AutoSubmitForm } from "@/components/AutoSubmitForm";
@@ -50,7 +51,8 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
 
   const [games, results, favs] = await Promise.all([
     db.game.findMany({ orderBy: { sort: "asc" }, include: { _count: { select: { listings: { where: visibleListing } } } } }),
-    db.listing.findMany({ where, include: cardInclude, orderBy: ORDENS[ordem], take: 60 }),
+    // Em "Mais relevantes", até 6 anúncios em órbita vêm primeiro; nas outras ordens vale só a ordem escolhida.
+    ordem === "relevancia" ? withOrbitFirst(where, ORDENS[ordem], 60, 6) : db.listing.findMany({ where, include: cardInclude, orderBy: ORDENS[ordem], take: 60 }),
     favoriteIds(user?.id),
   ]);
 

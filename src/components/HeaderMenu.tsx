@@ -62,6 +62,7 @@ export function HeaderMenu({ user }: { user: MenuUser | null }) {
               <nav className="hmenu-list">
                 <Link href="/app" role="menuitem"><Icon name="bolt" />Baixar o app</Link>
                 <Link href="/ajuda" role="menuitem"><Icon name="chat" />Central de ajuda</Link>
+                <Link href="/suporte" role="menuitem"><Icon name="headset" />Falar com o suporte</Link>
                 <Link href="/conta/seguranca" role="menuitem"><Icon name="verified" />Segurança da conta</Link>
               </nav>
               <form action={logout} className="hmenu-list">
@@ -78,6 +79,7 @@ export function HeaderMenu({ user }: { user: MenuUser | null }) {
               </div>
               <nav className="hmenu-list">
                 <Link href="/quero-comprar" role="menuitem"><Icon name="search" />Quero comprar</Link>
+                <Link href="/como-funciona" role="menuitem"><Icon name="shield" />Como funciona</Link>
                 <Link href="/app" role="menuitem"><Icon name="bolt" />Baixar o app</Link>
                 <Link href="/ajuda" role="menuitem"><Icon name="chat" />Central de ajuda</Link>
               </nav>

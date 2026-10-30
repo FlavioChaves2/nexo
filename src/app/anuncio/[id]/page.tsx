@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { money, pct, monthYear, dateTime } from "@/lib/format";
 import { sellerStats } from "@/lib/orders";
+import { inOrbit } from "@/lib/orbit-plans";
 import { cardInclude, displayName, favoriteIds, visibleListing } from "@/lib/queries";
 import { TYPE_PLURAL, WHAT_YOU_GET } from "@/lib/constants";
 import { Art } from "@/components/Art";
@@ -131,7 +132,8 @@ export default async function AnuncioPage({ params }: { params: Promise<{ id: st
             ) : mine ? (
               <>
                 <div className="note"><Icon name="user" /><span>Este anúncio é seu. Status: <b>{l.status === "ATIVO" ? "ativo" : "pausado"}</b>.</span></div>
-                <Link className="btn btn-primary btn-block" href={`/anuncio/${l.id}/editar`}><Icon name="edit" />Editar anúncio</Link>
+                <Link className="btn btn-primary btn-block" href={`/anuncio/${l.id}/orbita`}><Icon name="orbit" />{inOrbit(l) ? `Em órbita até ${dateTime(l.orbitUntil!)}` : "Colocar em órbita"}</Link>
+                <Link className="btn btn-ghost btn-block" href={`/anuncio/${l.id}/editar`}><Icon name="edit" />Editar anúncio</Link>
                 <form action={toggleListingStatus.bind(null, l.id)}>
                   <button className="btn btn-ghost btn-block" type="submit">{l.status === "ATIVO" ? "Pausar anúncio" : "Reativar anúncio"}</button>
                 </form>
