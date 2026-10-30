@@ -98,7 +98,13 @@ p { margin: 0; }
   .acoes { gap: 2px; min-width: 0; }
   .icon-btn { padding: 8px; }
   .icon-btn .saldo, .icon-btn sub { display: none; }
-  .acoes .btn { padding: 9px 12px; font-size: 13.5px; }
+  .acoes .btn { padding: 9px 12px; font-size: 13.5px; flex: none; }
+}
+/* Com o raio do app no topo, telas estreitas apertam mais os ícones para o Vender caber inteiro */
+@media (max-width: 400px) {
+  .icon-btn { padding: 7px 5px; }
+  .acoes .btn { padding: 8px 10px; font-size: 13px; }
+  .acoes { gap: 0; }
 }
 
 /* Botões, chips, campos */
@@ -905,7 +911,8 @@ body:has(.buy-bar) .helper { bottom: 96px; }
   .app-hero .qc-copy h1 { padding-right: 0; }
   .app-perks { grid-template-columns: 1fr; }
 }
-@media (max-width: 560px) { .app-link { display: none; } }
+/* No celular o raio fica só com o ícone (o texto "App" some com os outros rótulos) e brilha para chamar atenção. */
+.app-link .ic { color: var(--accent); filter: drop-shadow(0 0 5px rgba(197, 240, 74, .55)); }
 @media (prefers-reduced-motion: reduce) { .app-notif { animation: none; } }
 
 /* Guia de instalação no iPhone */
