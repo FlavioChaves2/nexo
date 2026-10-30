@@ -41,7 +41,7 @@ export function Footer() {
       </div>
       <div className="wrap foot-bottom">
         <span>© 2026 Nexo · Play. Trade. Repeat.</span>
-        <span className="foot-pay">Pagamento via <b>Pix</b>, <b>cartão</b> ou <b>saldo Nexo</b> · processado pelo Asaas</span>
+        <span className="foot-pay">Pagamento via <b>Pix</b> ou <b>saldo Nexo</b> · processado pelo Asaas</span>
       </div>
     </footer>
   );

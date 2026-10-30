@@ -3,7 +3,7 @@ import type { Order, Prisma } from "@prisma/client";
 import { db } from "./db";
 import { feeFor, money } from "./format";
 import { createCardCharge, createPixCharge, type Payer } from "./payments";
-import { CARD_MIN_CENTS, PLANS, checkoutTotals, isPlan, planCashback, type PayMethod, type PlanCode } from "./plans";
+import { CARD_ENABLED, CARD_MIN_CENTS, PLANS, checkoutTotals, isPlan, planCashback, type PayMethod, type PlanCode } from "./plans";
 import { confirmDays, daysLabel } from "./constants";
 import { notify } from "./notify";
 import { applyCoupon } from "./coupons";
@@ -45,6 +45,7 @@ export async function createOrder(input: { buyerId: string; listingId: string; q
   const plan: PlanCode = input.plan ?? "BASICO";
   // O que o comprador paga: item (com cupom) + plano VIP + taxa do cartão. Sempre recalculado aqui.
   const { planCents, cardFeeCents, totalCents } = checkoutTotals(grossCents - discountCents, plan, method);
+  if (method === "cartao" && !CARD_ENABLED) throw new OrderError("Pagamento com cartão em breve. Use Pix ou saldo.");
   if (method === "cartao" && totalCents < CARD_MIN_CENTS) throw new OrderError(`Cartão só a partir de ${money(CARD_MIN_CENTS)}. Use Pix ou saldo.`);
   const code = await newOrderCode();
   const bySaldo = method === "saldo";

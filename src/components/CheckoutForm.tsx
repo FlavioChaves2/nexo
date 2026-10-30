@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useState } from "react";
 import { startCheckout, type ActionState } from "@/app/actions/orders";
 import { PIX_MINUTES } from "@/lib/constants";
-import { CARD_MIN_CENTS, PLANS, PLAN_CODES, checkoutTotals, planFee, type PayMethod, type PlanCode } from "@/lib/plans";
+import { CARD_ENABLED, CARD_MIN_CENTS, PLANS, PLAN_CODES, checkoutTotals, planFee, type PayMethod, type PlanCode } from "@/lib/plans";
 import { Icon } from "./Icon";
 import { TrustBadges } from "./TrustBadges";
 
@@ -36,7 +36,7 @@ export function CheckoutForm({ listingId, qty, needsPlayerId, gameName, couponCo
 
   const t = checkoutTotals(baseCents, plan, method);
   const saldoOk = balanceCents >= checkoutTotals(baseCents, plan, "saldo").totalCents;
-  const cardOk = checkoutTotals(baseCents, plan, "cartao").totalCents >= CARD_MIN_CENTS;
+  const cardOk = CARD_ENABLED && checkoutTotals(baseCents, plan, "cartao").totalCents >= CARD_MIN_CENTS;
   // Trocou de plano e o saldo deixou de dar, ou o valor ficou abaixo do mínimo do cartão: volta para o Pix.
   useEffect(() => {
     if ((method === "saldo" && !saldoOk) || (method === "cartao" && !cardOk)) setMethod("pix");
@@ -96,7 +96,7 @@ export function CheckoutForm({ listingId, qty, needsPlayerId, gameName, couponCo
             <span className="pay-ic"><CardIcon /></span>
             <b>Cartão de crédito</b>
             <span className="muted small">Visa, Mastercard, Elo</span>
-            {cardOk ? <span className="chip">Taxa 2,99% + R$ 0,49</span> : <span className="chip warnchip"><Icon name="alert" />Valor mínimo: {brl(CARD_MIN_CENTS)}</span>}
+            {!CARD_ENABLED ? <span className="chip">Em breve</span> : cardOk ? <span className="chip">Taxa 2,99% + R$ 0,49</span> : <span className="chip warnchip"><Icon name="alert" />Valor mínimo: {brl(CARD_MIN_CENTS)}</span>}
           </label>
         </div>
         {method === "pix" && (

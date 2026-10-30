@@ -43,6 +43,8 @@ export function planFee(plan: PlanCode, baseCents: number) {
 /** Cashback do plano, creditado em saldo quando o pedido é concluído. */
 export const planCashback = (plan: string, baseCents: number) => (isPlan(plan) ? Math.round((baseCents * PLANS[plan].cashbackBps) / 10000) : 0);
 
+/** Cartão desligado até existir a verificação do celular por SMS antes do pagamento (antifraude). */
+export const CARD_ENABLED = false;
 /** Taxa do cartão (repasse do custo do Asaas: 2,99% + R$ 0,49), paga pelo comprador. */
 export const CARD_BPS = 299;
 export const CARD_FIXED_CENTS = 49;
