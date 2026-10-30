@@ -53,6 +53,11 @@ model User {
   notifications Notification[]
   pushSubs      PushSubscription[]
   titles        UserTitle[]
+  // Convite (indicação): quem trouxe esta pessoa ganha 2% de cada pedido concluído dela, pago da taxa da Nexo.
+  referredById     String?
+  referredBy       User?             @relation("referrals", fields: [referredById], references: [id])
+  referrals        User[]            @relation("referrals")
+  referralEarnings ReferralEarning[]
   questions     Question[]
   images        Image[]
 
@@ -422,4 +427,18 @@ model UserTitle {
 
   @@id([userId, titleId])
   @@index([titleId, createdAt])
+}
+
+// Comissão de convite paga em um pedido concluído. Uma por pedido e lado (comprador ou vendedor convidado).
+model ReferralEarning {
+  id          String   @id @default(cuid())
+  referrerId  String
+  referrer    User     @relation(fields: [referrerId], references: [id], onDelete: Cascade)
+  orderId     String
+  side        String // COMPRA | VENDA: o convidado foi o comprador ou o vendedor do pedido
+  amountCents Int
+  createdAt   DateTime @default(now())
+
+  @@unique([orderId, side])
+  @@index([referrerId, createdAt])
 }

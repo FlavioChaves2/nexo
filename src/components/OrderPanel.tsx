@@ -50,11 +50,11 @@ function ActionButton({ fn, className, children }: { fn: () => Promise<ActionSta
   );
 }
 
-function CopyField({ value }: { value: string }) {
+export function CopyField({ value, label = "Copiar código Pix", done = "Código copiado! Cole no app do banco", aria = "Código Pix copia e cola" }: { value: string; label?: string; done?: string; aria?: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <div className="stack" style={{ gap: 8 }}>
-      <input className="input mono pix-code" readOnly value={value} aria-label="Código Pix copia e cola" onFocus={(e) => e.currentTarget.select()} />
+      <input className="input mono pix-code" readOnly value={value} aria-label={aria} onFocus={(e) => e.currentTarget.select()} />
       <button
         className={`btn btn-block ${copied ? "btn-ghost pix-copied" : "btn-primary"}`}
         type="button"
@@ -68,7 +68,7 @@ function CopyField({ value }: { value: string }) {
           }
         }}
       >
-        {copied ? <><Icon name="check" />Código copiado! Cole no app do banco</> : <><Icon name="copy" />Copiar código Pix</>}
+        {copied ? <><Icon name="check" />{done}</> : <><Icon name="copy" />{label}</>}
       </button>
     </div>
   );

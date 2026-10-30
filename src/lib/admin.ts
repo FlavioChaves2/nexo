@@ -3,6 +3,7 @@ import { money } from "./format";
 import { payoutPix, refundPix } from "./payments";
 import { OrderError, paidWithBalance, payoutSeller, refundToBalance, sysMsg, transition, type Tx } from "./orders";
 import { notify } from "./notify";
+import { payReferrals } from "./referrals";
 
 // Decisões do painel de admin. Cada uma muda o status de forma atômica
 // (só passa se o item ainda estiver no estado esperado) e grava um AdminAction.
@@ -26,6 +27,7 @@ export async function releaseDispute(orderId: string, adminId: string, note: str
     const { count } = await tx.order.updateMany({ where: { id: orderId, status: "DISPUTA", resolvedAt: null }, data: { status: "CONCLUIDO", completedAt: new Date(), resolvedAt: new Date(), resolution: why } });
     if (count !== 1) throw new AdminError("Esta disputa já foi resolvida.");
     await payoutSeller(tx, order);
+    await payReferrals(tx, order);
     await sysMsg(tx, orderId, `Mediador Nexo decidiu a favor do vendedor: ${why}\nPagamento liberado ao vendedor.`);
     await notify(order.buyerId, "Disputa decidida", `Pedido #${order.code}: a favor do vendedor.`, `/pedido/${order.code}`, tx);
     await log(tx, adminId, "DISPUTA_LIBERADA", orderId, `#${order.code}`, why);

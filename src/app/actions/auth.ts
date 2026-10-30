@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
+import { cookies } from "next/headers";
+import { REF_COOKIE } from "@/lib/referrals";
 import { db } from "@/lib/db";
 import {
   clearPending2fa,
@@ -66,7 +68,11 @@ export async function register(_: FormState, form: FormData): Promise<FormState>
 
   let user;
   try {
-    user = await db.user.create({ data: { email, username, passwordHash: await bcrypt.hash(password, 10) } });
+    // Veio por um link de convite (/convite/<usuário>): guarda quem convidou.
+    const refId = (await cookies()).get(REF_COOKIE)?.value;
+    const referrer = refId ? await db.user.findUnique({ where: { id: refId }, select: { id: true, suspendedAt: true } }) : null;
+    user = await db.user.create({ data: { email, username, passwordHash: await bcrypt.hash(password, 10), referredById: referrer && !referrer.suspendedAt ? referrer.id : null } });
+    if (referrer) (await cookies()).delete(REF_COOKIE);
   } catch (e) {
     // Dois cadastros iguais ao mesmo tempo (clique duplo): o segundo cai aqui.
     if ((e as { code?: string }).code === "P2002") return { error: "Este e-mail ou nome de usuário já tem conta." };

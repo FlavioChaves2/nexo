@@ -7,6 +7,7 @@ import { CARD_ENABLED, CARD_MIN_CENTS, PLANS, checkoutTotals, isPlan, planCashba
 import { confirmDays, daysLabel } from "./constants";
 import { notify } from "./notify";
 import { applyCoupon } from "./coupons";
+import { payReferrals } from "./referrals";
 
 // Regras da Garantia Nexo. Toda mudança de status usa updateMany com o status
 // esperado no filtro: se duas requisições chegarem juntas, só uma passa.
@@ -209,6 +210,7 @@ export async function payoutSeller(tx: Tx, order: Order) {
 async function complete(tx: Tx, order: Order, auto: boolean) {
   await transition(tx, order.id, ["ENTREGUE"], { status: "CONCLUIDO", completedAt: new Date() });
   await payoutSeller(tx, order);
+  await payReferrals(tx, order);
   // O chat é visto pelas duas partes: o valor líquido do vendedor fica só na visão dele.
   await sysMsg(
     tx,

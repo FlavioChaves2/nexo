@@ -49,6 +49,8 @@ export default async function ContaPage({ searchParams }: { searchParams: Promis
         <div className="row">
           <Link className="btn btn-ghost btn-sm" href={`/loja/${fresh.username}`}>Ver minha loja</Link>
           <Link className="btn btn-ghost btn-sm" href="/conta/perfil"><Icon name="edit" />Editar perfil</Link>
+          <Link className="btn btn-ghost btn-sm" href="/conta/taxas"><Icon name="tag" />Taxas</Link>
+          <Link className="btn btn-primary btn-sm" href="/conta/convites"><Icon name="heart" />Convide e ganhe 2%</Link>
           <Link className="btn btn-ghost btn-sm" href="/conta/seguranca"><Icon name="shield" />{fresh.totpEnabled ? "2 etapas ativo" : "Ativar 2 etapas"}</Link>
           <form action={logout}><button className="btn btn-ghost btn-sm" type="submit">Sair</button></form>
         </div>

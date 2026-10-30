@@ -1054,3 +1054,9 @@ body:has(.buy-bar) .helper { bottom: 96px; }
 .pay-opt { min-width: 0; }
 .pay-opt .chip { white-space: normal; text-align: center; line-height: 1.25; max-width: 100%; }
 .pay-opt > span.muted { overflow-wrap: anywhere; }
+
+/* Taxas e convites (área do vendedor) */
+.fee-big { font: 800 clamp(44px, 7vw, 64px)/1 var(--f-display); color: var(--accent); letter-spacing: -.03em; }
+.fee-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 14px; }
+.fee-list li { display: flex; gap: 10px; align-items: flex-start; }
+.fee-list li > .ic { flex: none; width: 16px; height: 16px; margin-top: 3px; color: var(--accent); }
