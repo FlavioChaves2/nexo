@@ -165,6 +165,14 @@ model Order {
   refundId       String?
   discountCents  Int       @default(0) // desconto de cupom, pago pela Nexo (o vendedor recebe sobre o preço cheio)
   couponCode     String?
+  // Plano de proteção do comprador (BASICO | VIP | PREMIUM) e forma de pagamento (PIX | SALDO | CARTAO).
+  // planCents e cardFeeCents entram no totalCents (o que o comprador paga) e ficam com a Nexo, não com o vendedor.
+  plan           String    @default("BASICO")
+  planCents      Int       @default(0)
+  cardFeeCents   Int       @default(0)
+  payMethod      String    @default("PIX")
+  paymentUrl     String? // página segura do Asaas para pagar com cartão
+  cashbackCents  Int       @default(0) // devolvido em saldo ao concluir (planos VIP)
   createdAt      DateTime  @default(now())
 
   messages Message[]

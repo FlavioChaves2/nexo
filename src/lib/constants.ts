@@ -35,6 +35,8 @@ export const confirmDays = (type: string) => AUTO_CONFIRM_DAYS[type] ?? 3;
 export const daysLabel = (n: number) => (n === 1 ? "1 dia" : `${n} dias`);
 /** Minutos de validade do Pix. */
 export const PIX_MINUTES = 30;
+/** Minutos para pagar no cartão (página do Asaas) antes de o pedido ser cancelado. */
+export const CARD_MINUTES = 120;
 
 export const WHAT_YOU_GET: Record<string, string[]> = {
   CONTA: [

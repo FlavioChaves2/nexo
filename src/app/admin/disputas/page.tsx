@@ -13,6 +13,9 @@ export default async function DisputasPage({ searchParams }: { searchParams: Pro
     orderBy: resolved ? { resolvedAt: "desc" } : { disputedAt: "asc" },
     take: 100,
   });
+  // Fila de abertas: VIP Premium primeiro, depois VIP, depois as demais (cada grupo pela mais antiga).
+  const rank: Record<string, number> = { PREMIUM: 0, VIP: 1 };
+  if (!resolved) orders.sort((a, b) => (rank[a.plan] ?? 2) - (rank[b.plan] ?? 2));
 
   return (
     <div className="stack">
@@ -26,7 +29,7 @@ export default async function DisputasPage({ searchParams }: { searchParams: Pro
             <Link key={o.id} className="list-row" href={`/admin/disputas/${o.code}`}>
               <div className="thumb"><Art game={o.listing.game} glyph={o.listing.glyph} showName={false} /></div>
               <div>
-                <b>{o.disputeReason || o.listing.title}</b>
+                <b>{o.plan !== "BASICO" && <span className={`chip vip-chip ${o.plan === "PREMIUM" ? "premium" : ""}`}>{o.plan === "PREMIUM" ? "⭐ VIP Premium" : "VIP"}</span>} {o.disputeReason || o.listing.title}</b>
                 <span className="muted small">
                   <span className="mono">#{o.code}</span> · {o.buyer.username} contra {o.seller.username} · aberta em {o.disputedAt ? dateTime(o.disputedAt) : "—"}
                 </span>

@@ -36,9 +36,11 @@ export default async function ContaPage({ searchParams }: { searchParams: Promis
   const fresh = await db.user.findUniqueOrThrow({ where: { id: user.id } });
   const pending = await db.order.aggregate({
     where: { sellerId: user.id, status: { in: ["PAGO", "ENTREGUE", "DISPUTA"] } },
-    _sum: { totalCents: true, feeCents: true, discountCents: true },
+    _sum: { totalCents: true, feeCents: true, discountCents: true, planCents: true, cardFeeCents: true },
   });
-  const pendingCents = (pending._sum.totalCents ?? 0) + (pending._sum.discountCents ?? 0) - (pending._sum.feeCents ?? 0);
+  // Mesma conta do sellerNet: plano VIP e taxa do cartão ficam com a Nexo, não com o vendedor.
+  const s = pending._sum;
+  const pendingCents = (s.totalCents ?? 0) + (s.discountCents ?? 0) - (s.feeCents ?? 0) - (s.planCents ?? 0) - (s.cardFeeCents ?? 0);
 
   return (
     <div className="wrap">

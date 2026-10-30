@@ -4,6 +4,8 @@ import { DocPage } from "@/components/DocPage";
 export const metadata = { title: "Central de ajuda", description: "Como comprar, vender, a Garantia Nexo, disputas, taxas e saques." };
 
 const FAQ: [string, string, string][] = [
+  ["Comprar", "O que são os planos VIP?", "Proteção extra opcional no checkout. VIP (+1,99%): +2 dias para conferir a entrega, disputa na fila prioritária e 0,5% de volta em saldo. VIP Premium (+3,49%): +5 dias para conferir, prioridade máxima na disputa, 1% de volta em saldo e aviso de entrega prioritária ao vendedor. O valor do plano não vai para o vendedor."],
+  ["Comprar", "Posso pagar com cartão de crédito?", "Sim, a partir de R$ 5,00. Você digita o cartão na página segura do Asaas (a Nexo nunca vê os números) e paga a taxa do cartão: 2,99% + R$ 0,49. Pix e saldo Nexo não têm taxa."],
   ["Comprar", "Como funciona a Garantia Nexo?", "Seu Pix fica retido pela Nexo. O vendedor só recebe depois que você confirma que recebeu, ou automaticamente depois do prazo de conferência se você não abrir disputa. Contas: 7 dias (por causa do risco de recuperação). Itens e serviços: 3 dias. Moedas e gift cards: 1 dia."],
   ["Comprar", "Quanto tempo demora a entrega?", "Anúncios com entrega automática entregam o código na hora. Nos outros, o vendedor entrega pelo pedido e você recebe um aviso."],
   ["Comprar", "Recebi algo errado. E agora?", "Antes de confirmar, clique em “Tive um problema” no pedido e explique. O valor fica retido e um mediador analisa o caso."],

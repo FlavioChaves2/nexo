@@ -6,6 +6,7 @@ import { db } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
 import { isMockPayments, needsPayerDocument, type Payer } from "@/lib/payments";
 import { validCpf } from "@/lib/trust";
+import { isPlan, type PayMethod, type PlanCode } from "@/lib/plans";
 import {
   OrderError,
   cancelOrder,
@@ -37,9 +38,12 @@ async function run(code: string, fn: (orderId: string, userId: string) => Promis
 export async function startCheckout(_: ActionState, form: FormData): Promise<ActionState> {
   const listingId = String(form.get("listingId") ?? "");
   const user = await requireUser(`/anuncio/${listingId}`);
-  const method = form.get("method") === "saldo" ? "saldo" : "pix";
+  const m = form.get("method");
+  const method: PayMethod = m === "saldo" || m === "cartao" ? m : "pix";
+  const planRaw = form.get("plan");
+  const plan: PlanCode = isPlan(planRaw) ? planRaw : "BASICO";
   let payer: Payer | undefined;
-  if (method === "pix" && needsPayerDocument()) {
+  if (method !== "saldo" && needsPayerDocument()) {
     const name = String(form.get("payerName") ?? "").trim().replace(/\s+/g, " ").slice(0, 120);
     const cpf = String(form.get("payerCpf") ?? "").replace(/\D/g, "");
     if (name.split(" ").length < 2) return { error: "Informe seu nome completo." };
@@ -56,6 +60,7 @@ export async function startCheckout(_: ActionState, form: FormData): Promise<Act
       couponCode: String(form.get("coupon") ?? "") || undefined,
       payer,
       method,
+      plan,
     });
     code = order.code;
   } catch (e) {

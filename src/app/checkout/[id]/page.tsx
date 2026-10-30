@@ -9,7 +9,7 @@ import { OrderError } from "@/lib/orders";
 import { needsPayerDocument } from "@/lib/payments";
 import { Art } from "@/components/Art";
 import { Icon } from "@/components/Icon";
-import { CheckoutForm } from "@/components/CheckoutForm";
+import { CheckoutForm, CheckoutTotal } from "@/components/CheckoutForm";
 import { Avatar } from "@/components/Avatar";
 import { SellerBadges } from "@/components/SellerBadges";
 
@@ -53,7 +53,7 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
           {blocked ? (
             <div className="note warn"><Icon name="alert" /><span>{blocked}</span></div>
           ) : (
-            <CheckoutForm listingId={l.id} qty={qty} needsPlayerId={l.type === "MOEDA"} gameName={l.game.name} couponCode={coupon?.code} askPayer={needsPayerDocument()} total={money(total)} totalCents={total} balanceCents={user.balanceCents} />
+            <CheckoutForm listingId={l.id} qty={qty} needsPlayerId={l.type === "MOEDA"} gameName={l.game.name} couponCode={coupon?.code} askPayer={needsPayerDocument()} baseCents={total} balanceCents={user.balanceCents} />
           )}
         </div>
         <aside className="stack buybox">
@@ -88,14 +88,13 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
             <dl className="kv">
               <dt>Subtotal</dt><dd className="num">{money(subtotal)}</dd>
               {coupon && <><dt>Desconto ({coupon.code})</dt><dd className="num lime">−{money(coupon.discountCents)}</dd></>}
-              <dt>Taxa do Pix</dt><dd>Grátis</dd>
-              <dt style={{ fontWeight: 700, color: "var(--ink)" }}>Total</dt><dd className="price" style={{ fontSize: 22 }}>{money(total)}</dd>
+              <CheckoutTotal baseCents={total} />
             </dl>
           </div>
           <div className="panel box co-guarantee">
             <h3><Icon name="shield" /> Garantia Nexo</h3>
             <ul>
-              <li><Icon name="check" />Seu Pix fica retido até você confirmar que recebeu</li>
+              <li><Icon name="check" />Seu pagamento fica retido até você confirmar que recebeu</li>
               <li><Icon name="check" />Não recebeu ou veio diferente? Abra uma disputa e o dinheiro volta</li>
               <li><Icon name="check" />Conversa gravada e mediação pela equipe</li>
             </ul>

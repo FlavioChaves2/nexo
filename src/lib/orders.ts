@@ -2,7 +2,8 @@ import { randomInt } from "node:crypto";
 import type { Order, Prisma } from "@prisma/client";
 import { db } from "./db";
 import { feeFor, money } from "./format";
-import { createPixCharge, type Payer } from "./payments";
+import { createCardCharge, createPixCharge, type Payer } from "./payments";
+import { CARD_MIN_CENTS, PLANS, checkoutTotals, isPlan, planCashback, type PayMethod, type PlanCode } from "./plans";
 import { confirmDays, daysLabel } from "./constants";
 import { notify } from "./notify";
 import { applyCoupon } from "./coupons";
@@ -29,7 +30,7 @@ async function newOrderCode() {
   throw new Error("Não foi possível gerar o código do pedido.");
 }
 
-export async function createOrder(input: { buyerId: string; listingId: string; quantity: number; buyerNote: string; couponCode?: string; payer?: Payer; method?: "pix" | "saldo" }) {
+export async function createOrder(input: { buyerId: string; listingId: string; quantity: number; buyerNote: string; couponCode?: string; payer?: Payer; method?: PayMethod; plan?: PlanCode }) {
   const listing = await db.listing.findUnique({ where: { id: input.listingId }, include: { seller: { select: { suspendedAt: true } } } });
   if (!listing || listing.status !== "ATIVO" || listing.seller.suspendedAt) throw new OrderError("Este anúncio não está disponível.");
   if (listing.reservedForId && listing.reservedForId !== input.buyerId) throw new OrderError("Este anúncio não está disponível.");
@@ -40,20 +41,24 @@ export async function createOrder(input: { buyerId: string; listingId: string; q
   const grossCents = listing.priceCents * input.quantity;
   const coupon = input.couponCode ? await applyCoupon(input.couponCode, input.buyerId, grossCents) : null;
   const discountCents = coupon?.discountCents ?? 0;
-  const totalCents = grossCents - discountCents; // o que o comprador paga
+  const method: PayMethod = input.method ?? "pix";
+  const plan: PlanCode = input.plan ?? "BASICO";
+  // O que o comprador paga: item (com cupom) + plano VIP + taxa do cartão. Sempre recalculado aqui.
+  const { planCents, cardFeeCents, totalCents } = checkoutTotals(grossCents - discountCents, plan, method);
+  if (method === "cartao" && totalCents < CARD_MIN_CENTS) throw new OrderError(`Cartão só a partir de ${money(CARD_MIN_CENTS)}. Use Pix ou saldo.`);
   const code = await newOrderCode();
-  const bySaldo = input.method === "saldo";
+  const bySaldo = method === "saldo";
   if (bySaldo) {
     const buyer = await db.user.findUniqueOrThrow({ where: { id: input.buyerId }, select: { balanceCents: true } });
     if (buyer.balanceCents < totalCents) throw new OrderError("Saldo insuficiente para esta compra.");
   }
-  let charge: { id: string; copyPaste: string | null; expiresAt: Date | null } = { id: `saldo_${code}`, copyPaste: null, expiresAt: null };
+  let charge: { id: string; copyPaste: string | null; expiresAt: Date | null; url?: string | null } = { id: `saldo_${code}`, copyPaste: null, expiresAt: null };
   if (!bySaldo) {
     try {
-      charge = await createPixCharge({ code, totalCents }, input.payer);
+      charge = method === "cartao" ? await createCardCharge({ code, totalCents }, input.payer) : await createPixCharge({ code, totalCents }, input.payer);
     } catch (e) {
-      console.error("Falha ao gerar Pix:", e);
-      throw new OrderError("Não foi possível gerar o Pix agora. Confira seus dados e tente de novo.");
+      console.error("Falha ao gerar cobrança:", e);
+      throw new OrderError(`Não foi possível gerar ${method === "cartao" ? "o pagamento com cartão" : "o Pix"} agora. Confira seus dados e tente de novo.`);
     }
   }
 
@@ -68,12 +73,17 @@ export async function createOrder(input: { buyerId: string; listingId: string; q
       totalCents,
       discountCents,
       couponCode: coupon?.code,
+      plan,
+      planCents,
+      cardFeeCents,
+      payMethod: method.toUpperCase(),
+      paymentUrl: charge.url ?? null,
       feeCents: feeFor(grossCents),
       buyerNote: input.buyerNote,
       paymentId: charge.id,
       pixCode: charge.copyPaste,
       pixExpiresAt: charge.expiresAt,
-      messages: { create: { body: bySaldo ? "Pedido criado." : `Pedido criado. Pague o Pix de ${money(totalCents)} para iniciar.` } },
+      messages: { create: { body: bySaldo ? "Pedido criado." : `Pedido criado. Pague ${money(totalCents)} ${method === "cartao" ? "no cartão" : "no Pix"} para iniciar.${plan !== "BASICO" ? ` Plano ${PLANS[plan].name} ativo.` : ""}` } },
     },
   });
   if (bySaldo) {
@@ -127,7 +137,8 @@ async function payInTx(tx: Tx, orderId: string) {
   await transition(tx, order.id, ["AGUARDANDO_PAGAMENTO"], { status: "PAGO", paidAt: now });
   await sysMsg(tx, order.id, `Pagamento aprovado. ${money(order.totalCents)} ficam retidos pela Nexo até você confirmar o recebimento.`);
   if (order.couponCode) await tx.coupon.update({ where: { code: order.couponCode }, data: { uses: { increment: 1 } } });
-  await notify(order.sellerId, "Você vendeu!", `${order.listing.title} · ${order.listing.autoDelivery ? "entrega automática feita" : "entregue pelo pedido"}`, `/pedido/${order.code}`, tx);
+  const vip = order.plan === "PREMIUM" ? " · ⭐ Cliente VIP Premium: entregue com prioridade" : order.plan === "VIP" ? " · Cliente VIP" : "";
+  await notify(order.sellerId, "Você vendeu!", `${order.listing.title} · ${order.listing.autoDelivery ? "entrega automática feita" : "entregue pelo pedido"}${vip}`, `/pedido/${order.code}`, tx);
 
   if (order.listing.autoDelivery) {
     const codes = await tx.autoCode.findMany({
@@ -141,7 +152,7 @@ async function payInTx(tx: Tx, orderId: string) {
         status: "ENTREGUE",
         deliveryText: codes.map((c) => c.code).join("\n"),
         deliveredAt: now,
-        autoConfirmAt: addDays(now, confirmDays(order.listing.type)),
+        autoConfirmAt: addDays(now, confirmDays(order.listing.type) + extraDays(order.plan)),
       });
       await sysMsg(tx, order.id, 'Entrega automática concluída. O código está no quadro "Entrega".');
       await notify(order.buyerId, "Pedido entregue", `${order.listing.title}: o código já está no pedido.`, `/pedido/${order.code}`, tx);
@@ -169,7 +180,7 @@ export async function deliverOrder(orderId: string, sellerId: string, text: stri
   await db.$transaction(async (tx) => {
     const order = await tx.order.findUniqueOrThrow({ where: { id: orderId }, include: { listing: { select: { type: true } } } });
     if (order.sellerId !== sellerId) throw new OrderError("Só o vendedor pode entregar este pedido.");
-    const days = confirmDays(order.listing.type);
+    const days = confirmDays(order.listing.type) + extraDays(order.plan);
     const now = new Date();
     await transition(tx, orderId, ["PAGO"], {
       status: "ENTREGUE",
@@ -183,7 +194,8 @@ export async function deliverOrder(orderId: string, sellerId: string, text: stri
 }
 
 /** O que o vendedor recebe: preço cheio menos a taxa (o cupom é pago pela Nexo). */
-export const sellerNet = (o: { totalCents: number; discountCents: number; feeCents: number }) => o.totalCents + o.discountCents - o.feeCents;
+export const sellerNet = (o: { totalCents: number; discountCents: number; feeCents: number; planCents?: number; cardFeeCents?: number }) =>
+  o.totalCents + o.discountCents - o.feeCents - (o.planCents ?? 0) - (o.cardFeeCents ?? 0);
 
 /** Credita o vendedor e conta a venda para o nível dele. */
 export async function payoutSeller(tx: Tx, order: Order) {
@@ -204,7 +216,17 @@ async function complete(tx: Tx, order: Order, auto: boolean) {
       ? "Confirmação automática: o prazo para conferir terminou. Pagamento liberado ao vendedor."
       : "Recebimento confirmado. Pagamento liberado ao vendedor.",
   );
+  // Cashback dos planos VIP: volta em saldo para o comprador, pago do valor do plano.
+  const cashback = planCashback(order.plan, order.totalCents - order.planCents - order.cardFeeCents);
+  if (cashback > 0) {
+    await tx.user.update({ where: { id: order.buyerId }, data: { balanceCents: { increment: cashback } } });
+    await tx.order.update({ where: { id: order.id }, data: { cashbackCents: cashback } });
+    await notify(order.buyerId, `${money(cashback)} de volta no seu saldo`, `Cashback do plano ${PLANS[order.plan as PlanCode].name} no pedido #${order.code}.`, "/conta?aba=saldo", tx);
+  }
 }
+
+/** Dias extras para conferir a entrega, conforme o plano VIP do pedido. */
+const extraDays = (plan: string) => (isPlan(plan) ? PLANS[plan].extraDays : 0);
 
 export async function confirmOrder(orderId: string, buyerId: string) {
   await db.$transaction(async (tx) => {
@@ -277,7 +299,7 @@ export async function settleExpired(where: Prisma.OrderWhereInput) {
       await db.$transaction(async (tx) => {
         if (order.status === "ENTREGUE") return complete(tx, order, true);
         await transition(tx, order.id, ["AGUARDANDO_PAGAMENTO"], { status: "CANCELADO" });
-        await sysMsg(tx, order.id, "O Pix expirou e o pedido foi cancelado.");
+        await sysMsg(tx, order.id, order.payMethod === "CARTAO" ? "O prazo para pagar no cartão terminou e o pedido foi cancelado." : "O Pix expirou e o pedido foi cancelado.");
       });
     } catch (e) {
       if (!(e instanceof OrderError)) throw e;

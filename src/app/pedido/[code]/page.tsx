@@ -59,7 +59,7 @@ export default async function PedidoPage({ params }: { params: Promise<{ code: s
       <div className="order-head">
         <div className="grid-gap">
           <span className="eyebrow">{role === "buyer" ? "Sua compra" : "Sua venda"}</span>
-          <h1 style={{ fontSize: "clamp(26px,3.6vw,38px)" }}>Pedido <span className="mono" style={{ fontWeight: 700 }}>#{o.code}</span></h1>
+          <h1 style={{ fontSize: "clamp(26px,3.6vw,38px)" }}>Pedido <span className="mono" style={{ fontWeight: 700 }}>#{o.code}</span>{o.plan !== "BASICO" && <> <span className={`chip vip-chip ${o.plan === "PREMIUM" ? "premium" : ""}`}>{o.plan === "PREMIUM" ? "⭐ VIP Premium" : "VIP"}</span></>}</h1>
         </div>
         <span className={`chip ${chip} o-status`}><Icon name={status === "CONCLUIDO" ? "check" : closedBad ? "alert" : "clock"} />{ORDER_STATUS[status]}</span>
       </div>
@@ -88,6 +88,8 @@ export default async function PedidoPage({ params }: { params: Promise<{ code: s
             isMock={isMockPayments()}
             qr={qr}
             pixCode={o.pixCode}
+            payMethod={o.payMethod}
+            paymentUrl={o.paymentUrl}
             pixExpiresAt={o.pixExpiresAt ? time(o.pixExpiresAt) : null}
             pixExpiresIso={o.pixExpiresAt?.toISOString() ?? null}
             deliveryText={o.deliveryText}

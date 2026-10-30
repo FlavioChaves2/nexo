@@ -667,7 +667,7 @@ body { background:
 .pix-how { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .pix-how li { display: flex; gap: 10px; align-items: center; font-size: 13px; color: var(--muted); }
 .pix-how b { color: var(--ink); }
-.pix-how span { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; flex: none; font: 700 11px var(--f-mono); background: var(--surface-2); color: var(--accent); border: 1px solid var(--line); }
+.pix-how li > span:first-child { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; flex: none; font: 700 11px var(--f-mono); background: var(--surface-2); color: var(--accent); border: 1px solid var(--line); }
 /* Chat */
 .chat-head { background: linear-gradient(90deg, var(--moss), transparent); }
 .chat-avatar { background: linear-gradient(135deg, var(--accent), #6E9B1E); color: var(--accent-ink); font-weight: 800; }
@@ -1011,3 +1011,46 @@ body:has(.buy-bar) .helper { bottom: 96px; }
 .title-holders { display: flex; flex-wrap: wrap; gap: 6px 10px; }
 .title-holder { border: 1px solid var(--line); background: var(--surface-2, var(--surface-3)); color: var(--ink); border-radius: 999px; padding: 3px 10px; font-size: 12.5px; cursor: pointer; }
 .title-holder:hover { border-color: var(--danger); color: var(--danger); }
+
+/* Checkout: planos VIP e formas de pagamento */
+.co-step:has(.plan-grid) { container-type: inline-size; }
+.plan-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 12px; padding-top: 6px; }
+@container (max-width: 660px) { .plan-grid { grid-template-columns: minmax(0, 1fr); } }
+.plan-card { position: relative; display: grid; align-content: start; gap: 8px; padding: 18px 16px 16px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--surface-2, var(--surface)); cursor: pointer; transition: border-color .2s, transform .2s, box-shadow .2s; }
+.plan-card:hover { transform: translateY(-2px); border-color: var(--accent-line); }
+.plan-card.on { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(197, 240, 74, .12), 0 14px 30px -18px rgba(197, 240, 74, .5); }
+.plan-card input, .pay-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.plan-name { font-family: var(--f-display); font-size: 17px; letter-spacing: .02em; text-transform: uppercase; }
+.plan-gold { color: #F5C542; }
+.plan-price { font-family: var(--f-display); font-size: 22px; font-weight: 700; }
+.plan-price small { font-size: 12px; color: var(--muted); font-weight: 600; }
+.plan-card ul { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 7px; font-size: 12.5px; color: var(--muted); }
+.plan-card li { display: flex; gap: 7px; align-items: flex-start; }
+.plan-card li .ic { width: 14px; height: 14px; flex: none; margin-top: 2px; color: var(--accent); }
+.plan-check { position: absolute; top: 14px; right: 14px; width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--line); display: grid; place-items: center; color: transparent; transition: all .2s; }
+.plan-check .ic { width: 14px; height: 14px; }
+.plan-card.on .plan-check { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.plan-tag { position: absolute; top: -10px; right: 14px; padding: 2px 9px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.plan-premium { background: linear-gradient(160deg, rgba(245, 197, 66, .08), transparent 55%), var(--surface-2, var(--surface)); }
+.plan-premium .plan-tag { top: -10px; right: 46px; }
+.pay-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px 12px; padding-top: 6px; }
+.pay-opt { position: relative; display: grid; justify-items: center; text-align: center; gap: 5px; padding: 18px 12px 14px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--surface-2, var(--surface)); cursor: pointer; transition: border-color .2s, transform .2s; }
+.pay-opt:hover { border-color: var(--accent-line); }
+.pay-opt.on { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(197, 240, 74, .12); }
+.pay-opt.off { opacity: .55; cursor: not-allowed; }
+.pay-opt.off:hover { border-color: var(--line); }
+.pay-ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); margin-bottom: 4px; }
+.pay-ic .ic { width: 22px; height: 22px; }
+.pay-opt .plan-tag { right: 50%; translate: 50% 0; }
+.warnchip { background: rgba(245, 197, 66, .12); color: #F5C542; }
+.vip-chip { background: rgba(78, 161, 255, .14); color: #4EA1FF; vertical-align: middle; }
+.vip-chip.premium { background: rgba(245, 197, 66, .14); color: #F5C542; }
+@media (max-width: 760px) {
+  .plan-grid, .pay-grid { grid-template-columns: minmax(0, 1fr); }
+  .pay-opt { grid-template-columns: 44px 1fr; justify-items: start; text-align: left; column-gap: 12px; }
+  .pay-opt .pay-ic { grid-row: span 3; margin: 0; }
+  .pay-opt .plan-tag { right: 14px; translate: none; }
+}
+.pay-opt { min-width: 0; }
+.pay-opt .chip { white-space: normal; text-align: center; line-height: 1.25; max-width: 100%; }
+.pay-opt > span.muted { overflow-wrap: anywhere; }

@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { PIX_MINUTES } from "./constants";
+import { CARD_MINUTES, PIX_MINUTES } from "./constants";
 import { validCpf } from "./trust";
 
 // Camada de pagamento. Provedores:
@@ -23,7 +23,7 @@ export function paymentProvider() {
 export const isMockPayments = () => paymentProvider() === "mock";
 
 /** O Asaas só gera cobrança com nome e CPF de quem paga. */
-export const needsPayerDocument = () => paymentProvider() === "asaas";
+export const needsPayerDocument = () => paymentProvider() === "asaas"; // Pix e cartão
 
 export async function createPixCharge(order: { code: string; totalCents: number }, payer?: Payer): Promise<PixCharge> {
   const provider = paymentProvider();
@@ -47,6 +47,30 @@ export async function createPixCharge(order: { code: string; totalCents: number 
     });
     const qr = await asaas<{ payload: string }>("GET", `/payments/${payment.id}/pixQrCode`);
     return { id: payment.id, copyPaste: qr.payload, expiresAt: new Date(Date.now() + PIX_MINUTES * 60_000) };
+  }
+  throw new Error(`Provedor de pagamento "${provider}" ainda não foi configurado.`);
+}
+
+/**
+ * Cobrança no cartão de crédito pela página segura do Asaas (invoiceUrl): o comprador digita o cartão
+ * lá, nunca no site da Nexo. O aviso de pagamento chega pelo mesmo webhook do Pix.
+ */
+export async function createCardCharge(order: { code: string; totalCents: number }, payer?: Payer): Promise<{ id: string; copyPaste: null; expiresAt: Date; url: string | null }> {
+  const expiresAt = new Date(Date.now() + CARD_MINUTES * 60_000);
+  const provider = paymentProvider();
+  if (provider === "mock") return { id: `mock_card_${randomUUID()}`, copyPaste: null, expiresAt, url: null };
+  if (provider === "asaas") {
+    if (!payer) throw new Error("Informe nome e CPF de quem paga.");
+    const customer = await asaasCustomer(payer);
+    const payment = await asaas<{ id: string; invoiceUrl: string }>("POST", "/payments", {
+      customer,
+      billingType: "CREDIT_CARD",
+      value: order.totalCents / 100,
+      dueDate: new Date().toISOString().slice(0, 10),
+      description: `Nexo · pedido ${order.code}`,
+      externalReference: order.code,
+    });
+    return { id: payment.id, copyPaste: null, expiresAt, url: payment.invoiceUrl };
   }
   throw new Error(`Provedor de pagamento "${provider}" ainda não foi configurado.`);
 }

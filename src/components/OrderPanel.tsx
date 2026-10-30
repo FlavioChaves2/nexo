@@ -10,7 +10,7 @@ import {
   simulatePayment,
   type ActionState,
 } from "@/app/actions/orders";
-import { PIX_MINUTES, type OrderStatus } from "@/lib/constants";
+import { CARD_MINUTES, PIX_MINUTES, type OrderStatus } from "@/lib/constants";
 import { Icon } from "./Icon";
 
 type Props = {
@@ -20,6 +20,8 @@ type Props = {
   isMock: boolean;
   qr: string | null;
   pixCode: string | null;
+  payMethod: string;
+  paymentUrl: string | null;
   pixExpiresAt: string | null;
   pixExpiresIso: string | null;
   deliveryText: string;
@@ -102,7 +104,31 @@ export function OrderPanel(p: Props) {
   const buyer = p.role === "buyer";
 
   if (p.status === "AGUARDANDO_PAGAMENTO") {
-    if (!buyer) return <div className="panel box"><h3>Aguardando pagamento</h3><p className="muted small">O comprador ainda não pagou o Pix. Não entregue nada antes do pagamento aprovado.</p></div>;
+    if (!buyer) return <div className="panel box"><h3>Aguardando pagamento</h3><p className="muted small">O comprador ainda não pagou. Não entregue nada antes do pagamento aprovado.</p></div>;
+    if (p.payMethod === "CARTAO")
+      return (
+        <div className="panel box pix-panel">
+          <div className="row">
+            <h3>Pague com cartão</h3>
+            <span className="pix-wait"><span />Aguardando pagamento</span>
+          </div>
+          <div className="pix-amount"><span className="muted small">Valor</span><b>{p.total}</b></div>
+          {p.pixExpiresIso && <PixTimer until={p.pixExpiresIso} minutes={CARD_MINUTES} />}
+          {p.paymentUrl && <a className="btn btn-primary btn-block" href={p.paymentUrl} rel="noopener">Pagar com cartão na página segura <Icon name="arrow" /></a>}
+          <ol className="pix-how">
+            <li><span>1</span><span>Toque no botão: abre a página de pagamento do <b>Asaas</b></span></li>
+            <li><span>2</span>Digite os dados do cartão lá (a Nexo nunca vê os números)</li>
+            <li><span>3</span>Volte aqui: esta página atualiza sozinha quando for aprovado</li>
+          </ol>
+          {p.isMock && (
+            <>
+              <ActionButton className="btn btn-primary btn-block" fn={() => simulatePayment(p.code)}>Simular cartão aprovado</ActionButton>
+              <span className="hint">Modo de teste: nenhum cartão é cobrado. O botão faz o papel da operadora aprovando.</span>
+            </>
+          )}
+          <ActionButton className="btn btn-ghost btn-block btn-sm" fn={() => cancelAction(p.code)}>Cancelar pedido</ActionButton>
+        </div>
+      );
     return (
       <div className="panel box pix-panel">
         <div className="row">
@@ -118,8 +144,8 @@ export function OrderPanel(p: Props) {
           </div>
         </div>
         <ol className="pix-how">
-          <li><span>1</span>Abra o app do seu banco e entre em <b>Pix</b></li>
-          <li><span>2</span>Escaneie o QR ou escolha <b>Pix copia e cola</b></li>
+          <li><span>1</span><span>Abra o app do seu banco e entre em <b>Pix</b></span></li>
+          <li><span>2</span><span>Escaneie o QR ou escolha <b>Pix copia e cola</b></span></li>
           <li><span>3</span>Confirme: esta página atualiza sozinha</li>
         </ol>
         {p.isMock && (
