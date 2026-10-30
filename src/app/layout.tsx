@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Sora, Manrope, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Motion } from "@/components/Motion";
@@ -9,9 +9,37 @@ import { PwaRegister } from "@/components/PwaRegister";
 import { Suspense } from "react";
 import "./globals.css";
 
-const sora = Sora({ subsets: ["latin"], weight: ["500", "600", "700", "800"], variable: "--font-sora" });
-const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], variable: "--font-manrope" });
-const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["500", "700"], variable: "--font-mono" });
+// Fontes guardadas no projeto (pacotes @fontsource), não baixadas do Google na hora do build:
+// quando o Google Fonts falhava, a publicação na Vercel quebrava.
+const sora = localFont({
+  src: [
+    { path: "../../node_modules/@fontsource/sora/files/sora-latin-500-normal.woff2", weight: "500" },
+    { path: "../../node_modules/@fontsource/sora/files/sora-latin-600-normal.woff2", weight: "600" },
+    { path: "../../node_modules/@fontsource/sora/files/sora-latin-700-normal.woff2", weight: "700" },
+    { path: "../../node_modules/@fontsource/sora/files/sora-latin-800-normal.woff2", weight: "800" },
+  ],
+  variable: "--font-sora",
+  display: "swap",
+});
+const manrope = localFont({
+  src: [
+    { path: "../../node_modules/@fontsource/manrope/files/manrope-latin-400-normal.woff2", weight: "400" },
+    { path: "../../node_modules/@fontsource/manrope/files/manrope-latin-500-normal.woff2", weight: "500" },
+    { path: "../../node_modules/@fontsource/manrope/files/manrope-latin-600-normal.woff2", weight: "600" },
+    { path: "../../node_modules/@fontsource/manrope/files/manrope-latin-700-normal.woff2", weight: "700" },
+    { path: "../../node_modules/@fontsource/manrope/files/manrope-latin-800-normal.woff2", weight: "800" },
+  ],
+  variable: "--font-manrope",
+  display: "swap",
+});
+const mono = localFont({
+  src: [
+    { path: "../../node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-500-normal.woff2", weight: "500" },
+    { path: "../../node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-700-normal.woff2", weight: "700" },
+  ],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.APP_URL ?? "https://nexopoint.com.br"),
