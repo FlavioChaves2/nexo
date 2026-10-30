@@ -884,7 +884,7 @@ body:has(.buy-bar) .helper { bottom: 96px; }
 .app-btn { justify-self: start; }
 .app-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .app-steps li { display: flex; align-items: center; gap: 10px; font-size: 14px; }
-.app-steps span { flex: none; width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-weight: 800; font-size: 12px; }
+.app-steps li > span:first-child { flex: none; width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-weight: 800; font-size: 12px; }
 .app-phone { position: relative; z-index: 1; display: grid; place-items: center; padding: 26px 20px; }
 .app-screen { width: 230px; height: 400px; border-radius: 34px; border: 6px solid #2a2f27; background: linear-gradient(180deg, #1a1f17, #0d0f0c); box-shadow: 0 30px 60px -20px rgba(0, 0, 0, .7), 0 0 50px -10px rgba(197, 240, 74, .35); display: grid; align-content: start; justify-items: center; gap: 6px; padding: 34px 12px; }
 .app-screen > img { width: 64px; height: 64px; border-radius: 16px; }
@@ -907,3 +907,21 @@ body:has(.buy-bar) .helper { bottom: 96px; }
 }
 @media (max-width: 560px) { .app-link { display: none; } }
 @media (prefers-reduced-motion: reduce) { .app-notif { animation: none; } }
+
+/* Guia de instalação no iPhone */
+.ios-guide { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 20px; background: rgba(5, 7, 4, .82); backdrop-filter: blur(4px); animation: fadeIn .25s ease both; }
+.ios-card { position: relative; width: min(100%, 360px); display: grid; gap: 12px; justify-items: start; padding: 22px 20px 20px; border-radius: 22px; background: var(--surface); border: 1px solid var(--accent-line); box-shadow: 0 20px 60px -20px rgba(0, 0, 0, .8); }
+.ios-card > img { width: 54px; height: 54px; border-radius: 14px; }
+.ios-card h3 { font-size: 20px; }
+.ios-card .app-steps li { align-items: flex-start; }
+.ios-card .app-steps svg { vertical-align: -5px; color: #4ea1ff; }
+.ios-close { position: absolute; right: 10px; top: 8px; width: 34px; height: 34px; border: 0; border-radius: 50%; background: var(--surface-3); color: var(--ink); font-size: 22px; line-height: 1; cursor: pointer; }
+.ios-arrow { position: fixed; left: 50%; translate: -50% 0; display: grid; justify-items: center; color: #4ea1ff; font-size: 34px; font-weight: 800; pointer-events: none; }
+.ios-arrow svg { width: 30px; height: 30px; }
+.ios-arrow.bottom { bottom: max(14px, env(safe-area-inset-bottom)); animation: bounceDown 1s ease-in-out infinite; }
+.ios-arrow.bottom svg { order: 2; }
+.ios-arrow.top { top: 10px; left: auto; right: 18px; translate: none; animation: bounceUp 1s ease-in-out infinite; }
+.ios-arrow.top span { order: -1; }
+@keyframes bounceDown { 50% { transform: translateY(8px); } }
+@keyframes bounceUp { 50% { transform: translateY(-8px); } }
+@keyframes fadeIn { from { opacity: 0; } }
