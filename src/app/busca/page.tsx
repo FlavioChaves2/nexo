@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { cardInclude, favoriteIds, visibleListing } from "@/lib/queries";
 import { withOrbitFirst } from "@/lib/orbit";
+import { parseReais } from "@/lib/format";
 import { LISTING_TYPES, TYPE_PLURAL } from "@/lib/constants";
 import { ListingCard } from "@/components/ListingCard";
 import { AutoSubmitForm } from "@/components/AutoSubmitForm";
@@ -37,7 +38,11 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
   const q = (sp.q ?? "").trim().slice(0, 80);
   const tipo = LISTING_TYPES.includes(sp.tipo as never) ? sp.tipo! : "";
   const ordem = sp.ordem && ORDENS[sp.ordem] ? sp.ordem : "relevancia";
-  const max = Number(sp.max);
+  // Aceita "39.90", "39,90" ou "40"; negativo, vazio ou texto inválido = sem limite.
+  const maxCents = sp.max ? parseReais(sp.max) : NaN;
+  const max = Number.isFinite(maxCents) && maxCents > 0 ? maxCents / 100 : 0;
+  // Muda a cada combinação de filtros: o formulário é recriado e não guarda marcações antigas (ex.: depois de "Limpar filtros").
+  const formKey = JSON.stringify([q, sp.jogo ?? "", tipo, sp.auto ?? "", max, ordem]);
   const user = await getCurrentUser();
 
   const where: Prisma.ListingWhereInput = {
@@ -46,7 +51,7 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
     ...(sp.jogo && { gameSlug: sp.jogo }),
     ...(tipo && { type: tipo }),
     ...(sp.auto === "1" && { autoDelivery: true }),
-    ...(max > 0 && { priceCents: { lte: Math.round(max * 100) } }),
+    ...(max > 0 && { priceCents: { lte: maxCents } }),
   };
 
   const [games, results, favs] = await Promise.all([
@@ -65,7 +70,7 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
       {/* Celular: os filtros ficam atrás deste botão, para os anúncios aparecerem logo (só CSS, sem JavaScript). */}
       <input type="checkbox" id="ft" className="ft-toggle" aria-hidden="true" tabIndex={-1} />
       <label htmlFor="ft" className="btn btn-ghost ft-btn"><Icon name="search" />Filtros{activeFilters > 0 && <span className="ft-count">{activeFilters}</span>}</label>
-      <AutoSubmitForm className="panel filters" action="/busca" aria-label="Filtros">
+      <AutoSubmitForm key={formKey} className="panel filters" action="/busca" aria-label="Filtros">
         <div className="field">
           <label htmlFor="q">Palavra-chave</label>
           <input className="input" id="q" name="q" type="search" defaultValue={q} placeholder="Ex.: skins, VP, nível" />
@@ -94,7 +99,7 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
         <label className="check"><input type="checkbox" name="auto" value="1" defaultChecked={sp.auto === "1"} />Só entrega automática</label>
         <div className="field">
           <label htmlFor="max">Preço máximo (R$)</label>
-          <input className="input" id="max" name="max" type="number" min="0" step="1" inputMode="numeric" defaultValue={max > 0 ? max : ""} placeholder="Sem limite" />
+          <input className="input" id="max" name="max" type="number" min="0" step="0.01" inputMode="decimal" defaultValue={max > 0 ? max.toFixed(2) : ""} placeholder="Sem limite" />
         </div>
         <input type="hidden" name="ordem" value={ordem} />
         <button className="btn btn-ghost" type="submit">Aplicar filtros</button>
@@ -108,8 +113,8 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
             <span className="eyebrow">{results.length} {results.length === 1 ? "anúncio" : "anúncios"}</span>
             <h2>{title}</h2>
           </div>
-          <AutoSubmitForm action="/busca">
-            {Object.entries(sp).map(([k, v]) => (k !== "ordem" && v ? <input key={k} type="hidden" name={k} value={v} /> : null))}
+          <AutoSubmitForm key={formKey} action="/busca">
+            {Object.entries({ q, jogo: sp.jogo, tipo, auto: sp.auto === "1" ? "1" : "", max: max > 0 ? max.toFixed(2) : "" }).map(([k, v]) => (v ? <input key={k} type="hidden" name={k} value={v} /> : null))}
             <select className="input" name="ordem" defaultValue={ordem} aria-label="Ordenar" style={{ width: "auto" }}>
               <option value="relevancia">Mais relevantes</option>
               <option value="menor">Menor preço</option>

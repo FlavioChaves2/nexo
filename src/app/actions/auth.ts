@@ -6,12 +6,14 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { cookies } from "next/headers";
 import { REF_COOKIE } from "@/lib/referrals";
+import { deleteAccount, DeleteAccountError } from "@/lib/delete-account";
 import { db } from "@/lib/db";
 import {
   clearPending2fa,
   clientIp,
   createSession,
   destroySession,
+  getCurrentUser,
   readPending2fa,
   requireUser,
   safeNext,
@@ -176,4 +178,17 @@ export async function resendVerification(): Promise<FormState> {
   const user = await db.user.findUniqueOrThrow({ where: { id: me.id } });
   if (user.emailVerifiedAt) return { ok: "Seu e-mail já está confirmado." };
   return (await sendVerifyEmail(user)) ? { ok: `Enviamos um link para ${user.email}.` } : { error: "Você pediu muitos e-mails. Tente daqui a 1 hora." };
+}
+
+export async function deleteMyAccount(_: FormState, form: FormData): Promise<FormState> {
+  const user = await getCurrentUser();
+  if (!user) return { error: "Entre de novo para excluir a conta." };
+  try {
+    await deleteAccount(user.id, String(form.get("password") ?? ""), String(form.get("confirm") ?? ""));
+  } catch (e) {
+    if (e instanceof DeleteAccountError) return { error: e.message };
+    throw e;
+  }
+  await destroySession();
+  redirect("/?conta=excluida");
 }

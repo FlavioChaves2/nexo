@@ -1244,3 +1244,7 @@ a.acct-tile:hover { border-color: var(--accent-line); transform: translateY(-2px
 .home-founders .go-txt { margin-left: auto; font-weight: 700; color: var(--ink); white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
 @media (max-width: 760px) { .fund-seats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .fund-seats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .home-founders { flex-wrap: wrap; } .home-founders .go-txt { margin-left: 0; } }
+
+/* Excluir conta */
+.danger-zone { border-color: #522828; }
+.danger-zone summary { cursor: pointer; color: var(--danger); list-style-position: inside; }

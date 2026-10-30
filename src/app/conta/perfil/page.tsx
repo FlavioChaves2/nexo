@@ -5,6 +5,8 @@ import { requireUser } from "@/lib/auth";
 import { LEVEL_TABLE, avgRating, nextLevel, sellerLevel } from "@/lib/reputation";
 import { ProfileForm } from "@/components/SocialForms";
 import { SellerBadges } from "@/components/SellerBadges";
+import { DeleteAccount } from "@/components/DeleteAccount";
+import { deleteBlockers } from "@/lib/delete-account";
 
 export const metadata = { title: "Meu perfil" };
 export const dynamic = "force-dynamic";
@@ -23,7 +25,10 @@ export default async function PerfilPage() {
         <Link className="btn btn-ghost btn-sm" href={`/loja/${u.username}`}>Ver minha loja</Link>
       </div>
       <div className="two-col">
-        <ProfileForm username={u.username} storeName={u.storeName} bio={u.bio} avatarId={u.avatarId} />
+        <div className="stack">
+          <ProfileForm username={u.username} storeName={u.storeName} bio={u.bio} avatarId={u.avatarId} />
+          <DeleteAccount blockers={await deleteBlockers(u.id)} />
+        </div>
         <aside className="stack buybox">
           <div className="panel box">
             <div className="row"><h3>Seu nível</h3><span className="row" style={{ gap: 6 }}><SellerBadges rep={u} /></span></div>
