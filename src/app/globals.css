@@ -932,3 +932,70 @@ body:has(.buy-bar) .helper { bottom: 96px; }
 @keyframes bounceDown { 50% { transform: translateY(8px); } }
 @keyframes bounceUp { 50% { transform: translateY(-8px); } }
 @keyframes fadeIn { from { opacity: 0; } }
+
+/* ===== Ajustes de celular (varredura mobile) ===== */
+/* Busca: botão Filtros (só no celular) */
+.ft-toggle { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; }
+.ft-btn { display: none; }
+.ft-count { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font-size: 11.5px; font-weight: 800; }
+@media (max-width: 860px) {
+  .ft-btn { display: inline-flex; justify-self: start; gap: 8px; }
+  .catalog { gap: 14px; padding-block: 16px; }
+  .catalog .panel.filters { display: none; position: static; }
+  .catalog:has(.ft-toggle:checked) .panel.filters { display: grid; animation: rise .25s ease both; }
+  .catalog:has(.ft-toggle:checked) .ft-btn { border-color: var(--accent); color: var(--accent); }
+}
+
+/* Topo some ao rolar para baixo no celular */
+@media (max-width: 860px) {
+  .top { transition: transform .25s ease; }
+  html.hdr-hide .top { transform: translateY(-100%); }
+}
+
+/* Home: etiquetas não ficam por cima do Nexinho */
+@media (max-width: 560px) {
+  .htag { font-size: 9.5px; padding: 6px 10px; }
+  .htag.t1 { top: 4%; right: 3%; }
+  .htag.t2 { display: none; }
+}
+
+/* Quero comprar e App: Nexinho dentro da tela, em cima do texto (antes ficava cortado na lateral) */
+@media (max-width: 760px) {
+  .qc-hero { display: flex; flex-direction: column; }
+  .qc-hero .qc-bot { position: static; order: -1; align-self: center; width: 140px; height: 140px; margin: 16px 0 -8px; }
+  .qc-copy h1 { padding-right: 0; }
+  .app-hero .app-bot { display: none; } /* no celular o desenho do telefone já é a imagem principal */
+}
+.app-notif b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Faixa do jogo: caixa quadrada no celular para o Nexinho caber inteiro (alta e estreita cortava os pés) */
+@media (max-width: 620px) {
+  .game-banner { grid-template-columns: 1fr 140px; }
+  .gb-bot { width: 140px; height: 140px; align-self: center; }
+}
+/* Cards em 2 colunas: a etiqueta "Auto" desce para a linha de baixo em vez de vazar do card */
+@media (max-width: 599px) {
+  .card-seller { flex-wrap: wrap; row-gap: 6px; }
+  .card-seller .nome { flex: 1 1 50px; }
+}
+/* Formulários: campo nenhum força largura mínima (o de fotos empurrava a página 6 px para o lado) */
+.form-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.form-grid > * { min-width: 0; }
+@media (max-width: 560px) { .form-grid { grid-template-columns: minmax(0, 1fr); } }
+.field { grid-template-columns: minmax(0, 1fr); }
+.file-drop { min-width: 0; }
+.file-drop input { width: 100%; min-width: 0; }
+/* Ajudante no celular: menor, encostado no canto, e o fim da página ganha espaço para ele não cobrir o rodapé */
+@media (max-width: 600px) {
+  .helper { right: 12px; bottom: 12px; }
+  .helper-btn { width: 50px; height: 50px; border-radius: 16px; padding: 5px; }
+  body:has(.buy-bar) .helper { bottom: 90px; }
+  footer { padding-bottom: 70px; }
+}
+/* Celular estreito (≤ 400 px): logo um pouco menor e o coração sai do topo (favoritos ficam em Minha conta),
+   senão os ícones passavam por cima do "NEXO" */
+@media (max-width: 400px) {
+  .logo .nexo-word { height: 20px; }
+  .top-inner > .logo { gap: 7px; }
+  .acoes a[aria-label="Favoritos"] { display: none; }
+}

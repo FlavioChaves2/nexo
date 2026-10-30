@@ -8,6 +8,7 @@ import { ListingCard } from "@/components/ListingCard";
 import { AutoSubmitForm } from "@/components/AutoSubmitForm";
 import { GameBanner } from "@/components/GameBanner";
 import { Nexinho3D } from "@/components/Nexinho3D";
+import { Icon } from "@/components/Icon";
 
 export async function generateMetadata({ searchParams }: { searchParams: Promise<SP> }) {
   const sp = await searchParams;
@@ -54,10 +55,14 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
   ]);
 
   const game = games.find((g) => g.slug === sp.jogo);
+  const activeFilters = [q, sp.jogo, tipo, sp.auto === "1", max > 0].filter(Boolean).length;
   const title = game?.name ?? (tipo ? TYPE_PLURAL[tipo] : q ? `Resultados para “${q}”` : "Todos os anúncios");
 
   return (
     <div className="wrap catalog">
+      {/* Celular: os filtros ficam atrás deste botão, para os anúncios aparecerem logo (só CSS, sem JavaScript). */}
+      <input type="checkbox" id="ft" className="ft-toggle" aria-hidden="true" tabIndex={-1} />
+      <label htmlFor="ft" className="btn btn-ghost ft-btn"><Icon name="search" />Filtros{activeFilters > 0 && <span className="ft-count">{activeFilters}</span>}</label>
       <AutoSubmitForm className="panel filters" action="/busca" aria-label="Filtros">
         <div className="field">
           <label htmlFor="q">Palavra-chave</label>
