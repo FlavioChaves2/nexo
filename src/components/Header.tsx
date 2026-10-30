@@ -68,6 +68,10 @@ export async function Header() {
                 <span className="lbl">Entrar</span>
               </Link>
             )}
+            <Link className="icon-btn app-link" href="/app" aria-label="Baixar o app">
+              <Icon name="bolt" />
+              <span className="lbl">App</span>
+            </Link>
             <Link className="btn btn-primary" href="/vender">
               + Vender
             </Link>

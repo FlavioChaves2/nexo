@@ -51,6 +51,7 @@ model User {
   ratingCount    Int     @default(0)
 
   notifications Notification[]
+  pushSubs      PushSubscription[]
   questions     Question[]
   images        Image[]
 
@@ -373,4 +374,17 @@ model WantedOffer {
   createdAt  DateTime @default(now())
 
   @@unique([wantedId, sellerId])
+}
+
+// Celular ou navegador que aceitou receber notificações (Web Push).
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }

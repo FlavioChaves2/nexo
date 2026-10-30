@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { Motion } from "@/components/Motion";
 import { NavProgress } from "@/components/NavProgress";
 import { HelperBot } from "@/components/HelperBot";
+import { PwaRegister } from "@/components/PwaRegister";
 import { Suspense } from "react";
 import "./globals.css";
 
@@ -17,6 +18,8 @@ export const metadata: Metadata = {
   openGraph: { siteName: "Nexo", locale: "pt_BR", type: "website" },
   title: { default: "NEXO - Comprar e vender Contas, Skins, Moedas e Gift Cards de Jogos", template: "%s | NEXO" },
   description: "Compre e venda contas, skins, moedas e gift cards com o pagamento protegido até a entrega.",
+  appleWebApp: { capable: true, title: "Nexo", statusBarStyle: "black-translucent" },
+  icons: { apple: "/app/apple-touch-icon.png" },
 };
 
 export const viewport: Viewport = { themeColor: "#111311" };
@@ -31,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Footer />
         <Motion />
         <HelperBot />
+        <PwaRegister />
       </body>
     </html>
   );
