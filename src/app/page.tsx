@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { favoriteIds, visibleListing } from "@/lib/queries";
 import { withOrbitFirst } from "@/lib/orbit";
+import { FOUNDER } from "@/lib/titles";
 import { LISTING_TYPES, TYPE_PLURAL } from "@/lib/constants";
 import { feeBps } from "@/lib/format";
 import { HeroArt } from "@/components/HeroArt";
@@ -16,13 +17,15 @@ export const dynamic = "force-dynamic";
 export default async function Home() {
   const user = await getCurrentUser();
   // Uma rodada só de consultas: cada ida ao banco custa uma viagem de rede.
-  const [games, featured, favs, listingsCount, sellersCount] = await Promise.all([
+  const [games, featured, favs, listingsCount, sellersCount, founders] = await Promise.all([
     db.game.findMany({ orderBy: { sort: "asc" } }),
     withOrbitFirst(visibleListing, [{ featured: "desc" }, { soldCount: "desc" }, { createdAt: "desc" }], 8, 4),
     favoriteIds(user?.id),
     db.listing.count({ where: visibleListing }),
     db.user.count({ where: { listings: { some: visibleListing } } }),
+    db.userTitle.count({ where: { title: { auto: FOUNDER.auto } } }),
   ]);
+  const foundersLeft = FOUNDER.maxHolders - founders;
   const stats = { listings: listingsCount.toLocaleString("pt-BR"), sellers: sellersCount.toLocaleString("pt-BR") };
   const fee = (feeBps() / 100).toString().replace(".", ",");
 
@@ -56,6 +59,14 @@ export default async function Home() {
       </section>
 
       <div style={{ marginTop: 22 }}><Ticker /></div>
+
+      {foundersLeft > 0 && (
+        <Link className="home-founders" href="/fundadores">
+          <span aria-hidden="true">👑</span>
+          <span><b>Restam {foundersLeft} de {FOUNDER.maxHolders} vagas de Fundador.</b> Publique seu primeiro anúncio e ganhe o título para sempre.</span>
+          <span className="go-txt">Quero a minha <Icon name="arrow" /></span>
+        </Link>
+      )}
 
       <div className="perks">
         <div className="perk"><Icon name="diamond" /><div><b>Encontre seu próximo upgrade</b><span>Contas, itens, moedas e serviços de {games.length} jogos</span></div></div>

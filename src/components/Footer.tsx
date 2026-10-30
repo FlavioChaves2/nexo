@@ -27,6 +27,7 @@ export function Footer() {
             <li><Link href="/vender">Criar anúncio</Link></li>
             <li><Link href="/conta?aba=vendas">Minhas vendas</Link></li>
             <li><Link href="/conta?aba=saldo">Saldo e saques</Link></li>
+            <li><Link href="/fundadores">👑 Seja Fundador</Link></li>
           </ul>
         </div>
         <div>
