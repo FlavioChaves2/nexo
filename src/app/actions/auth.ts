@@ -147,7 +147,7 @@ export async function resetPassword(_: FormState, form: FormData): Promise<FormS
   if (password !== String(form.get("confirm") ?? "")) return { error: "As senhas não são iguais." };
   const userId = await consumeToken(String(form.get("token") ?? ""), "RESET");
   if (!userId) return { error: "Link inválido ou vencido. Peça um novo." };
-  await db.user.update({ where: { id: userId }, data: { passwordHash: await bcrypt.hash(password, 10), emailVerifiedAt: new Date() } });
+  await db.user.update({ where: { id: userId }, data: { passwordHash: await bcrypt.hash(password, 10), emailVerifiedAt: new Date(), passwordChangedAt: new Date() } });
   await db.emailToken.updateMany({ where: { userId, kind: "RESET", usedAt: null }, data: { usedAt: new Date() } });
   redirect("/entrar?senha=nova");
 }

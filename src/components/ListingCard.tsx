@@ -16,7 +16,7 @@ export type CardListing = Listing & {
 };
 
 export function ListingCard({ l, fav = false, preview = false, previewImage }: { l: CardListing; fav?: boolean; preview?: boolean; previewImage?: string }) {
-  const photo = previewImage ?? (l.images?.[0] ? imageUrl(l.images[0].id) : null);
+  const photo = previewImage ?? (l.images?.[0] ? imageUrl(l.images[0].id, true) : null);
   const s = l.seller;
   return (
     <article className={`card${l.oldPriceCents && l.oldPriceCents > l.priceCents ? " holo" : ""}`} data-type={l.type}>

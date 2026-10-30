@@ -1,3 +1,4 @@
+import sharp from "sharp";
 import { db } from "./db";
 import { OrderError } from "./orders";
 
@@ -22,13 +23,29 @@ export async function saveImage(file: File, ownerId: string, kind: "ANUNCIO" | "
   const buf = Buffer.from(await file.arrayBuffer());
   const mime = sniff(buf);
   if (!mime) throw new OrderError(`"${file.name}" não é JPG, PNG ou WEBP.`);
-  return db.image.create({ data: { ownerId, kind, listingId, mime, size: buf.length, sort, data: buf }, select: { id: true } });
+  const thumb = await makeThumb(buf);
+  return db.image.create({ data: { ownerId, kind, listingId, mime, size: buf.length, sort, data: buf, thumb }, select: { id: true } });
 }
 
-export async function readImage(id: string) {
+/** Miniatura WEBP de até 480 px: os cards baixam ~30 KB em vez da foto inteira. Falhou, fica sem (usa a original). */
+export async function makeThumb(buf: Buffer) {
+  try {
+    return await sharp(buf).rotate().resize(480, 480, { fit: "inside", withoutEnlargement: true }).webp({ quality: 74 }).toBuffer();
+  } catch {
+    return null;
+  }
+}
+
+export async function readImage(id: string, mini = false) {
   if (!/^[a-z0-9]+$/i.test(id)) return null;
+  if (mini) {
+    const t = await db.image.findUnique({ where: { id }, select: { thumb: true } });
+    if (!t) return null;
+    if (t.thumb) return { mime: "image/webp", data: t.thumb };
+    // foto antiga, ainda sem miniatura: cai na original
+  }
   const img = await db.image.findUnique({ where: { id }, select: { mime: true, data: true } });
-  return img ? { img, data: img.data } : null;
+  return img ? { mime: img.mime, data: img.data } : null;
 }
 
 export async function deleteImage(id: string) {

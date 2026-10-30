@@ -77,7 +77,10 @@ export function CheckoutForm({ listingId, qty, needsPlayerId, gameName, couponCo
               <input className="input mono" id="payerCpf" name="payerCpf" required inputMode="numeric" placeholder="000.000.000-00" value={cpf} onChange={(e) => setCpf(maskCpf(e.target.value))} />
             </div>
           </div>
-          <span className="hint"><Icon name="shield" /> Exigido pelo Banco Central para gerar o Pix. Não aparece para o vendedor.</span>
+          <div className="note co-cpf">
+            <Icon name="shield" />
+            <span><b>Por que pedimos o CPF?</b> Toda cobrança Pix precisa do CPF de quem paga, é uma regra do Banco Central. Ele vai só para o banco que gera o Pix: o vendedor <b>não vê</b> seus dados e a Nexo não usa para mais nada.</span>
+          </div>
         </section>
       )}
 

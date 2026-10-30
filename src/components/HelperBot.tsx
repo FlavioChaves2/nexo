@@ -25,7 +25,7 @@ const TIPS: { match: (p: string) => boolean; tips: { q: string; a: string; href?
     match: (p) => p.startsWith("/vender") || p.includes("aba=vendas"),
     tips: [
       { q: "Como vender mais rápido?", a: "Fotos reais, título claro e entrega automática para códigos. Anúncios assim vendem mais." },
-      { q: "Quando recebo?", a: "Quando o comprador confirma a entrega (ou automaticamente após 3 dias sem disputa).", href: "/ajuda", cta: "Ver regras" },
+      { q: "Quando recebo?", a: "Quando o comprador confirma a entrega (ou automaticamente ao fim do prazo: 7 dias para contas, 3 para itens e serviços, 1 para moedas e gift cards).", href: "/ajuda", cta: "Ver regras" },
     ],
   },
   {

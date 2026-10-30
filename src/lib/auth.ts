@@ -31,15 +31,17 @@ async function sign(sub: string, purpose: string, seconds: number) {
     .sign(key());
 }
 
-async function read(token: string | undefined, purpose: string) {
+async function verify(token: string | undefined, purpose: string) {
   if (!token) return null;
   try {
     const { payload } = await jwtVerify(token, key());
-    return payload.purpose === purpose && payload.sub ? payload.sub : null;
+    return payload.purpose === purpose && payload.sub ? { sub: payload.sub, iat: payload.iat ?? 0 } : null;
   } catch {
     return null;
   }
 }
+
+const read = async (token: string | undefined, purpose: string) => (await verify(token, purpose))?.sub ?? null;
 
 export async function createSession(userId: string) {
   (await cookies()).set(COOKIE, await sign(userId, "session", MAX_AGE), cookieOpts(MAX_AGE));
@@ -63,14 +65,19 @@ export async function clearPending2fa() {
 }
 
 export const getCurrentUser = cache(async () => {
-  const id = await read((await cookies()).get(COOKIE)?.value, "session");
-  if (!id) return null;
-  const user = await db.user.findUnique({
-    where: { id },
-    select: { id: true, email: true, username: true, balanceCents: true, role: true, totpEnabled: true, suspendedAt: true, createdAt: true, verification: true },
+  const session = await verify((await cookies()).get(COOKIE)?.value, "session");
+  if (!session) return null;
+  const found = await db.user.findUnique({
+    where: { id: session.sub },
+    select: { id: true, email: true, username: true, balanceCents: true, role: true, totpEnabled: true, suspendedAt: true, createdAt: true, verification: true, passwordChangedAt: true },
   });
+  if (!found) return null;
+  const { passwordChangedAt, ...user } = found;
   // Conta suspensa age como deslogada em todo o site.
-  return user && !user.suspendedAt ? user : null;
+  if (user.suspendedAt) return null;
+  // Trocou a senha: login feito antes disso (em outro aparelho, por exemplo) cai.
+  if (passwordChangedAt && session.iat < Math.floor(passwordChangedAt.getTime() / 1000)) return null;
+  return user;
 });
 
 export type CurrentUser = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>;

@@ -21,7 +21,7 @@ export default function TermosPage() {
       <ol>
         <li>O comprador paga via Pix e o valor fica retido pela Nexo.</li>
         <li>O vendedor entrega pelo pedido (ou a entrega automática envia o código).</li>
-        <li>O comprador tem 3 dias, a partir da entrega, para confirmar ou abrir uma disputa. Sem resposta, o pedido é confirmado automaticamente.</li>
+        <li>O comprador tem um prazo a partir da entrega (contas: 7 dias; itens e serviços: 3 dias; moedas e gift cards: 1 dia) para confirmar ou abrir uma disputa. Sem resposta, o pedido é confirmado automaticamente.</li>
         <li>Na confirmação, o valor menos a taxa vai para o saldo do vendedor.</li>
       </ol>
       <p>Contas de jogos têm 7 dias extras de garantia contra recuperação pelo antigo dono.</p>

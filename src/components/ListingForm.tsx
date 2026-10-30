@@ -3,7 +3,7 @@
 import { useActionState, useState } from "react";
 import type { Game } from "@prisma/client";
 import { createListing, updateListing, type ListingFormState } from "@/app/actions/listings";
-import { LISTING_TYPES, TYPE_LABEL } from "@/lib/constants";
+import { LISTING_TYPES, TYPE_LABEL, confirmDays, daysLabel } from "@/lib/constants";
 import { imageUrl } from "@/lib/images-url";
 import { ListingCard } from "./ListingCard";
 import { shrinkInput } from "@/lib/shrink-images";
@@ -78,7 +78,7 @@ export function ListingForm({ games, seller, feeBps, edit }: { games: Game[]; se
                 <div className="img-grid">
                   {edit.images.map((img) => (
                     <label key={img.id} title="Marque para remover">
-                      <img src={imageUrl(img.id)} alt="" />
+                      <img src={imageUrl(img.id, true)} alt="" />
                       <input type="checkbox" name="removeImage" value={img.id} aria-label="Remover esta foto" />
                     </label>
                   ))}
@@ -148,7 +148,7 @@ export function ListingForm({ games, seller, feeBps, edit }: { games: Game[]; se
       <aside className="stack buybox">
         <span className="eyebrow dim">Prévia do anúncio</span>
         <ListingCard l={preview} preview previewImage={photo} />
-        <div className="note"><Icon name="shield" /><span>Você recebe o valor quando o comprador confirmar a entrega (ou automaticamente após 3 dias sem disputa).</span></div>
+        <div className="note"><Icon name="shield" /><span>Você recebe o valor quando o comprador confirmar a entrega (ou automaticamente após {daysLabel(confirmDays(v.type))} sem disputa).</span></div>
       </aside>
     </div>
   );

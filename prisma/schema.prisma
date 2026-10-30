@@ -22,6 +22,7 @@ model User {
   balanceCents    Int          @default(0) // saldo disponível para saque
   role            String       @default("USER") // USER | ADMIN
   emailVerifiedAt DateTime?
+  passwordChangedAt DateTime? // sessões criadas antes disso deixam de valer
   emailTokens     EmailToken[]
   createdAt       DateTime     @default(now())
 
@@ -274,6 +275,7 @@ model Image {
   mime      String
   size      Int
   data      Bytes // o arquivo em si (a Vercel não guarda arquivos em disco)
+  thumb     Bytes? // miniatura WEBP de até 480 px, para cards e listas
   sort      Int      @default(0)
   createdAt DateTime @default(now())
 

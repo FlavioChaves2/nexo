@@ -3,7 +3,7 @@ import type { Order, Prisma } from "@prisma/client";
 import { db } from "./db";
 import { feeFor, money } from "./format";
 import { createPixCharge, type Payer } from "./payments";
-import { AUTO_CONFIRM_DAYS } from "./constants";
+import { confirmDays, daysLabel } from "./constants";
 import { notify } from "./notify";
 import { applyCoupon } from "./coupons";
 
@@ -141,7 +141,7 @@ async function payInTx(tx: Tx, orderId: string) {
         status: "ENTREGUE",
         deliveryText: codes.map((c) => c.code).join("\n"),
         deliveredAt: now,
-        autoConfirmAt: addDays(now, AUTO_CONFIRM_DAYS),
+        autoConfirmAt: addDays(now, confirmDays(order.listing.type)),
       });
       await sysMsg(tx, order.id, 'Entrega automática concluída. O código está no quadro "Entrega".');
       await notify(order.buyerId, "Pedido entregue", `${order.listing.title}: o código já está no pedido.`, `/pedido/${order.code}`, tx);
@@ -167,16 +167,17 @@ export async function deliverOrder(orderId: string, sellerId: string, text: stri
   const body = text.trim();
   if (body.length < 2) throw new OrderError("Escreva os dados da entrega.");
   await db.$transaction(async (tx) => {
-    const order = await tx.order.findUniqueOrThrow({ where: { id: orderId } });
+    const order = await tx.order.findUniqueOrThrow({ where: { id: orderId }, include: { listing: { select: { type: true } } } });
     if (order.sellerId !== sellerId) throw new OrderError("Só o vendedor pode entregar este pedido.");
+    const days = confirmDays(order.listing.type);
     const now = new Date();
     await transition(tx, orderId, ["PAGO"], {
       status: "ENTREGUE",
       deliveryText: body.slice(0, 4000),
       deliveredAt: now,
-      autoConfirmAt: addDays(now, AUTO_CONFIRM_DAYS),
+      autoConfirmAt: addDays(now, days),
     });
-    await sysMsg(tx, orderId, `O vendedor marcou o pedido como entregue. Confirme em até ${AUTO_CONFIRM_DAYS} dias ou abra uma disputa.`);
+    await sysMsg(tx, orderId, `O vendedor marcou o pedido como entregue. Confirme em até ${daysLabel(days)} ou abra uma disputa.`);
     await notify(order.buyerId, "Pedido entregue", `Confira a entrega do pedido #${order.code} e confirme o recebimento.`, `/pedido/${order.code}`, tx);
   });
 }
@@ -200,7 +201,7 @@ async function complete(tx: Tx, order: Order, auto: boolean) {
     tx,
     order.id,
     auto
-      ? `Confirmação automática após ${AUTO_CONFIRM_DAYS} dias. Pagamento liberado ao vendedor.`
+      ? "Confirmação automática: o prazo para conferir terminou. Pagamento liberado ao vendedor."
       : "Recebimento confirmado. Pagamento liberado ao vendedor.",
   );
 }

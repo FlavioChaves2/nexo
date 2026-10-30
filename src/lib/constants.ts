@@ -28,8 +28,11 @@ export const ORDER_STATUS = {
 } as const;
 export type OrderStatus = keyof typeof ORDER_STATUS;
 
-/** Dias até a confirmação automática depois da entrega. */
-export const AUTO_CONFIRM_DAYS = 3;
+/** Dias até a confirmação automática depois da entrega, por tipo de anúncio.
+ *  Conta tem prazo maior por causa do risco de recuperação pelo antigo dono; código e recarga são conferidos na hora. */
+export const AUTO_CONFIRM_DAYS: Record<string, number> = { CONTA: 7, SERVICO: 3, ITEM: 3, MOEDA: 1, GIFT: 1 };
+export const confirmDays = (type: string) => AUTO_CONFIRM_DAYS[type] ?? 3;
+export const daysLabel = (n: number) => (n === 1 ? "1 dia" : `${n} dias`);
 /** Minutos de validade do Pix. */
 export const PIX_MINUTES = 30;
 
