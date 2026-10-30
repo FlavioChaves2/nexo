@@ -7,15 +7,18 @@ import { isMockPayments } from "@/lib/payments";
 import { Logo } from "./Logo";
 import { Icon } from "./Icon";
 import { TabsNav } from "./TabsNav";
+import { HeaderMenu } from "./HeaderMenu";
+import { imageUrl } from "@/lib/images-url";
 
 export async function Header() {
   const user = await getCurrentUser();
-  const [favCount, unread] = user
+  const [favCount, unread, me] = user
     ? await Promise.all([
         db.favorite.count({ where: { userId: user.id } }),
         db.notification.count({ where: { userId: user.id, readAt: null } }),
+        db.user.findUnique({ where: { id: user.id }, select: { storeName: true, avatarId: true } }),
       ])
-    : [0, 0];
+    : [0, 0, null];
 
   return (
     <>
@@ -35,46 +38,24 @@ export async function Header() {
             <input name="q" type="search" placeholder="O que você quer encontrar hoje?" aria-label="Buscar na Nexo" />
             <kbd>↵</kbd>
           </form>
+          {/* Barra enxuta: avisos, Vender e o menu da conta (o resto mora no menu). */}
           <nav className="acoes" aria-label="Conta">
-            <Link className={`icon-btn${favCount ? " has" : ""}`} href="/conta?aba=favoritos" aria-label="Favoritos">
-              <Icon name="heart" />
-              <sub>{favCount}</sub>
-            </Link>
-            {user ? (
-              <>
-                <Link className="icon-btn bell" href="/notificacoes" aria-label={unread ? `Avisos, ${unread} novos` : "Avisos"}>
-                  <Icon name="bell" />
-                  {unread > 0 && <span className="dot">{unread > 9 ? "9+" : unread}</span>}
-                </Link>
-                {user.role === "ADMIN" && (
-                  <Link className="icon-btn" href="/admin">
-                    <Icon name="shield" />
-                    <span className="lbl">Admin</span>
-                  </Link>
-                )}
-                <Link className="icon-btn" href="/conta?aba=compras">
-                  <Icon name="bag" />
-                  <span className="lbl">Pedidos</span>
-                </Link>
-                <Link className="icon-btn" href="/conta">
-                  <Icon name="user" />
-                  <span className="lbl">{user.username}</span>
-                  <span className="saldo">{money(user.balanceCents)}</span>
-                </Link>
-              </>
-            ) : (
-              <Link className="icon-btn" href="/entrar">
-                <Icon name="user" />
-                <span className="lbl">Entrar</span>
+            {user && (
+              <Link className="icon-btn bell" href="/notificacoes" aria-label={unread ? `Avisos, ${unread} novos` : "Avisos"}>
+                <Icon name="bell" />
+                {unread > 0 && <span className="dot">{unread > 9 ? "9+" : unread}</span>}
               </Link>
             )}
-            <Link className="icon-btn app-link" href="/app" aria-label="Baixar o app">
-              <Icon name="bolt" />
-              <span className="lbl">App</span>
-            </Link>
             <Link className="btn btn-primary" href="/vender">
               + Vender
             </Link>
+            <HeaderMenu
+              user={
+                user
+                  ? { username: user.username, storeName: me?.storeName ?? "", avatarUrl: me?.avatarId ? imageUrl(me.avatarId, true) : null, balance: money(user.balanceCents), isAdmin: user.role === "ADMIN", favorites: favCount }
+                  : null
+              }
+            />
           </nav>
         </div>
         <nav className="tabs-nav" aria-label="Categorias">

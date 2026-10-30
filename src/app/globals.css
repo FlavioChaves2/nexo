@@ -1060,3 +1060,41 @@ body:has(.buy-bar) .helper { bottom: 96px; }
 .fee-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 14px; }
 .fee-list li { display: flex; gap: 10px; align-items: flex-start; }
 .fee-list li > .ic { flex: none; width: 16px; height: 16px; margin-top: 3px; color: var(--accent); }
+
+/* Menu da conta no topo (avatar + ☰) */
+.hmenu { position: relative; }
+.hmenu-btn { display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 10px 0 5px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; transition: border-color .2s, box-shadow .2s; }
+.hmenu-btn:hover, .hmenu.open .hmenu-btn { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(197, 240, 74, .12); }
+.hmenu-btn > .ic { width: 20px; height: 20px; margin-left: 5px; }
+.hmenu-av { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; object-fit: cover; flex: none; background: var(--accent); color: var(--accent-ink); font: 800 14px var(--f-display); text-transform: uppercase; }
+.hmenu-av.lg { width: 44px; height: 44px; font-size: 18px; }
+.hmenu-bars { display: grid; gap: 3px; width: 16px; }
+.hmenu-bars i { display: block; height: 2px; border-radius: 2px; background: currentColor; transition: transform .25s, opacity .2s; }
+.hmenu.open .hmenu-bars i:nth-child(1) { transform: translateY(5px) rotate(45deg); }
+.hmenu.open .hmenu-bars i:nth-child(2) { opacity: 0; }
+.hmenu.open .hmenu-bars i:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
+.hmenu-card { position: absolute; right: 0; top: calc(100% + 10px); z-index: 80; width: 290px; max-height: calc(100vh - 90px); overflow-y: auto; display: grid; gap: 4px; padding: 10px; border-radius: 18px; background: var(--surface); border: 1px solid var(--accent-line); box-shadow: 0 26px 60px -18px rgba(0, 0, 0, .85); transform-origin: top right; animation: pop .22s cubic-bezier(.2, .8, .2, 1.2) both; }
+.hmenu-me { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 12px; }
+.hmenu-me:hover { background: var(--surface-2); }
+.hmenu-me b { display: block; font-size: 15px; }
+.hmenu-me small { color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.hmenu-saldo { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 2px 4px 6px; padding: 12px 14px; border-radius: 12px; background: linear-gradient(120deg, rgba(197, 240, 74, .12), rgba(197, 240, 74, .03)); border: 1px solid var(--accent-line); }
+.hmenu-saldo small { display: block; font-size: 11px; color: var(--muted); }
+.hmenu-saldo b { font: 700 19px var(--f-display); color: var(--accent); }
+.hmenu-list { display: grid; padding: 4px 0; border-top: 1px solid var(--line); }
+.hmenu-list a, .hmenu-out { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; font-size: 14.5px; font-weight: 500; color: var(--ink); border: 0; background: none; width: 100%; text-align: left; cursor: pointer; font-family: inherit; }
+.hmenu-list a:hover, .hmenu-out:hover { background: var(--surface-2); }
+.hmenu-list .ic { width: 18px; height: 18px; color: var(--muted); flex: none; }
+.hmenu-list a:hover .ic { color: var(--accent); }
+.hmenu-list a.hot { color: var(--accent); font-weight: 700; }
+.hmenu-list a.hot .ic { color: var(--accent); }
+.hmenu-n { margin-left: auto; font-size: 12px; color: var(--muted); }
+.hmenu-out { color: var(--danger); }
+.hmenu-out .ic { color: var(--danger) !important; transform: rotate(180deg); }
+.hmenu-guest { display: grid; gap: 8px; padding: 10px 8px 12px; }
+.hmenu-guest b { font-size: 16px; }
+@media (max-width: 520px) {
+  .hmenu-card { position: fixed; right: 12px; left: 12px; top: 64px; width: auto; }
+  .hmenu-btn { height: 38px; padding: 0 8px 0 4px; gap: 6px; }
+  .hmenu-av { width: 28px; height: 28px; font-size: 13px; }
+}
