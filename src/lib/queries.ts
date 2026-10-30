@@ -1,7 +1,8 @@
 import { db } from "./db";
+import { titlesSelect } from "./titles";
 
 export const sellerPublic = {
-  select: { username: true, storeName: true, avatarId: true, verification: true, completedSales: true, ratingSum: true, ratingCount: true },
+  select: { username: true, storeName: true, avatarId: true, verification: true, completedSales: true, ratingSum: true, ratingCount: true, ...titlesSelect },
 } as const;
 
 export const cardInclude = {

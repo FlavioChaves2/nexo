@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { titlesSelect } from "@/lib/titles";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
 import { LEVEL_TABLE, avgRating, nextLevel, sellerLevel } from "@/lib/reputation";
@@ -10,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 export default async function PerfilPage() {
   const me = await requireUser("/conta/perfil");
-  const u = await db.user.findUniqueOrThrow({ where: { id: me.id } });
+  const u = await db.user.findUniqueOrThrow({ where: { id: me.id }, include: titlesSelect });
   const level = sellerLevel(u);
   const next = nextLevel(u);
   const avg = avgRating(u);

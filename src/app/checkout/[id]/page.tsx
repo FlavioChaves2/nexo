@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { titlesSelect } from "@/lib/titles";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
@@ -17,7 +18,7 @@ export const metadata = { title: "Finalizar compra" };
 export default async function CheckoutPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ qtd?: string; cupom?: string }> }) {
   const { id } = await params;
   const user = await requireUser(`/anuncio/${id}`);
-  const l = await db.listing.findUnique({ where: { id }, include: { game: true, seller: { select: { username: true, storeName: true, avatarId: true, verification: true, completedSales: true, ratingSum: true, ratingCount: true } } } });
+  const l = await db.listing.findUnique({ where: { id }, include: { game: true, seller: { select: { username: true, storeName: true, avatarId: true, verification: true, completedSales: true, ratingSum: true, ratingCount: true, ...titlesSelect } } } });
   if (!l || (l.reservedForId && l.reservedForId !== user.id && l.sellerId !== user.id)) notFound();
 
   const sp = await searchParams;
@@ -70,7 +71,7 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
               <Avatar user={s} />
               <div style={{ minWidth: 0 }}>
                 <span className="small muted">Vendido por</span>
-                <b className="co-seller-name">{s.storeName || s.username} <SellerBadges rep={{ completedSales: s.completedSales, ratingSum: s.ratingSum, ratingCount: s.ratingCount, verification: s.verification }} compact /></b>
+                <b className="co-seller-name">{s.storeName || s.username} <SellerBadges rep={{ completedSales: s.completedSales, ratingSum: s.ratingSum, ratingCount: s.ratingCount, verification: s.verification, titles: s.titles }} compact /></b>
               </div>
               <span className={`chip ${l.autoDelivery ? "auto" : ""}`}><Icon name={l.autoDelivery ? "bolt" : "chat"} />{l.autoDelivery ? "Entrega na hora" : "Entrega no chat"}</span>
             </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { titlesSelect } from "@/lib/titles";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
@@ -27,7 +28,7 @@ export default async function AnuncioPage({ params }: { params: Promise<{ id: st
   const { id } = await params;
   const l = await db.listing.findUnique({ where: { id }, include: {
       game: true,
-      seller: true,
+      seller: { include: titlesSelect },
       images: { select: { id: true }, orderBy: { sort: "asc" } },
       questions: { include: { asker: { select: { username: true } } }, orderBy: { createdAt: "desc" }, take: 30 },
     },

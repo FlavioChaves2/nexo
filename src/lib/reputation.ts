@@ -1,6 +1,12 @@
 // Níveis de vendedor: sobem com vendas concluídas e nota média.
 
-export type SellerRep = { completedSales: number; ratingSum: number; ratingCount: number; verification?: string };
+export type SellerRep = {
+  completedSales: number;
+  ratingSum: number;
+  ratingCount: number;
+  verification?: string;
+  titles?: { title: { name: string; emoji: string; color: string; description: string } }[];
+};
 
 const LEVELS = [
   { name: "Diamante", cls: "diamante", sales: 500, avg: 4.8 },

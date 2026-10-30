@@ -13,6 +13,7 @@ export function AdminNav({ disputes, withdrawals, reports, verifications }: { di
     { href: "/admin/usuarios", label: "Usuários", n: verifications },
     { href: "/admin/anuncios", label: "Anúncios", n: 0 },
     { href: "/admin/cupons", label: "Cupons", n: 0 },
+    { href: "/admin/titulos", label: "Títulos", n: 0 },
   ];
   return (
     <nav className="tabs" aria-label="Painel de admin">

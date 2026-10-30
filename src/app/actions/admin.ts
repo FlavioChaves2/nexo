@@ -5,6 +5,7 @@ import { requireAdmin } from "@/lib/auth";
 import { OrderError } from "@/lib/orders";
 import { parseReais } from "@/lib/format";
 import { normalizeCode } from "@/lib/coupons";
+import { createTitle, deleteTitle, grantTitle, revokeTitle } from "@/lib/titles";
 import {
   approveWithdrawal,
   mediatorMessage,
@@ -109,4 +110,23 @@ export async function createCouponAction(_: AdminState, form: FormData): Promise
 
 export async function toggleCouponAction(id: string): Promise<AdminState> {
   return run(["/admin/cupons"], (adminId) => toggleCoupon(id, adminId), "Cupom atualizado.");
+}
+
+export async function createTitleAction(_: AdminState, form: FormData): Promise<AdminState> {
+  const input = { name: String(form.get("name") ?? ""), emoji: String(form.get("emoji") ?? ""), color: String(form.get("color") ?? ""), description: String(form.get("description") ?? "") };
+  return run(["/admin/titulos"], (adminId) => createTitle(adminId, input), `Título ${input.name.trim()} criado.`);
+}
+
+export async function grantTitleAction(_: AdminState, form: FormData): Promise<AdminState> {
+  let who = "";
+  const r = await run(["/admin/titulos"], async (adminId) => (who = await grantTitle(adminId, String(form.get("titleId") ?? ""), String(form.get("user") ?? ""))), "");
+  return r?.error ? r : { ok: `Título dado para ${who}.` };
+}
+
+export async function revokeTitleAction(titleId: string, userId: string): Promise<AdminState> {
+  return run(["/admin/titulos"], (adminId) => revokeTitle(adminId, titleId, userId), "Título removido.");
+}
+
+export async function deleteTitleAction(titleId: string): Promise<AdminState> {
+  return run(["/admin/titulos"], (adminId) => deleteTitle(adminId, titleId), "Título apagado.");
 }

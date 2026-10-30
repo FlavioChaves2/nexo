@@ -1,3 +1,4 @@
+import type { SellerRep } from "@/lib/reputation";
 import Link from "next/link";
 import type { Game, Listing } from "@prisma/client";
 import { money } from "@/lib/format";
@@ -11,7 +12,7 @@ import { SellerBadges } from "./SellerBadges";
 
 export type CardListing = Listing & {
   game: Game;
-  seller: { username: string; storeName?: string; avatarId?: string | null; verification?: string; completedSales?: number; ratingSum?: number; ratingCount?: number };
+  seller: { username: string; storeName?: string; avatarId?: string | null; verification?: string; completedSales?: number; ratingSum?: number; ratingCount?: number; titles?: SellerRep["titles"] };
   images?: { id: string }[];
 };
 
@@ -31,7 +32,7 @@ export function ListingCard({ l, fav = false, preview = false, previewImage }: {
         <div className="card-seller">
           <Avatar user={s} />
           <span className="nome">{s.storeName || s.username}</span>
-          <SellerBadges rep={{ completedSales: s.completedSales ?? 0, ratingSum: s.ratingSum ?? 0, ratingCount: s.ratingCount ?? 0, verification: s.verification }} compact />
+          <SellerBadges rep={{ completedSales: s.completedSales ?? 0, ratingSum: s.ratingSum ?? 0, ratingCount: s.ratingCount ?? 0, verification: s.verification, titles: s.titles }} compact />
           {l.autoDelivery && (
             <span className="chip auto">
               <Icon name="bolt" />

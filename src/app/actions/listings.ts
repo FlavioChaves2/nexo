@@ -10,6 +10,7 @@ import { LISTING_TYPES } from "@/lib/constants";
 import { MAX_LISTING_IMAGES, deleteImage, filesFrom, saveImage } from "@/lib/images";
 import { OrderError } from "@/lib/orders";
 import { emailBlock } from "@/lib/email";
+import { grantFounderIfEligible } from "@/lib/titles";
 
 export type ListingFormState = { error?: string } | undefined;
 
@@ -82,6 +83,8 @@ export async function createListing(_: ListingFormState, form: FormData): Promis
       },
     });
     for (const [i, f] of files.entries()) await saveImage(f, user.id, "ANUNCIO", listing.id, i);
+    // Os 20 primeiros vendedores reais ganham o título Fundador; falha aqui não impede o anúncio.
+    await grantFounderIfEligible(user.id).catch((e) => console.error("Fundador:", e));
     return `/anuncio/${listing.id}`;
   });
 }

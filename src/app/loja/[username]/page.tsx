@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { titlesSelect } from "@/lib/titles";
 import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { pct, monthYear } from "@/lib/format";
@@ -15,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ username:
 
 export default async function LojaPage({ params }: { params: Promise<{ username: string }> }) {
   const { username } = await params;
-  const seller = await db.user.findUnique({ where: { username: decodeURIComponent(username) } });
+  const seller = await db.user.findUnique({ where: { username: decodeURIComponent(username) }, include: titlesSelect });
   if (!seller) notFound();
 
   const me = await getCurrentUser();

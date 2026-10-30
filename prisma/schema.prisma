@@ -52,6 +52,7 @@ model User {
 
   notifications Notification[]
   pushSubs      PushSubscription[]
+  titles        UserTitle[]
   questions     Question[]
   images        Image[]
 
@@ -387,4 +388,30 @@ model PushSubscription {
   createdAt DateTime @default(now())
 
   @@index([userId])
+}
+
+// Títulos dados pela equipe (ex.: "Parceiro oficial") ou automáticos (ex.: Fundador, os 20 primeiros vendedores).
+// Aparecem ao lado do nível do vendedor nos cards, anúncios e loja.
+model Title {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  emoji       String      @default("🏅")
+  color       String      @default("#C5F04A") // cor do selo (#RRGGBB)
+  description String      @default("")
+  auto        String?     @unique // FUNDADOR = concedido sozinho pelo site
+  maxHolders  Int? // limite de pessoas com o título (Fundador: 20)
+  createdAt   DateTime    @default(now())
+  holders     UserTitle[]
+}
+
+model UserTitle {
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  titleId     String
+  title       Title    @relation(fields: [titleId], references: [id], onDelete: Cascade)
+  grantedById String? // admin que deu; vazio = automático
+  createdAt   DateTime @default(now())
+
+  @@id([userId, titleId])
+  @@index([titleId, createdAt])
 }
