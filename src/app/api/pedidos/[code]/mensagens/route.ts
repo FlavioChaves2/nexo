@@ -38,6 +38,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ code: s
   if (r.order.status === "CANCELADO") return NextResponse.json({ error: "Este pedido foi cancelado." }, { status: 400 });
   const body = String((await req.json().catch(() => ({})))?.body ?? "").trim().slice(0, 1000);
   if (!body) return NextResponse.json({ error: "Mensagem vazia." }, { status: 400 });
+  const recent = await db.message.count({ where: { orderId: r.order.id, senderId: r.user.id, createdAt: { gte: new Date(Date.now() - 60_000) } } });
+  if (recent >= 20) return NextResponse.json({ error: "Muitas mensagens seguidas. Espere um minuto." }, { status: 429 });
   const msg = await db.message.create({ data: { orderId: r.order.id, senderId: r.user.id, body } });
   await notifyMessage(r.user.id === r.order.buyerId ? r.order.sellerId : r.order.buyerId, r.order.code, r.user.username, body);
   return NextResponse.json(shape(msg));

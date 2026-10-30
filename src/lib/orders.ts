@@ -241,11 +241,15 @@ export async function reviewOrder(orderId: string, buyerId: string, rating: numb
   if (order.buyerId !== buyerId) throw new OrderError("Só o comprador pode avaliar.");
   if (order.status !== "CONCLUIDO") throw new OrderError("Avalie depois de concluir o pedido.");
   if (order.review) throw new OrderError("Você já avaliou este pedido.");
+  // Clique duplo: a segunda avaliação bate na trava do banco (um review por pedido) e vira aviso.
   await db.$transaction([
     db.review.create({ data: { orderId, authorId: buyerId, sellerId: order.sellerId, rating, comment: comment.trim().slice(0, 500) } }),
     db.user.update({ where: { id: order.sellerId }, data: { ratingSum: { increment: rating }, ratingCount: { increment: 1 } } }),
     db.notification.create({ data: { userId: order.sellerId, title: `Nova avaliação: ${rating} estrela${rating > 1 ? "s" : ""}`, body: comment.trim().slice(0, 300), href: `/pedido/${order.code}` } }),
-  ]);
+  ]).catch((e) => {
+    if ((e as { code?: string }).code === "P2002") throw new OrderError("Você já avaliou este pedido.");
+    throw e;
+  });
 }
 
 /**

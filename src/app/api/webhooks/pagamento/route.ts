@@ -29,11 +29,21 @@ export async function POST(req: Request) {
   // Pago depois de expirar, ou o anúncio esgotou: devolve o dinheiro na hora.
   const now = await db.order.findUniqueOrThrow({ where: { id: order.id } });
   if (now.status === "CANCELADO" && !now.refundedAt) {
-    const refund = await refundPix(now);
-    await db.$transaction(async (tx) => {
-      await tx.order.update({ where: { id: now.id }, data: { refundedAt: new Date(), refundId: refund.id } });
-      await sysMsg(tx, now.id, "O pedido já estava cancelado quando o Pix chegou. O valor foi estornado automaticamente.");
-    });
+    // Trava antes de estornar: o Asaas às vezes manda o mesmo aviso duas vezes ao mesmo tempo,
+    // e sem isso os dois estornariam. Só quem marcar refundedAt primeiro segue.
+    const claimed = await db.order.updateMany({ where: { id: now.id, status: "CANCELADO", refundedAt: null }, data: { refundedAt: new Date(), refundId: "processando" } });
+    if (claimed.count !== 1) return NextResponse.json({ ok: true });
+    try {
+      const refund = await refundPix(now);
+      await db.$transaction(async (tx) => {
+        await tx.order.update({ where: { id: now.id }, data: { refundId: refund.id } });
+        await sysMsg(tx, now.id, "O pedido já estava cancelado quando o Pix chegou. O valor foi estornado automaticamente.");
+      });
+    } catch (e) {
+      // Estorno falhou: solta a trava para o próximo aviso do Asaas tentar de novo.
+      await db.order.update({ where: { id: now.id }, data: { refundedAt: null, refundId: null } });
+      throw e;
+    }
   }
   return NextResponse.json({ ok: true });
 }

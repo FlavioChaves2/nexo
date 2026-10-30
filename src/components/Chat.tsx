@@ -42,42 +42,30 @@ export function Chat({ code, meId, other, role, status, initial }: { code: strin
       setMsgs((m) => [...m, ...list.filter((n) => !m.some((x) => x.id === n.id))]);
     };
 
-    // Tempo real (SSE). Se o navegador ou a rede não suportar, cai para consulta a cada 4 s.
-    let poll: ReturnType<typeof setInterval> | undefined;
-    const startPolling = () => {
-      if (poll) return;
-      poll = setInterval(async () => {
-        if (document.hidden) return;
+    // Consulta curta a cada 4 s, só com a aba visível, e na hora em que a pessoa volta para a aba.
+    // Uma conexão aberta (SSE) prendia uma função e consultava o banco a cada segundo, mesmo com a
+    // aba escondida: no plano grátis da Vercel e do Neon isso esgotava o limite do mês.
+    let busy = false;
+    const check = async () => {
+      if (document.hidden || busy) return;
+      busy = true;
+      try {
         const res = await fetch(`/api/pedidos/${code}/mensagens?after=${encodeURIComponent(last.current)}`, { cache: "no-store" });
         if (!res.ok) return;
         const data: { messages: Msg[]; status: string } = await res.json();
         add(data.messages);
         if (data.status !== status) router.refresh();
-      }, 4000);
-    };
-
-    if (typeof EventSource === "undefined") {
-      startPolling();
-      return () => clearInterval(poll);
-    }
-    let failures = 0;
-    const es = new EventSource(`/api/pedidos/${code}/stream?after=${encodeURIComponent(last.current)}`);
-    es.addEventListener("message", (e) => {
-      failures = 0;
-      add([JSON.parse((e as MessageEvent).data)]);
-    });
-    es.addEventListener("status", (e) => {
-      if (JSON.parse((e as MessageEvent).data) !== status) router.refresh();
-    });
-    es.onerror = () => {
-      if (++failures >= 3) {
-        es.close();
-        startPolling();
+      } catch {
+        /* sem internet: tenta no próximo ciclo */
+      } finally {
+        busy = false;
       }
     };
+    const poll = setInterval(check, 4000);
+    document.addEventListener("visibilitychange", check);
     return () => {
-      es.close();
       clearInterval(poll);
+      document.removeEventListener("visibilitychange", check);
     };
   }, [code, status, router]);
 

@@ -52,15 +52,28 @@ export async function register(_: FormState, form: FormData): Promise<FormState>
   const { email, username, password } = parsed.data;
 
   const ip = await clientIp();
-  const recent = await db.user.count({ where: { createdAt: { gte: new Date(Date.now() - 3_600_000) } } });
-  if (recent > 200) return { error: "Muitos cadastros agora. Tente de novo em alguns minutos." };
+  // Limite por IP (robô criando contas em série) e um teto geral alto, para não barrar o público num lançamento.
+  const hourAgo = new Date(Date.now() - 3_600_000);
+  const [byIp, recent] = await Promise.all([
+    db.loginAttempt.count({ where: { ip, email: { startsWith: "cadastro:" }, createdAt: { gte: hourAgo } } }),
+    db.user.count({ where: { createdAt: { gte: hourAgo } } }),
+  ]);
+  if (byIp >= 5) return { error: "Muitos cadastros feitos desta conexão. Tente de novo mais tarde." };
+  if (recent > 2000) return { error: "Muitos cadastros agora. Tente de novo em alguns minutos." };
 
   const taken = await db.user.findFirst({ where: { OR: [{ email }, { username }] } });
   if (taken) return { error: taken.email === email ? "Este e-mail já tem conta." : "Este nome de usuário já existe." };
 
-  const user = await db.user.create({ data: { email, username, passwordHash: await bcrypt.hash(password, 10) } });
+  let user;
+  try {
+    user = await db.user.create({ data: { email, username, passwordHash: await bcrypt.hash(password, 10) } });
+  } catch (e) {
+    // Dois cadastros iguais ao mesmo tempo (clique duplo): o segundo cai aqui.
+    if ((e as { code?: string }).code === "P2002") return { error: "Este e-mail ou nome de usuário já tem conta." };
+    throw e;
+  }
   await sendVerifyEmail(user).catch(() => false);
-  await record(email, ip, true);
+  await record(`cadastro:${email}`, ip, true);
   await createSession(user.id);
   redirect(safeNext(form.get("next")));
 }

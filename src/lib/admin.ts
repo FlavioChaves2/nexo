@@ -23,7 +23,8 @@ export async function releaseDispute(orderId: string, adminId: string, note: str
   const why = needNote(note);
   await db.$transaction(async (tx) => {
     const order = await tx.order.findUniqueOrThrow({ where: { id: orderId } });
-    await transition(tx, orderId, ["DISPUTA"], { status: "CONCLUIDO", completedAt: new Date(), resolvedAt: new Date(), resolution: why });
+    const { count } = await tx.order.updateMany({ where: { id: orderId, status: "DISPUTA", resolvedAt: null }, data: { status: "CONCLUIDO", completedAt: new Date(), resolvedAt: new Date(), resolution: why } });
+    if (count !== 1) throw new AdminError("Esta disputa já foi resolvida.");
     await payoutSeller(tx, order);
     await sysMsg(tx, orderId, `Mediador Nexo decidiu a favor do vendedor: ${why}\nPagamento liberado ao vendedor.`);
     await notify(order.buyerId, "Disputa decidida", `Pedido #${order.code}: a favor do vendedor.`, `/pedido/${order.code}`, tx);
@@ -37,8 +38,16 @@ export async function refundDispute(orderId: string, adminId: string, note: stri
   const order = await db.order.findUniqueOrThrow({ where: { id: orderId } });
   if (order.status !== "DISPUTA") throw new AdminError("Esta disputa já foi resolvida.");
   const bySaldo = paidWithBalance(order);
-  // O estorno no gateway acontece antes de gravar; se o gateway falhar, nada muda aqui.
-  const pixRefund = bySaldo ? null : await refundPix(order);
+  // Trava antes do estorno: dois cliques (ou dois admins) não estornam duas vezes.
+  const claimed = await db.order.updateMany({ where: { id: orderId, status: "DISPUTA", resolvedAt: null }, data: { resolvedAt: new Date() } });
+  if (claimed.count !== 1) throw new AdminError("Esta disputa já está sendo resolvida.");
+  let pixRefund: { id: string } | null = null;
+  try {
+    pixRefund = bySaldo ? null : await refundPix(order);
+  } catch (e) {
+    await db.order.update({ where: { id: orderId }, data: { resolvedAt: null } }); // gateway falhou: nada muda
+    throw e;
+  }
   await db.$transaction(async (tx) => {
     const now = new Date();
     const refund = pixRefund ?? (await refundToBalance(tx, order));
@@ -62,13 +71,18 @@ export async function approveWithdrawal(id: string, adminId: string) {
   if (w.status !== "PENDENTE") throw new AdminError("Este saque já foi processado.");
   if (!w.user.cpf || w.pixKey.replace(/\D/g, "") !== w.user.cpf || w.pixKey.includes("@"))
     throw new AdminError("A chave Pix não é o CPF verificado do vendedor. Recuse este saque para devolver o valor ao saldo.");
-  const payout = await payoutPix(w);
+  // Trava antes do Pix: dois cliques em "Aprovar" não pagam duas vezes.
+  const claimed = await db.withdrawal.updateMany({ where: { id, status: "PENDENTE" }, data: { status: "PROCESSANDO" } });
+  if (claimed.count !== 1) throw new AdminError("Este saque já foi processado.");
+  let payout: { id: string };
+  try {
+    payout = await payoutPix(w);
+  } catch (e) {
+    await db.withdrawal.update({ where: { id }, data: { status: "PENDENTE" } }); // Pix não saiu: volta para a fila
+    throw e;
+  }
   await db.$transaction(async (tx) => {
-    const { count } = await tx.withdrawal.updateMany({
-      where: { id, status: "PENDENTE" },
-      data: { status: "PAGO", payoutId: payout.id, processedAt: new Date() },
-    });
-    if (count !== 1) throw new AdminError("Este saque já foi processado.");
+    await tx.withdrawal.update({ where: { id }, data: { status: "PAGO", payoutId: payout.id, processedAt: new Date() } });
     await log(tx, adminId, "SAQUE_PAGO", id, `${money(w.amountCents)} para ${w.user.username}`);
     await notify(w.userId, "Saque pago", `${money(w.amountCents)} enviados para a chave ${w.pixKey}.`, "/conta?aba=saldo", tx);
   });

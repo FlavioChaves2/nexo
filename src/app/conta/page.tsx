@@ -155,7 +155,7 @@ async function Aba({ aba, userId }: { aba: string; userId: string }) {
               <div><b>Saque para {w.pixKey}</b><span className="muted small">{dateTime(w.createdAt)}</span></div>
               <div className="grid-gap" style={{ justifyItems: "end", gap: 4 }}>
                 <span className="price" style={{ fontSize: 17 }}>{money(w.amountCents)}</span>
-                <span className={`chip ${w.status === "PAGO" ? "ok" : w.status === "RECUSADO" ? "bad" : "auto"}`}>{w.status === "PENDENTE" ? "Pendente" : w.status === "PAGO" ? "Pago" : "Recusado"}</span>
+                <span className={`chip ${w.status === "PAGO" ? "ok" : w.status === "RECUSADO" ? "bad" : "auto"}`}>{w.status === "PENDENTE" || w.status === "PROCESSANDO" ? "Pendente" : w.status === "PAGO" ? "Pago" : "Recusado"}</span>
               </div>
             </div>
           ))}

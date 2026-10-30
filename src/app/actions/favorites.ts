@@ -9,7 +9,7 @@ export async function toggleFavorite(listingId: string): Promise<{ on: boolean; 
   const key = { userId_listingId: { userId: user.id, listingId } };
   const existing = await db.favorite.findUnique({ where: key });
   if (existing) {
-    await db.favorite.delete({ where: key });
+    await db.favorite.deleteMany({ where: { userId: user.id, listingId } }); // clique duplo não dá erro
     return { on: false };
   }
   // Anúncio apagado ou id inválido: não derruba a página.

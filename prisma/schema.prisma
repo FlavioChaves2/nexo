@@ -216,7 +216,7 @@ model Withdrawal {
   user        User      @relation(fields: [userId], references: [id])
   amountCents Int
   pixKey      String
-  status      String    @default("PENDENTE") // PENDENTE | PAGO | RECUSADO
+  status      String    @default("PENDENTE") // PENDENTE | PROCESSANDO (Pix saindo) | PAGO | RECUSADO
   note        String    @default("") // motivo da recusa
   payoutId    String?
   processedAt DateTime?

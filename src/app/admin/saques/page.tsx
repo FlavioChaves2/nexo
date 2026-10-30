@@ -36,7 +36,7 @@ export default async function SaquesPage({ searchParams }: { searchParams: Promi
                 </span>
               </div>
               {history ? (
-                <span className={`chip ${w.status === "PAGO" ? "ok" : "bad"}`}>{w.status === "PAGO" ? "Pago" : "Recusado"}</span>
+                <span className={`chip ${w.status === "PAGO" ? "ok" : w.status === "PROCESSANDO" ? "auto" : "bad"}`}>{w.status === "PAGO" ? "Pago" : w.status === "PROCESSANDO" ? "Enviando Pix" : "Recusado"}</span>
               ) : (
                 <WithdrawalActions id={w.id} />
               )}

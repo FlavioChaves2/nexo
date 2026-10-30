@@ -39,6 +39,7 @@ const mono = localFont({
   ],
   variable: "--font-mono",
   display: "swap",
+  preload: false, // só preços e códigos usam: não atrasa a primeira tela
 });
 
 export const metadata: Metadata = {
