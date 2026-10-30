@@ -10,6 +10,10 @@ import { ListingCard } from "@/components/ListingCard";
 import { WithdrawForm } from "@/components/WithdrawForm";
 import { VerificationForm } from "@/components/TrustForms";
 import { Icon } from "@/components/Icon";
+import { Avatar } from "@/components/Avatar";
+import { ScrollToActive } from "@/components/ScrollToActive";
+import { AccountSummary, PERIODOS } from "@/components/AccountSummary";
+import { titlesSelect } from "@/lib/titles";
 import { VerifyBanner } from "@/components/EmailForms";
 import { emailEnabled } from "@/lib/email";
 import { logout } from "@/app/actions/auth";
@@ -18,54 +22,58 @@ import { toggleListingStatus } from "@/app/actions/listings";
 export const metadata = { title: "Minha conta" };
 export const dynamic = "force-dynamic";
 
-const ABAS = [
-  ["compras", "Compras"],
-  ["vendas", "Vendas"],
-  ["anuncios", "Meus anúncios"],
-  ["favoritos", "Favoritos"],
-  ["saldo", "Saldo e saques"],
-] as const;
+// Menu lateral da conta: abas desta página e atalhos para as outras páginas da conta.
+const MENU: { label: string; icon: string; aba?: string; href?: string; hot?: boolean }[] = [
+  { aba: "resumo", label: "Resumo", icon: "spark" },
+  { href: "/notificacoes", label: "Avisos", icon: "bell" },
+  { aba: "compras", label: "Compras", icon: "bag" },
+  { aba: "vendas", label: "Vendas", icon: "tag" },
+  { aba: "anuncios", label: "Meus anúncios", icon: "diamond" },
+  { aba: "favoritos", label: "Favoritos", icon: "heart" },
+  { aba: "saldo", label: "Saldo e saques", icon: "swap" },
+  { href: "/conta/convites", label: "Convide e ganhe 3%", icon: "spark", hot: true },
+  { href: "/conta/taxas", label: "Taxas e prazos", icon: "copy" },
+  { href: "/conta/perfil", label: "Perfil da loja", icon: "edit" },
+  { href: "/conta/seguranca", label: "Segurança", icon: "shield" },
+];
+const ABA_NAMES: Record<string, string> = Object.fromEntries(MENU.filter((m) => m.aba).map((m) => [m.aba, m.label]));
 
 const statusChip = (s: string) => (s === "CONCLUIDO" ? "ok" : s === "DISPUTA" || s === "CANCELADO" || s === "REEMBOLSADO" ? "bad" : "auto");
 
-export default async function ContaPage({ searchParams }: { searchParams: Promise<{ aba?: string }> }) {
-  const aba = (await searchParams).aba ?? "compras";
+export default async function ContaPage({ searchParams }: { searchParams: Promise<{ aba?: string; periodo?: string }> }) {
+  const sp = await searchParams;
+  const aba = sp.aba && ABA_NAMES[sp.aba] ? sp.aba : "resumo";
   const user = await requireUser(`/conta?aba=${aba}`);
   await settleExpired({ OR: [{ buyerId: user.id }, { sellerId: user.id }] });
-
-  const fresh = await db.user.findUniqueOrThrow({ where: { id: user.id } });
-  const pending = await db.order.aggregate({
-    where: { sellerId: user.id, status: { in: ["PAGO", "ENTREGUE", "DISPUTA"] } },
-    _sum: { totalCents: true, feeCents: true, discountCents: true, planCents: true, cardFeeCents: true },
-  });
-  // Mesma conta do sellerNet: plano VIP e taxa do cartão ficam com a Nexo, não com o vendedor.
-  const s = pending._sum;
-  const pendingCents = (s.totalCents ?? 0) + (s.discountCents ?? 0) - (s.feeCents ?? 0) - (s.planCents ?? 0) - (s.cardFeeCents ?? 0);
+  const fresh = await db.user.findUniqueOrThrow({ where: { id: user.id }, include: titlesSelect });
+  const periodo = PERIODOS.some(([k]) => k === sp.periodo) ? sp.periodo! : "30d";
 
   return (
-    <div className="wrap">
-      <div className="order-head">
-        <div className="grid-gap"><span className="eyebrow">Minha conta</span><h1 style={{ fontSize: "clamp(26px,3.6vw,38px)" }}>Olá, {fresh.username}</h1></div>
-        <div className="row">
-          <Link className="btn btn-ghost btn-sm" href={`/loja/${fresh.username}`}>Ver minha loja</Link>
-          <Link className="btn btn-ghost btn-sm" href="/conta/perfil"><Icon name="edit" />Editar perfil</Link>
-          <Link className="btn btn-ghost btn-sm" href="/conta/taxas"><Icon name="tag" />Taxas</Link>
-          <Link className="btn btn-primary btn-sm" href="/conta/convites"><Icon name="heart" />Convide e ganhe 3%</Link>
-          <Link className="btn btn-ghost btn-sm" href="/conta/seguranca"><Icon name="shield" />{fresh.totpEnabled ? "2 etapas ativo" : "Ativar 2 etapas"}</Link>
-          <form action={logout}><button className="btn btn-ghost btn-sm" type="submit">Sair</button></form>
+    <div className="wrap acct">
+      <aside className="acct-side">
+        <div className="acct-who">
+          <Avatar user={fresh} size="lg" />
+          <div style={{ minWidth: 0 }}>
+            <b>{fresh.storeName || fresh.username}</b>
+            <span className="muted small">@{fresh.username}</span>
+          </div>
         </div>
-      </div>
-
-      <section className="section">
-        {emailEnabled() && !fresh.emailVerifiedAt && <VerifyBanner email={fresh.email} />}
-        <div className="stat-tiles">
-          <div className="panel"><span className="eyebrow dim">Saldo disponível</span><b className="lime">{money(fresh.balanceCents)}</b><span className="muted small">Pronto para saque</span></div>
-          <div className="panel"><span className="eyebrow dim">A liberar</span><b>{money(pendingCents)}</b><span className="muted small">Vendas aguardando confirmação</span></div>
-        </div>
-        <nav className="tabs">
-          {ABAS.map(([k, n]) => <Link key={k} href={`/conta?aba=${k}`} className={aba === k ? "on" : undefined}>{n}</Link>)}
+        <nav className="acct-nav" aria-label="Minha conta">
+          {MENU.map((m) => (
+            <Link key={m.label} href={m.aba ? `/conta?aba=${m.aba}` : m.href!} className={[m.aba === aba && "on", m.hot && "hot"].filter(Boolean).join(" ") || undefined}>
+              <Icon name={m.icon} />{m.label}
+            </Link>
+          ))}
         </nav>
-        <Aba aba={aba} userId={user.id} />
+        <ScrollToActive selector=".acct-nav a.on" />
+        <Link className="acct-help" href="/ajuda"><Icon name="chat" />Central de ajuda</Link>
+        <form action={logout}><button className="acct-out" type="submit">Sair da conta</button></form>
+      </aside>
+
+      <section className="acct-main">
+        <nav className="crumbs"><Link href="/conta">Conta</Link><span>/</span><span>{ABA_NAMES[aba]}</span></nav>
+        {emailEnabled() && !fresh.emailVerifiedAt && <VerifyBanner email={fresh.email} />}
+        {aba === "resumo" ? <AccountSummary user={fresh} periodo={periodo} /> : <Aba aba={aba} userId={user.id} />}
       </section>
     </div>
   );
