@@ -32,7 +32,7 @@ export async function sendEmail(to: string, subject: string, html: string) {
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from: process.env.EMAIL_FROM ?? "Nexo <onboarding@resend.dev>", to, subject, html }),
+    body: JSON.stringify({ from: process.env.EMAIL_FROM ?? "Nexo <nao-responda@nexopoint.com.br>", to, subject, html }),
   });
   if (!res.ok) console.error("Falha ao enviar e-mail:", res.status, await res.text().catch(() => ""));
   return res.ok;

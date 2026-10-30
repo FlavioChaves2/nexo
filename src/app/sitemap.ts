@@ -5,7 +5,7 @@ import { visibleListing } from "@/lib/queries";
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = (process.env.APP_URL ?? "https://nexo-dun-sigma.vercel.app").replace(/\/$/, "");
+  const base = (process.env.APP_URL ?? "https://nexopoint.com.br").replace(/\/$/, "");
   const [games, listings] = await Promise.all([
     db.game.findMany({ select: { slug: true } }),
     db.listing.findMany({ where: visibleListing, select: { id: true, createdAt: true }, take: 5000 }),

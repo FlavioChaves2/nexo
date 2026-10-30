@@ -13,7 +13,7 @@ const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["500", "700"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.APP_URL ?? "https://nexo-dun-sigma.vercel.app"),
+  metadataBase: new URL(process.env.APP_URL ?? "https://nexopoint.com.br"),
   openGraph: { siteName: "Nexo", locale: "pt_BR", type: "website" },
   title: { default: "NEXO - Comprar e vender Contas, Skins, Moedas e Gift Cards de Jogos", template: "%s | NEXO" },
   description: "Compre e venda contas, skins, moedas e gift cards com o pagamento protegido até a entrega.",
