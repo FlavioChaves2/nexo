@@ -3,10 +3,10 @@ import { money } from "./format";
 import { notify } from "./notify";
 import type { Tx } from "./orders";
 
-// Convites: quem convidou ganha 2% do valor dos anúncios de cada pedido concluído do convidado,
+// Convites: quem convidou ganha 3% do valor dos anúncios de cada pedido concluído do convidado,
 // tanto quando ele compra quanto quando ele vende. Sai da taxa da Nexo; comprador e vendedor não pagam nada a mais.
 
-export const REFERRAL_BPS = 200; // 2%
+export const REFERRAL_BPS = 300; // 3%
 export const REF_COOKIE = "nexo_ref";
 export const REF_COOKIE_DAYS = 30;
 
