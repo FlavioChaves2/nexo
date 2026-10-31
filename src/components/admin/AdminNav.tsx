@@ -16,6 +16,7 @@ export function AdminNav({ disputes, withdrawals, reports, verifications, suppor
     { href: "/admin/cupons", label: "Cupons", n: 0 },
     { href: "/admin/titulos", label: "Títulos", n: 0 },
     { href: "/admin/verificacoes", label: "Perfis externos", n: external },
+    { href: "/admin/programa", label: "Primeiros vendedores", n: 0 },
     { href: "/admin/comissoes", label: "Comissões", n: 0 },
   ];
   return (

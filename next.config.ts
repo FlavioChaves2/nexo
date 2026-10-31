@@ -4,6 +4,14 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // Há um package-lock.json solto na pasta do usuário; fixa a raiz neste projeto.
   outputFileTracingRoot: __dirname,
+  // A imagem de cada loja é gerada na hora e lê as fontes e o ícone do disco: inclui esses arquivos na função.
+  outputFileTracingIncludes: {
+    "/loja/[username]/opengraph-image": [
+      "./node_modules/@fontsource/sora/files/sora-latin-800-normal.woff",
+      "./node_modules/@fontsource/manrope/files/manrope-latin-700-normal.woff",
+      "./public/app/icon-192.png",
+    ],
+  },
   // Permite testar por um link temporário do Cloudflare Tunnel.
   allowedDevOrigins: ["*.trycloudflare.com"],
   // Proteções básicas do navegador: o site não abre dentro de outro (golpe de clique escondido),

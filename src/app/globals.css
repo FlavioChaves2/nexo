@@ -1534,3 +1534,5 @@ body:has(.lp) header.top, body:has(.lp) footer:not(.lp-foot), body:has(.lp) .hel
 .store-external { display: grid; gap: 8px; margin-top: 14px; padding: 16px 18px; border-radius: 16px; border: 1px dashed var(--line); }
 .store-external ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .store-external li { display: flex; gap: 8px; align-items: flex-start; overflow-wrap: anywhere; }
+.program-row { grid-template-columns: 1fr; }
+.program-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 6px 14px; }

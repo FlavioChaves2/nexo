@@ -635,24 +635,37 @@ model StoreFollow {
 
 // Cupom criado pelo vendedor para a própria loja. O desconto sai do valor dele.
 model StoreCoupon {
-  id               String    @id @default(cuid())
+  id               String           @id @default(cuid())
   sellerId         String
-  seller           User      @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  seller           User             @relation(fields: [sellerId], references: [id], onDelete: Cascade)
   code             String
-  percentOff       Int       @default(0)
-  amountOffCents   Int       @default(0)
+  percentOff       Int              @default(0)
+  amountOffCents   Int              @default(0)
   maxDiscountCents Int?
-  minOrderCents    Int       @default(0)
+  minOrderCents    Int              @default(0)
   maxUses          Int?
-  uses             Int       @default(0) // pedidos em aberto ou pagos que usam o cupom
-  scope            String    @default("LOJA") // LOJA | JOGO | ANUNCIO
-  target           String    @default("") // slug do jogo ou id do anúncio
+  uses             Int              @default(0) // pedidos em aberto ou pagos que usam o cupom
+  scope            String           @default("LOJA") // LOJA | JOGO | ANUNCIO
+  target           String           @default("") // slug do jogo ou id do anúncio
   startsAt         DateTime?
   expiresAt        DateTime?
-  active           Boolean   @default(true)
-  createdAt        DateTime  @default(now())
+  active           Boolean          @default(true)
+  createdAt        DateTime         @default(now())
+  usesBy           StoreCouponUse[]
 
   @@unique([sellerId, code])
+}
+
+// Uso de cupom da loja: um por comprador (trava no banco). Apagado se o pedido for cancelado.
+model StoreCouponUse {
+  id        String      @id @default(cuid())
+  couponId  String
+  coupon    StoreCoupon @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  buyerId   String
+  orderId   String?     @unique
+  createdAt DateTime    @default(now())
+
+  @@unique([couponId, buyerId])
 }
 
 // Perfil do vendedor em outra plataforma. A equipe confere o código de verificação no perfil externo.

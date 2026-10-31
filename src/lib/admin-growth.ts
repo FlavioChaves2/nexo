@@ -82,3 +82,41 @@ export async function recordedTotals(days: number) {
 
 export const describePolicy = (p: Awaited<ReturnType<typeof activePolicy>>) =>
   `Normal ${bpsLabel(p.standardFeeBps)} · link do vendedor ${p.linkFeeBps === null ? "não definida" : bpsLabel(p.linkFeeBps)} (${linkModeActive(p) ? "ligada" : "desligada"}) · janela ${p.windowHours ? `${p.windowHours} h` : "não definida"} · Pix ${money(p.pixCostCents)}${p.pixCostBps ? ` + ${bpsLabel(p.pixCostBps)}` : ""} · outros ${money(p.otherCostCents)}`;
+
+// ---------- Programa de primeiros vendedores (só acompanhamento interno) ----------
+
+export const PROGRAM_STATUS: Record<string, string> = { CONTATO: "Primeiro contato", ONBOARDING: "Montando a loja", PRIMEIRA_VENDA: "Rumo à primeira venda", CONCLUIDO: "Concluído", PAUSADO: "Pausado" };
+const STEPS = { stepListings: "Primeiros anúncios", stepStore: "Loja organizada", stepMaterial: "Material de divulgação", stepFirstSale: "Primeira venda acompanhada" } as const;
+export const PROGRAM_STEPS = STEPS;
+
+export async function addToProgram(adminId: string, rawUsername: string) {
+  const username = rawUsername.trim().replace(/^@/, "").toLowerCase();
+  const u = await db.user.findUnique({ where: { username }, select: { id: true, suspendedAt: true } });
+  if (!u) throw new GrowthError("Usuário não encontrado.");
+  if (u.suspendedAt) throw new GrowthError("Esta conta está suspensa.");
+  await db.$transaction(async (tx) => {
+    const exists = await tx.sellerProgram.findUnique({ where: { userId: u.id } });
+    if (exists) throw new GrowthError("Este vendedor já está no programa.");
+    const p = await tx.sellerProgram.create({ data: { userId: u.id, ownerId: adminId } });
+    await logAction(tx, adminId, "PROGRAMA_ENTRADA", p.id, `@${username}`);
+  });
+}
+
+export async function updateProgram(adminId: string, id: string, input: { status: string; ownerId: string; notes: string; steps: Record<keyof typeof STEPS, boolean> }) {
+  if (!PROGRAM_STATUS[input.status]) throw new GrowthError("Status inválido.");
+  const owner = input.ownerId ? await db.user.findUnique({ where: { id: input.ownerId }, select: { role: true } }) : null;
+  if (input.ownerId && owner?.role !== "ADMIN") throw new GrowthError("O responsável precisa ser da equipe.");
+  await db.$transaction(async (tx) => {
+    const before = await tx.sellerProgram.findUnique({ where: { id }, include: { user: { select: { username: true } } } });
+    if (!before) throw new GrowthError("Participante não encontrado.");
+    const data = { status: input.status, ownerId: input.ownerId || null, notes: input.notes.trim().slice(0, 2000), ...input.steps };
+    await tx.sellerProgram.update({ where: { id }, data });
+    // Histórico só do que mudou.
+    const changes: string[] = [];
+    if (before.status !== data.status) changes.push(`status: ${PROGRAM_STATUS[before.status]} → ${PROGRAM_STATUS[data.status]}`);
+    if (before.ownerId !== data.ownerId) changes.push("responsável alterado");
+    if (before.notes !== data.notes) changes.push("observações editadas");
+    for (const k of Object.keys(STEPS) as (keyof typeof STEPS)[]) if (before[k] !== data[k]) changes.push(`${STEPS[k]}: ${data[k] ? "feito" : "pendente"}`);
+    if (changes.length) await logAction(tx, adminId, "PROGRAMA_ATUALIZADO", id, `@${before.user.username}`, changes.join(" · "));
+  });
+}

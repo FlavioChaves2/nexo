@@ -9,6 +9,7 @@ import { contactErrorIn } from "./contact-filter";
 import { cleanDisplayName } from "./store-names";
 import { notify } from "./notify";
 import { emailBlock } from "./email";
+import { releaseStoreCoupon } from "./store-coupons";
 
 // Proposta por link (docs/lojas-vendedor.md): o vendedor monta as condições combinadas com o cliente,
 // o comprador revisa e aceita, e a compra segue o checkout, a entrega e a disputa normais.
@@ -84,6 +85,7 @@ async function closeCheckout(tx: Tx, proposalId: string, why: string) {
   const pending = await tx.order.findMany({ where: { listingId: listing.id, status: "AGUARDANDO_PAGAMENTO" }, select: { id: true } });
   for (const o of pending) {
     await transition(tx, o.id, ["AGUARDANDO_PAGAMENTO"], { status: "CANCELADO" });
+    await releaseStoreCoupon(tx, { orderId: o.id });
     await sysMsg(tx, o.id, `${why} Este pagamento foi cancelado; se o Pix for pago mesmo assim, o valor é estornado.`);
   }
 }

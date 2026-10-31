@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
 import { money } from "@/lib/format";
-import { applyCoupon } from "@/lib/coupons";
+import { resolveCoupon } from "@/lib/store-coupons";
 import { OrderError } from "@/lib/orders";
 import { needsPayerDocument } from "@/lib/payments";
 import { Art } from "@/components/Art";
@@ -24,11 +24,11 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
   const sp = await searchParams;
   const qty = Math.max(1, Math.min(Number(sp.qtd) || 1, l.stock || 1));
   const subtotal = l.priceCents * qty;
-  let coupon: { code: string; discountCents: number } | null = null;
+  let coupon: { code: string; discountCents: number; kind: "NEXO" | "LOJA" } | null = null;
   let couponError = "";
   if (sp.cupom?.trim()) {
     try {
-      coupon = await applyCoupon(sp.cupom, user.id, subtotal);
+      coupon = await resolveCoupon(sp.cupom, user.id, l, subtotal);
     } catch (e) {
       if (!(e instanceof OrderError)) throw e;
       couponError = e.message;
@@ -83,7 +83,7 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
                 <button className="btn btn-ghost btn-sm" type="submit">Aplicar</button>
               </div>
               {couponError && <span className="error">{couponError}</span>}
-              {coupon && <span className="lime small"><Icon name="tag" /> Cupom {coupon.code} aplicado</span>}
+              {coupon && <span className="lime small"><Icon name="tag" /> Cupom {coupon.code} aplicado{coupon.kind === "LOJA" ? " (cupom da loja)" : ""}</span>}
             </form>
             <dl className="kv">
               <dt>Subtotal</dt><dd className="num">{money(subtotal)}</dd>

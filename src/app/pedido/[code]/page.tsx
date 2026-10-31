@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { OrderOrigin, OrderTerms } from "@/components/OrderTerms";
+import { Rebuy } from "@/components/Rebuy";
 import QRCode from "qrcode";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
@@ -82,6 +83,7 @@ export default async function PedidoPage({ params }: { params: Promise<{ code: s
           <div className="note warn"><Icon name="alert" /><span>Nunca combine pagamento por fora da Nexo. Fora daqui o seu dinheiro não tem garantia.</span></div>
           {o.terms && <OrderTerms raw={o.terms} />}
           {role === "seller" && <OrderOrigin o={o} />}
+          {role === "buyer" && ["CONCLUIDO", "REEMBOLSADO", "CANCELADO"].includes(status) && <Rebuy o={o} />}
         </div>
         <aside className="stack buybox">
           <OrderPanel

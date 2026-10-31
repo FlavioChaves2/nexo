@@ -8,7 +8,7 @@ import { CARD_ENABLED, CARD_MIN_CENTS, PLANS, checkoutTotals, isPlan, planCashba
 import { confirmDays, daysLabel } from "./constants";
 import { after } from "next/server";
 import { notify } from "./notify";
-import { applyCoupon } from "./coupons";
+import { releaseStoreCoupon, reserveStoreCoupon, resolveCoupon } from "./store-coupons";
 import { payReferrals } from "./referrals";
 import { claimProposalPayment, termsForCheckout } from "./proposals";
 
@@ -55,12 +55,15 @@ export async function createOrder(input: { buyerId: string; listingId: string; q
   const grossCents = listing.priceCents * input.quantity;
   // Origem da venda e comissão decididas aqui, no servidor, e fixadas no pedido (docs/lojas-vendedor.md).
   const attr = await decideOrigin({ buyerId: input.buyerId, sellerId: listing.sellerId });
-  const coupon = input.couponCode ? await applyCoupon(input.couponCode, input.buyerId, grossCents) : null;
-  const discountCents = coupon?.discountCents ?? 0;
+  // Um cupom por pedido: da Nexo (desconto pago pela plataforma) ou da loja (desconto pago pelo vendedor).
+  const coupon = input.couponCode ? await resolveCoupon(input.couponCode, input.buyerId, listing, grossCents) : null;
+  const discountCents = coupon?.kind === "NEXO" ? coupon.discountCents : 0;
+  const storeDiscountCents = coupon?.kind === "LOJA" ? coupon.discountCents : 0;
+  const itemCents = grossCents - storeDiscountCents; // base da comissão e do que o vendedor recebe
   const method: PayMethod = input.method ?? "pix";
   const plan: PlanCode = input.plan ?? "BASICO";
   // O que o comprador paga: item (com cupom) + plano VIP + taxa do cartão. Sempre recalculado aqui.
-  const { planCents, cardFeeCents, totalCents } = checkoutTotals(grossCents - discountCents, plan, method);
+  const { planCents, cardFeeCents, totalCents } = checkoutTotals(itemCents - discountCents, plan, method);
   if (method === "cartao" && !CARD_ENABLED) throw new OrderError("Pagamento com cartão em breve. Use Pix ou saldo.");
   if (method === "cartao" && totalCents < CARD_MIN_CENTS) throw new OrderError(`Cartão só a partir de ${money(CARD_MIN_CENTS)}. Use Pix ou saldo.`);
   const code = await newOrderCode();
@@ -69,12 +72,16 @@ export async function createOrder(input: { buyerId: string; listingId: string; q
     const buyer = await db.user.findUniqueOrThrow({ where: { id: input.buyerId }, select: { balanceCents: true } });
     if (buyer.balanceCents < totalCents) throw new OrderError("Saldo insuficiente para esta compra.");
   }
+  // Cupom da loja: reserva o uso antes da cobrança (limite e uso por comprador travados no banco).
+  const couponUse = coupon?.kind === "LOJA" ? await reserveStoreCoupon(coupon.coupon.id, input.buyerId) : null;
+  const release = () => (couponUse ? releaseStoreCoupon(db, { useId: couponUse.id }).catch((e) => console.error("Cupom:", e)) : undefined);
   let charge: { id: string; copyPaste: string | null; expiresAt: Date | null; url?: string | null } = { id: `saldo_${code}`, copyPaste: null, expiresAt: null };
   if (!bySaldo) {
     try {
       charge = method === "cartao" ? await createCardCharge({ code, totalCents }, input.payer) : await createPixCharge({ code, totalCents }, input.payer);
     } catch (e) {
       console.error("Falha ao gerar cobrança:", e);
+      await release();
       throw new OrderError(`Não foi possível gerar ${method === "cartao" ? "o pagamento com cartão" : "o Pix"} agora. Confira seus dados e tente de novo.`);
     }
   }
@@ -82,6 +89,8 @@ export async function createOrder(input: { buyerId: string; listingId: string; q
   const order = await db.order.create({
     data: {
       code,
+      storeCouponId: coupon?.kind === "LOJA" ? coupon.coupon.id : null,
+      storeDiscountCents,
       buyerId: input.buyerId,
       sellerId: listing.sellerId,
       listingId: listing.id,
@@ -89,13 +98,13 @@ export async function createOrder(input: { buyerId: string; listingId: string; q
       unitPriceCents: listing.priceCents,
       totalCents,
       discountCents,
-      couponCode: coupon?.code,
+      couponCode: coupon?.kind === "NEXO" ? coupon.code : undefined,
       plan,
       planCents,
       cardFeeCents,
       payMethod: method.toUpperCase(),
       paymentUrl: charge.url ?? null,
-      feeCents: feeForBps(grossCents, attr.feeBps),
+      feeCents: feeForBps(itemCents, attr.feeBps),
       feeBps: attr.feeBps,
       origin: attr.origin,
       policyId: attr.policyId,
@@ -107,13 +116,18 @@ export async function createOrder(input: { buyerId: string; listingId: string; q
       terms,
       messages: { create: { body: bySaldo ? "Pedido criado." : `Pedido criado. Pague ${money(totalCents)} ${method === "cartao" ? "no cartão" : "no Pix"} para iniciar.${plan !== "BASICO" ? ` Plano ${PLANS[plan].name} ativo.` : ""}` } },
     },
+  }).catch(async (e) => {
+    await release();
+    throw e;
   });
+  if (couponUse) await db.storeCouponUse.update({ where: { id: couponUse.id }, data: { orderId: order.id } });
   if (bySaldo) {
     try {
       await payWithBalance(order.id, input.buyerId, totalCents);
     } catch (e) {
       // Saldo mudou entre a checagem e o débito: o pedido não segue.
       await db.order.update({ where: { id: order.id }, data: { status: "CANCELADO" } });
+      await releaseStoreCoupon(db, { orderId: order.id });
       throw e;
     }
   }
@@ -148,6 +162,7 @@ async function payInTx(tx: Tx, orderId: string) {
     : { count: 0 };
   if (reserved.count !== 1) {
     await transition(tx, order.id, ["AGUARDANDO_PAGAMENTO"], { status: "CANCELADO" });
+    await releaseStoreCoupon(tx, { orderId: order.id });
     if (paidWithBalance(order)) {
       const r = await refundToBalance(tx, order);
       await tx.order.update({ where: { id: order.id }, data: { refundedAt: new Date(), refundId: r.id } });
@@ -288,6 +303,7 @@ export async function cancelOrder(orderId: string, buyerId: string) {
     const order = await tx.order.findUniqueOrThrow({ where: { id: orderId } });
     if (order.buyerId !== buyerId) throw new OrderError("Só o comprador pode cancelar.");
     await transition(tx, orderId, ["AGUARDANDO_PAGAMENTO"], { status: "CANCELADO" });
+    await releaseStoreCoupon(tx, { orderId });
     await sysMsg(tx, orderId, "Pedido cancelado pelo comprador antes do pagamento.");
   });
 }
@@ -334,6 +350,7 @@ export async function settleExpired(where: Prisma.OrderWhereInput) {
       await db.$transaction(async (tx) => {
         if (order.status === "ENTREGUE") return complete(tx, order, true);
         await transition(tx, order.id, ["AGUARDANDO_PAGAMENTO"], { status: "CANCELADO" });
+        await releaseStoreCoupon(tx, { orderId: order.id });
         await sysMsg(tx, order.id, order.payMethod === "CARTAO" ? "O prazo para pagar no cartão terminou e o pedido foi cancelado." : "O Pix expirou e o pedido foi cancelado.");
       });
     } catch (e) {
