@@ -1,0 +1,738 @@
+{
+ "8-ball-pool": {
+  "from": "ios:8 Ball Pool™",
+  "cover": true
+ },
+ "adopt-me": {
+  "from": "igual a roblox",
+  "cover": true
+ },
+ "afk-journey": {
+  "from": "ios:AFK Journey",
+  "cover": true
+ },
+ "albion": {
+  "from": "steam:#761890 + ios:Albion Online",
+  "cover": true
+ },
+ "among-us": {
+  "from": "steam:#945360 + ios:Among Us!",
+  "cover": true
+ },
+ "animal-crossing": {
+  "from": "ios:Animal Crossing: Pocket Camp C",
+  "cover": true
+ },
+ "apex": {
+  "from": "steam:#1172470",
+  "cover": true
+ },
+ "apple": {
+  "from": "ios:Apple Store",
+  "cover": true
+ },
+ "arena-breakout": {
+  "from": "ios:Arena Breakout: FPS realista",
+  "cover": true
+ },
+ "ark": {
+  "from": "steam:#2399830",
+  "cover": true
+ },
+ "arknights": {
+  "from": "ios:Arknights",
+  "cover": true
+ },
+ "asphalt": {
+  "from": "ios:Asphalt Legends - Corrida",
+  "cover": true
+ },
+ "baldurs-gate": {
+  "from": "steam:#1086940",
+  "cover": true
+ },
+ "battlefield": {
+  "from": "steam:#2807960 (cabeçalho)",
+  "cover": true
+ },
+ "battlenet": {
+  "from": "ios:Battle.net",
+  "cover": true
+ },
+ "black-desert": {
+  "from": "steam:#582660 + ios:Black Desert Mobile",
+  "cover": true
+ },
+ "blood-strike": {
+  "from": "ios:Blood Strike: 2.5 Anniversary",
+  "cover": true
+ },
+ "blox-fruits": {
+  "from": "igual a roblox",
+  "cover": true
+ },
+ "blue-archive": {
+  "from": "ios:Blue Archive",
+  "cover": true
+ },
+ "blue-lock": {
+  "from": "ios:BLUE LOCK PWC",
+  "cover": true
+ },
+ "boom-beach": {
+  "from": "ios:Boom Beach",
+  "cover": true
+ },
+ "brawl-stars": {
+  "from": "ios:Brawl Stars",
+  "cover": true
+ },
+ "candy-crush": {
+  "from": "ios:Candy Crush Saga",
+  "cover": true
+ },
+ "cartola": {
+  "from": "ios:Cartola: maior fantasy do país",
+  "cover": true
+ },
+ "clash-of-clans": {
+  "from": "ios:Clash of Clans",
+  "cover": true
+ },
+ "clash-royale": {
+  "from": "ios:Clash Royale",
+  "cover": true
+ },
+ "cod": {
+  "from": "steam:Call of Duty®",
+  "cover": true
+ },
+ "cod-mobile": {
+  "from": "ios:Call of Duty®: Mobile",
+  "cover": true
+ },
+ "coin-master": {
+  "from": "ios:Coin Master",
+  "cover": true
+ },
+ "critical-ops": {
+  "from": "ios:Critical Ops: Online PvP FPS",
+  "cover": true
+ },
+ "cs2": {
+  "from": "steam:#730 + ios:Counter Attack Multiplayer FPS",
+  "cover": true
+ },
+ "csgo-skins": {
+  "from": "igual a cs2",
+  "cover": true
+ },
+ "cyberpunk": {
+  "from": "steam:#1091500",
+  "cover": true
+ },
+ "dayz": {
+  "from": "steam:#221100",
+  "cover": true
+ },
+ "dead-by-daylight": {
+  "from": "steam:#381210",
+  "cover": true
+ },
+ "deadlock": {
+  "from": "steam:#1422450",
+  "cover": true
+ },
+ "delta-force": {
+  "from": "steam:#2507950 + ios:Garena Delta Force",
+  "cover": true
+ },
+ "destiny-2": {
+  "from": "steam:#1085660",
+  "cover": true
+ },
+ "diablo-4": {
+  "from": "steam:#2344520",
+  "cover": true
+ },
+ "diablo-immortal": {
+  "from": "ios:Diablo Immortal",
+  "cover": true
+ },
+ "discord-nitro": {
+  "from": "ios:Discord - Converse e Jogue",
+  "cover": true
+ },
+ "dokkan": {
+  "from": "ios:DRAGON BALL GEKISHIN SQUADRA",
+  "cover": true
+ },
+ "dota-2": {
+  "from": "steam:#570",
+  "cover": true
+ },
+ "dota-items": {
+  "from": "igual a dota-2",
+  "cover": true
+ },
+ "dragon-ball-legends": {
+  "from": "ios:DRAGON BALL GEKISHIN SQUADRA",
+  "cover": true
+ },
+ "dream-league": {
+  "from": "ios:Dream League Soccer 2026",
+  "cover": true
+ },
+ "dune": {
+  "from": "steam:#1172710",
+  "cover": true
+ },
+ "ea-app": {
+  "from": "ios:EA Connect",
+  "cover": true
+ },
+ "ea-fc-mobile": {
+  "from": "ios:EA SPORTS FC Futebol Mobile 27",
+  "cover": true
+ },
+ "efootball": {
+  "from": "steam:#1665460 + ios:eFootball™",
+  "cover": true
+ },
+ "elden-ring": {
+  "from": "steam:#1245620",
+  "cover": true
+ },
+ "epic-games": {
+  "from": "ios:Epic Games",
+  "cover": true
+ },
+ "epic-seven": {
+  "from": "ios:Epic Seven",
+  "cover": true
+ },
+ "escape-from-tarkov": {
+  "from": "steam:#3932890 (cabeçalho)",
+  "cover": true
+ },
+ "eve-online": {
+  "from": "steam:#8500",
+  "cover": true
+ },
+ "evony": {
+  "from": "ios:Evony",
+  "cover": true
+ },
+ "f1": {
+  "from": "steam:#3059520 (cabeçalho)",
+  "cover": true
+ },
+ "fall-guys": {
+  "from": "steam:#1097150",
+  "cover": true
+ },
+ "fallout-76": {
+  "from": "steam:#1151340",
+  "cover": true
+ },
+ "fc-26": {
+  "from": "steam:#3405690 (cabeçalho)",
+  "cover": true
+ },
+ "ffxiv": {
+  "from": "steam:#39210",
+  "cover": true
+ },
+ "fgo": {
+  "from": "ios:Fate/Grand Order (English)",
+  "cover": true
+ },
+ "fifa-ultimate": {
+  "from": "igual a fc-26",
+  "cover": true
+ },
+ "football-manager": {
+  "from": "steam:Football Manager 2024 In-game Editor",
+  "cover": true
+ },
+ "fortnite": {
+  "from": "ios:Fortnite",
+  "cover": true
+ },
+ "forza": {
+  "from": "steam:#1551360",
+  "cover": true
+ },
+ "free-fire-max": {
+  "from": "ios:Free Fire x NARUTO SHIPPUDEN",
+  "cover": true
+ },
+ "freefire": {
+  "from": "ios:Free Fire x NARUTO SHIPPUDEN",
+  "cover": true
+ },
+ "genshin": {
+  "from": "ios:Genshin Impact: 6º Aniversário",
+  "cover": true
+ },
+ "geometry-dash": {
+  "from": "steam:#322170 + ios:Geometry Dash Lite",
+  "cover": true
+ },
+ "gran-turismo": {
+  "from": "igual a playstation",
+  "cover": true
+ },
+ "grand-chase": {
+  "from": "steam:#985810",
+  "cover": true
+ },
+ "grow-a-garden": {
+  "from": "igual a roblox",
+  "cover": true
+ },
+ "growtopia": {
+  "from": "steam:#866020 + ios:Growtopia",
+  "cover": true
+ },
+ "gta-v": {
+  "from": "steam:#271590",
+  "cover": true
+ },
+ "guild-wars-2": {
+  "from": "steam:#1284210",
+  "cover": true
+ },
+ "habbo": {
+  "from": "ios:Habbo - Original Metaverse",
+  "cover": true
+ },
+ "halo": {
+  "from": "steam:#1240440",
+  "cover": true
+ },
+ "hay-day": {
+  "from": "ios:Hay Day",
+  "cover": true
+ },
+ "hearthstone": {
+  "from": "ios:Hearthstone",
+  "cover": true
+ },
+ "helldivers-2": {
+  "from": "steam:#553850",
+  "cover": true
+ },
+ "hogwarts": {
+  "from": "steam:#990080",
+  "cover": true
+ },
+ "honkai-impact": {
+  "from": "ios:Honkai Impact 3rd",
+  "cover": true
+ },
+ "honkai-star-rail": {
+  "from": "ios:Honkai: Star Rail",
+  "cover": true
+ },
+ "hypixel": {
+  "from": "igual a minecraft",
+  "cover": true
+ },
+ "infinity-nikki": {
+  "from": "ios:Infinity Nikki",
+  "cover": true
+ },
+ "last-war": {
+  "from": "ios:Last War:Survival",
+  "cover": true
+ },
+ "legends-of-runeterra": {
+  "from": "ios:Legends of Runeterra",
+  "cover": true
+ },
+ "lineage-2": {
+  "from": "ios:Lineage2M",
+  "cover": true
+ },
+ "lol": {
+  "from": "ios:League of Legends: Wild Rift",
+  "cover": true
+ },
+ "lords-mobile": {
+  "from": "ios:Lords Mobile: Guerra de Reinos",
+  "cover": true
+ },
+ "lost-ark": {
+  "from": "steam:#1599340",
+  "cover": true
+ },
+ "ludo": {
+  "from": "ios:Ludo King",
+  "cover": true
+ },
+ "madden": {
+  "from": "steam:#3230400 (cabeçalho)",
+  "cover": true
+ },
+ "magic-arena": {
+  "from": "steam:#2141910 + ios:Magic: The Gathering Arena",
+  "cover": true
+ },
+ "mario-kart": {
+  "from": "ios:Mario Kart Tour",
+  "cover": true
+ },
+ "marvel-rivals": {
+  "from": "steam:#2767030",
+  "cover": true
+ },
+ "marvel-snap": {
+  "from": "steam:#1997040 + ios:MARVEL SNAP",
+  "cover": true
+ },
+ "minecraft": {
+  "from": "ios:Minecraft: jogue com amigos!",
+  "cover": true
+ },
+ "mini-militia": {
+  "from": "ios:Mini Militia - Doodle Army 2",
+  "cover": true
+ },
+ "mobile-legends": {
+  "from": "ios:Mobile Legends: Bang Bang",
+  "cover": true
+ },
+ "monopoly-go": {
+  "from": "ios:MONOPOLY GO!",
+  "cover": true
+ },
+ "monster-hunter": {
+  "from": "steam:#2246340",
+  "cover": true
+ },
+ "mortal-kombat": {
+  "from": "steam:#1971870",
+  "cover": true
+ },
+ "mu-online": {
+  "from": "ios:MU ORIGIN 3",
+  "cover": true
+ },
+ "murder-mystery": {
+  "from": "igual a roblox",
+  "cover": true
+ },
+ "naruto": {
+  "from": "steam:NARUTO X BORUTO Ultimate Ninja STORM CONNECTIONS",
+  "cover": true
+ },
+ "nba-2k": {
+  "from": "steam:#3472040 (cabeçalho)",
+  "cover": true
+ },
+ "need-for-speed": {
+  "from": "steam:#1846380",
+  "cover": true
+ },
+ "new-world": {
+  "from": "steam:#1063730",
+  "cover": true
+ },
+ "nikke": {
+  "from": "ios:GODDESS OF VICTORY: NIKKE",
+  "cover": true
+ },
+ "nintendo": {
+  "from": "ios:Nintendo Switch App",
+  "cover": true
+ },
+ "once-human": {
+  "from": "steam:#2139460",
+  "cover": true
+ },
+ "one-piece-bounty": {
+  "from": "ios:ONE PIECE Bounty Rush",
+  "cover": true
+ },
+ "overwatch": {
+  "from": "steam:#2357570",
+  "cover": true
+ },
+ "palworld": {
+  "from": "steam:#1623730",
+  "cover": true
+ },
+ "path-of-exile": {
+  "from": "steam:#2694490",
+  "cover": true
+ },
+ "perfect-world": {
+  "from": "ios:Perfect World Mobile",
+  "cover": true
+ },
+ "pet-simulator": {
+  "from": "igual a roblox",
+  "cover": true
+ },
+ "pixel-gun": {
+  "from": "ios:Pixel Gun 3D: FPS PvP Shooter",
+  "cover": true
+ },
+ "playstation": {
+  "from": "ios:PlayStation App",
+  "cover": true
+ },
+ "pokemon-go": {
+  "from": "ios:Pokémon GO",
+  "cover": true
+ },
+ "pokemon-scarlet": {
+  "from": "igual a pokemon-go",
+  "cover": true
+ },
+ "pokemon-tcg": {
+  "from": "ios:Pokémon TCG Pocket",
+  "cover": true
+ },
+ "pokemon-unite": {
+  "from": "ios:Pokémon UNITE",
+  "cover": true
+ },
+ "poker": {
+  "from": "ios:PokerStars Play Money Poker",
+  "cover": true
+ },
+ "pubg": {
+  "from": "steam:#578080",
+  "cover": true
+ },
+ "pubg-mobile": {
+  "from": "ios:PUBG MOBILE",
+  "cover": true
+ },
+ "ragnarok": {
+  "from": "ios:Ragnarok Origin: Classic",
+  "cover": true
+ },
+ "rainbow-six": {
+  "from": "steam:#359550",
+  "cover": true
+ },
+ "rdr2": {
+  "from": "steam:#1174180",
+  "cover": true
+ },
+ "riot-points": {
+  "from": "ios:Riot Mobile",
+  "cover": true
+ },
+ "rise-of-kingdoms": {
+  "from": "ios:Rise of Kingdoms: Lost Crusade",
+  "cover": true
+ },
+ "roblox": {
+  "from": "ios:Roblox",
+  "cover": true
+ },
+ "rocket-league": {
+  "from": "steam:#252950",
+  "cover": true
+ },
+ "royal-match": {
+  "from": "ios:Royal Match",
+  "cover": true
+ },
+ "runescape": {
+  "from": "steam:#1343400 + ios:Old School RuneScape",
+  "cover": true
+ },
+ "rust": {
+  "from": "steam:#252490",
+  "cover": true
+ },
+ "rust-skins": {
+  "from": "igual a rust",
+  "cover": true
+ },
+ "sea-of-thieves": {
+  "from": "steam:#1172620",
+  "cover": true
+ },
+ "seven-deadly-sins": {
+  "from": "ios:The Seven Deadly Sins",
+  "cover": true
+ },
+ "sf6": {
+  "from": "steam:#1364780",
+  "cover": true
+ },
+ "shadow-fight": {
+  "from": "ios:Shadow Fight 4: Arena",
+  "cover": true
+ },
+ "skyrim": {
+  "from": "steam:#489830",
+  "cover": true
+ },
+ "smash": {
+  "from": "igual a nintendo",
+  "cover": true
+ },
+ "spectre-divide": {
+  "from": "steam:#2641470",
+  "cover": true
+ },
+ "splatoon": {
+  "from": "igual a nintendo",
+  "cover": true
+ },
+ "spotify": {
+  "from": "ios:Spotify: músicas e podcasts",
+  "cover": true
+ },
+ "standoff-2": {
+  "from": "ios:Standoff 2",
+  "cover": true
+ },
+ "star-wars": {
+  "from": "steam:#1237950",
+  "cover": true
+ },
+ "stardew": {
+  "from": "steam:#413150 + ios:Stardew Valley",
+  "cover": true
+ },
+ "state-of-survival": {
+  "from": "ios:State of Survival: Zombie War",
+  "cover": true
+ },
+ "steam": {
+  "from": "ios:Steam Mobile",
+  "cover": true
+ },
+ "strinova": {
+  "from": "steam:#1282270",
+  "cover": true
+ },
+ "stumble-guys": {
+  "from": "ios:Stumble Guys",
+  "cover": true
+ },
+ "subway-surfers": {
+  "from": "ios:Subway Surfers",
+  "cover": true
+ },
+ "summoners-war": {
+  "from": "ios:Summoners' War: Sky Arena",
+  "cover": true
+ },
+ "tekken-8": {
+  "from": "steam:#1778820",
+  "cover": true
+ },
+ "terraria": {
+  "from": "steam:#105600 + ios:Terraria",
+  "cover": true
+ },
+ "tf2": {
+  "from": "steam:#440",
+  "cover": true
+ },
+ "tft": {
+  "from": "ios:TFT: Teamfight Tactics",
+  "cover": true
+ },
+ "the-crew": {
+  "from": "steam:#2698940",
+  "cover": true
+ },
+ "the-finals": {
+  "from": "steam:#2073850",
+  "cover": true
+ },
+ "the-sims-4": {
+  "from": "steam:#1222670",
+  "cover": true
+ },
+ "throne-and-liberty": {
+  "from": "steam:#2429640",
+  "cover": true
+ },
+ "top-eleven": {
+  "from": "ios:Top Eleven: Manager de Futebol",
+  "cover": true
+ },
+ "tower-of-fantasy": {
+  "from": "ios:Tower of Fantasy",
+  "cover": true
+ },
+ "twitch": {
+  "from": "ios:Twitch: Transmissão ao vivo",
+  "cover": true
+ },
+ "umamusume": {
+  "from": "steam:#3224770 + ios:Umamusume: Pretty Derby",
+  "cover": true
+ },
+ "war-thunder": {
+  "from": "steam:#236390",
+  "cover": true
+ },
+ "warface": {
+  "from": "steam:#291480",
+  "cover": true
+ },
+ "warframe": {
+  "from": "steam:#230410",
+  "cover": true
+ },
+ "warzone": {
+  "from": "ios:Call of Duty®: Mobile",
+  "cover": true
+ },
+ "whiteout-survival": {
+  "from": "ios:Whiteout Survival",
+  "cover": true
+ },
+ "wild-rift": {
+  "from": "ios:League of Legends: Wild Rift",
+  "cover": true
+ },
+ "world-of-tanks": {
+  "from": "steam:#1407200 + ios:World of Tanks Blitz™",
+  "cover": true
+ },
+ "world-of-warships": {
+  "from": "steam:#552990",
+  "cover": true
+ },
+ "wow": {
+  "from": "igual a battlenet",
+  "cover": true
+ },
+ "wuthering-waves": {
+  "from": "ios:Wuthering Waves",
+  "cover": true
+ },
+ "xadrez": {
+  "from": "ios:Chess - Offline Board Game",
+  "cover": true
+ },
+ "xbox": {
+  "from": "ios:XBOX",
+  "cover": true
+ },
+ "yugioh": {
+  "from": "steam:#1449850 + ios:Yu-Gi-Oh! Master Duel",
+  "cover": true
+ },
+ "zelda": {
+  "from": "igual a nintendo",
+  "cover": true
+ },
+ "zenless": {
+  "from": "ios:Zenless Zone Zero",
+  "cover": true
+ }
+}

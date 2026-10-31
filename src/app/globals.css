@@ -179,7 +179,7 @@ main { min-height: 60vh; }
 .perk span { font-size: 13px; color: var(--muted); }
 @media (max-width: 760px) { .perks { grid-template-columns: 1fr; gap: 16px; } }
 
-.unis { display: grid; grid-template-columns: repeat(auto-fill, minmax(178px, 1fr)); gap: 12px; }
+.unis { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 156px), 1fr)); gap: 10px; }
 .uni { display: flex; align-items: center; gap: 12px; padding: 16px 14px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); transition: border-color .15s, transform .15s; min-width: 0; }
 .uni:hover { border-color: var(--c1); transform: translateY(-2px); }
 .uni .letra { font-family: var(--f-display); font-weight: 800; font-size: 26px; line-height: 1; color: var(--c1); letter-spacing: -0.04em; flex: none; min-width: 26px; }
@@ -1270,3 +1270,37 @@ a.acct-tile:hover { border-color: var(--accent-line); transform: translateY(-2px
 .az-letter { color: var(--accent); }
 .uni-all { border-style: dashed; }
 .uni-all .letra { color: var(--accent); font-size: 20px; }
+
+/* Arte oficial dos jogos */
+.art.has-cover::before { display: none; }
+.art-cover { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.art.has-cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(10, 12, 10, .75)); }
+.art.has-cover .gname { z-index: 2; }
+.game-ic { width: 22px; height: 22px; border-radius: 6px; object-fit: cover; flex: none; }
+
+/* Página inicial: mais buscados + categorias populares */
+.hot-games { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+.hot-games .hot-label { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); margin-right: 4px; }
+.hot-games .hot-label .ic { width: 15px; height: 15px; color: var(--accent); }
+.hot-chip { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 6px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); font-size: 13.5px; font-weight: 700; transition: border-color .15s, transform .15s; }
+.hot-chip:hover { border-color: var(--accent-line); transform: translateY(-1px); }
+.hot-chip .game-ic { width: 26px; height: 26px; }
+.hot-chip .let { width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; font: 800 12px var(--f-display); color: var(--c1); background: var(--surface-3); }
+@media (max-width: 640px) { .hot-games { flex-wrap: nowrap; overflow-x: auto; margin-inline: -16px; padding: 0 16px 6px; scrollbar-width: none; } .hot-games::-webkit-scrollbar { display: none; } .hot-chip { flex: none; } }
+
+.covers { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(140px, 1fr); gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; scrollbar-width: thin; }
+.cover-card { scroll-snap-align: start; display: grid; grid-template-rows: auto auto; border-radius: 14px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); transition: transform .18s, border-color .18s, box-shadow .18s; }
+.cover-card:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--c1) 60%, transparent); box-shadow: 0 14px 34px rgba(0, 0, 0, .45); }
+.cover-img { position: relative; aspect-ratio: 3 / 4; overflow: hidden; background: var(--surface-2); }
+.cover-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s; }
+.cover-card:hover .cover-img img { transform: scale(1.05); }
+.cover-img .art { position: absolute; inset: 0; }
+.cover-name { padding: 12px 10px 14px; text-align: center; font: 700 14px var(--f-display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cover-count { display: block; font: 600 11.5px var(--f-body); color: var(--muted); margin-top: 2px; }
+.see-all { display: flex; align-items: center; gap: 14px; }
+.see-all::before, .see-all::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+@media (max-width: 640px) { .covers { grid-auto-columns: 132px; margin-inline: -16px; padding-inline: 16px; scroll-padding-inline: 16px; } }
+.uni-ic { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; flex: none; }
+.gpick-dot { margin-inline: 6px; }
+@media (min-width: 900px) { .covers { grid-auto-flow: row; grid-template-columns: repeat(8, minmax(0, 1fr)); overflow: visible; } }
+@media (max-width: 420px) { .uni { padding: 12px 10px; gap: 10px; } .uni-ic { width: 34px; height: 34px; } .uni b { font-size: 13px; } }

@@ -229,7 +229,7 @@ export const GAME_CATALOG: CatalogGame[] = RAW.map(([slug, name, glyph, c1], sor
 }));
 
 /** Quantos jogos aparecem como destaque na página inicial. */
-export const HOME_GAMES = 11; // + o bloco "Todos os jogos" = 12, que fecha as linhas em 2, 3, 4 ou 6 colunas
+export const HOME_GAMES = 8; // capas na vitrine "Categorias populares" (uma linha no computador)
 
 export const slugify = (name: string) =>
   name.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);

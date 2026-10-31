@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { gameIcon } from "@/lib/game-art";
 
 export type PickGame = { slug: string; name: string; c1: string; count?: number };
 
@@ -83,7 +84,7 @@ export function GamePicker({ games, name, value, onChange, allowAll = false, id,
               onMouseDown={(e) => { e.preventDefault(); pick(g); }}
               onMouseEnter={() => setHi(i)}
             >
-              <span className="gpick-dot" style={{ background: g?.c1 ?? "var(--muted)" }} />
+              {g && gameIcon(g.slug) ? <img className="game-ic" src={gameIcon(g.slug)!} alt="" loading="lazy" /> : <span className="gpick-dot" style={{ background: g?.c1 ?? "var(--muted)" }} />}
               <span className="gpick-name">{g ? g.name : "Todos os jogos"}</span>
               {g?.count ? <small className="muted">{g.count}</small> : null}
             </li>

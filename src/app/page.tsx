@@ -6,6 +6,7 @@ import { favoriteIds, visibleListing } from "@/lib/queries";
 import { withOrbitFirst } from "@/lib/orbit";
 import { FOUNDER } from "@/lib/titles";
 import { HOME_GAMES } from "@/lib/game-catalog";
+import { gameCover, gameIcon, MOST_SEARCHED } from "@/lib/game-art";
 import { LISTING_TYPES, TYPE_PLURAL } from "@/lib/constants";
 import { feeBps } from "@/lib/format";
 import { HeroArt } from "@/components/HeroArt";
@@ -19,7 +20,7 @@ export default async function Home() {
   const user = await getCurrentUser();
   // Uma rodada só de consultas: cada ida ao banco custa uma viagem de rede.
   const [games, gamesCount, featured, favs, listingsCount, sellersCount, founders] = await Promise.all([
-    db.game.findMany({ orderBy: { sort: "asc" }, take: HOME_GAMES }),
+    db.game.findMany({ orderBy: { sort: "asc" }, take: 40, include: { _count: { select: { listings: { where: visibleListing } } } } }),
     db.game.count(),
     withOrbitFirst(visibleListing, [{ featured: "desc" }, { soldCount: "desc" }, { createdAt: "desc" }], 8, 4),
     favoriteIds(user?.id),
@@ -30,6 +31,9 @@ export default async function Home() {
   const foundersLeft = FOUNDER.maxHolders - founders;
   const stats = { listings: listingsCount.toLocaleString("pt-BR"), sellers: sellersCount.toLocaleString("pt-BR") };
   const fee = (feeBps() / 100).toString().replace(".", ",");
+  // Vitrine: os primeiros jogos do catálogo que têm capa oficial. Atalhos: os mais buscados.
+  const popular = games.filter((g) => gameCover(g.slug)).slice(0, HOME_GAMES);
+  const hot = MOST_SEARCHED.map((slug) => games.find((g) => g.slug === slug)).filter((g) => g !== undefined);
 
   return (
     <div className="wrap">
@@ -60,6 +64,19 @@ export default async function Home() {
         <HeroArt />
       </section>
 
+      <nav className="hot-games" aria-label="Mais buscados">
+        <span className="hot-label"><Icon name="search" />Mais buscados</span>
+        {hot.map((g) => {
+          const ic = gameIcon(g.slug);
+          return (
+            <Link key={g.slug} className="hot-chip" href={`/busca?jogo=${g.slug}`} style={{ "--c1": g.c1 } as CSSProperties}>
+              {ic ? <img className="game-ic" src={ic} alt="" /> : <span className="let">{g.letter}</span>}
+              {g.name}
+            </Link>
+          );
+        })}
+      </nav>
+
       <div style={{ marginTop: 22 }}><Ticker /></div>
 
       {foundersLeft > 0 && (
@@ -78,21 +95,17 @@ export default async function Home() {
 
       <section className="section">
         <div className="section-head">
-          <h2>Escolha seu universo <Icon name="spark" /></h2>
-          <Link className="linkish" href="/jogos">Ver os {gamesCount} jogos <Icon name="arrow" /></Link>
+          <h2>Categorias populares <Icon name="spark" /></h2>
         </div>
-        <div className="unis">
-          {games.map((g) => (
-            <Link key={g.slug} className="uni" href={`/busca?jogo=${g.slug}`} style={{ "--c1": g.c1 } as CSSProperties}>
-              <span className="letra">{g.letter}</span>
-              <div><b>{g.name}</b><small>Explorar <Icon name="arrow" /></small></div>
+        <div className="covers">
+          {popular.map((g) => (
+            <Link key={g.slug} className="cover-card" href={`/busca?jogo=${g.slug}`} style={{ "--c1": g.c1 } as CSSProperties}>
+              <div className="cover-img"><img src={gameCover(g.slug)!} alt={g.name} loading="lazy" decoding="async" /></div>
+              <div className="cover-name">{g.name}{g._count.listings > 0 && <span className="cover-count">{g._count.listings} {g._count.listings === 1 ? "anúncio" : "anúncios"}</span>}</div>
             </Link>
           ))}
-          <Link className="uni uni-all" href="/jogos">
-            <span className="letra">+{gamesCount - games.length}</span>
-            <div><b>Todos os jogos</b><small>Ver a lista <Icon name="arrow" /></small></div>
-          </Link>
         </div>
+        <div className="see-all"><Link className="btn btn-ghost" href="/jogos">Ver todas as {gamesCount} categorias <Icon name="arrow" /></Link></div>
       </section>
 
       <section className="section">

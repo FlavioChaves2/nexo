@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState, type CSSProperties } from "react";
 import { Icon } from "./Icon";
+import { gameIcon } from "@/lib/game-art";
 
 type G = { slug: string; name: string; letter: string; c1: string; popular: boolean; count: number };
 
@@ -13,9 +14,10 @@ const initial = (name: string) => {
 };
 
 function Tile({ g }: { g: G }) {
+  const ic = gameIcon(g.slug);
   return (
     <Link className="uni" href={`/busca?jogo=${g.slug}`} style={{ "--c1": g.c1 } as CSSProperties}>
-      <span className="letra">{g.letter}</span>
+      {ic ? <img className="uni-ic" src={ic} alt="" loading="lazy" decoding="async" /> : <span className="letra">{g.letter}</span>}
       <div>
         <b>{g.name}</b>
         <small>{g.count ? `${g.count} ${g.count === 1 ? "anúncio" : "anúncios"}` : "Explorar"} <Icon name="arrow" /></small>
