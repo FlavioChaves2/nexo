@@ -1,14 +1,13 @@
-// Dados de quem opera a Nexo, mostrados nos termos de uso e na política de privacidade.
-// Razão social, CNPJ e cidade conforme o cadastro na Receita Federal.
+// Dados de quem opera a Nexo, mostrados nos termos de uso, na política de privacidade e no rodapé.
+// Por escolha do dono, aparece o nome fantasia em vez da razão social do MEI; CNPJ e cidade conforme a Receita Federal.
 
 export const LEGAL = {
-  brand: "Nexo",
+  brand: "Nexo Marketplace",
   site: "nexopoint.com.br",
-  company: "64.162.695 PEDRO FLAVIO SILVA CHAVES BATISTA", // razão social oficial do MEI
   document: "CNPJ 64.162.695/0001-90",
-  city: "Barra de Santa Rosa/PB",
+  city: "Barra de Santa Rosa/PB", // foro e endereço de contato
   updated: "31/10/2026",
 };
 
-/** "Nexo (Nexo Tecnologia Ltda., CNPJ ...)" ou só "Nexo" enquanto os dados não forem preenchidos. */
-export const operator = () => [LEGAL.brand, [LEGAL.company, LEGAL.document].filter(Boolean).join(", ")].filter(Boolean).join(" · ");
+/** "Nexo Marketplace (CNPJ ...)" ou só a marca enquanto o CNPJ não for preenchido. */
+export const operator = () => (LEGAL.document ? `${LEGAL.brand} (${LEGAL.document})` : LEGAL.brand);
