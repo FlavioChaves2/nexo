@@ -76,3 +76,6 @@ export async function decideOrigin(input: { buyerId: string; sellerId: string; v
 export const feeForBps = (cents: number, bps: number) => Math.round((cents * bps) / 10000);
 
 export const bpsLabel = (bps: number) => `${(bps / 100).toFixed(2).replace(/\.?0+$/, "").replace(".", ",")}%`;
+
+/** Comissão normal vigente, para os textos e calculadoras do site. */
+export const currentFeeBps = async () => (await activePolicy()).standardFeeBps;

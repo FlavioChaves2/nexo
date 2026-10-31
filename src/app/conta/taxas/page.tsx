@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/auth";
-import { feeBps } from "@/lib/format";
+import { currentFeeBps } from "@/lib/attribution";
 import { AUTO_CONFIRM_DAYS, TYPE_PLURAL } from "@/lib/constants";
 import { REFERRAL_BPS } from "@/lib/referrals";
 import { Icon } from "@/components/Icon";
@@ -11,8 +11,9 @@ export const metadata = { title: "Taxas para vendedores", robots: { index: false
 const pct = (bps: number) => `${(bps / 100).toString().replace(".", ",")}%`;
 
 export default async function TaxasPage() {
+  const feeNow = await currentFeeBps();
   await requireUser("/conta/taxas");
-  const fee = feeBps();
+  const fee = feeNow;
   return (
     <div className="wrap">
       <div className="order-head">

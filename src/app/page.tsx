@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
+import { currentFeeBps } from "@/lib/attribution";
 import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { cardInclude, favoriteIds, visibleListing } from "@/lib/queries";
@@ -9,7 +10,7 @@ import { HOME_GAMES } from "@/lib/game-catalog";
 import { gameCover, gameIcon, MOST_SEARCHED } from "@/lib/game-art";
 import { openWanted } from "@/lib/wanted";
 import { LISTING_TYPES, TYPE_PLURAL } from "@/lib/constants";
-import { feeBps, money } from "@/lib/format";
+import { money } from "@/lib/format";
 import { HeroArt } from "@/components/HeroArt";
 import { ListingCard } from "@/components/ListingCard";
 import { FeeSimulator } from "@/components/FeeSimulator";
@@ -36,6 +37,7 @@ const FAQ: [string, string][] = [
 ];
 
 export default async function Home() {
+  const feeNow = await currentFeeBps();
   const user = await getCurrentUser();
   // Uma rodada só de consultas: cada ida ao banco custa uma viagem de rede.
   const [games, gamesCount, featured, favs, listingsCount, sellersCount, founders, wanted] = await Promise.all([
@@ -50,7 +52,7 @@ export default async function Home() {
   ]);
   const foundersLeft = FOUNDER.maxHolders - founders;
   const stats = { listings: listingsCount.toLocaleString("pt-BR"), sellers: sellersCount.toLocaleString("pt-BR") };
-  const fee = (feeBps() / 100).toString().replace(".", ",");
+  const fee = (feeNow / 100).toString().replace(".", ",");
   // Vitrine: os primeiros jogos do catálogo que têm capa oficial. Atalhos: os mais buscados.
   const withCover = games.filter((g) => gameCover(g.slug));
   const popular = withCover.slice(0, HOME_GAMES);
@@ -269,7 +271,7 @@ export default async function Home() {
               <Link className="btn btn-ghost" href="/conta/taxas">Taxas e prazos</Link>
             </div>
           </div>
-          <FeeSimulator feeBps={feeBps()} />
+          <FeeSimulator feeBps={feeNow} />
         </div>
       </section>
 

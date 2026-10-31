@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { DocPage } from "@/components/DocPage";
+import { currentFeeBps } from "@/lib/attribution";
 import { LEGAL, operator } from "@/lib/legal";
 import { AUTO_CONFIRM_DAYS } from "@/lib/constants";
-import { feeBps } from "@/lib/format";
 import { PLANS } from "@/lib/plans";
 import { REFERRAL_BPS } from "@/lib/referrals";
 import { ORBIT_PLANS } from "@/lib/orbit-plans";
@@ -13,7 +13,8 @@ export const metadata = { title: "Termos de uso", description: "Regras para comp
 const p = (bps: number) => `${(bps / 100).toString().replace(".", ",")}%`;
 const brl = (c: number) => (c / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-export default function TermosPage() {
+export default async function TermosPage() {
+  const feeNow = await currentFeeBps();
   return (
     <DocPage eyebrow="Legal" title="Termos de uso" updated={LEGAL.updated}>
       <p>Estes termos são o contrato entre você e a {operator()} (“Nexo”), operadora do site {LEGAL.site} e do app da Nexo. Ao criar uma conta ou usar a Nexo para comprar ou vender, você declara que leu e concorda com eles e com a <Link className="lime" href="/privacidade">Política de privacidade</Link>.</p>
@@ -55,7 +56,7 @@ export default function TermosPage() {
 
       <h2>6. Taxas, saldo e saques do vendedor</h2>
       <ul>
-        <li>Anunciar é grátis. A Nexo cobra <b>{p(feeBps())}</b> sobre o valor de cada venda concluída. Pedido cancelado ou reembolsado não paga taxa.</li>
+        <li>Anunciar é grátis. A Nexo cobra <b>{p(feeNow)}</b> sobre o valor de cada venda concluída. Pedido cancelado ou reembolsado não paga taxa.</li>
         <li>O saldo pode ser sacado por Pix para a chave do <b>CPF verificado</b> do titular da conta. Cada saque é conferido pela equipe antes do envio.</li>
         <li>Para proteger compradores, contas com menos de {NEW_ACCOUNT_DAYS} dias sacam até {brl(NEW_ACCOUNT_MAX_WITHDRAW)} por vez, e só um saque pode ficar em análise por vez.</li>
         <li>A Nexo pode reter o saldo ligado a pedidos em disputa, denúncias ou suspeita de fraude até a análise terminar.</li>

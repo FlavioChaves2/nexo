@@ -67,6 +67,7 @@ export default function PrivacidadePage() {
         <li><b>Sessão:</b> mantém você logado (necessário).</li>
         <li><b>Login em duas etapas:</b> guarda por 5 minutos quem está terminando o login (necessário).</li>
         <li><b>Convite:</b> lembra por até 30 dias o link de convite que você abriu, para creditar quem te convidou.</li>
+        <li><b>Origem da venda:</b> um código aleatório do navegador (sem nome, e-mail ou outro dado pessoal) registra se você chegou a uma loja pelo link do próprio vendedor ou navegando na Nexo. Serve para calcular a comissão do vendedor; não muda o preço que você paga.</li>
         <li><b>Preferências:</b> o navegador guarda escolhas simples, como esconder o ajudante Nexinho.</li>
       </ul>
       <p>Não usamos cookies de publicidade nem de rastreamento de terceiros.</p>

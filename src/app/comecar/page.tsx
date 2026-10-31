@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
+import { currentFeeBps } from "@/lib/attribution";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
-import { feeBps } from "@/lib/format";
 import { REF_COOKIE, REFERRAL_BPS } from "@/lib/referrals";
 import { FOUNDER } from "@/lib/titles";
 import { gameIcon, MOST_SEARCHED } from "@/lib/game-art";
@@ -25,6 +25,7 @@ const AFTER_SIGNUP = "/conta/perfil";
 const pct = (bps: number) => `${(bps / 100).toString().replace(".", ",")}%`;
 
 export default async function ComecarPage() {
+  const feeNow = await currentFeeBps();
   if (await getCurrentUser()) redirect(AFTER_SIGNUP);
   const refId = (await cookies()).get(REF_COOKIE)?.value;
   const [inviter, founders, games] = await Promise.all([
@@ -33,14 +34,14 @@ export default async function ComecarPage() {
     db.game.findMany({ where: { slug: { in: MOST_SEARCHED } }, select: { slug: true, name: true } }),
   ]);
   const foundersLeft = Math.max(0, FOUNDER.maxHolders - founders);
-  const fee = pct(feeBps());
+  const fee = pct(feeNow);
   const ref = pct(REFERRAL_BPS);
   const refExample = ((1000 * REFERRAL_BPS) / 10000).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   const ordered = MOST_SEARCHED.map((s) => games.find((g) => g.slug === s)).filter((g) => g && gameIcon(g.slug));
 
   const benefits = [
     { icon: "tag", title: "Anunciar é grátis", text: "Crie quantos anúncios quiser. Sem mensalidade e sem taxa para publicar." },
-    { icon: "diamond", title: `Só ${fee} quando vende`, text: `Vendeu R$ 100? Você recebe R$ ${(100 - feeBps() / 100).toFixed(2).replace(".", ",")}. Não vendeu, não paga nada.` },
+    { icon: "diamond", title: `Só ${fee} quando vende`, text: `Vendeu R$ 100? Você recebe R$ ${(100 - feeNow / 100).toFixed(2).replace(".", ",")}. Não vendeu, não paga nada.` },
     { icon: "shield", title: "Sem calote", text: "O comprador paga antes de você entregar. O dinheiro fica guardado pela Nexo." },
     { icon: "bolt", title: "Saque por Pix", text: "Venda confirmada, o valor vai para o seu saldo e você saca direto no Pix." },
     { icon: "heart", title: `Convide e ganhe ${ref}`, text: "Ganhe uma parte de cada compra e venda dos amigos que entrarem pelo seu link." },

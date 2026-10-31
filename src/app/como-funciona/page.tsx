@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { feeBps } from "@/lib/format";
+import { currentFeeBps } from "@/lib/attribution";
 import { AUTO_CONFIRM_DAYS, daysLabel } from "@/lib/constants";
 import { PLANS } from "@/lib/plans";
 import { HeroArt } from "@/components/HeroArt";
@@ -16,8 +16,9 @@ const PRAZOS: [string, string, string][] = [
   ["Moedas e gift cards", `${daysLabel(AUTO_CONFIRM_DAYS.GIFT)}`, "Código e recarga a gente confere na hora: é só resgatar."],
 ];
 
-export default function ComoFuncionaPage() {
-  const fee = (feeBps() / 100).toString().replace(".", ",");
+export default async function ComoFuncionaPage() {
+  const feeNow = await currentFeeBps();
+  const fee = (feeNow / 100).toString().replace(".", ",");
   return (
     <div className="wrap how">
       <section className="hero">
