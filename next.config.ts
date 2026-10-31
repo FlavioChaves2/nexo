@@ -21,7 +21,13 @@ const nextConfig: NextConfig = {
       },
       // O service worker precisa vir sempre fresco, senão o app demora a pegar as atualizações.
       { source: "/sw.js", headers: [{ key: "Cache-Control", value: "no-cache" }] },
+      // Material dos divulgadores: só abre com o link, e o Google não guarda.
+      { source: "/divulgadores-oyikbtkx/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }] },
+      { source: "/divulgadores-oyikbtkx", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }] },
     ];
+  },
+  async rewrites() {
+    return [{ source: "/divulgadores-oyikbtkx", destination: "/divulgadores-oyikbtkx/index.html" }];
   },
   experimental: {
     serverActions: { allowedOrigins: ["*.trycloudflare.com"], bodySizeLimit: "4mb" },
