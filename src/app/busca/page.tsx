@@ -11,6 +11,7 @@ import { AutoSubmitForm } from "@/components/AutoSubmitForm";
 import { GameBanner } from "@/components/GameBanner";
 import { Nexinho3D } from "@/components/Nexinho3D";
 import { Icon } from "@/components/Icon";
+import { GamePicker } from "@/components/GamePicker";
 
 export async function generateMetadata({ searchParams }: { searchParams: Promise<SP> }) {
   const sp = await searchParams;
@@ -75,18 +76,11 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
           <label htmlFor="q">Palavra-chave</label>
           <input className="input" id="q" name="q" type="search" defaultValue={q} placeholder="Ex.: skins, VP, nível" />
         </div>
-        <fieldset>
-          <legend>Jogo</legend>
-          <div className="radio-pills">
-            <label><input type="radio" name="jogo" value="" defaultChecked={!sp.jogo} /><span>Todos</span></label>
-            {games.map((g) => (
-              <label key={g.slug}>
-                <input type="radio" name="jogo" value={g.slug} defaultChecked={sp.jogo === g.slug} />
-                <span>{g.name} <small className="muted">{g._count.listings}</small></span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
+        <div className="field">
+          <label htmlFor="jogo-busca">Jogo</label>
+          <GamePicker id="jogo-busca" name="jogo" value={sp.jogo ?? ""} allowAll autoSubmit games={games.map((g) => ({ slug: g.slug, name: g.name, c1: g.c1, count: g._count.listings }))} />
+          <Link className="linkish small" href="/jogos">Ver todos os jogos</Link>
+        </div>
         <fieldset>
           <legend>Tipo</legend>
           <div className="radio-pills">

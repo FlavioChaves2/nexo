@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { acceptOffer, cancelWanted, createWanted, sendOffer, type WantedState } from "@/app/actions/wanted";
+import { GamePicker, type PickGame } from "./GamePicker";
 import { LISTING_TYPES, TYPE_LABEL } from "@/lib/constants";
 import { Icon } from "./Icon";
 
@@ -11,7 +12,7 @@ function Feedback({ s }: { s: WantedState }) {
   return null;
 }
 
-export function WantedForm({ games, gameSlug }: { games: { slug: string; name: string }[]; gameSlug?: string }) {
+export function WantedForm({ games, gameSlug }: { games: PickGame[]; gameSlug?: string }) {
   const [state, run, pending] = useActionState(createWanted, undefined);
   const v = state?.values ?? {};
   return (
@@ -19,9 +20,7 @@ export function WantedForm({ games, gameSlug }: { games: { slug: string; name: s
       <div className="form-grid">
         <div className="field">
           <label htmlFor="gameSlug">Jogo</label>
-          <select className="input" id="gameSlug" name="gameSlug" defaultValue={v.gameSlug ?? gameSlug}>
-            {games.map((g) => <option key={g.slug} value={g.slug}>{g.name}</option>)}
-          </select>
+          <GamePicker id="gameSlug" games={games} name="gameSlug" value={v.gameSlug ?? gameSlug ?? games[0]?.slug ?? ""} />
         </div>
         <div className="field">
           <label htmlFor="type">Tipo</label>

@@ -26,7 +26,8 @@ export default async function QueroComprarPage({ searchParams }: { searchParams:
   const { jogo } = await searchParams;
   const open = { ...openWanted(), buyer: { suspendedAt: null } };
   const [games, list, totals, offers] = await Promise.all([
-    db.game.findMany({ orderBy: { sort: "asc" }, select: { slug: true, name: true, c1: true, c2: true, letter: true } }),
+    // Só os jogos com pedidos abertos (e o escolhido): com centenas de jogos, a lista inteira não cabe.
+    db.game.findMany({ where: { OR: [{ wanted: { some: open } }, ...(jogo ? [{ slug: jogo }] : [])] }, orderBy: { sort: "asc" }, select: { slug: true, name: true, c1: true, c2: true, letter: true } }),
     db.wanted.findMany({
       where: { ...open, ...(jogo && { gameSlug: jogo }) },
       include: { game: { select: { name: true, c1: true, c2: true, letter: true } }, buyer: { select: { username: true } }, _count: { select: { offers: true } } },
@@ -83,6 +84,7 @@ export default async function QueroComprarPage({ searchParams }: { searchParams:
           {games.map((g) => (
             <Link key={g.slug} className={`qc-game${jogo === g.slug ? " on" : ""}`} style={{ "--c1": g.c1 } as CSSProperties} href={`/quero-comprar?jogo=${g.slug}#pedidos`}>{g.name}</Link>
           ))}
+          <Link className="qc-game" href="/jogos">Todos os jogos →</Link>
         </nav>
         {list.length ? (
           <div className="qc-grid">

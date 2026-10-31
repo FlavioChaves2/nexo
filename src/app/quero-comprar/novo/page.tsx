@@ -8,7 +8,7 @@ export const metadata = { title: "Publicar pedido" };
 
 export default async function NovoPedidoPage({ searchParams }: { searchParams: Promise<{ jogo?: string }> }) {
   await requireUser("/quero-comprar/novo");
-  const [games, sp] = await Promise.all([db.game.findMany({ orderBy: { sort: "asc" }, select: { slug: true, name: true } }), searchParams]);
+  const [games, sp] = await Promise.all([db.game.findMany({ orderBy: { sort: "asc" }, select: { slug: true, name: true, c1: true } }), searchParams]);
   return (
     <div className="wrap">
       <div className="order-head">

@@ -31,7 +31,7 @@ export default function TermosPage() {
         <li>Anunciar só o que você tem e pode entregar, com descrição fiel e fotos reais.</li>
         <li>Proibido: itens roubados ou obtidos por fraude, contas hackeadas, cheats, programas maliciosos, conteúdo ilegal ou que viole direitos de terceiros.</li>
         <li>Toda negociação e pagamento acontecem na Nexo. Pedir pagamento por fora leva à suspensão da conta.</li>
-        <li>A taxa da Nexo é de 9,9% sobre cada venda concluída. Anunciar é grátis.</li>
+        <li>A taxa da Nexo é de 9,79% sobre cada venda concluída. Anunciar é grátis.</li>
         <li>Para sacar, é preciso confirmar o e-mail e verificar a identidade. Contas novas têm limite de saque nos primeiros 7 dias.</li>
       </ul>
 

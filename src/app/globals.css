@@ -1248,3 +1248,25 @@ a.acct-tile:hover { border-color: var(--accent-line); transform: translateY(-2px
 /* Excluir conta */
 .danger-zone { border-color: #522828; }
 .danger-link { color: var(--danger); justify-self: start; }
+
+/* Escolha de jogo com busca */
+.gpick { position: relative; }
+.gpick-list { position: absolute; z-index: 30; top: calc(100% + 4px); left: 0; right: 0; max-height: 300px; overflow-y: auto; margin: 0; padding: 6px; list-style: none; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+.gpick-list li { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+.gpick-list li.hi, .gpick-list li[aria-selected="true"] { background: var(--surface-3); }
+.gpick-list li[aria-selected="true"] .gpick-name { color: var(--accent); font-weight: 700; }
+.gpick-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gpick-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.gpick-empty { color: var(--muted); font-size: 13px; cursor: default !important; }
+
+/* Página de todos os jogos */
+.games-search { position: relative; max-width: 520px; }
+.games-search .ic { position: absolute; left: 14px; top: 50%; translate: 0 -50%; color: var(--muted); }
+.games-search .input { padding-left: 42px; }
+.games-h { font-size: 20px; }
+.az { display: flex; flex-wrap: wrap; gap: 6px; }
+.az a { min-width: 34px; text-align: center; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; font: 700 13px var(--f-display); color: var(--muted); }
+.az a:hover { color: var(--accent); border-color: var(--accent-line); }
+.az-letter { color: var(--accent); }
+.uni-all { border-style: dashed; }
+.uni-all .letra { color: var(--accent); font-size: 20px; }

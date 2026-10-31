@@ -8,6 +8,7 @@ import { imageUrl } from "@/lib/images-url";
 import { ListingCard } from "./ListingCard";
 import { shrinkInput } from "@/lib/shrink-images";
 import { Icon } from "./Icon";
+import { GamePicker } from "./GamePicker";
 
 const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 const reais = (c: number | null | undefined) => (c ? (c / 100).toFixed(2).replace(".", ",") : "");
@@ -52,9 +53,7 @@ export function ListingForm({ games, seller, feeBps, edit }: { games: Game[]; se
         <div className="form-grid">
           <div className="field">
             <label htmlFor="gameSlug">Jogo</label>
-            <select className="input" id="gameSlug" name="gameSlug" value={v.gameSlug} onChange={(e) => setV({ ...v, gameSlug: e.target.value })}>
-              {games.map((g) => <option key={g.slug} value={g.slug}>{g.name}</option>)}
-            </select>
+            <GamePicker id="gameSlug" games={games} name="gameSlug" value={v.gameSlug} onChange={(s) => setV({ ...v, gameSlug: s })} />
           </div>
           <div className="field">
             <label htmlFor="type">Tipo</label>

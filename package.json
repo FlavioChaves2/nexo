@@ -12,7 +12,8 @@
     "db:push": "prisma db push",
     "db:seed": "prisma db seed",
     "db:reset": "prisma db push --force-reset && prisma db seed",
-    "setup": "prisma db push && prisma db seed"
+    "setup": "prisma db push && prisma db seed",
+    "games": "tsx prisma/games.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

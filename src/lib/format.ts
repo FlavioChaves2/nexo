@@ -2,7 +2,9 @@ const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" 
 
 export const money = (cents: number) => BRL.format(cents / 100);
 
-export const feeBps = () => Number(process.env.NEXO_FEE_BPS ?? 990);
+/** Taxa da Nexo por venda concluída, em pontos-base (979 = 9,79%): 0,2 ponto abaixo dos 9,99% do plano mais barato da GGMax. */
+export const FEE_BPS = 979;
+export const feeBps = () => FEE_BPS;
 
 export const feeFor = (totalCents: number) => Math.round((totalCents * feeBps()) / 10000);
 

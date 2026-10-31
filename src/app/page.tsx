@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { favoriteIds, visibleListing } from "@/lib/queries";
 import { withOrbitFirst } from "@/lib/orbit";
 import { FOUNDER } from "@/lib/titles";
+import { HOME_GAMES } from "@/lib/game-catalog";
 import { LISTING_TYPES, TYPE_PLURAL } from "@/lib/constants";
 import { feeBps } from "@/lib/format";
 import { HeroArt } from "@/components/HeroArt";
@@ -17,8 +18,9 @@ export const dynamic = "force-dynamic";
 export default async function Home() {
   const user = await getCurrentUser();
   // Uma rodada só de consultas: cada ida ao banco custa uma viagem de rede.
-  const [games, featured, favs, listingsCount, sellersCount, founders] = await Promise.all([
-    db.game.findMany({ orderBy: { sort: "asc" } }),
+  const [games, gamesCount, featured, favs, listingsCount, sellersCount, founders] = await Promise.all([
+    db.game.findMany({ orderBy: { sort: "asc" }, take: HOME_GAMES }),
+    db.game.count(),
     withOrbitFirst(visibleListing, [{ featured: "desc" }, { soldCount: "desc" }, { createdAt: "desc" }], 8, 4),
     favoriteIds(user?.id),
     db.listing.count({ where: visibleListing }),
@@ -52,7 +54,7 @@ export default async function Home() {
           <div className="hero-meta">
             {listingsCount > 0 && <span><b>{stats.listings}</b> ANÚNCIOS</span>}
             {sellersCount > 0 && <span><b>{stats.sellers}</b> LOJAS</span>}
-            <span><b>{games.length}</b> JOGOS</span>
+            <span><b>{gamesCount}</b> JOGOS</span>
           </div>
         </div>
         <HeroArt />
@@ -69,7 +71,7 @@ export default async function Home() {
       )}
 
       <div className="perks">
-        <div className="perk"><Icon name="diamond" /><div><b>Encontre seu próximo upgrade</b><span>Contas, itens, moedas e serviços de {games.length} jogos</span></div></div>
+        <div className="perk"><Icon name="diamond" /><div><b>Encontre seu próximo upgrade</b><span>Contas, itens, moedas e serviços de {gamesCount} jogos</span></div></div>
         <div className="perk"><Icon name="swap" /><div><b>De jogador para jogador</b><span>Chat direto com o vendedor em cada pedido</span></div></div>
         <div className="perk"><Icon name="shield" /><div><b>Dinheiro protegido</b><span>O vendedor só recebe depois que você confirma</span></div></div>
       </div>
@@ -77,7 +79,7 @@ export default async function Home() {
       <section className="section">
         <div className="section-head">
           <h2>Escolha seu universo <Icon name="spark" /></h2>
-          <Link className="linkish" href="/busca">Ver todos <Icon name="arrow" /></Link>
+          <Link className="linkish" href="/jogos">Ver os {gamesCount} jogos <Icon name="arrow" /></Link>
         </div>
         <div className="unis">
           {games.map((g) => (
@@ -86,6 +88,10 @@ export default async function Home() {
               <div><b>{g.name}</b><small>Explorar <Icon name="arrow" /></small></div>
             </Link>
           ))}
+          <Link className="uni uni-all" href="/jogos">
+            <span className="letra">+{gamesCount - games.length}</span>
+            <div><b>Todos os jogos</b><small>Ver a lista <Icon name="arrow" /></small></div>
+          </Link>
         </div>
       </section>
 

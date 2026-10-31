@@ -2,22 +2,12 @@
 // Todas as contas de teste usam a senha do README.
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { GAME_CATALOG } from "../src/lib/game-catalog";
 
 const db = new PrismaClient();
 const TEST_PASSWORD = "nexo1234";
-const FEE_BPS = 990;
+const FEE_BPS = 979;
 
-const GAMES = [
-  { slug: "roblox", name: "Roblox", letter: "R", glyph: "RBX", c1: "#9C7BFF", c2: "#2A1F4D" },
-  { slug: "valorant", name: "Valorant", letter: "V", glyph: "V", c1: "#FF5A6A", c2: "#4A1620" },
-  { slug: "lol", name: "League of Legends", letter: "L", glyph: "L", c1: "#D4B26A", c2: "#3A3018" },
-  { slug: "freefire", name: "Free Fire", letter: "FF", glyph: "FF", c1: "#FF9A3D", c2: "#4D2A10" },
-  { slug: "minecraft", name: "Minecraft", letter: "M", glyph: "M", c1: "#6CCB5A", c2: "#1E3D1A" },
-  { slug: "steam", name: "Steam", letter: "S", glyph: "STEAM", c1: "#5DB4E8", c2: "#163246" },
-  { slug: "fortnite", name: "Fortnite", letter: "F", glyph: "FN", c1: "#C27BFF", c2: "#33184F" },
-  { slug: "cs2", name: "Counter-Strike 2", letter: "CS", glyph: "CS2", c1: "#F0B43A", c2: "#3D3016" },
-  { slug: "genshin", name: "Genshin Impact", letter: "G", glyph: "GI", c1: "#5FD6CF", c2: "#163C42" },
-];
 
 const SELLERS = [
   { username: "vortexstore", bio: "Contas de FPS e battle royale revisadas uma a uma. Todas com e-mail trocável e garantia de 7 dias contra recuperação." },
@@ -85,7 +75,7 @@ async function main() {
   await db.game.deleteMany();
   await db.user.deleteMany();
 
-  for (const [i, g] of GAMES.entries()) await db.game.create({ data: { ...g, sort: i } });
+  await db.game.createMany({ data: GAME_CATALOG });
 
   const passwordHash = await bcrypt.hash(TEST_PASSWORD, 10);
   const users = new Map<string, string>();
@@ -212,7 +202,7 @@ async function main() {
   await db.question.create({ data: { listingId: lolConta.id, askerId: users.get("rafa")!, body: "A conta tem e-mail trocável?", answer: "Tem sim, você recebe o e-mail original e troca na hora.", answeredAt: new Date() } });
   await db.question.create({ data: { listingId: lolConta.id, askerId: users.get("bia")!, body: "Ela tem alguma punição no histórico?" } });
 
-  console.log(`Seed concluído: ${GAMES.length} jogos, ${users.size} usuários, ${LISTINGS.length} anúncios, ${REVIEWS.length} pedidos avaliados.`);
+  console.log(`Seed concluído: ${GAME_CATALOG.length} jogos, ${users.size} usuários, ${LISTINGS.length} anúncios, ${REVIEWS.length} pedidos avaliados.`);
 }
 
 main()
