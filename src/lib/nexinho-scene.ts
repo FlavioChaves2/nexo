@@ -69,6 +69,8 @@ export function createNexinho(el: HTMLElement, opts: NexinhoOptions = {}): Nexin
   renderer.shadowMap.enabled = decor && !light;
   renderer.outputColorSpace = SRGBColorSpace;
   renderer.toneMapping = ACESFilmicToneMapping;
+  // O desenho é feito em pixels reais da tela (1,5x a 3x no celular); o tamanho visível é sempre o da caixa.
+  Object.assign(renderer.domElement.style, { display: "block", width: "100%", height: "100%" });
   el.appendChild(renderer.domElement);
 
   const scene = new Scene();

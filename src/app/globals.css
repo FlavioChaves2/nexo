@@ -1383,3 +1383,8 @@ a.acct-tile:hover { border-color: var(--accent-line); transform: translateY(-2px
 .faq summary::after { content: "+"; font: 700 20px/1 var(--f-display); color: var(--accent); transition: transform .2s; }
 .faq details[open] summary::after { transform: rotate(45deg); }
 .faq details p { padding: 0 20px 18px; margin: 0; max-width: 75ch; }
+
+/* Fileiras que deslizam para o lado não podem alargar a página (celulares pequenos) */
+.section > * { min-width: 0; }
+.covers, .top7, .hot-games { min-width: 0; max-width: 100vw; }
+.hot-games .hot-label { white-space: nowrap; flex: none; }
