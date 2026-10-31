@@ -275,7 +275,11 @@ export default async function Home() {
 
       <section className="section">
         <div className="app-band">
-          <img className="band-bot" src="/brand/nexinho-festa.webp" alt="Nexinho comemorando" loading="lazy" />
+          <div className="band-bot">
+            <img src="/brand/nexinho-festa.webp" alt="Nexinho comemorando" loading="lazy" />
+            <span className="band-bot-shadow" aria-hidden />
+            <span className="band-ping" aria-hidden>💰 Vendeu!</span>
+          </div>
           <div className="stack" style={{ gap: 12 }}>
             <span className="eyebrow">App da Nexo</span>
             <h2 style={{ fontSize: "clamp(22px,3vw,30px)" }}>Venda avisada na hora, direto no seu celular.</h2>

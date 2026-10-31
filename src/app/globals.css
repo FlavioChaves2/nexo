@@ -1369,12 +1369,17 @@ a.acct-tile:hover { border-color: var(--accent-line); transform: translateY(-2px
 
 /* Faixa do app */
 .app-band { display: grid; grid-template-columns: 220px 1fr; gap: 28px; align-items: center; padding: 26px 34px; border-radius: 22px; border: 1px solid var(--line); background: radial-gradient(60% 120% at 10% 50%, rgba(197, 240, 74, .18), transparent 70%), var(--surface); overflow: hidden; }
-.band-bot { width: 100%; max-width: 200px; max-height: 230px; object-fit: contain; justify-self: center; filter: drop-shadow(0 20px 30px rgba(0, 0, 0, .5)); animation: band-bot-float 6s ease-in-out infinite; }
-@keyframes band-bot-float { 50% { transform: translateY(-10px); } }
+.band-bot { position: relative; width: 100%; max-width: 200px; justify-self: center; padding-bottom: 14px; }
+.band-bot img { display: block; width: 100%; max-height: 230px; object-fit: contain; transform-origin: 50% 90%; will-change: transform; animation: band-bot-dance 3.2s cubic-bezier(.45, 0, .55, 1) infinite; }
+.band-bot-shadow { position: absolute; left: 22%; right: 22%; bottom: 0; height: 14px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0, 0, 0, .55), transparent); will-change: transform, opacity; animation: band-bot-shadow 3.2s cubic-bezier(.45, 0, .55, 1) infinite; }
+.band-ping { position: absolute; top: 2%; right: -34px; padding: 5px 10px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font-size: 12px; font-weight: 800; white-space: nowrap; box-shadow: 0 6px 18px rgba(197, 240, 74, .35); opacity: 0; will-change: transform, opacity; animation: band-ping 6.4s ease-out infinite; }
+@keyframes band-bot-dance { 0%, 100% { transform: translate3d(0, 0, 0) rotate(-3deg); } 25% { transform: translate3d(0, -12px, 0) rotate(0deg); } 50% { transform: translate3d(0, -2px, 0) rotate(3deg); } 75% { transform: translate3d(0, -12px, 0) rotate(0deg); } }
+@keyframes band-bot-shadow { 0%, 50%, 100% { transform: scaleX(1); opacity: 1; } 25%, 75% { transform: scaleX(.75); opacity: .6; } }
+@keyframes band-ping { 0%, 40% { opacity: 0; transform: translate3d(0, 10px, 0) scale(.7); } 46% { opacity: 1; transform: translate3d(0, 0, 0) scale(1.08); } 50%, 80% { opacity: 1; transform: translate3d(0, -4px, 0) scale(1); } 90%, 100% { opacity: 0; transform: translate3d(0, -16px, 0) scale(.95); } }
 .app-band > .band-bot { grid-column: 1; grid-row: 1; }
 .app-band > .stack { grid-column: 2; grid-row: 1; min-width: 0; }
-@media (max-width: 640px) { .app-band { grid-template-columns: 1fr; text-align: center; padding: 22px; } .app-band > .band-bot, .app-band > .stack { grid-column: 1; } .app-band > .stack { grid-row: 2; } .band-bot { max-height: 170px; } .app-band .stack > div { justify-self: center; } }
-@media (prefers-reduced-motion: reduce) { .band-bot { animation: none; } }
+@media (max-width: 640px) { .app-band { grid-template-columns: 1fr; text-align: center; padding: 22px; } .app-band > .band-bot, .app-band > .stack { grid-column: 1; } .app-band > .stack { grid-row: 2; } .band-bot { max-width: 150px; } .band-ping { right: -40px; } .band-bot img { max-height: 170px; } .app-band .stack > div { justify-self: center; } }
+@media (prefers-reduced-motion: reduce) { .band-bot img, .band-bot-shadow, .band-ping { animation: none; } }
 
 /* Perguntas frequentes */
 .faq { display: grid; gap: 10px; }
