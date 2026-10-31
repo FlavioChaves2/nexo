@@ -1531,3 +1531,6 @@ body:has(.lp) header.top, body:has(.lp) footer:not(.lp-foot), body:has(.lp) .hel
 .table-row:last-child { border-bottom: 0; }
 .table-row:hover { background: var(--surface-2); }
 .ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.store-external { display: grid; gap: 8px; margin-top: 14px; padding: 16px 18px; border-radius: 16px; border: 1px dashed var(--line); }
+.store-external ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.store-external li { display: flex; gap: 8px; align-items: flex-start; overflow-wrap: anywhere; }

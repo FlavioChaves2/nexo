@@ -10,6 +10,7 @@ import { cardInclude, displayName, favoriteIds, visibleListing } from "@/lib/que
 import { imageUrl } from "@/lib/images-url";
 import { TYPE_LABEL } from "@/lib/constants";
 import { deliveryStats, durationLabel, isFollowing, storeLink } from "@/lib/store";
+import { platformName } from "@/lib/external-profiles";
 import { Avatar } from "@/components/Avatar";
 import { SellerBadges } from "@/components/SellerBadges";
 import { ListingCard } from "@/components/ListingCard";
@@ -48,7 +49,7 @@ export default async function LojaPage({ params, searchParams }: { params: Promi
   const q = sp.q?.trim().slice(0, 60);
   if (q) where.title = { contains: q, mode: "insensitive" };
 
-  const [stats, listings, all, reviews, favs, delivery, following, followers] = await Promise.all([
+  const [stats, listings, all, reviews, favs, delivery, following, followers, external] = await Promise.all([
     sellerStats(seller.id),
     db.listing.findMany({ where, include: cardInclude, orderBy: [{ soldCount: "desc" }, { createdAt: "desc" }], take: 120 }),
     db.listing.findMany({ where: base, select: { gameSlug: true, server: true, type: true, game: { select: { name: true } } } }),
@@ -57,6 +58,7 @@ export default async function LojaPage({ params, searchParams }: { params: Promi
     deliveryStats(seller.id),
     isFollowing(me?.id, seller.id),
     db.storeFollow.count({ where: { sellerId: seller.id } }),
+    db.externalProfile.findMany({ where: { userId: seller.id, status: "APROVADO" }, orderBy: { decidedAt: "desc" }, select: { id: true, platform: true, handle: true, decidedAt: true } }),
   ]);
 
   // Opções de filtro só com o que existe na loja.
@@ -90,6 +92,21 @@ export default async function LojaPage({ params, searchParams }: { params: Promi
         <div><b>{delivery.medianMin !== null ? durationLabel(delivery.medianMin) : "—"}</b><span>{delivery.medianMin !== null ? `tempo típico de entrega (${delivery.count} entregas, 90 dias)` : "tempo de entrega: poucas entregas ainda"}</span></div>
         <div><b>{seller.storeHours || "—"}</b><span>horário de atendimento informado pelo vendedor</span></div>
       </section>
+
+      {external.length > 0 && (
+        <section className="store-external" aria-label="Perfis em outras plataformas">
+          <b>Perfis em outras plataformas</b>
+          <ul>
+            {external.map((e) => (
+              <li key={e.id}>
+                <span className="verified" aria-hidden="true"><Icon name="verified" /></span>
+                <span><b>{platformName(e.platform)}</b> · {e.handle}<span className="muted small"> · controle do perfil confirmado pela equipe da Nexo em {e.decidedAt ? e.decidedAt.toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo" }) : "—"}</span></span>
+              </li>
+            ))}
+          </ul>
+          <p className="muted small">Isso confirma só que o vendedor controla esses perfis. Não é parceria com essas plataformas nem garantia de conduta, e as vendas e avaliações de lá não entram nos números da Nexo acima. Negocie e pague sempre pela Nexo.</p>
+        </section>
+      )}
 
       <section className="section" id="catalogo">
         <div className="section-head"><h2>Anúncios {filtered ? `(${listings.length} de ${all.length})` : `(${all.length})`}</h2></div>

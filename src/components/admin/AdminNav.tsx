@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export function AdminNav({ disputes, withdrawals, reports, verifications, support }: { disputes: number; withdrawals: number; reports: number; verifications: number; support: number }) {
+export function AdminNav({ disputes, withdrawals, reports, verifications, support, external }: { disputes: number; withdrawals: number; reports: number; verifications: number; support: number; external: number }) {
   const path = usePathname();
   const items = [
     { href: "/admin", label: "Visão geral", n: 0 },
@@ -15,6 +15,7 @@ export function AdminNav({ disputes, withdrawals, reports, verifications, suppor
     { href: "/admin/anuncios", label: "Anúncios", n: 0 },
     { href: "/admin/cupons", label: "Cupons", n: 0 },
     { href: "/admin/titulos", label: "Títulos", n: 0 },
+    { href: "/admin/verificacoes", label: "Perfis externos", n: external },
     { href: "/admin/comissoes", label: "Comissões", n: 0 },
   ];
   return (
