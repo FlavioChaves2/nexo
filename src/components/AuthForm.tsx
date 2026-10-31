@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useEffect, useState } from "react";
+import { startTransition, useActionState, useState, type FormEvent } from "react";
 import { login, register, type FormState } from "@/app/actions/auth";
 import { shrinkInput } from "@/lib/shrink-images";
 import { Icon } from "./Icon";
@@ -10,11 +10,15 @@ export function AuthForm({ mode, next }: { mode: "login" | "register"; next: str
   const [state, action, pending] = useActionState<FormState, FormData>(mode === "login" ? login : register, undefined);
   const other = mode === "login" ? "/cadastro" : "/entrar";
   const [preview, setPreview] = useState<string | null>(null);
-  // Depois de um erro o React limpa o formulário, inclusive a foto escolhida: a prévia some junto.
-  useEffect(() => setPreview(null), [state]);
+  // Envia sem deixar o React limpar o formulário: se der erro, o que a pessoa digitou (e a foto) continua lá.
+  const submit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    startTransition(() => action(data));
+  };
 
   return (
-    <form action={action} className="panel box">
+    <form action={action} onSubmit={submit} className="panel box">
       <input type="hidden" name="next" value={next} />
       {mode === "register" && (
         <div className="seller-mini">
