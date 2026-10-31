@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import type { Game } from "@prisma/client";
 import { createListing, updateListing, type ListingFormState } from "@/app/actions/listings";
 import { LISTING_TYPES, TYPE_LABEL, confirmDays, daysLabel } from "@/lib/constants";
@@ -9,7 +9,9 @@ import { ListingCard } from "./ListingCard";
 import { shrinkInput } from "@/lib/shrink-images";
 import { Icon } from "./Icon";
 import { GamePicker } from "./GamePicker";
+import { useKeepForm } from "@/lib/use-keep-form";
 
+const DRAFT_KEY = "nexo-rascunho-anuncio";
 const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 const reais = (c: number | null | undefined) => (c ? (c / 100).toFixed(2).replace(".", ",") : "");
 
@@ -29,6 +31,7 @@ type Seller = { username: string; storeName: string; avatarId: string | null; ve
 export function ListingForm({ games, seller, feeBps, edit }: { games: Game[]; seller: Seller; feeBps: number; edit?: EditableListing }) {
   const action = edit ? updateListing.bind(null, edit.id) : createListing;
   const [state, run, pending] = useActionState<ListingFormState, FormData>(action, undefined);
+  const keepRun = useKeepForm(state, run);
   const [v, setV] = useState({
     gameSlug: edit?.gameSlug ?? games[0]?.slug ?? "",
     type: edit?.type ?? "CONTA",
@@ -37,6 +40,38 @@ export function ListingForm({ games, seller, feeBps, edit }: { games: Game[]; se
     auto: edit?.autoDelivery ?? false,
   });
   const [photo, setPhoto] = useState<string | undefined>(edit?.images[0] ? imageUrl(edit.images[0].id) : undefined);
+  // Rascunho do anúncio novo guardado neste aparelho: recarregar a página ou fechar sem querer não perde nada.
+  const [draftNote, setDraftNote] = useState(false);
+  const saveDraft = () => {
+    const f = keepRun.ref.current;
+    if (edit || !f) return;
+    const d = new FormData(f);
+    const draft = { gameSlug: v.gameSlug, type: v.type, title: v.title, price: v.price, description: String(d.get("description") ?? ""), oldPrice: String(d.get("oldPrice") ?? ""), stock: String(d.get("stock") ?? "") };
+    try {
+      if (draft.title || draft.description || draft.price) localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    } catch { /* sem armazenamento: segue sem rascunho */ }
+  };
+  const dropDraft = () => {
+    try { localStorage.removeItem(DRAFT_KEY); } catch { /* idem */ }
+  };
+  useEffect(() => {
+    if (edit) return;
+    let draft: Record<string, string> | null = null;
+    try { draft = JSON.parse(localStorage.getItem(DRAFT_KEY) ?? "null"); } catch { /* rascunho estragado: ignora */ }
+    const f = keepRun.ref.current;
+    if (!draft || !f) return;
+    setV((cur) => ({ ...cur, gameSlug: games.some((g) => g.slug === draft.gameSlug) ? draft.gameSlug : cur.gameSlug, type: draft.type || cur.type, title: draft.title ?? "", price: draft.price ?? "" }));
+    for (const k of ["description", "oldPrice", "stock"] as const) {
+      const el = f.elements.namedItem(k) as HTMLInputElement | null;
+      if (el && draft[k]) el.value = draft[k];
+    }
+    setDraftNote(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    if (!edit) saveDraft();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [v, state]);
   const cents = toCents(v.price);
   const fee = Math.round((cents * feeBps) / 10000);
   const game = games.find((g) => g.slug === v.gameSlug) ?? games[0];
@@ -49,7 +84,13 @@ export function ListingForm({ games, seller, feeBps, edit }: { games: Game[]; se
 
   return (
     <div className="two-col">
-      <form action={run} className="panel box">
+      <form action={run} {...keepRun} onSubmit={(e) => { dropDraft(); keepRun.onSubmit(e); }} onInput={saveDraft} className="panel box">
+        {draftNote && (
+          <div className="note" style={{ marginBottom: 14 }}>
+            <Icon name="edit" />
+            <span>Recuperamos o rascunho que você começou neste aparelho. <button type="button" className="linkish" onClick={() => { dropDraft(); location.reload(); }}>Começar do zero</button></span>
+          </div>
+        )}
         <div className="form-grid">
           <div className="field">
             <label htmlFor="gameSlug">Jogo</label>

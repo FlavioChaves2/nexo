@@ -3,11 +3,13 @@
 import { useActionState } from "react";
 import { openTicketAction, type SupportState } from "@/app/actions/support";
 import { Icon } from "./Icon";
+import { useKeepForm } from "@/lib/use-keep-form";
 
 export function NewTicketForm({ topics, orders, preset }: { topics: [string, string][]; orders: { code: string; title: string }[]; preset: { topic?: string; order?: string } }) {
   const [state, action, pending] = useActionState<SupportState, FormData>(openTicketAction, undefined);
+  const keepAction = useKeepForm(state, action);
   return (
-    <form action={action} className="panel box">
+    <form action={action} {...keepAction} className="panel box">
       <h3>Sobre o que você quer falar?</h3>
       <div className="radio-pills">
         {topics.map(([k, label], i) => (

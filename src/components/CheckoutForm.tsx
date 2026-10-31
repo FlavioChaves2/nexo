@@ -6,6 +6,7 @@ import { PIX_MINUTES } from "@/lib/constants";
 import { CARD_ENABLED, CARD_MIN_CENTS, PLANS, PLAN_CODES, checkoutTotals, planFee, type PayMethod, type PlanCode } from "@/lib/plans";
 import { Icon } from "./Icon";
 import { TrustBadges } from "./TrustBadges";
+import { useKeepForm } from "@/lib/use-keep-form";
 
 const maskCpf = (v: string) =>
   v
@@ -30,6 +31,7 @@ const CardIcon = () => (
 
 export function CheckoutForm({ listingId, qty, needsPlayerId, gameName, couponCode, askPayer, baseCents, balanceCents }: { listingId: string; qty: number; needsPlayerId: boolean; gameName: string; couponCode?: string; askPayer: boolean; baseCents: number; balanceCents: number }) {
   const [state, action, pending] = useActionState<ActionState, FormData>(startCheckout, undefined);
+  const keepAction = useKeepForm(state, action);
   const [cpf, setCpf] = useState("");
   const [plan, setPlan] = useState<PlanCode>("BASICO");
   const [method, setMethod] = useState<PayMethod>("pix");
@@ -47,7 +49,7 @@ export function CheckoutForm({ listingId, qty, needsPlayerId, gameName, couponCo
 
   let n = 0;
   return (
-    <form action={action} className="checkout">
+    <form action={action} {...keepAction} className="checkout">
       <input type="hidden" name="listingId" value={listingId} />
       <input type="hidden" name="qty" value={qty} />
       <input type="hidden" name="plan" value={plan} />

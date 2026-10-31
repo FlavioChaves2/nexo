@@ -1,7 +1,9 @@
 "use client";
 
 import { useActionState, useState, useTransition } from "react";
+import { PasswordInput } from "./PasswordInput";
 import { requestPasswordReset, resendVerification, resetPassword, type FormState } from "@/app/actions/auth";
+import { useKeepForm } from "@/lib/use-keep-form";
 
 function Feedback({ s }: { s: FormState }) {
   if (s?.error) return <p className="alert" role="alert">{s.error}</p>;
@@ -11,8 +13,9 @@ function Feedback({ s }: { s: FormState }) {
 
 export function ForgotForm() {
   const [state, run, pending] = useActionState(requestPasswordReset, undefined);
+  const keepRun = useKeepForm(state, run);
   return (
-    <form action={run} className="panel box">
+    <form action={run} {...keepRun} className="panel box">
       <div className="field">
         <label htmlFor="email">E-mail da conta</label>
         <input className="input" id="email" name="email" type="email" required autoComplete="email" />
@@ -25,16 +28,17 @@ export function ForgotForm() {
 
 export function ResetForm({ token }: { token: string }) {
   const [state, run, pending] = useActionState(resetPassword, undefined);
+  const keepRun = useKeepForm(state, run);
   return (
-    <form action={run} className="panel box">
+    <form action={run} {...keepRun} className="panel box">
       <input type="hidden" name="token" value={token} />
       <div className="field">
         <label htmlFor="password">Nova senha</label>
-        <input className="input" id="password" name="password" type="password" required minLength={8} autoComplete="new-password" />
+        <PasswordInput id="password" name="password" required minLength={8} autoComplete="new-password" />
       </div>
       <div className="field">
         <label htmlFor="confirm">Repita a nova senha</label>
-        <input className="input" id="confirm" name="confirm" type="password" required minLength={8} autoComplete="new-password" />
+        <PasswordInput id="confirm" name="confirm" required minLength={8} autoComplete="new-password" />
       </div>
       <Feedback s={state} />
       <button className="btn btn-primary btn-block" type="submit" disabled={pending}>Salvar nova senha</button>

@@ -1,5 +1,7 @@
 "use client";
 
+import { useKeepForm } from "@/lib/use-keep-form";
+
 import { useActionState, useState, useTransition } from "react";
 import {
   approveWithdrawalAction,
@@ -19,11 +21,12 @@ function Feedback({ s }: { s: AdminState }) {
 
 export function DisputeDecision({ orderId, code, sellerNet, total }: { orderId: string; code: string; sellerNet: string; total: string }) {
   const [state, action, pending] = useActionState(decideDispute.bind(null, orderId, code), undefined);
+  const keepAction = useKeepForm(state, action);
   const [decision, setDecision] = useState<"" | "liberar" | "reembolsar">("");
   const [confirming, setConfirming] = useState(false);
 
   return (
-    <form action={action} className="panel box">
+    <form action={action} {...keepAction} className="panel box">
       <h3>Decisão</h3>
       <div className="stack" style={{ gap: 8 }}>
         <label className="switch">
@@ -59,8 +62,9 @@ export function DisputeDecision({ orderId, code, sellerNet, total }: { orderId: 
 
 export function MediatorMessage({ orderId, code }: { orderId: string; code: string }) {
   const [state, action, pending] = useActionState(sendMediatorMessage.bind(null, orderId, code), undefined);
+  const keepAction = useKeepForm(state, action);
   return (
-    <form action={action} className="chat-form" style={{ borderTop: 0, padding: 0 }}>
+    <form action={action} {...keepAction} className="chat-form" style={{ borderTop: 0, padding: 0 }}>
       <input className="input" name="text" placeholder="Pedir prova, explicar o próximo passo…" maxLength={1000} required aria-label="Mensagem do mediador" />
       <button className="btn btn-ghost" type="submit" disabled={pending}>Enviar como mediador</button>
       {state?.error && <span className="error">{state.error}</span>}
@@ -73,10 +77,11 @@ export function WithdrawalActions({ id }: { id: string }) {
   const [paying, start] = useTransition();
   const [payState, setPayState] = useState<AdminState>();
   const [state, reject, pending] = useActionState(rejectWithdrawalAction.bind(null, id), undefined);
+  const keepReject = useKeepForm(state, reject);
 
   if (rejecting)
     return (
-      <form action={reject} className="stack" style={{ gap: 8, minWidth: 240 }}>
+      <form action={reject} {...keepReject} className="stack" style={{ gap: 8, minWidth: 240 }}>
         <input className="input" name="note" required minLength={5} placeholder="Motivo da recusa" aria-label="Motivo da recusa" />
         <div className="row" style={{ justifyContent: "flex-end" }}>
           <button className="btn btn-ghost btn-sm" type="button" onClick={() => setRejecting(false)}>Voltar</button>
@@ -103,6 +108,7 @@ export function ListingModeration({ id, removed }: { id: string; removed: boolea
   const [restoring, start] = useTransition();
   const [restoreState, setRestoreState] = useState<AdminState>();
   const [state, remove, pending] = useActionState(removeListingAction.bind(null, id), undefined);
+  const keepRemove = useKeepForm(state, remove);
 
   if (removed)
     return (
@@ -113,7 +119,7 @@ export function ListingModeration({ id, removed }: { id: string; removed: boolea
     );
   if (open)
     return (
-      <form action={remove} className="stack" style={{ gap: 8, minWidth: 240 }}>
+      <form action={remove} {...keepRemove} className="stack" style={{ gap: 8, minWidth: 240 }}>
         <input className="input" name="note" required minLength={5} placeholder="Motivo (o vendedor vê)" aria-label="Motivo da remoção" />
         <div className="row" style={{ justifyContent: "flex-end" }}>
           <button className="btn btn-ghost btn-sm" type="button" onClick={() => setOpen(false)}>Voltar</button>

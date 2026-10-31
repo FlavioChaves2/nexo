@@ -5,6 +5,7 @@ import { answerQuestion, askQuestion, updateProfile, type SocialState } from "@/
 import { imageUrl } from "@/lib/images-url";
 import { Icon } from "./Icon";
 import { shrinkInput } from "@/lib/shrink-images";
+import { useKeepForm } from "@/lib/use-keep-form";
 
 function Feedback({ s }: { s: SocialState }) {
   if (s?.error) return <p className="alert" role="alert">{s.error}</p>;
@@ -14,8 +15,9 @@ function Feedback({ s }: { s: SocialState }) {
 
 export function AskForm({ listingId }: { listingId: string }) {
   const [state, run, pending] = useActionState(askQuestion.bind(null, listingId), undefined);
+  const keepRun = useKeepForm(state, run);
   return (
-    <form action={run} className="stack" style={{ gap: 8 }} key={state?.ok}>
+    <form action={run} {...keepRun} className="stack" style={{ gap: 8 }} key={state?.ok}>
       <textarea className="input" name="body" rows={2} maxLength={500} required placeholder="Pergunte antes de comprar. Ex.: a conta tem e-mail trocável?" aria-label="Sua pergunta" />
       <Feedback s={state} />
       <div><button className="btn btn-ghost btn-sm" type="submit" disabled={pending}><Icon name="chat" />Perguntar</button></div>
@@ -25,9 +27,10 @@ export function AskForm({ listingId }: { listingId: string }) {
 
 export function AnswerForm({ questionId }: { questionId: string }) {
   const [state, run, pending] = useActionState(answerQuestion.bind(null, questionId), undefined);
+  const keepRun = useKeepForm(state, run);
   if (state?.ok) return <Feedback s={state} />;
   return (
-    <form action={run} className="copy-row">
+    <form action={run} {...keepRun} className="copy-row">
       <input className="input" name="answer" required maxLength={1000} placeholder="Responder publicamente" aria-label="Resposta" />
       <button className="btn btn-primary btn-sm" type="submit" disabled={pending}>Responder</button>
       {state?.error && <span className="error">{state.error}</span>}
@@ -64,9 +67,10 @@ export function GalleryViewer({ ids, alt }: { ids: string[]; alt: string }) {
 
 export function ProfileForm({ username, storeName, bio, avatarId }: { username: string; storeName: string; bio: string; avatarId: string | null }) {
   const [state, run, pending] = useActionState(updateProfile, undefined);
+  const keepRun = useKeepForm(state, run);
   const [preview, setPreview] = useState(avatarId ? imageUrl(avatarId) : null);
   return (
-    <form action={run} className="panel box">
+    <form action={run} {...keepRun} className="panel box">
       <div className="seller-mini">
         {preview ? <img className="avatar xl" src={preview} alt="" /> : <span className="avatar xl">{(storeName || username)[0]}</span>}
         <label className="file-drop" style={{ flex: 1 }}>

@@ -923,6 +923,10 @@ body:has(.buy-bar) .helper { bottom: 96px; }
 .ios-card .app-steps li { align-items: flex-start; }
 .ios-card .app-steps svg { vertical-align: -5px; color: #4ea1ff; }
 .ios-close { position: absolute; right: 10px; top: 8px; width: 34px; height: 34px; border: 0; border-radius: 50%; background: var(--surface-3); color: var(--ink); font-size: 22px; line-height: 1; cursor: pointer; }
+.pass-wrap { position: relative; }
+.pass-wrap .input { padding-right: 46px; }
+.pass-eye { position: absolute; right: 4px; top: 50%; translate: 0 -50%; width: 40px; height: 40px; display: grid; place-items: center; border: 0; border-radius: 10px; background: transparent; color: var(--muted); cursor: pointer; }
+.pass-eye:hover, .pass-eye.on { color: var(--accent); }
 .welcome-card { justify-items: center; text-align: center; width: min(100%, 400px); }
 .welcome-card .welcome-bot { width: 120px; height: 120px; border-radius: 0; object-fit: contain; animation: bob 2.4s ease-in-out infinite; }
 .welcome-mail { color: var(--ink); overflow-wrap: anywhere; }

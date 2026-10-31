@@ -1,5 +1,7 @@
 "use client";
 
+import { useKeepForm } from "@/lib/use-keep-form";
+
 import { useActionState, useEffect, useState, useTransition } from "react";
 import {
   cancelAction,
@@ -96,8 +98,10 @@ function PixTimer({ until, minutes }: { until: string; minutes: number }) {
 
 export function OrderPanel(p: Props) {
   const [deliverState, deliver, delivering] = useActionState(deliverAction.bind(null, p.code), undefined);
+  const keepDeliver = useKeepForm(deliverState, deliver);
   const [disputeState, dispute, disputing] = useActionState(disputeAction.bind(null, p.code), undefined);
   const [reviewState, review, reviewing] = useActionState(reviewAction.bind(null, p.code), undefined);
+  const keepReview = useKeepForm(reviewState, review);
   const [showDispute, setShowDispute] = useState(false);
   const [reveal, setReveal] = useState(false);
 
@@ -173,7 +177,7 @@ export function OrderPanel(p: Props) {
         </div>
       );
     return (
-      <form action={deliver} className="panel box">
+      <form action={deliver} {...keepDeliver} className="panel box">
         <h3>Entregar pedido</h3>
         {p.buyerNote && <div className="note"><Icon name="user" /><span>ID informado pelo comprador: <b className="mono">{p.buyerNote}</b></span></div>}
         <div className="field">
@@ -235,7 +239,7 @@ export function OrderPanel(p: Props) {
       {p.resolution && <div className="note"><Icon name="shield" /><span><b>Decisão do mediador:</b> {p.resolution}</span></div>}
       {delivery}
       {buyer && !p.reviewed && !reviewState?.ok && (
-        <form action={review} className="stack" style={{ gap: 10 }}>
+        <form action={review} {...keepReview} className="stack" style={{ gap: 10 }}>
           <span className="label">Como foi a compra?</span>
           <div className="rate-row" role="radiogroup" aria-label="Nota">
             {[1, 2, 3, 4, 5].map((n) => <input key={`i${n}`} type="radio" name="rating" id={`r${n}`} value={n} required />)}
@@ -252,8 +256,9 @@ export function OrderPanel(p: Props) {
 }
 
 function DisputeForm({ action, pending, state }: { action: (f: FormData) => void; pending: boolean; state: ActionState }) {
+  const keep = useKeepForm(state, action);
   return (
-    <form action={action} className="stack" style={{ gap: 10 }}>
+    <form action={action} {...keep} className="stack" style={{ gap: 10 }}>
       <div className="field">
         <label htmlFor="reason">O que aconteceu?</label>
         <textarea className="input" id="reason" name="reason" rows={4} required minLength={10} placeholder="Ex.: a senha não funciona, o item é diferente do anúncio…" />

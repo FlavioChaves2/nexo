@@ -3,11 +3,13 @@
 import { useActionState } from "react";
 import { requestWithdrawal, type WithdrawState } from "@/app/actions/account";
 import { Icon } from "./Icon";
+import { useKeepForm } from "@/lib/use-keep-form";
 
 export function WithdrawForm({ cpfMasked }: { cpfMasked: string }) {
   const [state, action, pending] = useActionState<WithdrawState, FormData>(requestWithdrawal, undefined);
+  const keepAction = useKeepForm(state, action);
   return (
-    <form action={action} className="panel box">
+    <form action={action} {...keepAction} className="panel box">
       <h3>Sacar via Pix</h3>
       <div className="form-grid">
         <div className="field">

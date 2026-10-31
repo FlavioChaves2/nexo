@@ -1,5 +1,7 @@
 "use client";
 
+import { useKeepForm } from "@/lib/use-keep-form";
+
 import { useActionState, useState, useTransition } from "react";
 import {
   resolveReportsAction,
@@ -20,9 +22,10 @@ type Option = { value: string; label: string; danger?: boolean };
 /** Dois botões de decisão que compartilham um campo de observação. */
 function Decision({ action, options, placeholder }: { action: (s: AdminState, f: FormData) => Promise<AdminState>; options: Option[]; placeholder: string }) {
   const [state, run, pending] = useActionState(action, undefined);
+  const keepRun = useKeepForm(state, run);
   if (state?.ok) return <Feedback s={state} />;
   return (
-    <form action={run} className="stack" style={{ gap: 8, minWidth: 0 }}>
+    <form action={run} {...keepRun} className="stack" style={{ gap: 8, minWidth: 0 }}>
       <input className="input" name="note" placeholder={placeholder} aria-label="Observação" />
       <div className="row" style={{ justifyContent: "flex-end", gap: 8 }}>
         {options.map((o) => (
@@ -61,6 +64,7 @@ export function SuspendControls({ userId, suspended }: { userId: string; suspend
   const [pending, start] = useTransition();
   const [res, setRes] = useState<AdminState>();
   const [state, suspend, suspending] = useActionState(suspendUserAction.bind(null, userId), undefined);
+  const keepSuspend = useKeepForm(state, suspend);
 
   if (suspended)
     return (
@@ -71,7 +75,7 @@ export function SuspendControls({ userId, suspended }: { userId: string; suspend
     );
   if (!open) return <button className="btn btn-ghost btn-sm" type="button" onClick={() => setOpen(true)}>Suspender</button>;
   return (
-    <form action={suspend} className="stack" style={{ gap: 8, minWidth: 240 }}>
+    <form action={suspend} {...keepSuspend} className="stack" style={{ gap: 8, minWidth: 240 }}>
       <input className="input" name="note" required minLength={5} placeholder="Motivo (a pessoa vê ao tentar entrar)" aria-label="Motivo da suspensão" />
       <div className="row" style={{ justifyContent: "flex-end" }}>
         <button className="btn btn-ghost btn-sm" type="button" onClick={() => setOpen(false)}>Voltar</button>

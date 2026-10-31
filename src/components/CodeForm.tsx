@@ -2,12 +2,14 @@
 
 import { useActionState } from "react";
 import type { FormState } from "@/app/actions/auth";
+import { useKeepForm } from "@/lib/use-keep-form";
 
 /** Campo de código de 6 dígitos ligado a uma ação do servidor. */
 export function CodeForm({ action, next, label }: { action: (s: FormState, f: FormData) => Promise<FormState>; next?: string; label: string }) {
   const [state, run, pending] = useActionState(action, undefined);
+  const keepRun = useKeepForm(state, run);
   return (
-    <form action={run} className="stack" style={{ gap: 12 }}>
+    <form action={run} {...keepRun} className="stack" style={{ gap: 12 }}>
       {next && <input type="hidden" name="next" value={next} />}
       <div className="field">
         <label htmlFor="code">Código de 6 dígitos</label>

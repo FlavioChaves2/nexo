@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import { sendReport, sendVerification } from "@/app/actions/account";
 import { Icon } from "./Icon";
+import { useKeepForm } from "@/lib/use-keep-form";
 
 const REASONS = ["Golpe ou fraude", "Item proibido ou roubado", "Descrição enganosa", "Preço abusivo", "Outro"];
 
@@ -15,6 +16,7 @@ function Feedback({ s }: { s: { error?: string; ok?: string } | undefined }) {
 export function ReportButton({ listingId }: { listingId: string }) {
   const [open, setOpen] = useState(false);
   const [state, action, pending] = useActionState(sendReport.bind(null, listingId), undefined);
+  const keepAction = useKeepForm(state, action);
   if (state?.ok) return <Feedback s={state} />;
   if (!open)
     return (
@@ -23,7 +25,7 @@ export function ReportButton({ listingId }: { listingId: string }) {
       </button>
     );
   return (
-    <form action={action} className="stack" style={{ gap: 10 }}>
+    <form action={action} {...keepAction} className="stack" style={{ gap: 10 }}>
       <div className="field">
         <label htmlFor="reason">Motivo da denúncia</label>
         <select className="input" id="reason" name="reason" required defaultValue="">
@@ -43,9 +45,10 @@ export function ReportButton({ listingId }: { listingId: string }) {
 
 export function VerificationForm() {
   const [state, action, pending] = useActionState(sendVerification, undefined);
+  const keepAction = useKeepForm(state, action);
   if (state?.ok) return <div className="panel box"><Feedback s={state} /></div>;
   return (
-    <form action={action} className="panel box">
+    <form action={action} {...keepAction} className="panel box">
       <h3>Verificar identidade</h3>
       <p className="muted small">Para proteger compradores, só vendedores verificados podem sacar. Seus dados ficam visíveis apenas para a equipe da Nexo.</p>
       <div className="form-grid">

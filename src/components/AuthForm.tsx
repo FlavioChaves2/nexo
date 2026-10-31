@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { startTransition, useActionState, useState, type FormEvent } from "react";
+import { PasswordInput } from "./PasswordInput";
+import { useActionState, useState } from "react";
+import { useKeepForm } from "@/lib/use-keep-form";
 import { login, register, type FormState } from "@/app/actions/auth";
 import { shrinkInput } from "@/lib/shrink-images";
 import { Icon } from "./Icon";
@@ -10,15 +12,10 @@ export function AuthForm({ mode, next }: { mode: "login" | "register"; next: str
   const [state, action, pending] = useActionState<FormState, FormData>(mode === "login" ? login : register, undefined);
   const other = mode === "login" ? "/cadastro" : "/entrar";
   const [preview, setPreview] = useState<string | null>(null);
-  // Envia sem deixar o React limpar o formulário: se der erro, o que a pessoa digitou (e a foto) continua lá.
-  const submit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    startTransition(() => action(data));
-  };
+  const keep = useKeepForm(state, action);
 
   return (
-    <form action={action} onSubmit={submit} className="panel box">
+    <form action={action} {...keep} className="panel box">
       <input type="hidden" name="next" value={next} />
       {mode === "register" && (
         <div className="seller-mini">
@@ -43,11 +40,10 @@ export function AuthForm({ mode, next }: { mode: "login" | "register"; next: str
       )}
       <div className="field">
         <label htmlFor="password">Senha</label>
-        <input
+        <PasswordInput
           className="input"
           id="password"
           name="password"
-          type="password"
           autoComplete={mode === "login" ? "current-password" : "new-password"}
           required
           minLength={mode === "register" ? 8 : undefined}

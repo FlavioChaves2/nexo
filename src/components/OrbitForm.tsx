@@ -4,17 +4,19 @@ import { useActionState, useState } from "react";
 import { buyOrbitAction, type OrbitState } from "@/app/actions/orbit";
 import { ORBIT_PLANS } from "@/lib/orbit-plans";
 import { Icon } from "./Icon";
+import { useKeepForm } from "@/lib/use-keep-form";
 
 const brl = (cents: number) => (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 export function OrbitForm({ listingId, balanceCents, active }: { listingId: string; balanceCents: number; active: boolean }) {
   const [state, action, pending] = useActionState<OrbitState, FormData>(buyOrbitAction.bind(null, listingId), undefined);
+  const keepAction = useKeepForm(state, action);
   const [days, setDays] = useState<number>(3);
   const plan = ORBIT_PLANS.find((p) => p.days === days)!;
   const short = balanceCents < plan.cents;
 
   return (
-    <form action={action} className="panel box">
+    <form action={action} {...keepAction} className="panel box">
       <h3>{active ? "Estender a Órbita" : "Escolha quanto tempo"}</h3>
       <div className="orbit-plans" role="radiogroup" aria-label="Período da Órbita">
         {ORBIT_PLANS.map((p) => (

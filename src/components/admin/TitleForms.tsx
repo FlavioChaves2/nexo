@@ -3,6 +3,7 @@
 import { useActionState, useState, useTransition } from "react";
 import { createTitleAction, deleteTitleAction, grantTitleAction, revokeTitleAction, type AdminState } from "@/app/actions/admin";
 import { TitleBadge } from "@/components/SellerBadges";
+import { useKeepForm } from "@/lib/use-keep-form";
 
 function Feedback({ s }: { s: AdminState }) {
   if (s?.error) return <p className="alert" role="alert">{s.error}</p>;
@@ -14,9 +15,10 @@ const COLORS = ["#C5F04A", "#F5C542", "#4EA1FF", "#B57BFF", "#FF6B8A", "#3DDC97"
 
 export function TitleCreate() {
   const [state, run, pending] = useActionState(createTitleAction, undefined);
+  const keepRun = useKeepForm(state, run);
   const [v, setV] = useState({ name: "", emoji: "🏅", color: COLORS[2], description: "" });
   return (
-    <form action={run} className="panel box" key={state?.ok}>
+    <form action={run} {...keepRun} className="panel box" key={state?.ok}>
       <h3>Novo título</h3>
       <div className="form-grid">
         <div className="field">
@@ -54,8 +56,9 @@ export function TitleCreate() {
 
 export function TitleGrant({ titles }: { titles: { id: string; name: string; emoji: string; full: boolean }[] }) {
   const [state, run, pending] = useActionState(grantTitleAction, undefined);
+  const keepRun = useKeepForm(state, run);
   return (
-    <form action={run} className="panel box" key={state?.ok}>
+    <form action={run} {...keepRun} className="panel box" key={state?.ok}>
       <h3>Dar título para alguém</h3>
       <div className="form-grid">
         <div className="field">

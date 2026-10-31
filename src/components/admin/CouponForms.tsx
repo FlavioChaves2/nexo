@@ -2,6 +2,7 @@
 
 import { useActionState, useState, useTransition } from "react";
 import { createCouponAction, toggleCouponAction, type AdminState } from "@/app/actions/admin";
+import { useKeepForm } from "@/lib/use-keep-form";
 
 function Feedback({ s }: { s: AdminState }) {
   if (s?.error) return <p className="alert" role="alert">{s.error}</p>;
@@ -11,9 +12,10 @@ function Feedback({ s }: { s: AdminState }) {
 
 export function CouponCreate() {
   const [state, run, pending] = useActionState(createCouponAction, undefined);
+  const keepRun = useKeepForm(state, run);
   const [kind, setKind] = useState("percent");
   return (
-    <form action={run} className="panel box" key={state?.ok}>
+    <form action={run} {...keepRun} className="panel box" key={state?.ok}>
       <h3>Novo cupom</h3>
       <div className="form-grid">
         <div className="field">
