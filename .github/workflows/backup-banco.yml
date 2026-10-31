@@ -1,0 +1,47 @@
+# Backup automático do banco (Neon) todo dia às 03:00 de Brasília.
+# A cópia sai CRIPTOGRAFADA (AES-256) e fica em Actions → "Backup do banco" → execução do dia → Artifacts, por 30 dias.
+# Segredos necessários (Settings → Secrets and variables → Actions):
+#   BACKUP_DATABASE_URL  conexão DIRETA do Neon (a que não tem "-pooler" no endereço)
+#   BACKUP_PASSWORD      senha longa que tranca a cópia; guarde-a fora do GitHub
+# Para restaurar:
+#   gpg --batch --passphrase "<senha>" -d nexo-AAAA-MM-DD.dump.gpg > nexo.dump
+#   pg_restore --clean --no-owner -d "<conexão>" nexo.dump
+name: Backup do banco
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Copiar e trancar o banco
+        shell: bash
+        env:
+          DATABASE_URL: ${{ secrets.BACKUP_DATABASE_URL }}
+          BACKUP_PASSWORD: ${{ secrets.BACKUP_PASSWORD }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then echo "::error::Falta o segredo BACKUP_DATABASE_URL"; exit 1; fi
+          if [ ${#BACKUP_PASSWORD} -lt 16 ]; then echo "::error::Falta o segredo BACKUP_PASSWORD (mínimo 16 caracteres)"; exit 1; fi
+          FILE="nexo-$(TZ=America/Sao_Paulo date +%F).dump.gpg"
+          docker run --rm -e PGURL="$DATABASE_URL" postgres:18 \
+            sh -c 'pg_dump "$PGURL" --format=custom --no-owner --no-privileges' \
+            | gpg --batch --yes --symmetric --cipher-algo AES256 --passphrase-fd 3 -o "$FILE" 3<<<"$BACKUP_PASSWORD"
+          SIZE=$(stat -c%s "$FILE")
+          echo "Backup: $FILE ($SIZE bytes)"
+          if [ "$SIZE" -lt 10000 ]; then echo "::error::Backup pequeno demais, algo deu errado"; exit 1; fi
+          echo "FILE=$FILE" >> "$GITHUB_ENV"
+
+      - name: Guardar a cópia por 30 dias
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.FILE }}
+          path: ${{ env.FILE }}
+          retention-days: 30
+          compression-level: 0

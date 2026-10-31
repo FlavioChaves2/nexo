@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
 import { TrustBadges } from "./TrustBadges";
+import { LEGAL } from "@/lib/legal";
 
 export function Footer() {
   return (
@@ -43,7 +44,7 @@ export function Footer() {
         </div>
       </div>
       <div className="wrap foot-bottom">
-        <span>© 2026 Nexo · Play. Trade. Repeat.</span>
+        <span>© 2026 Nexo · Play. Trade. Repeat.{LEGAL.document && <> · {LEGAL.document}</>}</span>
         <span className="foot-pay">Pagamento via <b>Pix</b> ou <b>saldo Nexo</b> · processado pelo Asaas</span>
       </div>
     </footer>

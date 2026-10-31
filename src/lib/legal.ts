@@ -1,12 +1,12 @@
 // Dados de quem opera a Nexo, mostrados nos termos de uso e na política de privacidade.
-// Preencha razão social e CNPJ (ou nome e CPF do responsável, se for pessoa física) quando estiverem definidos.
+// Razão social, CNPJ e cidade conforme o cadastro na Receita Federal.
 
 export const LEGAL = {
   brand: "Nexo",
   site: "nexopoint.com.br",
-  company: "", // ex.: "Nexo Tecnologia Ltda."
-  document: "", // ex.: "CNPJ 00.000.000/0001-00"
-  city: "", // ex.: "João Pessoa/PB" (foro e endereço de contato)
+  company: "64.162.695 PEDRO FLAVIO SILVA CHAVES BATISTA", // razão social oficial do MEI
+  document: "CNPJ 64.162.695/0001-90",
+  city: "Barra de Santa Rosa/PB",
   updated: "31/10/2026",
 };
 
