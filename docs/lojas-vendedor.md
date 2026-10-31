@@ -66,8 +66,8 @@ Objetivo: dar a comissão reduzida só quando o vendedor realmente trouxe o comp
 ## Para publicar (precisa de autorização do dono)
 
 1. **Primeiro o banco**, depois o site. O código novo lê tabelas e colunas novas; publicar o site antes quebra as páginas.
-    com o  normal (produção). Só cria tabelas/colunas novas com valor padrão: CommissionPolicy, AttributionTouch, Proposal, StoreFollow, StoreCoupon, StoreCouponUse, ExternalProfile, SellerProgram; colunas novas em User, Listing e Order.
-2. Depois juntar o ramo  na  e enviar (a Vercel publica).
+   Comando: `npx prisma db push` com o `.env` normal (produção). Só cria tabelas e colunas novas com valor padrão: CommissionPolicy, AttributionTouch, Proposal, StoreFollow, StoreCoupon, StoreCouponUse, ExternalProfile, SellerProgram; colunas novas em User, Listing e Order.
+2. Depois juntar o ramo `feature/lojas-vendedor` na `main` e enviar (a Vercel publica).
 3. Nenhuma variável de ambiente nova.
 
 ## O que fica ligado e desligado
