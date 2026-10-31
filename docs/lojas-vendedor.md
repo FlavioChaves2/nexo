@@ -8,11 +8,11 @@ Ramo: `feature/lojas-vendedor`. Nada aqui foi publicado nem aplicado ao banco de
 | Etapa | Situação |
 |---|---|
 | 0. Inspeção, banco de testes local, desenho do banco | feito |
-| 1. Loja do vendedor + proposta por link | em andamento |
-| 2. Origem da venda (atribuição) + comissão configurável + simulação | pendente |
-| 3. Verificação de perfil externo | pendente |
-| 4. Cupons da loja, recompra, seguir loja, programa de primeiros vendedores | pendente |
-| 5. Testes e relatório | pendente |
+| 1. Loja do vendedor + proposta por link | feito |
+| 2. Origem da venda (atribuição) + comissão configurável + simulação | feito (modalidade reduzida desligada) |
+| 3. Verificação de perfil externo | feito |
+| 4. Cupons da loja, recompra, seguir loja, programa de primeiros vendedores | feito |
+| 5. Testes e relatório | feito (ver abaixo) |
 
 ## Como testar sem tocar em produção
 
@@ -62,3 +62,29 @@ Objetivo: dar a comissão reduzida só quando o vendedor realmente trouxe o comp
   As condições aceitas são copiadas para o pedido (`Order.terms`) e aparecem para comprador, vendedor e mediador.
 - Proposta cancelada ou vencida não pode ser aceita nem paga; Pix pago depois do cancelamento é estornado pelo fluxo atual.
 - Clique duplo e avisos repetidos do Asaas não geram pedidos nem cobranças em dobro (um pagamento em aberto por proposta; estoque 1 reservado na aprovação).
+
+## Para publicar (precisa de autorização do dono)
+
+1. **Primeiro o banco**, depois o site. O código novo lê tabelas e colunas novas; publicar o site antes quebra as páginas.
+    com o  normal (produção). Só cria tabelas/colunas novas com valor padrão: CommissionPolicy, AttributionTouch, Proposal, StoreFollow, StoreCoupon, StoreCouponUse, ExternalProfile, SellerProgram; colunas novas em User, Listing e Order.
+2. Depois juntar o ramo  na  e enviar (a Vercel publica).
+3. Nenhuma variável de ambiente nova.
+
+## O que fica ligado e desligado
+
+- Ligado: loja nova, link /v/, seguir, compartilhar, propostas, cupons da loja, recompra, verificação externa, programa (só admin), registro da origem da venda, comissão configurável.
+- Desligado até decisão comercial: comissão reduzida do link do vendedor (sem taxa nem janela definidas). Todas as vendas seguem com 9,79%.
+- Nada publicado sobre benefícios, vagas ou prazos do programa de primeiros vendedores.
+
+## Testes executados (banco local, pagamento simulado)
+
+- 31 verificações de proposta e origem (scratchpad/t-stage12.ts): versão, aceite duplo, pagamento em aberto reaproveitado, alteração cancela pagamento, Pix da versão antiga não aprova, aviso de pagamento repetido, cancelada/vencida, acesso de outro comprador/vendedor, primeiro contato, janela, política fixada no pedido.
+- 39 verificações (scratchpad/t-stage34.ts): URLs de perfil externo, aprovação/recusa/revogação com histórico, cupons (limite com dois compradores ao mesmo tempo, cliques simultâneos do mesmo comprador, devolução ao cancelar e ao vencer o Pix, jogo, mínimo, agendado, teto de R$ 1, loja errada, cupom da Nexo), validação da política e simulação, programa.
+- Navegador no tamanho de celular: criar proposta, abrir link deslogado, aceitar logado, pagar (simulado), condições no pedido; bloqueio 404 de proposta/pedido/gestão para outras contas e do admin para não-admin; loja com filtros, seguir e link /v/ gravando a origem; telas de admin.
+- Não testado: o webhook real do Asaas (só funciona com o Asaas de produção); a repetição foi testada chamando a aprovação duas vezes.
+
+## Limitações conhecidas
+
+- A origem não acompanha a pessoa entre aparelhos, a menos que ela esteja logada quando abre o link.
+- A loja mostra o perfil externo verificado só como nome e plataforma (sem link clicável), para não abrir caminho de negociação por fora.
+- Provas de entrega continuam sendo o quadro de entrega e o chat do pedido (sem anexo de imagem no chat).
