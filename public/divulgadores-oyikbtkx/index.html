@@ -33,7 +33,9 @@ section { display: grid; gap: 20px; }
 .cap b { font-family: var(--f-d); }
 .txt { white-space: pre-line; font-size: 14px; color: #D3D8CC; background: var(--s2); border-radius: 10px; padding: 12px; overflow-wrap: anywhere; }
 button.copy { justify-self: start; font: 800 13px var(--f-b); background: var(--lime); color: var(--lime-ink); border: 0; border-radius: 8px; padding: 8px 14px; cursor: pointer; }
-button.copy:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+a.dl-video { justify-self: start; display: inline-flex; align-items: center; gap: 8px; font: 800 13px var(--f-b); color: var(--lime); border: 2px solid var(--lime); border-radius: 8px; padding: 7px 14px; text-decoration: none; }
+a.dl-video:hover { background: var(--lime); color: var(--lime-ink); }
+a.dl-video:focus-visible, button.copy:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
 .carousel { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; }
 .carousel img { width: min(240px, 70vw); flex: none; border-radius: 10px; }
 .tip { border-left: 3px solid var(--lime); padding: 4px 0 4px 14px; color: var(--muted); }
@@ -61,17 +63,17 @@ ol, ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
     <div class="head"><span class="eye">Vídeos · Reels e TikTok · 1080×1920</span><h2>3 vídeos curtos animados</h2>
     <p class="tip">Já vêm com trilha sonora original (feita para a Nexo, sem direitos autorais), sincronizada com cada cena. Se quiser surfar uma trend, dá para trocar pelo áudio em alta do app.</p></div>
     <div class="grid st">
-      <div class="piece"><video src="4-videos/golpe.mp4" controls muted playsinline preload="metadata"></video><div class="cap"><b>Golpe × Nexo · 15s</b><div class="txt">Pagou no Pix e o vendedor sumiu? 😭
+      <div class="piece"><video src="4-videos/golpe.mp4" controls muted playsinline preload="metadata"></video><div class="cap"><b>Golpe × Nexo · 15s</b><a class="dl-video" href="4-videos/golpe.mp4" download="nexo-golpe.mp4">⬇ Baixar vídeo</a><div class="txt">Pagou no Pix e o vendedor sumiu? 😭
 Na Nexo o seu dinheiro fica retido até você confirmar que recebeu. Deu problema? Uma pessoa da equipe decide.
 🔗 nexopoint.com.br
 
 #gamer #freefire #valorant #roblox #contasgamer #golpe</div><button class="copy">Copiar legenda</button></div></div>
-      <div class="piece"><video src="4-videos/fundadores.mp4" controls muted playsinline preload="metadata"></video><div class="cap"><b>20 Fundadores · 13s</b><div class="txt">👑 20 vagas. Para sempre.
+      <div class="piece"><video src="4-videos/fundadores.mp4" controls muted playsinline preload="metadata"></video><div class="cap"><b>20 Fundadores · 13s</b><a class="dl-video" href="4-videos/fundadores.mp4" download="nexo-fundadores.mp4">⬇ Baixar vídeo</a><div class="txt">👑 20 vagas. Para sempre.
 Os 20 primeiros vendedores a concluir uma venda na Nexo ganham o título Fundador ao lado do nome. Só criar a conta não vale: anuncie (é grátis) e faça a primeira venda.
 🔗 nexopoint.com.br/fundadores
 
 #vendaskins #contasgamer #freefire #valorant #roblox</div><button class="copy">Copiar legenda</button></div></div>
-      <div class="piece"><video src="4-videos/orbita.mp4" controls muted playsinline preload="metadata"></video><div class="cap"><b>Órbita · 12s</b><div class="txt">Seu anúncio está perdido lá embaixo? 😵
+      <div class="piece"><video src="4-videos/orbita.mp4" controls muted playsinline preload="metadata"></video><div class="cap"><b>Órbita · 12s</b><a class="dl-video" href="4-videos/orbita.mp4" download="nexo-orbita.mp4">⬇ Baixar vídeo</a><div class="txt">Seu anúncio está perdido lá embaixo? 😵
 Coloque em Órbita: topo da página inicial e da busca, a partir de R$ 2 por dia.
 🔗 nexopoint.com.br
 
