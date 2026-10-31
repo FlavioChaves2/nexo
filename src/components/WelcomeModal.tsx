@@ -48,8 +48,12 @@ export function WelcomeModal() {
           <p className="muted small">Você já pode comprar. Para vender e sacar, confirme seu e-mail em <Link className="lime" href="/conta" onClick={close}>Minha conta</Link>.</p>
         )}
         <div className="welcome-actions">
-          <button className="btn btn-primary" type="button" onClick={close}>Começar a explorar</button>
-          <Link className="btn btn-ghost" href="/conta/perfil" onClick={close}>Completar meu perfil</Link>
+          <button className="btn btn-primary" type="button" onClick={close}>{path === "/conta/perfil" ? "Completar meu perfil" : "Começar a explorar"}</button>
+          {path === "/conta/perfil" ? (
+            <Link className="btn btn-ghost" href="/vender" onClick={close}>Criar meu primeiro anúncio</Link>
+          ) : (
+            <Link className="btn btn-ghost" href="/conta/perfil" onClick={close}>Completar meu perfil</Link>
+          )}
         </div>
       </div>
     </div>,
