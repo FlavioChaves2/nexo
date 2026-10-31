@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { cookies } from "next/headers";
 import { REF_COOKIE } from "@/lib/referrals";
+import { WELCOME_COOKIE } from "@/lib/welcome";
 import { deleteAccount, DeleteAccountError } from "@/lib/delete-account";
 import { db } from "@/lib/db";
 import { checkImage, filesFrom, saveImage } from "@/lib/images";
@@ -97,7 +98,8 @@ export async function register(_: FormState, form: FormData): Promise<FormState>
     const img = await saveImage(avatar, user.id, "AVATAR").catch(() => null);
     if (img) await db.user.update({ where: { id: user.id }, data: { avatarId: img.id } });
   }
-  await sendVerifyEmail(user).catch(() => false);
+  const sent = await sendVerifyEmail(user).catch(() => false);
+  (await cookies()).set(WELCOME_COOKIE, JSON.stringify({ email, sent: Boolean(sent) }), { maxAge: 300, path: "/", sameSite: "lax" });
   await record(`cadastro:${email}`, ip, true);
   await createSession(user.id);
   redirect(safeNext(form.get("next")));

@@ -7,6 +7,7 @@ import { NavProgress } from "@/components/NavProgress";
 import { HelperBot } from "@/components/HelperBot";
 import { PwaRegister } from "@/components/PwaRegister";
 import { HeaderAutoHide } from "@/components/HeaderAutoHide";
+import { WelcomeModal } from "@/components/WelcomeModal";
 import { Suspense } from "react";
 import "./globals.css";
 
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <HelperBot />
         <PwaRegister />
         <HeaderAutoHide />
+        <WelcomeModal />
       </body>
     </html>
   );

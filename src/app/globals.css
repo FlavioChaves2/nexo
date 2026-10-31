@@ -923,6 +923,10 @@ body:has(.buy-bar) .helper { bottom: 96px; }
 .ios-card .app-steps li { align-items: flex-start; }
 .ios-card .app-steps svg { vertical-align: -5px; color: #4ea1ff; }
 .ios-close { position: absolute; right: 10px; top: 8px; width: 34px; height: 34px; border: 0; border-radius: 50%; background: var(--surface-3); color: var(--ink); font-size: 22px; line-height: 1; cursor: pointer; }
+.welcome-card { justify-items: center; text-align: center; width: min(100%, 400px); }
+.welcome-card .welcome-bot { width: 120px; height: 120px; border-radius: 0; object-fit: contain; animation: bob 2.4s ease-in-out infinite; }
+.welcome-mail { color: var(--ink); overflow-wrap: anywhere; }
+.welcome-actions { display: grid; gap: 8px; width: 100%; }
 .ios-arrow { position: fixed; left: 50%; translate: -50% 0; display: grid; justify-items: center; color: #4ea1ff; font-size: 34px; font-weight: 800; pointer-events: none; }
 .ios-arrow svg { width: 30px; height: 30px; }
 .ios-arrow.bottom { bottom: max(14px, env(safe-area-inset-bottom)); animation: bounceDown 1s ease-in-out infinite; }
