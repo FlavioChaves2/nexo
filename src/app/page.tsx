@@ -50,8 +50,8 @@ export default async function Home() {
             </Link>
           </div>
           <div className="hero-meta">
-            <span><b>{stats.listings}</b> ANÚNCIOS</span>
-            <span><b>{stats.sellers}</b> LOJAS</span>
+            {listingsCount > 0 && <span><b>{stats.listings}</b> ANÚNCIOS</span>}
+            {sellersCount > 0 && <span><b>{stats.sellers}</b> LOJAS</span>}
             <span><b>{games.length}</b> JOGOS</span>
           </div>
         </div>
@@ -63,7 +63,7 @@ export default async function Home() {
       {foundersLeft > 0 && (
         <Link className="home-founders" href="/fundadores">
           <span aria-hidden="true">👑</span>
-          <span><b>Restam {foundersLeft} de {FOUNDER.maxHolders} vagas de Fundador.</b> Publique seu primeiro anúncio e ganhe o título para sempre.</span>
+          <span><b>Restam {foundersLeft} de {FOUNDER.maxHolders} vagas de Fundador.</b> Conclua sua primeira venda e ganhe o título para sempre.</span>
           <span className="go-txt">Quero a minha <Icon name="arrow" /></span>
         </Link>
       )}
@@ -93,15 +93,27 @@ export default async function Home() {
         <div className="section-head">
           <div className="grid-gap"><span className="eyebrow">O próximo drop é seu</span><h2>Explore os destaques</h2></div>
         </div>
-        <div className="pills">
+        {featured.length > 0 && <div className="pills">
           <Link className="pill on" href="/busca">Todos</Link>
           {LISTING_TYPES.map((t) => (
             <Link key={t} className="pill" href={`/busca?tipo=${t}`}>{TYPE_PLURAL[t]}</Link>
           ))}
-        </div>
-        <div className="cards">
-          {featured.map((l) => <ListingCard key={l.id} l={l} fav={favs.has(l.id)} />)}
-        </div>
+        </div>}
+        {featured.length ? (
+          <div className="cards">
+            {featured.map((l) => <ListingCard key={l.id} l={l} fav={favs.has(l.id)} />)}
+          </div>
+        ) : (
+          <div className="panel empty">
+            <h3>A vitrine está esperando os primeiros vendedores</h3>
+            <p className="muted">A Nexo acabou de abrir. Anuncie de graça e apareça aqui primeiro{foundersLeft > 0 ? `: os ${FOUNDER.maxHolders} primeiros a concluir uma venda viram 👑 Fundadores` : ""}.</p>
+            <p className="muted">Procurando algo? Publique um pedido em Quero comprar e receba ofertas.</p>
+            <div className="copy-row" style={{ justifyContent: "center", flexWrap: "wrap" }}>
+              <Link className="btn btn-primary" href="/vender">Criar meu anúncio</Link>
+              <Link className="btn btn-ghost" href="/quero-comprar/novo">Quero comprar</Link>
+            </div>
+          </div>
+        )}
       </section>
 
       <section className="section" id="garantia">

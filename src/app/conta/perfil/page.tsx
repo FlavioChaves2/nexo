@@ -5,8 +5,6 @@ import { requireUser } from "@/lib/auth";
 import { LEVEL_TABLE, avgRating, nextLevel, sellerLevel } from "@/lib/reputation";
 import { ProfileForm } from "@/components/SocialForms";
 import { SellerBadges } from "@/components/SellerBadges";
-import { DeleteAccount } from "@/components/DeleteAccount";
-import { deleteBlockers } from "@/lib/delete-account";
 
 export const metadata = { title: "Meu perfil" };
 export const dynamic = "force-dynamic";
@@ -27,7 +25,7 @@ export default async function PerfilPage() {
       <div className="two-col">
         <div className="stack">
           <ProfileForm username={u.username} storeName={u.storeName} bio={u.bio} avatarId={u.avatarId} />
-          <DeleteAccount blockers={await deleteBlockers(u.id)} />
+          <Link className="linkish small danger-link" href="/conta/excluir">Quero excluir minha conta →</Link>
         </div>
         <aside className="stack buybox">
           <div className="panel box">

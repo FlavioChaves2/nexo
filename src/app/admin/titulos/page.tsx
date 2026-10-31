@@ -27,7 +27,7 @@ export default async function TitulosPage() {
               <div className="row" style={{ justifyContent: "flex-start", gap: 10 }}>
                 <TitleBadge t={t} />
                 <span className="muted small">
-                  {t.auto ? "Automático: os 20 primeiros vendedores reais ganham ao publicar o 1º anúncio" : t.description || "Dado pela equipe"}
+                  {t.auto ? "Automático: os 20 primeiros vendedores reais ganham ao concluir a 1ª venda" : t.description || "Dado pela equipe"}
                   {" · "}
                   {t.holders.length}{t.maxHolders !== null ? `/${t.maxHolders}` : ""} {t.holders.length === 1 ? "pessoa" : "pessoas"}
                 </span>

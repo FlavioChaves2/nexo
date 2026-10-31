@@ -4,7 +4,7 @@ import { OrderError } from "./orders";
 
 // Títulos de vendedor: dados à mão pela equipe no admin, ou automáticos como o Fundador.
 
-export const FOUNDER = { auto: "FUNDADOR", name: "Fundador", emoji: "👑", color: "#F5C542", maxHolders: 20, description: "Um dos 20 primeiros vendedores da Nexo." };
+export const FOUNDER = { auto: "FUNDADOR", name: "Fundador", emoji: "👑", color: "#F5C542", maxHolders: 20, description: "Um dos 20 primeiros vendedores a concluir uma venda na Nexo." };
 
 /** Contas de exemplo (@nexo.test) não ocupam vaga de Fundador. */
 const isTestAccount = (email: string) => email.endsWith("@nexo.test");
@@ -21,7 +21,7 @@ export async function founderTitle() {
   return db.title.upsert({ where: { auto: FOUNDER.auto }, create: FOUNDER, update: {} });
 }
 
-/** Chamado quando alguém publica um anúncio: os 20 primeiros vendedores reais ganham o Fundador. */
+/** Chamado quando uma venda é concluída: os 20 primeiros vendedores reais ganham o Fundador. */
 export async function grantFounderIfEligible(userId: string) {
   const user = await db.user.findUnique({ where: { id: userId }, select: { email: true } });
   if (!user || isTestAccount(user.email)) return;

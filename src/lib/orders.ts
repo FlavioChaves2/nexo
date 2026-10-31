@@ -5,6 +5,7 @@ import { feeFor, money } from "./format";
 import { createCardCharge, createPixCharge, type Payer } from "./payments";
 import { CARD_ENABLED, CARD_MIN_CENTS, PLANS, checkoutTotals, isPlan, planCashback, type PayMethod, type PlanCode } from "./plans";
 import { confirmDays, daysLabel } from "./constants";
+import { after } from "next/server";
 import { notify } from "./notify";
 import { applyCoupon } from "./coupons";
 import { payReferrals } from "./referrals";
@@ -204,6 +205,14 @@ export async function payoutSeller(tx: Tx, order: Order) {
   const net = sellerNet(order);
   await tx.user.update({ where: { id: order.sellerId }, data: { balanceCents: { increment: net }, completedSales: { increment: 1 } } });
   await notify(order.sellerId, "Dinheiro liberado", `${money(net)} do pedido #${order.code} entraram no seu saldo.`, "/conta?aba=saldo", tx);
+  // Primeira venda concluída: os 20 primeiros vendedores reais ganham o título Fundador.
+  // Roda depois da resposta (com a venda já gravada); falha aqui não afeta o pagamento.
+  const grant = () => import("./titles").then((t) => t.grantFounderIfEligible(order.sellerId)).catch((e) => console.error("Fundador:", e));
+  try {
+    after(grant);
+  } catch {
+    setTimeout(grant, 2000); // fora de uma requisição (scripts)
+  }
   return net;
 }
 

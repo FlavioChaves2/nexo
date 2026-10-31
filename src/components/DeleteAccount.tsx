@@ -8,10 +8,10 @@ import { Icon } from "./Icon";
 export function DeleteAccount({ blockers }: { blockers: string[] }) {
   const [state, action, pending] = useActionState<FormState, FormData>(deleteMyAccount, undefined);
   return (
-    <details className="panel box danger-zone">
-      <summary><b>Excluir minha conta</b></summary>
+    <div className="panel box danger-zone">
+      <h3>Excluir minha conta</h3>
       <p className="muted small">
-        Só quer trocar o nome? O <b>nome da loja</b> pode ser mudado aqui em cima, sem excluir nada. Ao excluir, seus anúncios saem do ar, seus dados pessoais são apagados
+        Só quer trocar o nome? O <b>nome da loja</b> pode ser mudado em <a className="lime" href="/conta/perfil">Perfil da loja</a>, sem excluir nada. Ao excluir, seus anúncios saem do ar, seus dados pessoais são apagados
         e você sai da conta. O e-mail e o nome de usuário ficam livres para criar uma conta nova. Os pedidos antigos continuam registrados para as outras pessoas, sem seus dados. <b>Não dá para desfazer.</b>
       </p>
       {blockers.length ? (
@@ -30,6 +30,6 @@ export function DeleteAccount({ blockers }: { blockers: string[] }) {
           <button className="btn btn-danger" type="submit" disabled={pending}>{pending ? "Excluindo…" : "Excluir minha conta para sempre"}</button>
         </form>
       )}
-    </details>
+    </div>
   );
 }

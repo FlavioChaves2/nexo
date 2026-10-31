@@ -50,6 +50,7 @@ export default async function SegurancaPage({ searchParams }: { searchParams: Pr
             <button className="btn btn-primary" type="submit"><Icon name="shield" />Configurar agora</button>
           </form>
         )}
+        <Link className="linkish small danger-link" href="/conta/excluir">Quero excluir minha conta →</Link>
       </div>
     </div>
   );

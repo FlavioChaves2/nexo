@@ -8,7 +8,7 @@ import { Icon } from "@/components/Icon";
 
 export const metadata = {
   title: "Seja um dos 20 Fundadores da Nexo",
-  description: "Os 20 primeiros vendedores da Nexo ganham o título 👑 Fundador para sempre ao lado do nome. Anuncie de graça e garanta sua vaga.",
+  description: "Os 20 primeiros vendedores a concluir uma venda na Nexo ganham o título 👑 Fundador para sempre ao lado do nome.",
 };
 export const dynamic = "force-dynamic";
 
@@ -33,7 +33,7 @@ export default async function FundadoresPage() {
             <br />
             <em>Para sempre.</em>
           </h1>
-          <p>Os 20 primeiros vendedores da Nexo ganham o título <b>👑 Fundador</b> ao lado do nome, em todo anúncio, card e na loja. Não tem sorteio nem inscrição: publicou o primeiro anúncio, garantiu a vaga.</p>
+          <p>Os 20 primeiros vendedores da Nexo ganham o título <b>👑 Fundador</b> ao lado do nome, em todo anúncio, card e na loja. Não tem sorteio nem inscrição: <b>concluiu a primeira venda, garantiu a vaga.</b> Só criar a conta ou anunciar ainda não vale.</p>
           <div className="hero-ctas">
             {left > 0 ? (
               <Link className="btn btn-primary" href="/vender">Garantir minha vaga <Icon name="arrow" /></Link>
@@ -80,9 +80,9 @@ export default async function FundadoresPage() {
           <div className="grid-gap"><span className="eyebrow">Como garantir</span><h2>3 passos, e a vaga é sua</h2></div>
         </div>
         <div className="how-steps">
-          <div className="panel how-step"><span className="how-n">1</span><Icon name="user" /><b>Crie sua conta</b><p>É grátis e leva 1 minuto. Confirme seu e-mail.</p></div>
-          <div className="panel how-step"><span className="how-n">2</span><Icon name="tag" /><b>Publique um anúncio</b><p>Conta, item, moeda, gift card ou serviço, de qualquer jogo da Nexo. Anunciar não custa nada.</p></div>
-          <div className="panel how-step hl"><span className="how-n">3</span><Icon name="star" /><b>O 👑 aparece na hora</b><p>Se ainda houver vaga, o título é seu automaticamente e você recebe um aviso. Para sempre.</p></div>
+          <div className="panel how-step"><span className="how-n">1</span><Icon name="tag" /><b>Anuncie de graça</b><p>Crie a conta e publique conta, item, moeda, gift card ou serviço, de qualquer jogo da Nexo.</p></div>
+          <div className="panel how-step"><span className="how-n">2</span><Icon name="bag" /><b>Faça a primeira venda</b><p>Entregue o pedido e espere o comprador confirmar (ou o prazo de conferência acabar).</p></div>
+          <div className="panel how-step hl"><span className="how-n">3</span><Icon name="star" /><b>O 👑 é seu</b><p>Quando a venda é concluída e o dinheiro entra no seu saldo, se ainda houver vaga, o título aparece sozinho e você recebe um aviso. Para sempre.</p></div>
         </div>
       </section>
 
@@ -93,7 +93,7 @@ export default async function FundadoresPage() {
           <div className="panel box"><Icon name="spark" /><b>Saia na frente</b><p className="muted small">Com pouca concorrência no início, seus anúncios aparecem mais e você junta avaliações antes de todo mundo.</p></div>
           <div className="panel box"><Icon name="shield" /><b>Venda protegida</b><p className="muted small">O comprador paga antes da entrega: não tem calote. Você recebe quando ele confirma.</p></div>
         </div>
-        <p className="muted small">Regras: vale para contas reais (contas de teste não contam), uma vaga por pessoa, na ordem em que o primeiro anúncio é publicado. A equipe pode retirar o título de contas suspensas por golpe.</p>
+        <p className="muted small">Regras: vale para contas reais (contas de teste não contam), uma vaga por pessoa, na ordem em que a primeira venda é concluída (pedido cancelado ou reembolsado não conta). Só criar a conta ou publicar anúncio não garante vaga. A equipe pode retirar o título de contas suspensas por golpe.</p>
       </section>
 
       <section className="section how-end">

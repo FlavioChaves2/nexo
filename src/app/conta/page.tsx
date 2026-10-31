@@ -36,6 +36,7 @@ const MENU: { label: string; icon: string; aba?: string; href?: string; hot?: bo
   { href: "/conta/taxas", label: "Taxas e prazos", icon: "copy" },
   { href: "/conta/perfil", label: "Perfil da loja", icon: "edit" },
   { href: "/conta/seguranca", label: "Segurança", icon: "shield" },
+  { href: "/conta/excluir", label: "Excluir conta", icon: "alert" },
 ];
 const ABA_NAMES: Record<string, string> = Object.fromEntries(MENU.filter((m) => m.aba).map((m) => [m.aba, m.label]));
 

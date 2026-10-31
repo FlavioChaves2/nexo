@@ -1247,4 +1247,4 @@ a.acct-tile:hover { border-color: var(--accent-line); transform: translateY(-2px
 
 /* Excluir conta */
 .danger-zone { border-color: #522828; }
-.danger-zone summary { cursor: pointer; color: var(--danger); list-style-position: inside; }
+.danger-link { color: var(--danger); justify-self: start; }
