@@ -9,6 +9,7 @@ import { ListingCard } from "./ListingCard";
 import { shrinkInput } from "@/lib/shrink-images";
 import { Icon } from "./Icon";
 import { GamePicker } from "./GamePicker";
+import { capPrice } from "./FeeSimulator";
 import { useKeepForm } from "@/lib/use-keep-form";
 
 const DRAFT_KEY = "nexo-rascunho-anuncio";
@@ -150,7 +151,7 @@ export function ListingForm({ games, seller, feeBps, edit }: { games: Game[]; se
 
           <div className="field">
             <label htmlFor="price">Preço (R$)</label>
-            <input className="input mono" id="price" name="price" inputMode="decimal" maxLength={10} required placeholder="49,90" value={v.price} onChange={(e) => setV({ ...v, price: e.target.value })} />
+            <input className="input mono" id="price" name="price" inputMode="decimal" maxLength={10} required placeholder="49,90" value={v.price} onChange={(e) => setV({ ...v, price: capPrice(e.target.value) })} />
           </div>
           <div className="field">
             <label htmlFor="oldPrice">Preço &quot;de&quot; (opcional)</label>
