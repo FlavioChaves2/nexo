@@ -23,7 +23,7 @@ function toCents(v: string) {
 
 export type EditableListing = {
   id: string; gameSlug: string; type: string; title: string; description: string; priceCents: number;
-  oldPriceCents: number | null; stock: number; autoDelivery: boolean; images: { id: string }[];
+  oldPriceCents: number | null; stock: number; autoDelivery: boolean; server: string; images: { id: string }[];
 };
 
 type Seller = { username: string; storeName: string; avatarId: string | null; verification: string; completedSales: number; ratingSum: number; ratingCount: number };
@@ -36,6 +36,7 @@ export function ListingForm({ games, seller, feeBps, edit }: { games: Game[]; se
     gameSlug: edit?.gameSlug ?? games[0]?.slug ?? "",
     type: edit?.type ?? "CONTA",
     title: edit?.title ?? "",
+    server: edit?.server ?? "",
     price: reais(edit?.priceCents),
     auto: edit?.autoDelivery ?? false,
   });
@@ -79,7 +80,7 @@ export function ListingForm({ games, seller, feeBps, edit }: { games: Game[]; se
   const preview = {
     id: "preview", sellerId: "", gameSlug: game.slug, game, seller, type: v.type,
     title: v.title || "Título do seu anúncio", description: "", glyph: null, priceCents: cents, oldPriceCents: null,
-    stock: 1, autoDelivery: v.auto, featured: false, status: "ATIVO", moderationNote: "", soldCount: 0, reservedForId: null, orbitUntil: null, createdAt: new Date(),
+    stock: 1, autoDelivery: v.auto, featured: false, status: "ATIVO", moderationNote: "", soldCount: 0, reservedForId: null, orbitUntil: null, createdAt: new Date(), server: v.server, proposalId: null,
   };
 
   return (
@@ -105,6 +106,11 @@ export function ListingForm({ games, seller, feeBps, edit }: { games: Game[]; se
           <div className="field full">
             <label htmlFor="title">Título</label>
             <input className="input" id="title" name="title" maxLength={80} required placeholder="Ex.: Conta Valorant Diamante 3 · 22 skins" value={v.title} onChange={(e) => setV({ ...v, title: e.target.value })} />
+          </div>
+          <div className="field full">
+            <label htmlFor="server">Servidor ou região (opcional)</label>
+            <input className="input" id="server" name="server" maxLength={40} placeholder="Ex.: BR, NA, Mundo 12" value={v.server} onChange={(e) => setV({ ...v, server: e.target.value })} />
+            <span className="hint">Ajuda o comprador a filtrar na sua loja. Deixe em branco se não se aplica.</span>
           </div>
           <div className="field full">
             <label htmlFor="description">Descrição</label>

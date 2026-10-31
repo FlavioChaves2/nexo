@@ -33,6 +33,7 @@ const MENU: { label: string; icon: string; aba?: string; href?: string; hot?: bo
   { aba: "anuncios", label: "Meus anúncios", icon: "diamond" },
   { aba: "favoritos", label: "Favoritos", icon: "heart" },
   { href: "/conta/alertas", label: "Meus alertas", icon: "bell" },
+  { href: "/conta/propostas", label: "Propostas por link", icon: "send" },
   { aba: "saldo", label: "Saldo e saques", icon: "swap" },
   { href: "/conta/convites", label: "Convide e ganhe 3%", icon: "spark", hot: true },
   { href: "/conta/taxas", label: "Taxas e prazos", icon: "copy" },

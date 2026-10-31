@@ -27,7 +27,7 @@ export async function checkImage(file: File) {
   return { buf, mime };
 }
 
-export async function saveImage(file: File, ownerId: string, kind: "ANUNCIO" | "AVATAR", listingId?: string, sort = 0) {
+export async function saveImage(file: File, ownerId: string, kind: "ANUNCIO" | "AVATAR" | "CAPA", listingId?: string, sort = 0) {
   const { buf, mime } = await checkImage(file);
   const thumb = await makeThumb(buf);
   return db.image.create({ data: { ownerId, kind, listingId, mime, size: buf.length, sort, data: buf, thumb }, select: { id: true } });

@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { after } from "next/server";
 import { countView } from "@/lib/seller-stats";
+import { recordTouch, visitorId } from "@/lib/attribution";
 import { money, pct, monthYear, dateTime } from "@/lib/format";
 import { sellerStats } from "@/lib/orders";
 import { inOrbit } from "@/lib/orbit-plans";
@@ -44,6 +45,9 @@ export default async function AnuncioPage({ params }: { params: Promise<{ id: st
   const mine = user?.id === l.sellerId;
   // Visita do dia para o painel do vendedor (a do próprio vendedor não conta). Gravada depois da resposta.
   if (!mine) after(() => countView(l.id).catch(() => {}));
+  // Contato com o vendedor pelo marketplace (origem da venda). O cookie é lido agora; a gravação vai depois da resposta.
+  const vid = await visitorId();
+  if (!mine && !l.reservedForId) after(() => recordTouch({ sellerId: l.sellerId, source: "MARKETPLACE", userId: user?.id, listingId: l.id, visitorId: vid }).catch(() => {}));
   const [stats, reviews, similar, favs] = await Promise.all([
     sellerStats(l.sellerId),
     db.review.findMany({ where: { sellerId: l.sellerId }, include: { author: { select: { username: true } } }, orderBy: { createdAt: "desc" }, take: 5 }),

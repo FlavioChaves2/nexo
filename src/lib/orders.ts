@@ -1,7 +1,8 @@
 import { randomInt } from "node:crypto";
 import type { Order, Prisma } from "@prisma/client";
 import { db } from "./db";
-import { feeFor, money } from "./format";
+import { money } from "./format";
+import { decideOrigin, feeForBps } from "./attribution";
 import { createCardCharge, createPixCharge, type Payer } from "./payments";
 import { CARD_ENABLED, CARD_MIN_CENTS, PLANS, checkoutTotals, isPlan, planCashback, type PayMethod, type PlanCode } from "./plans";
 import { confirmDays, daysLabel } from "./constants";
@@ -9,6 +10,7 @@ import { after } from "next/server";
 import { notify } from "./notify";
 import { applyCoupon } from "./coupons";
 import { payReferrals } from "./referrals";
+import { claimProposalPayment, termsForCheckout } from "./proposals";
 
 // Regras da Garantia Nexo. Toda mudança de status usa updateMany com o status
 // esperado no filtro: se duas requisições chegarem juntas, só uma passa.
@@ -40,7 +42,19 @@ export async function createOrder(input: { buyerId: string; listingId: string; q
   if (!Number.isInteger(input.quantity) || input.quantity < 1) throw new OrderError("Quantidade inválida.");
   if (input.quantity > listing.stock) throw new OrderError(`Só há ${listing.stock} unidade(s) disponível(is).`);
 
+  // Proposta por link: confere a versão aceita e copia as condições para o pedido.
+  // Já existe um pagamento em aberto desta proposta? Reaproveita (clique duplo não gera outra cobrança).
+  let terms = "";
+  if (listing.proposalId) {
+    if (input.quantity !== 1) throw new OrderError("Quantidade inválida.");
+    terms = JSON.stringify(await termsForCheckout(listing.proposalId, input.buyerId));
+    const open = await db.order.findFirst({ where: { listingId: listing.id, buyerId: input.buyerId, status: "AGUARDANDO_PAGAMENTO", OR: [{ pixExpiresAt: null }, { pixExpiresAt: { gt: new Date() } }] } });
+    if (open && open.terms === terms) return open;
+  }
+
   const grossCents = listing.priceCents * input.quantity;
+  // Origem da venda e comissão decididas aqui, no servidor, e fixadas no pedido (docs/lojas-vendedor.md).
+  const attr = await decideOrigin({ buyerId: input.buyerId, sellerId: listing.sellerId });
   const coupon = input.couponCode ? await applyCoupon(input.couponCode, input.buyerId, grossCents) : null;
   const discountCents = coupon?.discountCents ?? 0;
   const method: PayMethod = input.method ?? "pix";
@@ -81,11 +95,16 @@ export async function createOrder(input: { buyerId: string; listingId: string; q
       cardFeeCents,
       payMethod: method.toUpperCase(),
       paymentUrl: charge.url ?? null,
-      feeCents: feeFor(grossCents),
+      feeCents: feeForBps(grossCents, attr.feeBps),
+      feeBps: attr.feeBps,
+      origin: attr.origin,
+      policyId: attr.policyId,
       buyerNote: input.buyerNote,
       paymentId: charge.id,
       pixCode: charge.copyPaste,
       pixExpiresAt: charge.expiresAt,
+      proposalId: listing.proposalId,
+      terms,
       messages: { create: { body: bySaldo ? "Pedido criado." : `Pedido criado. Pague ${money(totalCents)} ${method === "cartao" ? "no cartão" : "no Pix"} para iniciar.${plan !== "BASICO" ? ` Plano ${PLANS[plan].name} ativo.` : ""}` } },
     },
   });
@@ -119,19 +138,23 @@ async function payInTx(tx: Tx, orderId: string) {
   const order = await tx.order.findUniqueOrThrow({ where: { id: orderId }, include: { listing: true } });
   if (order.status !== "AGUARDANDO_PAGAMENTO") return order;
 
-  const reserved = await tx.listing.updateMany({
-    where: { id: order.listingId, stock: { gte: order.quantity } },
-    data: { stock: { decrement: order.quantity }, soldCount: { increment: order.quantity } },
-  });
+  // Proposta cancelada ou alterada depois de gerar o Pix: não vale mais; cai no mesmo caminho do esgotado (estorno).
+  const proposalOk = await claimProposalPayment(tx, order);
+  const reserved = proposalOk
+    ? await tx.listing.updateMany({
+        where: { id: order.listingId, stock: { gte: order.quantity } },
+        data: { stock: { decrement: order.quantity }, soldCount: { increment: order.quantity } },
+      })
+    : { count: 0 };
   if (reserved.count !== 1) {
     await transition(tx, order.id, ["AGUARDANDO_PAGAMENTO"], { status: "CANCELADO" });
     if (paidWithBalance(order)) {
       const r = await refundToBalance(tx, order);
       await tx.order.update({ where: { id: order.id }, data: { refundedAt: new Date(), refundId: r.id } });
-      await sysMsg(tx, order.id, "O anúncio esgotou. O valor voltou para o seu saldo na Nexo.");
+      await sysMsg(tx, order.id, "O anúncio não está mais disponível (esgotou, ou a proposta foi alterada ou cancelada). O valor voltou para o seu saldo na Nexo.");
     } else {
       // Pix: o webhook vê o pedido cancelado e estorna no gateway.
-      await sysMsg(tx, order.id, "Pagamento recebido, mas o anúncio esgotou. O valor será estornado.");
+      await sysMsg(tx, order.id, "Pagamento recebido, mas o anúncio não está mais disponível (esgotou, ou a proposta foi alterada ou cancelada). O valor será estornado.");
     }
     return order;
   }

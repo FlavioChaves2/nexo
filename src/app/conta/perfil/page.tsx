@@ -24,7 +24,7 @@ export default async function PerfilPage() {
       </div>
       <div className="two-col">
         <div className="stack">
-          <ProfileForm username={u.username} storeName={u.storeName} bio={u.bio} avatarId={u.avatarId} />
+          <ProfileForm username={u.username} storeName={u.storeName} bio={u.bio} avatarId={u.avatarId} bannerId={u.storeBannerId} storeHours={u.storeHours} />
           <Link className="linkish small danger-link" href="/conta/excluir">Quero excluir minha conta →</Link>
         </div>
         <aside className="stack buybox">

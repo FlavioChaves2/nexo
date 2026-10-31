@@ -40,3 +40,12 @@ export function contactError(text: string, where = "aqui"): string | null {
     ? `Bloqueamos ${why} ${where}. Por segurança, toda a negociação acontece pela Nexo: links, telefone, e-mail, @ e contato de WhatsApp, Discord ou Telegram não são permitidos.`
     : null;
 }
+
+/** Confere vários campos, um de cada vez (juntar "…pedido." com "BR" viraria o falso link "pedido.br"). */
+export function contactErrorIn(fields: string[], where = "aqui"): string | null {
+  for (const f of fields) {
+    const e = contactError(f, where);
+    if (e) return e;
+  }
+  return null;
+}

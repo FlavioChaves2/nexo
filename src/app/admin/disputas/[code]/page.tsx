@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { OrderTerms } from "@/components/OrderTerms";
+import { ORIGIN_LABEL } from "@/lib/attribution";
 import { db } from "@/lib/db";
 import { money, dateTime } from "@/lib/format";
 import { sellerNet, sellerStats } from "@/lib/orders";
@@ -46,6 +48,7 @@ export default async function DisputaPage({ params }: { params: Promise<{ code: 
               <dt>Anúncio</dt><dd><Link className="lime" href={`/anuncio/${o.listingId}`}>{o.listing.title}</Link></dd>
               <dt>Tipo</dt><dd>{TYPE_LABEL[o.listing.type]} · {o.listing.game.name}{o.listing.autoDelivery ? " · entrega automática" : ""}</dd>
               <dt>Valor</dt><dd>{money(o.totalCents)} ({o.quantity}×) · taxa {money(o.feeCents)}</dd>
+              <dt>Origem</dt><dd>{ORIGIN_LABEL[o.origin] ?? o.origin}{o.proposalId ? " · proposta por link" : ""}</dd>
               <dt>Pago em</dt><dd>{o.paidAt ? dateTime(o.paidAt) : "—"}</dd>
               <dt>Entregue em</dt><dd>{o.deliveredAt ? dateTime(o.deliveredAt) : "Não entregue"}</dd>
               <dt>Disputa aberta</dt><dd>{o.disputedAt ? dateTime(o.disputedAt) : "—"}</dd>
@@ -56,6 +59,7 @@ export default async function DisputaPage({ params }: { params: Promise<{ code: 
               <pre className="delivery">{o.deliveryText || "Nada foi entregue pelo quadro de entrega."}</pre>
             </div>
           </div>
+          {o.terms && <OrderTerms raw={o.terms} />}
 
           <div className="panel box">
             <h3>Conversa do pedido</h3>

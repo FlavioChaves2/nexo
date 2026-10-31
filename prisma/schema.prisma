@@ -14,17 +14,17 @@ datasource db {
 }
 
 model User {
-  id              String       @id @default(cuid())
-  email           String       @unique
-  username        String       @unique
-  passwordHash    String
-  bio             String       @default("")
-  balanceCents    Int          @default(0) // saldo disponível para saque
-  role            String       @default("USER") // USER | ADMIN
-  emailVerifiedAt DateTime?
+  id                String       @id @default(cuid())
+  email             String       @unique
+  username          String       @unique
+  passwordHash      String
+  bio               String       @default("")
+  balanceCents      Int          @default(0) // saldo disponível para saque
+  role              String       @default("USER") // USER | ADMIN
+  emailVerifiedAt   DateTime?
   passwordChangedAt DateTime? // sessões criadas antes disso deixam de valer
-  emailTokens     EmailToken[]
-  createdAt       DateTime     @default(now())
+  emailTokens       EmailToken[]
+  createdAt         DateTime     @default(now())
 
   // Suspensão pela equipe: a pessoa não entra e os anúncios somem.
   suspendedAt   DateTime?
@@ -46,24 +46,27 @@ model User {
   // Perfil público e reputação (contadores atualizados a cada venda e avaliação).
   storeName      String  @default("")
   avatarId       String?
+  // Loja: capa (Image CAPA) e horário de atendimento informado pelo vendedor.
+  storeBannerId  String?
+  storeHours     String  @default("")
   completedSales Int     @default(0)
   ratingSum      Int     @default(0)
   ratingCount    Int     @default(0)
 
-  notifications Notification[]
-  pushSubs      PushSubscription[]
-  titles        UserTitle[]
+  notifications    Notification[]
+  pushSubs         PushSubscription[]
+  titles           UserTitle[]
   // Convite (indicação): quem trouxe esta pessoa ganha 2% de cada pedido concluído dela, pago da taxa da Nexo.
   referredById     String?
-  referredBy       User?             @relation("referrals", fields: [referredById], references: [id])
-  referrals        User[]            @relation("referrals")
+  referredBy       User?              @relation("referrals", fields: [referredById], references: [id])
+  referrals        User[]             @relation("referrals")
   referralEarnings ReferralEarning[]
   boosts           Boost[]
   supportTickets   SupportTicket[]
   supportMessages  SupportMessage[]
   savedAlerts      SavedAlert[]
-  questions     Question[]
-  images        Image[]
+  questions        Question[]
+  images           Image[]
 
   listings         Listing[]
   purchases        Order[]       @relation("buyer")
@@ -77,6 +80,17 @@ model User {
   wanted           Wanted[]
   wantedOffers     WantedOffer[]
   reservedListings Listing[]     @relation("reservedFor")
+
+  following          StoreFollow[]      @relation("follower")
+  followers          StoreFollow[]      @relation("followed")
+  proposalsSold      Proposal[]         @relation("proposalSeller")
+  proposalsBought    Proposal[]         @relation("proposalBuyer")
+  externalProfiles   ExternalProfile[]  @relation("externalOwner")
+  externalReviewed   ExternalProfile[]  @relation("externalReviewer")
+  storeCoupons       StoreCoupon[]
+  sellerProgram      SellerProgram?     @relation("programSeller")
+  programsOwned      SellerProgram[]    @relation("programOwner")
+  commissionPolicies CommissionPolicy[]
 }
 
 model Game {
@@ -92,11 +106,11 @@ model Game {
 }
 
 model Listing {
-  id             String   @id @default(cuid())
+  id             String           @id @default(cuid())
   sellerId       String
-  seller         User     @relation(fields: [sellerId], references: [id])
+  seller         User             @relation(fields: [sellerId], references: [id])
   gameSlug       String
-  game           Game     @relation(fields: [gameSlug], references: [slug])
+  game           Game             @relation(fields: [gameSlug], references: [slug])
   type           String // CONTA | MOEDA | ITEM | GIFT | SERVICO
   title          String
   description    String
@@ -104,19 +118,24 @@ model Listing {
   priceCents     Int
   oldPriceCents  Int?
   stock          Int
-  autoDelivery   Boolean  @default(false)
-  featured       Boolean  @default(false)
-  status         String   @default("ATIVO") // ATIVO | PAUSADO | REMOVIDO (pela moderação)
-  moderationNote String   @default("") // motivo da remoção, visível para o vendedor
-  soldCount      Int      @default(0)
-  createdAt      DateTime @default(now())
+  autoDelivery   Boolean          @default(false)
+  featured       Boolean          @default(false)
+  status         String           @default("ATIVO") // ATIVO | PAUSADO | REMOVIDO (pela moderação)
+  moderationNote String           @default("") // motivo da remoção, visível para o vendedor
+  soldCount      Int              @default(0)
+  createdAt      DateTime         @default(now())
   // Órbita (destaque pago): até esta data o anúncio aparece no topo da página inicial e da busca.
   orbitUntil     DateTime?
   boosts         Boost[]
   viewDays       ListingViewDay[]
   // Anúncio criado de uma oferta aceita em "Quero comprar": só esse comprador vê e compra.
   reservedForId  String?
-  reservedFor    User?    @relation("reservedFor", fields: [reservedForId], references: [id])
+  reservedFor    User?            @relation("reservedFor", fields: [reservedForId], references: [id])
+  // Servidor/região do jogo (opcional), usado no filtro da loja.
+  server         String           @default("")
+  // Anúncio criado ao aceitar uma proposta por link (também reservado ao comprador).
+  proposalId     String?          @unique
+  proposal       Proposal?        @relation(fields: [proposalId], references: [id])
 
   codes     AutoCode[]
   orders    Order[]
@@ -149,45 +168,56 @@ model AutoCode {
 //                                               \-> REEMBOLSADO (admin devolve ao comprador)
 // AGUARDANDO_PAGAMENTO -> CANCELADO (Pix expirou ou comprador cancelou)
 model Order {
-  id             String    @id @default(cuid())
-  code           String    @unique
-  buyerId        String
-  buyer          User      @relation("buyer", fields: [buyerId], references: [id])
-  sellerId       String
-  seller         User      @relation("seller", fields: [sellerId], references: [id])
-  listingId      String
-  listing        Listing   @relation(fields: [listingId], references: [id])
-  quantity       Int
-  unitPriceCents Int
-  totalCents     Int
-  feeCents       Int
-  status         String    @default("AGUARDANDO_PAGAMENTO")
-  buyerNote      String    @default("") // ex.: ID do jogador para recargas
-  deliveryText   String    @default("")
-  disputeReason  String    @default("")
-  paymentId      String?
-  pixCode        String?
-  pixExpiresAt   DateTime?
-  paidAt         DateTime?
-  deliveredAt    DateTime?
-  autoConfirmAt  DateTime?
-  completedAt    DateTime?
-  disputedAt     DateTime?
-  resolution     String    @default("") // decisão do mediador, visível para as duas partes
-  resolvedAt     DateTime?
-  refundedAt     DateTime?
-  refundId       String?
-  discountCents  Int       @default(0) // desconto de cupom, pago pela Nexo (o vendedor recebe sobre o preço cheio)
-  couponCode     String?
+  id                 String    @id @default(cuid())
+  code               String    @unique
+  buyerId            String
+  buyer              User      @relation("buyer", fields: [buyerId], references: [id])
+  sellerId           String
+  seller             User      @relation("seller", fields: [sellerId], references: [id])
+  listingId          String
+  listing            Listing   @relation(fields: [listingId], references: [id])
+  quantity           Int
+  unitPriceCents     Int
+  totalCents         Int
+  feeCents           Int
+  status             String    @default("AGUARDANDO_PAGAMENTO")
+  buyerNote          String    @default("") // ex.: ID do jogador para recargas
+  deliveryText       String    @default("")
+  disputeReason      String    @default("")
+  paymentId          String?
+  pixCode            String?
+  pixExpiresAt       DateTime?
+  paidAt             DateTime?
+  deliveredAt        DateTime?
+  autoConfirmAt      DateTime?
+  completedAt        DateTime?
+  disputedAt         DateTime?
+  resolution         String    @default("") // decisão do mediador, visível para as duas partes
+  resolvedAt         DateTime?
+  refundedAt         DateTime?
+  refundId           String?
+  discountCents      Int       @default(0) // desconto de cupom, pago pela Nexo (o vendedor recebe sobre o preço cheio)
+  couponCode         String?
   // Plano de proteção do comprador (BASICO | VIP | PREMIUM) e forma de pagamento (PIX | SALDO | CARTAO).
   // planCents e cardFeeCents entram no totalCents (o que o comprador paga) e ficam com a Nexo, não com o vendedor.
-  plan           String    @default("BASICO")
-  planCents      Int       @default(0)
-  cardFeeCents   Int       @default(0)
-  payMethod      String    @default("PIX")
-  paymentUrl     String? // página segura do Asaas para pagar com cartão
-  cashbackCents  Int       @default(0) // devolvido em saldo ao concluir (planos VIP)
-  createdAt      DateTime  @default(now())
+  plan               String    @default("BASICO")
+  planCents          Int       @default(0)
+  cardFeeCents       Int       @default(0)
+  payMethod          String    @default("PIX")
+  paymentUrl         String? // página segura do Asaas para pagar com cartão
+  cashbackCents      Int       @default(0) // devolvido em saldo ao concluir (planos VIP)
+  // Origem da venda e comissão fixadas na criação do pedido (docs/lojas-vendedor.md).
+  // origin: MARKETPLACE | LINK_VENDEDOR. feeBps e policyId vazios = pedidos anteriores à política.
+  origin             String    @default("MARKETPLACE")
+  feeBps             Int?
+  policyId           String?
+  // Proposta por link: condições aceitas pelo comprador, copiadas (JSON) para o pedido.
+  proposalId         String?
+  terms              String    @default("")
+  // Cupom da loja: o desconto sai do vendedor (diferente do cupom da Nexo, pago pela plataforma).
+  storeCouponId      String?
+  storeDiscountCents Int       @default(0)
+  createdAt          DateTime  @default(now())
 
   messages Message[]
   review   Review?
@@ -525,4 +555,139 @@ model ListingViewDay {
 
   @@id([listingId, day])
   @@index([day])
+}
+
+// Política de comissão. Cada alteração do admin cria uma versão nova; a ativa é a mais recente.
+// O pedido guarda a versão usada (Order.policyId), então mudar a política não altera vendas antigas.
+model CommissionPolicy {
+  id             String   @id @default(cuid())
+  standardFeeBps Int // comissão normal (marketplace)
+  linkFeeBps     Int? // comissão reduzida para vendas vindas do link do vendedor
+  linkEnabled    Boolean  @default(false)
+  windowHours    Int      @default(0) // janela de atribuição; 0 = não definida
+  // Custos estimados, só para a simulação do admin (não mudam cobranças).
+  pixCostCents   Int      @default(0)
+  pixCostBps     Int      @default(0)
+  otherCostCents Int      @default(0)
+  note           String   @default("")
+  createdById    String
+  createdBy      User     @relation(fields: [createdById], references: [id])
+  createdAt      DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+// Pontos de contato entre um navegador/conta e um vendedor (origem da venda).
+model AttributionTouch {
+  id        String   @id @default(cuid())
+  visitorId String // cookie aleatório nexo_vid
+  userId    String?
+  sellerId  String
+  source    String // LINK_VENDEDOR | MARKETPLACE
+  listingId String?
+  createdAt DateTime @default(now())
+
+  @@index([sellerId, visitorId, createdAt])
+  @@index([sellerId, userId, createdAt])
+}
+
+// Proposta por link: negociação combinada fora da Nexo e paga com a Garantia Nexo.
+model Proposal {
+  id              String    @id @default(cuid())
+  token           String    @unique // código aleatório do link
+  sellerId        String
+  seller          User      @relation("proposalSeller", fields: [sellerId], references: [id])
+  buyerId         String? // vinculado ao primeiro comprador que aceitar
+  buyer           User?     @relation("proposalBuyer", fields: [buyerId], references: [id])
+  gameSlug        String
+  server          String    @default("")
+  type            String
+  title           String
+  description     String
+  quantity        Int       @default(1)
+  totalCents      Int
+  deliveryDays    Int
+  deliveryTerms   String
+  expiresAt       DateTime
+  status          String    @default("ABERTA") // ABERTA | ACEITA | PAGA | CANCELADA
+  version         Int       @default(1)
+  acceptedVersion Int?
+  acceptedAt      DateTime?
+  orderId         String?
+  listing         Listing?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([sellerId, createdAt])
+  @@index([buyerId])
+}
+
+model StoreFollow {
+  followerId String
+  follower   User     @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
+  sellerId   String
+  seller     User     @relation("followed", fields: [sellerId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@id([followerId, sellerId])
+  @@index([sellerId])
+}
+
+// Cupom criado pelo vendedor para a própria loja. O desconto sai do valor dele.
+model StoreCoupon {
+  id               String    @id @default(cuid())
+  sellerId         String
+  seller           User      @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  code             String
+  percentOff       Int       @default(0)
+  amountOffCents   Int       @default(0)
+  maxDiscountCents Int?
+  minOrderCents    Int       @default(0)
+  maxUses          Int?
+  uses             Int       @default(0) // pedidos em aberto ou pagos que usam o cupom
+  scope            String    @default("LOJA") // LOJA | JOGO | ANUNCIO
+  target           String    @default("") // slug do jogo ou id do anúncio
+  startsAt         DateTime?
+  expiresAt        DateTime?
+  active           Boolean   @default(true)
+  createdAt        DateTime  @default(now())
+
+  @@unique([sellerId, code])
+}
+
+// Perfil do vendedor em outra plataforma. A equipe confere o código de verificação no perfil externo.
+model ExternalProfile {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation("externalOwner", fields: [userId], references: [id], onDelete: Cascade)
+  platform   String
+  url        String
+  handle     String    @default("")
+  challenge  String // código que o vendedor coloca na bio/descrição do perfil externo
+  status     String    @default("PENDENTE") // PENDENTE | APROVADO | RECUSADO | REVOGADO
+  note       String    @default("")
+  reviewerId String?
+  reviewer   User?     @relation("externalReviewer", fields: [reviewerId], references: [id])
+  decidedAt  DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([status])
+  @@index([userId])
+}
+
+// Programa de primeiros vendedores: acompanhamento interno da equipe (nada disso é público).
+model SellerProgram {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation("programSeller", fields: [userId], references: [id], onDelete: Cascade)
+  ownerId       String?
+  owner         User?    @relation("programOwner", fields: [ownerId], references: [id])
+  status        String   @default("CONTATO") // CONTATO | ONBOARDING | PRIMEIRA_VENDA | CONCLUIDO | PAUSADO
+  notes         String   @default("")
+  stepListings  Boolean  @default(false)
+  stepStore     Boolean  @default(false)
+  stepMaterial  Boolean  @default(false)
+  stepFirstSale Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }

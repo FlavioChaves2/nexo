@@ -6,8 +6,9 @@ import { db } from "@/lib/db";
 import { getCurrentUser, requireUser } from "@/lib/auth";
 import { notify } from "@/lib/notify";
 import { OrderError } from "@/lib/orders";
-import { contactError } from "@/lib/contact-filter";
+import { contactError, contactErrorIn } from "@/lib/contact-filter";
 import { deleteImage, filesFrom, saveImage } from "@/lib/images";
+import { cleanDisplayName, reservedNameError } from "@/lib/store-names";
 
 export type SocialState = { error?: string; ok?: string } | undefined;
 
@@ -48,27 +49,39 @@ export async function answerQuestion(questionId: string, _: SocialState, form: F
 const profileSchema = z.object({
   storeName: z.string().trim().max(40, "Nome da loja: até 40 caracteres."),
   bio: z.string().trim().max(500, "Descrição: até 500 caracteres."),
+  storeHours: z.string().trim().max(80, "Horário de atendimento: até 80 caracteres."),
 });
 
 export async function updateProfile(_: SocialState, form: FormData): Promise<SocialState> {
   const user = await requireUser("/conta/perfil");
-  const parsed = profileSchema.safeParse({ storeName: form.get("storeName") ?? "", bio: form.get("bio") ?? "" });
+  const parsed = profileSchema.safeParse({
+    storeName: cleanDisplayName(String(form.get("storeName") ?? "")),
+    bio: form.get("bio") ?? "",
+    storeHours: cleanDisplayName(String(form.get("storeHours") ?? "")),
+  });
   if (!parsed.success) return { error: parsed.error.issues[0].message };
-  const contact = contactError(`${parsed.data.storeName}\n${parsed.data.bio}`, "no perfil");
+  const reserved = reservedNameError(parsed.data.storeName, "O nome da loja");
+  if (reserved) return { error: reserved };
+  const contact = contactErrorIn([parsed.data.storeName, parsed.data.bio, parsed.data.storeHours], "no perfil");
   if (contact) return { error: contact };
   const me =await db.user.findUniqueOrThrow({ where: { id: user.id } });
 
   let avatarId = me.avatarId;
+  let storeBannerId = me.storeBannerId;
   try {
     const [file] = filesFrom(form, "avatar");
     if (file) avatarId = (await saveImage(file, user.id, "AVATAR")).id;
     else if (form.get("removeAvatar") === "on") avatarId = null;
+    const [banner] = filesFrom(form, "banner");
+    if (banner) storeBannerId = (await saveImage(banner, user.id, "CAPA")).id;
+    else if (form.get("removeBanner") === "on") storeBannerId = null;
   } catch (e) {
     if (e instanceof OrderError) return { error: e.message };
     throw e;
   }
-  await db.user.update({ where: { id: user.id }, data: { ...parsed.data, avatarId } });
+  await db.user.update({ where: { id: user.id }, data: { ...parsed.data, avatarId, storeBannerId } });
   if (me.avatarId && me.avatarId !== avatarId) await deleteImage(me.avatarId);
+  if (me.storeBannerId && me.storeBannerId !== storeBannerId) await deleteImage(me.storeBannerId);
   revalidatePath("/", "layout");
   return { ok: "Perfil salvo." };
 }

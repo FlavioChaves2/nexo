@@ -55,6 +55,7 @@ export function HeaderMenu({ user }: { user: MenuUser | null }) {
                 <Link href="/conta?aba=compras" role="menuitem"><Icon name="bag" />Minhas compras</Link>
                 <Link href="/conta?aba=vendas" role="menuitem"><Icon name="tag" />Minhas vendas</Link>
                 <Link href="/conta/painel" role="menuitem"><Icon name="spark" />Painel de vendas</Link>
+                <Link href="/conta/propostas" role="menuitem"><Icon name="send" />Propostas por link</Link>
                 <Link href="/conta/alertas" role="menuitem"><Icon name="bell" />Meus alertas</Link>
                 <Link href="/conta?aba=favoritos" role="menuitem"><Icon name="heart" />Favoritos{user.favorites > 0 && <span className="hmenu-n">{user.favorites}</span>}</Link>
                 <Link href="/conta/convites" role="menuitem" className="hot"><Icon name="spark" />Convide e ganhe 3%</Link>

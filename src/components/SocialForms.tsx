@@ -65,12 +65,21 @@ export function GalleryViewer({ ids, alt }: { ids: string[]; alt: string }) {
   );
 }
 
-export function ProfileForm({ username, storeName, bio, avatarId }: { username: string; storeName: string; bio: string; avatarId: string | null }) {
+export function ProfileForm({ username, storeName, bio, avatarId, bannerId, storeHours }: { username: string; storeName: string; bio: string; avatarId: string | null; bannerId: string | null; storeHours: string }) {
   const [state, run, pending] = useActionState(updateProfile, undefined);
   const keepRun = useKeepForm(state, run);
   const [preview, setPreview] = useState(avatarId ? imageUrl(avatarId) : null);
+  const [cover, setCover] = useState(bannerId ? imageUrl(bannerId) : null);
   return (
     <form action={run} {...keepRun} className="panel box">
+      <div className="field">
+        <span className="label">Capa da loja</span>
+        <label className="store-cover-pick" style={cover ? { backgroundImage: `url(${cover})` } : undefined}>
+          <span className="small"><Icon name="camera" /> {cover ? "Trocar capa" : "Adicionar capa"} · JPG, PNG ou WEBP, de preferência larga (1600×400)</span>
+          <input type="file" name="banner" accept="image/jpeg,image/png,image/webp" onChange={async (e) => { const f = await shrinkInput(e.currentTarget); if (f) setCover(URL.createObjectURL(f)); }} />
+        </label>
+        {bannerId && <label className="check"><input type="checkbox" name="removeBanner" />Remover capa atual</label>}
+      </div>
       <div className="seller-mini">
         {preview ? <img className="avatar xl" src={preview} alt="" /> : <span className="avatar xl">{(storeName || username)[0]}</span>}
         <label className="file-drop" style={{ flex: 1 }}>
@@ -87,7 +96,12 @@ export function ProfileForm({ username, storeName, bio, avatarId }: { username: 
       </div>
       <div className="field">
         <label htmlFor="bio">Sobre a loja</label>
-        <textarea className="input" id="bio" name="bio" rows={4} maxLength={500} defaultValue={bio} placeholder="O que você vende, como entrega, horários de atendimento…" />
+        <textarea className="input" id="bio" name="bio" rows={4} maxLength={500} defaultValue={bio} placeholder="O que você vende, como entrega, regras de garantia…" />
+      </div>
+      <div className="field">
+        <label htmlFor="storeHours">Horário de atendimento (opcional)</label>
+        <input className="input" id="storeHours" name="storeHours" maxLength={80} defaultValue={storeHours} placeholder="Ex.: seg. a sáb., 9h às 22h" />
+        <span className="hint">Aparece na sua loja. O tempo médio de entrega é calculado pela Nexo com as suas vendas reais.</span>
       </div>
       <Feedback s={state} />
       <button className="btn btn-primary" type="submit" disabled={pending}>{pending ? "Salvando…" : "Salvar perfil"}</button>

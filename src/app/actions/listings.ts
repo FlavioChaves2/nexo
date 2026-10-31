@@ -9,10 +9,12 @@ import { parseReais } from "@/lib/format";
 import { LISTING_TYPES } from "@/lib/constants";
 import { MAX_LISTING_IMAGES, deleteImage, filesFrom, saveImage } from "@/lib/images";
 import { OrderError } from "@/lib/orders";
-import { contactError } from "@/lib/contact-filter";
+import { contactError, contactErrorIn } from "@/lib/contact-filter";
 import { matchAlerts } from "@/lib/alerts";
+import { notifyFollowers } from "@/lib/store";
 import { after } from "next/server";
 import { emailBlock } from "@/lib/email";
+import { cleanDisplayName } from "@/lib/store-names";
 
 export type ListingFormState = { error?: string } | undefined;
 
@@ -26,6 +28,7 @@ const schema = z.object({
   stock: z.coerce.number().int().min(1, "Estoque mínimo: 1.").max(9999),
   autoDelivery: z.literal("on").optional(),
   codes: z.string().optional(),
+  server: z.string().trim().max(40, "Servidor: até 40 caracteres.").optional().default(""),
 });
 
 function parsePrices(d: z.infer<typeof schema>) {
@@ -62,7 +65,7 @@ export async function createListing(_: ListingFormState, form: FormData): Promis
     const parsed = schema.safeParse(Object.fromEntries(form));
     if (!parsed.success) throw new OrderError(parsed.error.issues[0].message);
     const d = parsed.data;
-    const contact = contactError(`${d.title}\n${d.description}`, "no anúncio");
+    const contact = contactErrorIn([d.title, d.description, d.server], "no anúncio");
     if (contact) throw new OrderError(contact);
     const prices = parsePrices(d);
     if (!(await db.game.findUnique({ where: { slug: d.gameSlug } }))) throw new OrderError("Jogo inválido.");
@@ -80,6 +83,7 @@ export async function createListing(_: ListingFormState, form: FormData): Promis
         type: d.type,
         title: d.title,
         description: d.description,
+        server: cleanDisplayName(d.server),
         ...prices,
         stock: auto ? codes.length : d.stock,
         autoDelivery: auto,
@@ -89,6 +93,7 @@ export async function createListing(_: ListingFormState, form: FormData): Promis
     for (const [i, f] of files.entries()) await saveImage(f, user.id, "ANUNCIO", listing.id, i);
     // Avisa quem tem alerta que combina, depois da resposta (não atrasa a publicação).
     after(() => matchAlerts(listing).catch((e) => console.error("Alertas:", e)));
+    after(() => notifyFollowers(listing).catch((e) => console.error("Seguidores:", e)));
     return `/anuncio/${listing.id}`;
   });
 }
@@ -106,7 +111,7 @@ export async function updateListing(listingId: string, _: ListingFormState, form
     const parsed = schema.safeParse({ ...Object.fromEntries(form), autoDelivery: listing.autoDelivery ? "on" : undefined, stock: form.get("stock") ?? listing.stock });
     if (!parsed.success) throw new OrderError(parsed.error.issues[0].message);
     const d = parsed.data;
-    const contact = contactError(`${d.title}\n${d.description}`, "no anúncio");
+    const contact = contactErrorIn([d.title, d.description, d.server], "no anúncio");
     if (contact) throw new OrderError(contact);
     const prices = parsePrices(d);
 
@@ -121,7 +126,7 @@ export async function updateListing(listingId: string, _: ListingFormState, form
       const stock = listing.autoDelivery ? await tx.autoCode.count({ where: { listingId, orderId: null } }) : d.stock;
       await tx.listing.update({
         where: { id: listingId },
-        data: { gameSlug: d.gameSlug, type: d.type, title: d.title, description: d.description, ...prices, stock },
+        data: { gameSlug: d.gameSlug, type: d.type, title: d.title, description: d.description, server: cleanDisplayName(d.server), ...prices, stock },
       });
     });
     for (const img of listing.images) if (remove.has(img.id)) await deleteImage(img.id);

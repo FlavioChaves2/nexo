@@ -7,6 +7,7 @@ import { z } from "zod";
 import { cookies } from "next/headers";
 import { REF_COOKIE } from "@/lib/referrals";
 import { WELCOME_COOKIE } from "@/lib/welcome";
+import { reservedNameError } from "@/lib/store-names";
 import { deleteAccount, DeleteAccountError } from "@/lib/delete-account";
 import { db } from "@/lib/db";
 import { checkImage, filesFrom, saveImage } from "@/lib/images";
@@ -57,6 +58,8 @@ export async function register(_: FormState, form: FormData): Promise<FormState>
   const parsed = registerSchema.safeParse(Object.fromEntries(form));
   if (!parsed.success) return { error: parsed.error.issues[0].message };
   const { email, username, password } = parsed.data;
+  const reserved = reservedNameError(username, "O nome de usuário");
+  if (reserved) return { error: reserved };
 
   const ip = await clientIp();
   // Limite por IP (robô criando contas em série) e um teto geral alto, para não barrar o público num lançamento.
