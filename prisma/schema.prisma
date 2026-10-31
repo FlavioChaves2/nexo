@@ -61,6 +61,7 @@ model User {
   boosts           Boost[]
   supportTickets   SupportTicket[]
   supportMessages  SupportMessage[]
+  savedAlerts      SavedAlert[]
   questions     Question[]
   images        Image[]
 
@@ -112,6 +113,7 @@ model Listing {
   // Órbita (destaque pago): até esta data o anúncio aparece no topo da página inicial e da busca.
   orbitUntil     DateTime?
   boosts         Boost[]
+  viewDays       ListingViewDay[]
   // Anúncio criado de uma oferta aceita em "Quero comprar": só esse comprador vê e compra.
   reservedForId  String?
   reservedFor    User?    @relation("reservedFor", fields: [reservedForId], references: [id])
@@ -495,4 +497,32 @@ model SupportMessage {
   createdAt DateTime      @default(now())
 
   @@index([ticketId, createdAt])
+}
+
+// "Me avise quando aparecer": filtros salvos da busca. Anúncio novo que combina gera um aviso.
+model SavedAlert {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gameSlug  String?
+  type      String?
+  q         String    @default("")
+  maxCents  Int?
+  hits      Int       @default(0)
+  lastHitAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@index([gameSlug])
+}
+
+// Visitas por dia de cada anúncio (painel do vendedor). day = AAAA-MM-DD no horário de Brasília.
+model ListingViewDay {
+  listingId String
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  day       String
+  count     Int     @default(0)
+
+  @@id([listingId, day])
+  @@index([day])
 }

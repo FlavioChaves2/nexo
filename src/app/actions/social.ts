@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 import { getCurrentUser, requireUser } from "@/lib/auth";
 import { notify } from "@/lib/notify";
 import { OrderError } from "@/lib/orders";
-import { CONTACT } from "@/lib/trust";
+import { contactError } from "@/lib/contact-filter";
 import { deleteImage, filesFrom, saveImage } from "@/lib/images";
 
 export type SocialState = { error?: string; ok?: string } | undefined;
@@ -17,7 +17,8 @@ export async function askQuestion(listingId: string, _: SocialState, form: FormD
   if (!user) return { error: "Entre na sua conta para perguntar." };
   const body = String(form.get("body") ?? "").trim();
   if (body.length < 5 || body.length > 500) return { error: "A pergunta precisa ter entre 5 e 500 caracteres." };
-  if (CONTACT.test(body)) return { error: "Não envie contato, telefone ou link. Toda negociação acontece pela Nexo." };
+  const contact = contactError(body, "na pergunta");
+  if (contact) return { error: contact };
   const listing = await db.listing.findUnique({ where: { id: listingId } });
   if (!listing) return { error: "Anúncio não encontrado." };
   if (listing.sellerId === user.id) return { error: "Você não pode perguntar no próprio anúncio." };
@@ -34,7 +35,8 @@ export async function answerQuestion(questionId: string, _: SocialState, form: F
   const user = await requireUser("/");
   const answer = String(form.get("answer") ?? "").trim();
   if (answer.length < 2 || answer.length > 1000) return { error: "Escreva a resposta." };
-  if (CONTACT.test(answer)) return { error: "Não envie contato, telefone ou link na resposta." };
+  const contact = contactError(answer, "na resposta");
+  if (contact) return { error: contact };
   const q = await db.question.findUnique({ where: { id: questionId }, include: { listing: true } });
   if (!q || q.listing.sellerId !== user.id) return { error: "Pergunta não encontrada." };
   await db.question.update({ where: { id: questionId }, data: { answer, answeredAt: new Date() } });
@@ -52,7 +54,9 @@ export async function updateProfile(_: SocialState, form: FormData): Promise<Soc
   const user = await requireUser("/conta/perfil");
   const parsed = profileSchema.safeParse({ storeName: form.get("storeName") ?? "", bio: form.get("bio") ?? "" });
   if (!parsed.success) return { error: parsed.error.issues[0].message };
-  const me = await db.user.findUniqueOrThrow({ where: { id: user.id } });
+  const contact = contactError(`${parsed.data.storeName}\n${parsed.data.bio}`, "no perfil");
+  if (contact) return { error: contact };
+  const me =await db.user.findUniqueOrThrow({ where: { id: user.id } });
 
   let avatarId = me.avatarId;
   try {

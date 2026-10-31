@@ -9,6 +9,9 @@ import { parseReais } from "@/lib/format";
 import { LISTING_TYPES } from "@/lib/constants";
 import { MAX_LISTING_IMAGES, deleteImage, filesFrom, saveImage } from "@/lib/images";
 import { OrderError } from "@/lib/orders";
+import { contactError } from "@/lib/contact-filter";
+import { matchAlerts } from "@/lib/alerts";
+import { after } from "next/server";
 import { emailBlock } from "@/lib/email";
 
 export type ListingFormState = { error?: string } | undefined;
@@ -59,6 +62,8 @@ export async function createListing(_: ListingFormState, form: FormData): Promis
     const parsed = schema.safeParse(Object.fromEntries(form));
     if (!parsed.success) throw new OrderError(parsed.error.issues[0].message);
     const d = parsed.data;
+    const contact = contactError(`${d.title}\n${d.description}`, "no anúncio");
+    if (contact) throw new OrderError(contact);
     const prices = parsePrices(d);
     if (!(await db.game.findUnique({ where: { slug: d.gameSlug } }))) throw new OrderError("Jogo inválido.");
     const files = filesFrom(form, "images");
@@ -82,6 +87,8 @@ export async function createListing(_: ListingFormState, form: FormData): Promis
       },
     });
     for (const [i, f] of files.entries()) await saveImage(f, user.id, "ANUNCIO", listing.id, i);
+    // Avisa quem tem alerta que combina, depois da resposta (não atrasa a publicação).
+    after(() => matchAlerts(listing).catch((e) => console.error("Alertas:", e)));
     return `/anuncio/${listing.id}`;
   });
 }
@@ -99,6 +106,8 @@ export async function updateListing(listingId: string, _: ListingFormState, form
     const parsed = schema.safeParse({ ...Object.fromEntries(form), autoDelivery: listing.autoDelivery ? "on" : undefined, stock: form.get("stock") ?? listing.stock });
     if (!parsed.success) throw new OrderError(parsed.error.issues[0].message);
     const d = parsed.data;
+    const contact = contactError(`${d.title}\n${d.description}`, "no anúncio");
+    if (contact) throw new OrderError(contact);
     const prices = parsePrices(d);
 
     const remove = new Set(form.getAll("removeImage").map(String));

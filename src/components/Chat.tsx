@@ -96,7 +96,7 @@ export function Chat({ code, meId, other, role, status, initial }: { code: strin
         <span className="avatar chat-avatar">{other[0]}</span>
         <div style={{ minWidth: 0, flex: 1 }}>
           <b>{other}</b> <span className="online" aria-hidden="true" />
-          <div className="muted" style={{ fontSize: 12 }}>{role === "buyer" ? "Vendedor" : "Comprador"} · conversa gravada para sua segurança</div>
+          <div className="muted" style={{ fontSize: 12 }}>{role === "buyer" ? "Vendedor" : "Comprador"} · conversa gravada · links e contatos externos bloqueados</div>
         </div>
         <span className="chip chat-safe"><Icon name="shield" />Protegido</span>
       </div>

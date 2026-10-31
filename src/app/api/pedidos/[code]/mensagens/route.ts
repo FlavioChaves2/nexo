@@ -1,4 +1,5 @@
 import { notifyMessage } from "@/lib/notify";
+import { contactError } from "@/lib/contact-filter";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
@@ -38,6 +39,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ code: s
   if (r.order.status === "CANCELADO") return NextResponse.json({ error: "Este pedido foi cancelado." }, { status: 400 });
   const body = String((await req.json().catch(() => ({})))?.body ?? "").trim().slice(0, 1000);
   if (!body) return NextResponse.json({ error: "Mensagem vazia." }, { status: 400 });
+  const blocked = contactError(body, "nesta mensagem");
+  if (blocked) return NextResponse.json({ error: blocked }, { status: 400 });
   const recent = await db.message.count({ where: { orderId: r.order.id, senderId: r.user.id, createdAt: { gte: new Date(Date.now() - 60_000) } } });
   if (recent >= 20) return NextResponse.json({ error: "Muitas mensagens seguidas. Espere um minuto." }, { status: 429 });
   const msg = await db.message.create({ data: { orderId: r.order.id, senderId: r.user.id, body } });

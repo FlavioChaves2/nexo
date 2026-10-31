@@ -12,6 +12,7 @@ import { GameBanner } from "@/components/GameBanner";
 import { Nexinho3D } from "@/components/Nexinho3D";
 import { Icon } from "@/components/Icon";
 import { GamePicker } from "@/components/GamePicker";
+import { AlertButton } from "@/components/AlertButton";
 
 export async function generateMetadata({ searchParams }: { searchParams: Promise<SP> }) {
   const sp = await searchParams;
@@ -44,6 +45,9 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
   const max = Number.isFinite(maxCents) && maxCents > 0 ? maxCents / 100 : 0;
   // Muda a cada combinação de filtros: o formulário é recriado e não guarda marcações antigas (ex.: depois de "Limpar filtros").
   const formKey = JSON.stringify([q, sp.jogo ?? "", tipo, sp.auto ?? "", max, ordem]);
+  // Filtros que viram um alerta "Me avise quando aparecer".
+  const alertFilters = { q, jogo: sp.jogo ?? "", tipo, max: max > 0 ? max.toFixed(2) : "" };
+  const hasFilter = Object.values(alertFilters).some(Boolean);
   const user = await getCurrentUser();
 
   const where: Prisma.ListingWhereInput = {
@@ -106,6 +110,7 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
           <div className="grid-gap" style={{ gap: 4 }}>
             <span className="eyebrow">{results.length} {results.length === 1 ? "anúncio" : "anúncios"}</span>
             <h2>{title}</h2>
+            {hasFilter && results.length > 0 && <AlertButton filters={alertFilters} logged={!!user} />}
           </div>
           <AutoSubmitForm key={formKey} action="/busca">
             {Object.entries({ q, jogo: sp.jogo, tipo, auto: sp.auto === "1" ? "1" : "", max: max > 0 ? max.toFixed(2) : "" }).map(([k, v]) => (v ? <input key={k} type="hidden" name={k} value={v} /> : null))}
@@ -124,12 +129,26 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
           <div className="panel empty">
             <Nexinho3D className="sad-bot" mood="sad" decor={false} interactive={false} zoom={11} label="Nexinho triste: nada encontrado" />
             <h3>Nenhum anúncio com esses filtros</h3>
-            <p className="muted">Tente remover um filtro ou buscar outro termo.</p>
-            <p className="muted">Ou publique um pedido e deixe os vendedores virem até você.</p>
-            <div className="copy-row" style={{ justifyContent: "center", flexWrap: "wrap" }}>
-              <Link className="btn btn-ghost" href="/busca">Limpar filtros</Link>
-              <Link className="btn btn-primary" href="/quero-comprar/novo">Quero comprar</Link>
-            </div>
+            {hasFilter ? (
+              <>
+                <p className="muted">Crie um alerta: avisamos no seu celular assim que alguém anunciar isso.</p>
+                <AlertButton filters={alertFilters} logged={!!user} big />
+                <p className="muted small">Ou publique um pedido em Quero comprar e receba ofertas dos vendedores.</p>
+                <div className="copy-row" style={{ justifyContent: "center", flexWrap: "wrap" }}>
+                  <Link className="btn btn-ghost" href="/busca">Limpar filtros</Link>
+                  <Link className="btn btn-ghost" href="/quero-comprar/novo">Quero comprar</Link>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="muted">Tente remover um filtro ou buscar outro termo.</p>
+                <p className="muted">Ou publique um pedido e deixe os vendedores virem até você.</p>
+                <div className="copy-row" style={{ justifyContent: "center", flexWrap: "wrap" }}>
+                  <Link className="btn btn-ghost" href="/busca">Limpar filtros</Link>
+                  <Link className="btn btn-primary" href="/quero-comprar/novo">Quero comprar</Link>
+                </div>
+              </>
+            )}
           </div>
         )}
       </section>

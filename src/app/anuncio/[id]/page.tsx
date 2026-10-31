@@ -3,6 +3,8 @@ import { titlesSelect } from "@/lib/titles";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
+import { after } from "next/server";
+import { countView } from "@/lib/seller-stats";
 import { money, pct, monthYear, dateTime } from "@/lib/format";
 import { sellerStats } from "@/lib/orders";
 import { inOrbit } from "@/lib/orbit-plans";
@@ -40,6 +42,8 @@ export default async function AnuncioPage({ params }: { params: Promise<{ id: st
   // Anúncio reservado (oferta aceita em "Quero comprar"): só o comprador e o vendedor veem.
   if (l.reservedForId && user?.id !== l.reservedForId && user?.id !== l.sellerId) notFound();
   const mine = user?.id === l.sellerId;
+  // Visita do dia para o painel do vendedor (a do próprio vendedor não conta). Gravada depois da resposta.
+  if (!mine) after(() => countView(l.id).catch(() => {}));
   const [stats, reviews, similar, favs] = await Promise.all([
     sellerStats(l.sellerId),
     db.review.findMany({ where: { sellerId: l.sellerId }, include: { author: { select: { username: true } } }, orderBy: { createdAt: "desc" }, take: 5 }),
