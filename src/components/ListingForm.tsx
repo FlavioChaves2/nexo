@@ -73,7 +73,7 @@ export function ListingForm({ games, seller, feeBps, edit }: { games: Game[]; se
     if (!edit) saveDraft();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [v, state]);
-  const cents = toCents(v.price);
+  const cents = Math.min(toCents(v.price), 5_000_000);
   const fee = Math.round((cents * feeBps) / 10000);
   const game = games.find((g) => g.slug === v.gameSlug) ?? games[0];
 
@@ -150,11 +150,11 @@ export function ListingForm({ games, seller, feeBps, edit }: { games: Game[]; se
 
           <div className="field">
             <label htmlFor="price">Preço (R$)</label>
-            <input className="input mono" id="price" name="price" inputMode="decimal" required placeholder="49,90" value={v.price} onChange={(e) => setV({ ...v, price: e.target.value })} />
+            <input className="input mono" id="price" name="price" inputMode="decimal" maxLength={10} required placeholder="49,90" value={v.price} onChange={(e) => setV({ ...v, price: e.target.value })} />
           </div>
           <div className="field">
             <label htmlFor="oldPrice">Preço &quot;de&quot; (opcional)</label>
-            <input className="input mono" id="oldPrice" name="oldPrice" inputMode="decimal" placeholder="59,90" defaultValue={reais(edit?.oldPriceCents)} />
+            <input className="input mono" id="oldPrice" name="oldPrice" inputMode="decimal" maxLength={10} placeholder="59,90" defaultValue={reais(edit?.oldPriceCents)} />
           </div>
           {!v.auto && (
             <div className="field">

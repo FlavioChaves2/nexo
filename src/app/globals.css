@@ -274,7 +274,7 @@ main { min-height: 60vh; }
 .buybox .price { font-size: 32px; }
 .kv { display: grid; grid-template-columns: auto 1fr; gap: 9px 16px; font-size: 14px; margin: 0; }
 .kv dt { color: var(--muted); }
-.kv dd { margin: 0; text-align: right; font-weight: 600; }
+.kv dd { margin: 0; text-align: right; font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
 .note { display: flex; gap: 10px; padding: 12px 14px; border-radius: 10px; font-size: 13.5px; background: var(--accent-soft); border: 1px solid var(--accent-line); }
 .note .ic { color: var(--accent); margin-top: 2px; }
 .note.warn { background: var(--danger-soft); border-color: #522828; }
@@ -1536,3 +1536,4 @@ body:has(.lp) header.top, body:has(.lp) footer:not(.lp-foot), body:has(.lp) .hel
 .store-external li { display: flex; gap: 8px; align-items: flex-start; overflow-wrap: anywhere; }
 .program-row { grid-template-columns: 1fr; }
 .program-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 6px 14px; }
+.fee-sim, .fee-sim .input { min-width: 0; max-width: 100%; }
