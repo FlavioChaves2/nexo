@@ -18,11 +18,17 @@ function sniff(buf: Buffer): string | null {
 
 export { imageUrl } from "./images-url";
 
-export async function saveImage(file: File, ownerId: string, kind: "ANUNCIO" | "AVATAR", listingId?: string, sort = 0) {
+/** Confere tamanho e tipo real da foto antes de gravar. Lança OrderError com a explicação. */
+export async function checkImage(file: File) {
   if (file.size > MAX_IMAGE_BYTES) throw new OrderError(`"${file.name}" passa de 3 MB.`);
   const buf = Buffer.from(await file.arrayBuffer());
   const mime = sniff(buf);
   if (!mime) throw new OrderError(`"${file.name}" não é JPG, PNG ou WEBP.`);
+  return { buf, mime };
+}
+
+export async function saveImage(file: File, ownerId: string, kind: "ANUNCIO" | "AVATAR", listingId?: string, sort = 0) {
+  const { buf, mime } = await checkImage(file);
   const thumb = await makeThumb(buf);
   return db.image.create({ data: { ownerId, kind, listingId, mime, size: buf.length, sort, data: buf, thumb }, select: { id: true } });
 }

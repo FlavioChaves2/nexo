@@ -8,6 +8,8 @@ import { cookies } from "next/headers";
 import { REF_COOKIE } from "@/lib/referrals";
 import { deleteAccount, DeleteAccountError } from "@/lib/delete-account";
 import { db } from "@/lib/db";
+import { checkImage, filesFrom, saveImage } from "@/lib/images";
+import { OrderError } from "@/lib/orders";
 import {
   clearPending2fa,
   clientIp,
@@ -68,6 +70,17 @@ export async function register(_: FormState, form: FormData): Promise<FormState>
   const taken = await db.user.findFirst({ where: { OR: [{ email }, { username }] } });
   if (taken) return { error: taken.email === email ? "Este e-mail já tem conta." : "Este nome de usuário já existe." };
 
+  // Foto de perfil é opcional no cadastro; confere antes de criar a conta para o erro aparecer no formulário.
+  const [avatar] = filesFrom(form, "avatar");
+  if (avatar) {
+    try {
+      await checkImage(avatar);
+    } catch (e) {
+      if (e instanceof OrderError) return { error: e.message };
+      throw e;
+    }
+  }
+
   let user;
   try {
     // Veio por um link de convite (/convite/<usuário>): guarda quem convidou.
@@ -79,6 +92,10 @@ export async function register(_: FormState, form: FormData): Promise<FormState>
     // Dois cadastros iguais ao mesmo tempo (clique duplo): o segundo cai aqui.
     if ((e as { code?: string }).code === "P2002") return { error: "Este e-mail ou nome de usuário já tem conta." };
     throw e;
+  }
+  if (avatar) {
+    const img = await saveImage(avatar, user.id, "AVATAR").catch(() => null);
+    if (img) await db.user.update({ where: { id: user.id }, data: { avatarId: img.id } });
   }
   await sendVerifyEmail(user).catch(() => false);
   await record(`cadastro:${email}`, ip, true);
