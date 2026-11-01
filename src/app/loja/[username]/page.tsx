@@ -10,7 +10,6 @@ import { cardInclude, displayName, favoriteIds, visibleListing } from "@/lib/que
 import { imageUrl } from "@/lib/images-url";
 import { TYPE_LABEL } from "@/lib/constants";
 import { deliveryStats, durationLabel, isFollowing, storeLink } from "@/lib/store";
-import { platformName } from "@/lib/external-profiles";
 import { Avatar } from "@/components/Avatar";
 import { SellerBadges } from "@/components/SellerBadges";
 import { ListingCard } from "@/components/ListingCard";
@@ -58,7 +57,7 @@ export default async function LojaPage({ params, searchParams }: { params: Promi
     deliveryStats(seller.id),
     isFollowing(me?.id, seller.id),
     db.storeFollow.count({ where: { sellerId: seller.id } }),
-    db.externalProfile.findMany({ where: { userId: seller.id, status: "APROVADO" }, orderBy: { decidedAt: "desc" }, select: { id: true, platform: true, handle: true, decidedAt: true } }),
+    db.externalProfile.count({ where: { userId: seller.id, status: "APROVADO" } }),
   ]);
 
   // Opções de filtro só com o que existe na loja.
@@ -93,18 +92,16 @@ export default async function LojaPage({ params, searchParams }: { params: Promi
         <div><b>{seller.storeHours || "—"}</b><span>horário de atendimento informado pelo vendedor</span></div>
       </section>
 
-      {external.length > 0 && (
-        <section className="store-external" aria-label="Perfis em outras plataformas">
-          <b>Perfis em outras plataformas</b>
+      {/* Só o selo: plataforma e nome do perfil ficam com a equipe, para o comprador não ir negociar por fora. */}
+      {external > 0 && (
+        <section className="store-external" aria-label="Experiência verificada em outras plataformas">
           <ul>
-            {external.map((e) => (
-              <li key={e.id}>
-                <span className="verified" aria-hidden="true"><Icon name="verified" /></span>
-                <span><b>{platformName(e.platform)}</b> · {e.handle}<span className="muted small"> · controle do perfil confirmado pela equipe da Nexo em {e.decidedAt ? e.decidedAt.toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo" }) : "—"}</span></span>
-              </li>
-            ))}
+            <li>
+              <span className="verified" aria-hidden="true"><Icon name="verified" /></span>
+              <span><b>Vendedor com experiência verificada fora da Nexo</b><span className="muted small"> · a equipe confirmou {external === 1 ? "1 perfil de venda" : `${external} perfis de venda`} em outras plataformas</span></span>
+            </li>
           </ul>
-          <p className="muted small">Isso confirma só que o vendedor controla esses perfis. Não é parceria com essas plataformas nem garantia de conduta, e as vendas e avaliações de lá não entram nos números da Nexo acima. Negocie e pague sempre pela Nexo.</p>
+          <p className="muted small">As vendas e avaliações de lá não entram nos números da Nexo acima. Negocie e pague sempre pela Nexo: fora dela não há Garantia Nexo.</p>
         </section>
       )}
 

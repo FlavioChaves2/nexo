@@ -86,5 +86,5 @@ Objetivo: dar a comissão reduzida só quando o vendedor realmente trouxe o comp
 ## Limitações conhecidas
 
 - A origem não acompanha a pessoa entre aparelhos, a menos que ela esteja logada quando abre o link.
-- A loja mostra o perfil externo verificado só como nome e plataforma (sem link clicável), para não abrir caminho de negociação por fora.
+- A loja mostra só o selo "experiência verificada fora da Nexo" (com a quantidade de perfis). Plataforma, nome e link do perfil externo ficam só com a equipe, para o comprador não negociar por fora (decisão do dono em 2026-10-31).
 - Provas de entrega continuam sendo o quadro de entrega e o chat do pedido (sem anexo de imagem no chat).

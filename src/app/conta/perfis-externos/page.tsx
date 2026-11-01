@@ -19,7 +19,7 @@ export default async function PerfisExternosPage() {
       <div className="grid-gap" style={{ margin: "22px 0 16px" }}>
         <span className="eyebrow">Minha conta</span>
         <h1 style={{ fontSize: "clamp(26px,3.6vw,38px)" }}>Perfis em outras plataformas</h1>
-        <p className="muted">Já vende em outro lugar? Mostre na sua loja que aquele perfil é seu. A equipe confere que você controla o perfil; suas vendas e avaliações de fora <b>não</b> são somadas às da Nexo.</p>
+        <p className="muted">Já vende em outro lugar? Comprove para a equipe e ganhe na sua loja o selo <b>experiência verificada fora da Nexo</b>. Os compradores <b>não</b> veem qual é a plataforma nem o nome ou link do perfil; isso fica só com a equipe. Suas vendas e avaliações de fora não são somadas às da Nexo.</p>
       </div>
 
       <ol className="app-steps" style={{ marginBottom: 18 }}>
@@ -47,7 +47,7 @@ export default async function PerfisExternosPage() {
           </div>
         </section>
       )}
-      <p className="muted small" style={{ marginTop: 16 }}>O selo na loja diz só que a equipe confirmou que você controla o perfil, na data indicada. Não é parceria com a outra plataforma nem garantia de conduta. <Link className="lime" href={`/loja/${me.username}`}>Ver minha loja</Link></p>
+      <p className="muted small" style={{ marginTop: 16 }}>O selo na loja diz só que a equipe confirmou que você controla um perfil de venda em outra plataforma. Não é parceria com a outra plataforma nem garantia de conduta. Divulgar contato ou perfil externo para compradores continua proibido. <Link className="lime" href={`/loja/${me.username}`}>Ver minha loja</Link></p>
     </div>
   );
 }
