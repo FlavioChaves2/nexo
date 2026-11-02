@@ -9,6 +9,7 @@ import { PwaRegister } from "@/components/PwaRegister";
 import { HeaderAutoHide } from "@/components/HeaderAutoHide";
 import { WelcomeModal } from "@/components/WelcomeModal";
 import { Suspense } from "react";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 // Fontes guardadas no projeto (pacotes @fontsource), não baixadas do Google na hora do build:
@@ -85,6 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <PwaRegister />
         <HeaderAutoHide />
         <WelcomeModal />
+        <Analytics />
       </body>
     </html>
   );
