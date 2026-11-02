@@ -61,9 +61,20 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = { themeColor: "#111311" };
 
+// Tag do Google Ads (gtag.js), em todas as páginas.
+const GOOGLE_TAG_ID = "AW-18551892825";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" className={`${sora.variable} ${manrope.variable} ${mono.variable}`}>
+      <head>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_TAG_ID}`} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GOOGLE_TAG_ID}');`,
+          }}
+        />
+      </head>
       <body>
         <Suspense fallback={null}><NavProgress /></Suspense>
         <Header />
