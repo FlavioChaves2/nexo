@@ -6,6 +6,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { cardInclude, favoriteIds, visibleListing } from "@/lib/queries";
 import { withOrbitFirst } from "@/lib/orbit";
 import { FOUNDER } from "@/lib/titles";
+import { EarlyShelf } from "@/components/EarlyShelf";
 import { HOME_GAMES } from "@/lib/game-catalog";
 import { gameCover, gameIcon, MOST_SEARCHED } from "@/lib/game-art";
 import { openWanted } from "@/lib/wanted";
@@ -163,19 +164,17 @@ export default async function Home() {
             <Link key={t} className="pill" href={`/busca?tipo=${t}`}>{TYPE_PLURAL[t]}</Link>
           ))}
         </div>}
-        {featured.length ? (
+        {featured.length > 0 && (
           <div className="cards">
             {featured.map((l) => <ListingCard key={l.id} l={l} fav={favs.has(l.id)} />)}
           </div>
-        ) : (
-          <div className="panel empty">
-            <h3>A vitrine está esperando os primeiros vendedores</h3>
-            <p className="muted">A Nexo acabou de abrir. Anuncie de graça e apareça aqui primeiro{foundersLeft > 0 ? `: os ${FOUNDER.maxHolders} primeiros a concluir uma venda viram 👑 Fundadores` : ""}.</p>
-            <p className="muted">Procurando algo? Publique um pedido em Quero comprar e receba ofertas.</p>
-            <div className="copy-row" style={{ justifyContent: "center", flexWrap: "wrap" }}>
-              <Link className="btn btn-primary" href="/vender">Criar meu anúncio</Link>
-              <Link className="btn btn-ghost" href="/quero-comprar/novo">Quero comprar</Link>
-            </div>
+        )}
+        {/* Vitrine vazia ou com poucos anúncios: mostra os dois caminhos em vez de uma prateleira solitária. */}
+        {featured.length < 6 && (
+          <div className="panel empty" style={featured.length ? { marginTop: 16 } : undefined}>
+            <h3>{featured.length ? "A vitrine está começando a encher" : "A vitrine está esperando os primeiros vendedores"}</h3>
+            <p className="muted">A Nexo acabou de abrir. Escolha o seu caminho:</p>
+            <EarlyShelf foundersLeft={Math.max(0, foundersLeft)} logged={!!user} />
           </div>
         )}
       </section>

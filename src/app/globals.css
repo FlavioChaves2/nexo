@@ -1489,15 +1489,51 @@ body:has(.lp) header.top, body:has(.lp) footer:not(.lp-foot), body:has(.lp) .hel
 .btn-lg { padding: 16px 26px; font-size: 17px; }
 .lp-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; padding-top: 34px; padding-bottom: 24px; font-size: 13px; color: var(--muted); }
 .lp-foot a { color: var(--muted); }
+/* Hero em áreas: no celular o formulário vem logo depois do título, antes da lista de vantagens. */
+.lp-hero { grid-template-areas: "pitch form" "proof form"; row-gap: 22px; }
+.lp-pitch { grid-area: pitch; }
+.lp-form { grid-area: form; }
+.lp-proof { grid-area: proof; display: grid; gap: 18px; min-width: 0; align-self: start; }
+.lp-game-ic { width: 1em; height: 1em; border-radius: .22em; vertical-align: -.12em; margin-right: .3em; border: 1px solid var(--line); }
+.lp-scarce { display: grid; gap: 10px; padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(245, 197, 66, .45); background: rgba(245, 197, 66, .08); }
+.lp-scarce-txt { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.45; }
+.lp-scarce-txt > span:first-child { font-size: 20px; line-height: 1; }
+.lp-bar { height: 8px; border-radius: 99px; background: rgba(245, 197, 66, .15); overflow: hidden; }
+.lp-bar span { display: block; height: 100%; border-radius: inherit; background: #F5C542; }
+.lp-trust { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px; font-size: 13px; color: var(--muted); font-weight: 600; }
+.lp-trust li { display: flex; align-items: center; gap: 6px; }
+.lp-trust svg { width: 16px; height: 16px; color: var(--accent); }
+.lp-money { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.lp-money-v { font-family: var(--f-display); font-size: 28px; }
+.lp-vs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.lp-vs-col { display: grid; gap: 12px; align-content: start; padding: 22px; border-radius: 18px; border: 1px solid var(--line); background: var(--surface); }
+.lp-vs-col h3 { font-size: 18px; }
+.lp-vs-col ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.lp-vs-col li { display: flex; gap: 10px; align-items: flex-start; line-height: 1.4; }
+.lp-vs-col svg { flex: none; width: 20px; height: 20px; margin-top: 1px; }
+.lp-vs-col.bad svg { color: var(--danger); }
+.lp-vs-col.bad li { color: var(--muted); }
+.lp-vs-col.good { border-color: var(--accent-line); background: radial-gradient(80% 120% at 100% 0%, rgba(197, 240, 74, .12), transparent 70%), var(--surface); }
+.lp-vs-col.good svg { color: var(--accent); }
+.lp-sticky { display: none; }
 @media (max-width: 900px) {
   .lp-hero, .lp-invite { grid-template-columns: 1fr; gap: 26px; }
+  .lp-hero { grid-template-areas: "pitch" "form" "proof"; }
   .lp-benefits, .lp-steps { grid-template-columns: 1fr 1fr; }
+  .lp-sticky { display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: linear-gradient(transparent, var(--bg) 35%); transform: translateY(110%); transition: transform .25s ease; }
+  .lp-sticky.on { transform: none; }
+  .lp-foot { padding-bottom: 90px; }
 }
 @media (max-width: 560px) {
-  .lp-benefits, .lp-steps { grid-template-columns: 1fr; }
+  .lp-benefits, .lp-steps, .lp-vs { grid-template-columns: 1fr; }
+  .lp-money { grid-template-columns: 1fr; gap: 10px; }
+  .lp-money .lp-card { grid-template-columns: 1fr auto; align-items: center; padding: 14px 16px; }
+  .lp-money .lp-card > span:last-child { grid-column: 1 / -1; }
   .lp-invite { padding: 22px; }
   .lp-sub { font-size: 16px; }
+  .lp-hero { padding-top: 16px; }
 }
+@media (prefers-reduced-motion: reduce) { .lp-sticky { transition: none; } }
 
 /* Loja do vendedor */
 .store-cover { height: clamp(120px, 22vw, 240px); margin-top: 22px; border-radius: 22px; border: 1px solid var(--line); background: radial-gradient(70% 140% at 85% 0%, #2a3a12, transparent 70%), var(--surface); background-size: cover; background-position: center; }
@@ -1537,3 +1573,14 @@ body:has(.lp) header.top, body:has(.lp) footer:not(.lp-foot), body:has(.lp) .hel
 .program-row { grid-template-columns: 1fr; }
 .program-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 6px 14px; }
 .fee-sim, .fee-sim .input { min-width: 0; max-width: 100%; }
+
+/* Vitrine vazia: dois caminhos (pedir no Quero comprar ou ser o primeiro a vender). */
+.early { width: 100%; max-width: 760px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 6px auto; text-align: left; }
+.early-card { display: grid; gap: 10px; align-content: start; padding: 20px; border-radius: 18px; border: 1px solid var(--accent-line); background: radial-gradient(90% 120% at 0% 0%, rgba(197, 240, 74, .12), transparent 70%), var(--surface); }
+.early-card.sell { border-color: rgba(245, 197, 66, .45); background: radial-gradient(90% 120% at 100% 0%, rgba(245, 197, 66, .10), transparent 70%), var(--surface); }
+.early-card h3 { font-size: 18px; }
+.early-card p { margin: 0; }
+.early-card .btn { justify-self: start; margin-top: 4px; }
+.early-ic { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; background: var(--accent-soft); border: 1px solid var(--accent-line); color: var(--accent); }
+.early-card.sell .early-ic { background: rgba(245, 197, 66, .12); border-color: rgba(245, 197, 66, .45); color: #F5C542; }
+@media (max-width: 640px) { .early { grid-template-columns: 1fr; } .early-card .btn { justify-self: stretch; } }

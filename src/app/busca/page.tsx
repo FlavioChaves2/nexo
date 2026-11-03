@@ -13,6 +13,8 @@ import { Nexinho3D } from "@/components/Nexinho3D";
 import { Icon } from "@/components/Icon";
 import { GamePicker } from "@/components/GamePicker";
 import { AlertButton } from "@/components/AlertButton";
+import { EarlyShelf } from "@/components/EarlyShelf";
+import { FOUNDER } from "@/lib/titles";
 
 export async function generateMetadata({ searchParams }: { searchParams: Promise<SP> }) {
   const sp = await searchParams;
@@ -59,12 +61,14 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
     ...(max > 0 && { priceCents: { lte: maxCents } }),
   };
 
-  const [games, results, favs] = await Promise.all([
+  const [games, results, favs, founders] = await Promise.all([
     db.game.findMany({ orderBy: { sort: "asc" }, include: { _count: { select: { listings: { where: visibleListing } } } } }),
     // Em "Mais relevantes", até 6 anúncios em órbita vêm primeiro; nas outras ordens vale só a ordem escolhida.
     ordem === "relevancia" ? withOrbitFirst(where, ORDENS[ordem], 60, 6) : db.listing.findMany({ where, include: cardInclude, orderBy: ORDENS[ordem], take: 60 }),
     favoriteIds(user?.id),
+    db.userTitle.count({ where: { title: { auto: FOUNDER.auto } } }),
   ]);
+  const foundersLeft = Math.max(0, FOUNDER.maxHolders - founders);
 
   const game = games.find((g) => g.slug === sp.jogo);
   const activeFilters = [q, sp.jogo, tipo, sp.auto === "1", max > 0].filter(Boolean).length;
@@ -128,27 +132,16 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
         ) : (
           <div className="panel empty">
             <Nexinho3D className="sad-bot" mood="sad" decor={false} interactive={false} zoom={11} label="Nexinho triste: nada encontrado" />
-            <h3>Nenhum anúncio com esses filtros</h3>
-            {hasFilter ? (
+            <h3>{game && !q && !tipo ? `Ainda ninguém anunciou ${game.name}` : "Nenhum anúncio com esses filtros"}</h3>
+            <p className="muted">A Nexo acabou de abrir e a vitrine está enchendo agora. Escolha o seu caminho:</p>
+            <EarlyShelf game={game} foundersLeft={foundersLeft} logged={!!user} />
+            {hasFilter && (
               <>
-                <p className="muted">Crie um alerta: avisamos no seu celular assim que alguém anunciar isso.</p>
-                <AlertButton filters={alertFilters} logged={!!user} big />
-                <p className="muted small">Ou publique um pedido em Quero comprar e receba ofertas dos vendedores.</p>
-                <div className="copy-row" style={{ justifyContent: "center", flexWrap: "wrap" }}>
-                  <Link className="btn btn-ghost" href="/busca">Limpar filtros</Link>
-                  <Link className="btn btn-ghost" href="/quero-comprar/novo">Quero comprar</Link>
-                </div>
-              </>
-            ) : (
-              <>
-                <p className="muted">Tente remover um filtro ou buscar outro termo.</p>
-                <p className="muted">Ou publique um pedido e deixe os vendedores virem até você.</p>
-                <div className="copy-row" style={{ justifyContent: "center", flexWrap: "wrap" }}>
-                  <Link className="btn btn-ghost" href="/busca">Limpar filtros</Link>
-                  <Link className="btn btn-primary" href="/quero-comprar/novo">Quero comprar</Link>
-                </div>
+                <p className="muted small">Ou crie um alerta: avisamos no seu celular assim que alguém anunciar isso.</p>
+                <AlertButton filters={alertFilters} logged={!!user} />
               </>
             )}
+            {activeFilters > 0 && <Link className="linkish small" href="/busca">Limpar filtros</Link>}
           </div>
         )}
       </section>

@@ -8,7 +8,8 @@ import { login, register, type FormState } from "@/app/actions/auth";
 import { shrinkInput } from "@/lib/shrink-images";
 import { Icon } from "./Icon";
 
-export function AuthForm({ mode, next }: { mode: "login" | "register"; next: string }) {
+// avatar={false}: sem o campo de foto (landing de anúncio, onde cada campo a mais derruba o cadastro).
+export function AuthForm({ mode, next, avatar = true, submitLabel }: { mode: "login" | "register"; next: string; avatar?: boolean; submitLabel?: string }) {
   const [state, action, pending] = useActionState<FormState, FormData>(mode === "login" ? login : register, undefined);
   const other = mode === "login" ? "/cadastro" : "/entrar";
   const [preview, setPreview] = useState<string | null>(null);
@@ -17,7 +18,7 @@ export function AuthForm({ mode, next }: { mode: "login" | "register"; next: str
   return (
     <form action={action} {...keep} className="panel box">
       <input type="hidden" name="next" value={next} />
-      {mode === "register" && (
+      {mode === "register" && avatar && (
         <div className="seller-mini">
           {preview ? <img className="avatar xl" src={preview} alt="" /> : <span className="avatar xl"><Icon name="camera" /></span>}
           <label className="file-drop" style={{ flex: 1 }}>
@@ -52,7 +53,7 @@ export function AuthForm({ mode, next }: { mode: "login" | "register"; next: str
       {mode === "login" && <Link className="linkish small" href="/esqueci-senha" style={{ justifySelf: "end" }}>Esqueci a senha</Link>}
       {state?.error && <p className="alert" role="alert">{state.error}</p>}
       <button className="btn btn-primary btn-block" type="submit" disabled={pending}>
-        {pending ? "Aguarde…" : mode === "login" ? "Entrar" : "Criar conta"}
+        {pending ? "Aguarde…" : submitLabel ?? (mode === "login" ? "Entrar" : "Criar conta")}
       </button>
       <p className="muted small" style={{ textAlign: "center" }}>
         {mode === "login" ? "Ainda não tem conta? " : "Já tem conta? "}
