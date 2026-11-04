@@ -12,6 +12,7 @@ import { deleteAccount, DeleteAccountError } from "@/lib/delete-account";
 import { db } from "@/lib/db";
 import { checkImage, filesFrom, saveImage } from "@/lib/images";
 import { OrderError } from "@/lib/orders";
+import { isDisposableEmail } from "@/lib/disposable-email";
 import {
   clearPending2fa,
   clientIp,
@@ -45,7 +46,7 @@ async function tooManyAttempts(email: string, ip: string) {
 const record = (email: string, ip: string, ok: boolean) => db.loginAttempt.create({ data: { email, ip, ok } });
 
 const registerSchema = z.object({
-  email: z.string().trim().toLowerCase().email("E-mail inválido."),
+  email: z.string().trim().toLowerCase().email("E-mail inválido.").refine((e) => !isDisposableEmail(e), "Use um e-mail seu de verdade: e-mails temporários não recebem a confirmação."),
   username: z
     .string()
     .trim()
