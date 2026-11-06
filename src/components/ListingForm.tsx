@@ -29,7 +29,7 @@ export type EditableListing = {
 
 type Seller = { username: string; storeName: string; avatarId: string | null; verification: string; completedSales: number; ratingSum: number; ratingCount: number };
 
-export function ListingForm({ games, seller, feeBps, edit }: { games: Game[]; seller: Seller; feeBps: number; edit?: EditableListing }) {
+export function ListingForm({ games, seller, feeBps, edit, welcomeUntil }: { games: Game[]; seller: Seller; feeBps: number; edit?: EditableListing; welcomeUntil?: string }) {
   const action = edit ? updateListing.bind(null, edit.id) : createListing;
   const [state, run, pending] = useActionState<ListingFormState, FormData>(action, undefined);
   const keepRun = useKeepForm(state, run);
@@ -183,7 +183,7 @@ export function ListingForm({ games, seller, feeBps, edit }: { games: Game[]; se
           )}
           <div className="calc full">
             <div><span>Preço de venda</span><span>{BRL.format(cents / 100)}</span></div>
-            <div><span>Taxa Nexo ({(feeBps / 100).toString().replace(".", ",")}%)</span><span>−{BRL.format(fee / 100)}</span></div>
+            <div><span>Taxa Nexo ({(feeBps / 100).toString().replace(".", ",")}%{welcomeUntil ? ` até ${welcomeUntil}` : ""})</span><span>−{BRL.format(fee / 100)}</span></div>
             <div className="total"><span>Você recebe por venda</span><span>{BRL.format((cents - fee) / 100)}</span></div>
           </div>
           {state?.error && <p className="alert full" role="alert">{state.error}</p>}

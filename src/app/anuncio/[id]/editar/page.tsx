@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
 import { sellerPublic } from "@/lib/queries";
 import { ListingForm } from "@/components/ListingForm";
+import { inWelcomeFee, welcomeFeeLabel } from "@/lib/welcome-fee";
 
 export const metadata = { title: "Editar anúncio" };
 
@@ -25,7 +26,7 @@ export default async function EditarAnuncioPage({ params }: { params: Promise<{ 
       <div className="order-head" style={{ paddingTop: 10 }}>
         <div className="grid-gap"><span className="eyebrow">Sua loja</span><h1 style={{ fontSize: "clamp(26px,3.6vw,38px)" }}>Editar anúncio</h1></div>
       </div>
-      <ListingForm games={games} seller={seller} feeBps={feeNow} edit={listing} />
+      <ListingForm games={games} seller={seller} feeBps={inWelcomeFee(me.createdAt) ? 0 : feeNow} welcomeUntil={inWelcomeFee(me.createdAt) ? welcomeFeeLabel(me.createdAt) : undefined} edit={listing} />
     </div>
   );
 }

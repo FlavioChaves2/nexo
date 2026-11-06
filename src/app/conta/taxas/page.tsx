@@ -2,7 +2,9 @@ import Link from "next/link";
 import { requireUser } from "@/lib/auth";
 import { currentFeeBps } from "@/lib/attribution";
 import { AUTO_CONFIRM_DAYS, TYPE_PLURAL } from "@/lib/constants";
-import { REFERRAL_BPS } from "@/lib/referrals";
+import { REFERRAL_BPS, FIRST_SALE_BONUS_CENTS } from "@/lib/referrals";
+import { inWelcomeFee, welcomeFeeLabel, WELCOME_FEE_HOURS } from "@/lib/welcome-fee";
+import { money } from "@/lib/format";
 import { Icon } from "@/components/Icon";
 import { FeeSimulator } from "@/components/FeeSimulator";
 
@@ -12,8 +14,9 @@ const pct = (bps: number) => `${(bps / 100).toString().replace(".", ",")}%`;
 
 export default async function TaxasPage() {
   const feeNow = await currentFeeBps();
-  await requireUser("/conta/taxas");
+  const me = await requireUser("/conta/taxas");
   const fee = feeNow;
+  const welcome = inWelcomeFee(me.createdAt);
   return (
     <div className="wrap">
       <div className="order-head">
@@ -28,7 +31,9 @@ export default async function TaxasPage() {
           <div className="panel box fee-hero">
             <span className="muted small">Taxa por venda concluída</span>
             <b className="fee-big">{pct(fee)}</b>
+            {welcome && <p className="welcome-fee"><b>Você está na taxa ZERO:</b> pedidos feitos até {welcomeFeeLabel(me.createdAt)} não pagam taxa nenhuma. É o presente de boas-vindas da Nexo.</p>}
             <ul className="fee-list">
+              <li><Icon name="check" /><span><b>Conta nova vende com taxa zero</b> nas primeiras {WELCOME_FEE_HOURS} horas: vale para os pedidos feitos nesse período.</span></li>
               <li><Icon name="check" /><span><b>Anunciar é grátis.</b> Sem mensalidade, sem taxa de cadastro e sem cobrança por anúncio parado.</span></li>
               <li><Icon name="check" /><span>A taxa só é descontada <b>quando a venda é concluída</b>. Pedido cancelado ou reembolsado não paga nada.</span></li>
               <li><Icon name="check" /><span><b>Cupons de desconto são pagos pela Nexo.</b> Você recebe sobre o preço cheio do anúncio.</span></li>
@@ -50,7 +55,7 @@ export default async function TaxasPage() {
 
           <div className="panel box">
             <h3>Ganhe mais convidando</h3>
-            <p className="muted small">Traga amigos para a Nexo e ganhe <b>{pct(REFERRAL_BPS)} de cada venda e de cada compra</b> concluída deles, para sempre. Quem paga é a Nexo: seus convidados não pagam nada a mais.</p>
+            <p className="muted small">Traga amigos para a Nexo e ganhe <b>{money(FIRST_SALE_BONUS_CENTS)} quando cada um concluir a primeira venda</b>, e mais <b>{pct(REFERRAL_BPS)} de cada venda e de cada compra</b> concluída deles, para sempre. Quem paga é a Nexo: seus convidados não pagam nada a mais.</p>
             <div><Link className="btn btn-primary btn-sm" href="/conta/convites">Pegar meu link de convite</Link></div>
           </div>
         </div>

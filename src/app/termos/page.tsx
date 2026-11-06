@@ -4,7 +4,9 @@ import { currentFeeBps } from "@/lib/attribution";
 import { LEGAL, operator } from "@/lib/legal";
 import { AUTO_CONFIRM_DAYS } from "@/lib/constants";
 import { PLANS } from "@/lib/plans";
-import { REFERRAL_BPS } from "@/lib/referrals";
+import { REFERRAL_BPS, FIRST_SALE_BONUS_CENTS, FIRST_SALE_BONUS_MIN_CENTS } from "@/lib/referrals";
+import { WELCOME_FEE_HOURS } from "@/lib/welcome-fee";
+import { money } from "@/lib/format";
 import { ORBIT_PLANS } from "@/lib/orbit-plans";
 import { NEW_ACCOUNT_DAYS, NEW_ACCOUNT_MAX_WITHDRAW } from "@/lib/trust";
 
@@ -56,7 +58,7 @@ export default async function TermosPage() {
 
       <h2>6. Taxas, saldo e saques do vendedor</h2>
       <ul>
-        <li>Anunciar é grátis. A Nexo cobra <b>{p(feeNow)}</b> sobre o valor de cada venda concluída. Pedido cancelado ou reembolsado não paga taxa.</li>
+        <li>Anunciar é grátis. A Nexo cobra <b>{p(feeNow)}</b> sobre o valor de cada venda concluída. Pedido cancelado ou reembolsado não paga taxa. <b>Taxa zero de boas-vindas:</b> pedidos criados nas primeiras {WELCOME_FEE_HOURS} horas depois do cadastro do vendedor não pagam taxa (vale uma vez por pessoa; contas duplicadas para repetir o benefício levam à cobrança da taxa e à suspensão).</li>
         <li>O saldo pode ser sacado por Pix para a chave do <b>CPF verificado</b> do titular da conta. Cada saque é conferido pela equipe antes do envio.</li>
         <li>Para proteger compradores, contas com menos de {NEW_ACCOUNT_DAYS} dias sacam até {brl(NEW_ACCOUNT_MAX_WITHDRAW)} por vez, e só um saque pode ficar em análise por vez.</li>
         <li>A Nexo pode reter o saldo ligado a pedidos em disputa, denúncias ou suspeita de fraude até a análise terminar.</li>
@@ -96,7 +98,7 @@ export default async function TermosPage() {
 
       <h2>13. Convites, títulos e alertas</h2>
       <ul>
-        <li><b>Convide e ganhe:</b> quem convida recebe {p(REFERRAL_BPS)} do valor de cada compra e venda concluída de quem criou a conta pelo seu link, pago da taxa da Nexo. Convites falsos, contas duplicadas ou negociação simulada para gerar comissão cancelam os ganhos e podem levar à suspensão.</li>
+        <li><b>Convide e ganhe:</b> quem convida recebe {p(REFERRAL_BPS)} do valor de cada compra e venda concluída de quem criou a conta pelo seu link, pago pela Nexo, e mais um bônus de {money(FIRST_SALE_BONUS_CENTS)} quando o convidado conclui a primeira venda (de pelo menos {money(FIRST_SALE_BONUS_MIN_CENTS)}, comprada por outra pessoa, com limite de 20 bônus por mês). Convites falsos, contas duplicadas ou negociação simulada para gerar comissão cancelam os ganhos e podem levar à suspensão.</li>
         <li><b>Fundadores:</b> os 20 primeiros vendedores reais a concluir uma venda recebem o título Fundador. A Nexo pode retirar títulos de contas suspensas por fraude.</li>
         <li><b>Alertas:</b> você pode salvar buscas para receber avisos de anúncios novos. Os avisos são um serviço de conveniência e podem atrasar ou falhar.</li>
       </ul>

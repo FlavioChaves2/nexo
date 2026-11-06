@@ -134,7 +134,7 @@ export default async function ComoFuncionaPage() {
           </div>
           <div className="sell-facts">
             <div><b>R$ 0</b><span>para anunciar</span></div>
-            <div><b>{fee}%</b><span>só quando vende</span></div>
+            <div><b>{fee}%</b><span>só quando vende (zero nos 3 primeiros dias)</span></div>
             <div><b>Pix</b><span>para sacar</span></div>
           </div>
         </div>

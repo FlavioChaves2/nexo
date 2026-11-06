@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import type { CommissionPolicy } from "@prisma/client";
 import { db } from "./db";
 import { FEE_BPS } from "./format";
+import { inWelcomeFee } from "./welcome-fee";
 
 // Origem da venda e comissão. Regras completas em docs/lojas-vendedor.md ("Política de atribuição").
 // Resumo: o primeiro contato com o vendedor dentro da janela decide; sem dados, é marketplace.
@@ -69,8 +70,11 @@ export async function decideOrigin(input: { buyerId: string; sellerId: string; v
     select: { source: true },
   });
   const origin: Origin = first?.source === "LINK_VENDEDOR" ? "LINK_VENDEDOR" : "MARKETPLACE";
-  const feeBps = active && origin === "LINK_VENDEDOR" ? policy.linkFeeBps! : policy.standardFeeBps;
-  return { origin, feeBps, policyId: policy.id, policy };
+  // Vendedor nas primeiras 72 h da conta: taxa zero de boas-vindas (src/lib/welcome-fee.ts).
+  const seller = await db.user.findUnique({ where: { id: input.sellerId }, select: { createdAt: true } });
+  const welcome = !!seller && inWelcomeFee(seller.createdAt);
+  const feeBps = welcome ? 0 : active && origin === "LINK_VENDEDOR" ? policy.linkFeeBps! : policy.standardFeeBps;
+  return { origin, feeBps, policyId: policy.id, policy, welcome };
 }
 
 export const feeForBps = (cents: number, bps: number) => Math.round((cents * bps) / 10000);
