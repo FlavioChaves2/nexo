@@ -38,6 +38,8 @@ export default function PrivacidadePage() {
         <li>o processador de pagamento (atualmente o Asaas), para cobrar, estornar e enviar Pix;</li>
         <li>os serviços de hospedagem e banco de dados (Vercel e Neon) e de envio de e-mails (Resend);</li>
         <li>os serviços de notificação do seu navegador ou celular (Google, Apple, Mozilla), se você ativar;</li>
+        <li>as plataformas de anúncio (Google Ads e, quando ativada, Meta), que recebem pelo navegador dados de navegação como páginas visitadas e se a conta foi criada, para medir e mostrar nossos anúncios;</li>
+        <li>a medição de visitas da Vercel (Vercel Analytics), que conta páginas vistas sem cookies e sem identificar você;</li>
         <li>a outra parte de um pedido, que vê só seu nome de usuário, seu perfil público e o que vocês trocarem no pedido. CPF e e-mail não aparecem para ela;</li>
         <li>autoridades públicas, quando a lei ou uma ordem judicial exigir.</li>
       </ul>
@@ -69,8 +71,9 @@ export default function PrivacidadePage() {
         <li><b>Convite:</b> lembra por até 30 dias o link de convite que você abriu, para creditar quem te convidou.</li>
         <li><b>Origem da venda:</b> um código aleatório do navegador (sem nome, e-mail ou outro dado pessoal) registra se você chegou a uma loja pelo link do próprio vendedor ou navegando na Nexo. Serve para calcular a comissão do vendedor; não muda o preço que você paga.</li>
         <li><b>Preferências:</b> o navegador guarda escolhas simples, como esconder o ajudante Nexinho.</li>
+        <li><b>Anúncios:</b> a tag do Google Ads e, quando ativado, o Pixel da Meta usam cookies dessas empresas para medir se um anúncio trouxe uma visita ou um cadastro e para mostrar nossos anúncios a quem já visitou a Nexo. Elas não recebem seu CPF, sua senha nem as conversas dos pedidos.</li>
       </ul>
-      <p>Não usamos cookies de publicidade nem de rastreamento de terceiros.</p>
+      <p>Você pode bloquear ou apagar esses cookies nas configurações do navegador, e ajustar os anúncios que vê em <a className="lime" href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">adssettings.google.com</a> e nas preferências de anúncios do Facebook e do Instagram. O site continua funcionando.</p>
 
       <h2>8. Crianças e adolescentes</h2>
       <p>A Nexo não é destinada a menores de 18 anos para vender. Menores só podem comprar com autorização e acompanhamento dos responsáveis. Se soubermos de dados de criança coletados sem consentimento dos pais, eles serão apagados.</p>

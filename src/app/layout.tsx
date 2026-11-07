@@ -10,6 +10,8 @@ import { HeaderAutoHide } from "@/components/HeaderAutoHide";
 import { WelcomeModal } from "@/components/WelcomeModal";
 import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/next";
+import { META_PIXEL_ID } from "@/lib/tracking";
+import { MetaPixelRoutes } from "@/components/MetaPixelRoutes";
 import "./globals.css";
 
 // Fontes guardadas no projeto (pacotes @fontsource), não baixadas do Google na hora do build:
@@ -75,6 +77,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GOOGLE_TAG_ID}');`,
           }}
         />
+        {/* Pixel da Meta: só carrega quando o ID estiver preenchido em src/lib/tracking.ts. */}
+        {META_PIXEL_ID && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","${META_PIXEL_ID}");fbq("track","PageView");`,
+            }}
+          />
+        )}
       </head>
       <body>
         <Suspense fallback={null}><NavProgress /></Suspense>
@@ -87,6 +97,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <HeaderAutoHide />
         <WelcomeModal />
         <Analytics />
+        {META_PIXEL_ID && <MetaPixelRoutes />}
       </body>
     </html>
   );

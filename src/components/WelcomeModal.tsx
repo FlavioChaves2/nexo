@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { WELCOME_COOKIE } from "@/lib/welcome";
+import { metaTrack } from "@/lib/tracking";
 
 type Welcome = { email: string; sent: boolean };
 
@@ -18,6 +19,8 @@ export function WelcomeModal() {
     const raw = document.cookie.split("; ").find((c) => c.startsWith(`${WELCOME_COOKIE}=`));
     if (!raw) return;
     document.cookie = `${WELCOME_COOKIE}=; Max-Age=0; path=/`;
+    // Cadastro concluído: é a conversão que os anúncios da Meta otimizam (o cookie só existe logo após criar a conta).
+    metaTrack("CompleteRegistration");
     try {
       setData(JSON.parse(decodeURIComponent(raw.slice(WELCOME_COOKIE.length + 1))));
     } catch {
