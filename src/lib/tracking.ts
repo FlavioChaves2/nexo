@@ -1,6 +1,6 @@
 // Marcadores de anúncio (Meta). Vazio = desligado: nada é carregado no site.
 // Para ligar, cole o ID do Pixel (Gerenciador de Eventos da Meta → Fontes de dados), só números.
-export const META_PIXEL_ID = "";
+export const META_PIXEL_ID = "1380892450588060";
 
 type Fbq = (cmd: "track" | "trackCustom", event: string, params?: Record<string, unknown>) => void;
 
