@@ -119,7 +119,7 @@ export default async function TermosPage() {
       <p>Estes termos seguem as leis brasileiras. Fica eleito o foro do domicílio do consumidor{LEGAL.city ? `; para as demais situações, o foro de ${LEGAL.city}` : ""}.</p>
 
       <h2>19. Contato</h2>
-      <p>Fale com a equipe pelo <Link className="lime" href="/suporte">chat do suporte</Link> ou pela <Link className="lime" href="/ajuda">central de ajuda</Link>.</p>
+      <p>Fale com a equipe pelo <Link className="lime" href="/suporte">chat do suporte</Link>, pela <Link className="lime" href="/ajuda">central de ajuda</Link> ou pelo e-mail <a className="lime" href="mailto:suporte@nexopoint.com.br">suporte@nexopoint.com.br</a>.</p>
     </DocPage>
   );
 }

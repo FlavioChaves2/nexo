@@ -13,6 +13,10 @@ export function Footer() {
           <p className="muted" style={{ maxWidth: "36ch" }}>
             De jogador para jogador. O dinheiro só chega ao vendedor depois que você recebe.
           </p>
+          <p className="small muted" style={{ display: "grid", gap: 4 }}>
+            <span>Suporte: <a className="lime" href="mailto:suporte@nexopoint.com.br">suporte@nexopoint.com.br</a></span>
+            <span>Contato e parcerias: <a className="lime" href="mailto:contato@nexopoint.com.br">contato@nexopoint.com.br</a></span>
+          </p>
         </div>
         <div>
           <h4>Comprar</h4>

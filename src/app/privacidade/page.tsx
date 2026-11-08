@@ -58,7 +58,7 @@ export default function PrivacidadePage() {
       <ul>
         <li>Corrigir perfil e senha: em <Link className="lime" href="/conta/perfil">Minha conta</Link>.</li>
         <li>Excluir a conta: em <Link className="lime" href="/conta/excluir">Excluir conta</Link>.</li>
-        <li>Demais pedidos: pelo <Link className="lime" href="/suporte">chat do suporte</Link>, que é o nosso canal de atendimento ao titular. Respondemos em até 15 dias.</li>
+        <li>Demais pedidos: pelo <Link className="lime" href="/suporte">chat do suporte</Link> ou pelo e-mail <a className="lime" href="mailto:suporte@nexopoint.com.br">suporte@nexopoint.com.br</a>, que são os nossos canais de atendimento ao titular. Respondemos em até 15 dias.</li>
       </ul>
 
       <h2>6. Segurança</h2>
@@ -82,7 +82,7 @@ export default function PrivacidadePage() {
       <p>Podemos atualizar esta política. Mudanças importantes serão avisadas no site. A data da última atualização fica no topo da página.</p>
 
       <h2>10. Contato</h2>
-      <p>Dúvidas sobre seus dados: <Link className="lime" href="/suporte">chat do suporte</Link>.</p>
+      <p>Dúvidas sobre seus dados: <Link className="lime" href="/suporte">chat do suporte</Link> ou <a className="lime" href="mailto:suporte@nexopoint.com.br">suporte@nexopoint.com.br</a>.</p>
     </DocPage>
   );
 }
