@@ -403,7 +403,10 @@ img.avatar { object-fit: cover; padding: 0; }
 .img-grid label:has(input:checked) { border-color: var(--danger); opacity: .5; }
 .file-drop { display: grid; place-items: center; gap: 6px; padding: 18px; border: 1.5px dashed var(--line); border-radius: 10px; color: var(--muted); text-align: center; cursor: pointer; }
 .file-drop:hover { border-color: var(--accent); color: var(--ink); }
-.file-drop input { max-width: 100%; }
+.file-drop input, .store-cover-pick input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.file-drop { position: relative; }
+.file-drop::after { content: "Toque para escolher"; font: 700 12.5px var(--f-body); color: var(--accent); }
+.file-drop:focus-within { border-color: var(--accent); }
 .bell { position: relative; }
 .bell .dot { position: absolute; top: 4px; right: 4px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 99px; background: var(--accent); color: var(--accent-ink); font-size: 10px; font-weight: 800; display: grid; place-items: center; font-family: var(--f-mono); }
 .notif { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; padding: 14px 18px; border-top: 1px solid var(--line); align-items: start; }
@@ -992,7 +995,7 @@ body:has(.buy-bar) .helper { bottom: 96px; }
 @media (max-width: 560px) { .form-grid { grid-template-columns: minmax(0, 1fr); } }
 .field { grid-template-columns: minmax(0, 1fr); }
 .file-drop { min-width: 0; }
-.file-drop input { width: 100%; min-width: 0; }
+
 /* Ajudante no celular: menor, encostado no canto, e o fim da página ganha espaço para ele não cobrir o rodapé */
 @media (max-width: 600px) {
   .helper { right: 12px; bottom: 12px; }

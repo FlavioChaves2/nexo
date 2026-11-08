@@ -58,7 +58,8 @@ export function HelperBot() {
     setPick(null);
   }, [path]);
 
-  if (gone || path.startsWith("/admin")) return null;
+  // Nas telas de entrar/cadastrar o robô cobria o botão principal no celular
+  if (gone || path.startsWith("/admin") || ["/cadastro", "/entrar", "/redefinir-senha"].includes(path)) return null;
   const tips = TIPS.find((t) => t.match(path + location.search))!.tips;
   const tip = pick !== null ? tips[pick] : null;
 

@@ -19,7 +19,7 @@ export function TabsNav() {
   return (
     <ul>
       {TABS.map((t) => {
-        const on = t.tipo ? path === "/busca" && tipo === t.tipo : t.href === "/" ? path === "/" : path.startsWith(t.href);
+        const on = t.tipo ? path === "/busca" && tipo === t.tipo : t.href === "/" ? path === "/" || (path === "/busca" && !tipo) : path.startsWith(t.href);
         return (
           <li key={t.label}>
             <Link href={t.href} className={[on && "on", t.hot && "tab-hot"].filter(Boolean).join(" ") || undefined}>

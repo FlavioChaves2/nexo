@@ -80,10 +80,10 @@ export default async function AnuncioPage({ params }: { params: Promise<{ id: st
           </div>
           <div className="grid-gap l-head">
             <span className="eyebrow">{TYPE_PLURAL[l.type]} · {l.game.name}</span>
-            <h1 style={{ fontSize: "clamp(24px,3.4vw,34px)" }}>{l.title}</h1>
+            <h1 style={{ fontSize: "clamp(24px,3.4vw,34px)", lineHeight: 1.18, marginBottom: 10, overflowWrap: "anywhere" }}>{l.title}</h1>
             <div className="l-meta">
               {stats.reviews > 0 && <span><Stars n={Math.round(stats.avg)} /> <b>{stats.avg.toFixed(1).replace(".", ",")}</b> <span className="muted">({stats.reviews})</span></span>}
-              <span><Icon name="bag" /><b>{l.soldCount.toLocaleString("pt-BR")}</b> vendidos</span>
+              {l.soldCount > 0 && <span><Icon name="bag" /><b>{l.soldCount.toLocaleString("pt-BR")}</b> {l.soldCount === 1 ? "vendido" : "vendidos"}</span>}
               <span className={l.stock > 0 && l.stock <= 3 ? "l-low" : ""}><Icon name="diamond" />{l.stock === 1 ? "Unidade única" : l.stock > 0 ? `${l.stock} disponíveis` : "Esgotado"}</span>
             </div>
           </div>

@@ -85,8 +85,8 @@ export default async function Home() {
             </Link>
           </div>
           <div className="hero-meta">
-            {listingsCount > 0 && <span><b>{stats.listings}</b> ANÚNCIOS</span>}
-            {sellersCount > 0 && <span><b>{stats.sellers}</b> LOJAS</span>}
+            {listingsCount > 0 && <span><b>{stats.listings}</b> {listingsCount === 1 ? "ANÚNCIO" : "ANÚNCIOS"}</span>}
+            {sellersCount > 0 && <span><b>{stats.sellers}</b> {sellersCount === 1 ? "LOJA" : "LOJAS"}</span>}
             <span><b>{gamesCount}</b> JOGOS</span>
           </div>
         </div>

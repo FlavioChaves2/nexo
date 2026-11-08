@@ -41,6 +41,7 @@ export function ListingForm({ games, seller, feeBps, edit, welcomeUntil }: { gam
     price: reais(edit?.priceCents),
     auto: edit?.autoDelivery ?? false,
   });
+  const [picked, setPicked] = useState(0);
   const [photo, setPhoto] = useState<string | undefined>(edit?.images[0] ? imageUrl(edit.images[0].id) : undefined);
   // Rascunho do anúncio novo guardado neste aparelho: recarregar a página ou fechar sem querer não perde nada.
   const [draftNote, setDraftNote] = useState(false);
@@ -135,13 +136,14 @@ export function ListingForm({ games, seller, feeBps, edit, welcomeUntil }: { gam
             )}
             <label className="file-drop">
               <Icon name="camera" />
-              <span className="small">Prints da conta, do inventário ou do item</span>
+              <span className="small">{picked ? (picked === 1 ? "1 foto escolhida" : picked + " fotos escolhidas") : "Prints da conta, do inventário ou do item"}</span>
               <input
                 type="file"
                 name="images"
                 accept="image/jpeg,image/png,image/webp"
                 multiple
                 onChange={async (e) => {
+                  setPicked(e.currentTarget.files?.length ?? 0);
                   const f = await shrinkInput(e.currentTarget);
                   if (f) setPhoto(URL.createObjectURL(f));
                 }}
