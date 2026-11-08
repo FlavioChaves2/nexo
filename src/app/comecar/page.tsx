@@ -30,7 +30,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-const AFTER_SIGNUP = "/conta/perfil";
+// Quem vem da campanha de vendedores cai direto em "Criar anúncio" (o cadastro comum, de compradores, segue normal).
+const AFTER_SIGNUP = "/vender";
 const pct = (bps: number) => `${(bps / 100).toString().replace(".", ",")}%`;
 const DAYS = WELCOME_FEE_HOURS / 24;
 

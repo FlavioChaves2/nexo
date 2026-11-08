@@ -42,6 +42,8 @@ export function ListingForm({ games, seller, feeBps, edit, welcomeUntil }: { gam
     auto: edit?.autoDelivery ?? false,
   });
   const [picked, setPicked] = useState(0);
+  // No anúncio novo, os campos opcionais ficam recolhidos para o primeiro anúncio sair em 1 minuto.
+  const [more, setMore] = useState(!!edit);
   const [photo, setPhoto] = useState<string | undefined>(edit?.images[0] ? imageUrl(edit.images[0].id) : undefined);
   // Rascunho do anúncio novo guardado neste aparelho: recarregar a página ou fechar sem querer não perde nada.
   const [draftNote, setDraftNote] = useState(false);
@@ -109,7 +111,7 @@ export function ListingForm({ games, seller, feeBps, edit, welcomeUntil }: { gam
             <label htmlFor="title">Título</label>
             <input className="input" id="title" name="title" maxLength={80} required placeholder="Ex.: Conta Valorant Diamante 3 · 22 skins" value={v.title} onChange={(e) => setV({ ...v, title: e.target.value })} />
           </div>
-          <div className="field full">
+          <div className="field full" style={more ? undefined : { display: "none" }}>
             <label htmlFor="server">Servidor ou região (opcional)</label>
             <input className="input" id="server" name="server" maxLength={40} placeholder="Ex.: BR, NA, Mundo 12" value={v.server} onChange={(e) => setV({ ...v, server: e.target.value })} />
             <span className="hint">Ajuda o comprador a filtrar na sua loja. Deixe em branco se não se aplica.</span>
@@ -155,12 +157,15 @@ export function ListingForm({ games, seller, feeBps, edit, welcomeUntil }: { gam
             <label htmlFor="price">Preço (R$)</label>
             <input className="input mono" id="price" name="price" inputMode="decimal" maxLength={10} required placeholder="49,90" value={v.price} onChange={(e) => setV({ ...v, price: capPrice(e.target.value) })} />
           </div>
-          <div className="field">
+          <div className="field" style={more ? undefined : { display: "none" }}>
             <label htmlFor="oldPrice">Preço &quot;de&quot; (opcional)</label>
             <input className="input mono" id="oldPrice" name="oldPrice" inputMode="decimal" maxLength={10} placeholder="59,90" defaultValue={reais(edit?.oldPriceCents)} />
           </div>
+          {!more && (
+            <button type="button" className="linkish small full" style={{ justifySelf: "start" }} onClick={() => setMore(true)}>+ Mais opções (servidor, preço "de", estoque)</button>
+          )}
           {!v.auto && (
-            <div className="field">
+            <div className="field" style={more ? undefined : { display: "none" }}>
               <label htmlFor="stock">Estoque</label>
               <input className="input mono" id="stock" name="stock" type="number" min={1} max={9999} defaultValue={edit?.stock ?? 1} />
             </div>

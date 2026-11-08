@@ -78,3 +78,36 @@ export async function emailBlock(userId: string) {
   const u = await db.user.findUnique({ where: { id: userId }, select: { emailVerifiedAt: true } });
   return u?.emailVerifiedAt ? null : "Confirme seu e-mail antes (veja o aviso em Minha conta).";
 }
+
+/**
+ * Lembretes da taxa zero de boas-vindas (72 h) para quem se cadastrou e ainda não anunciou.
+ * Roda uma vez por dia no cron: quem tem 24–48 h de conta recebe "ainda dá tempo"; quem tem 48–72 h,
+ * "último dia". Cada janela tem 24 h, então cada pessoa recebe no máximo um e-mail de cada.
+ */
+export async function sendWelcomeFeeReminders(now = new Date()) {
+  if (!emailEnabled()) return 0;
+  const { WELCOME_FEE_HOURS, welcomeFeeLabel } = await import("./welcome-fee");
+  const h = (n: number) => new Date(now.getTime() - n * 3_600_000);
+  const users = await db.user.findMany({
+    where: { createdAt: { gt: h(WELCOME_FEE_HOURS), lte: h(24) }, suspendedAt: null, listings: { none: {} } },
+    select: { id: true, email: true, createdAt: true, emailVerifiedAt: true },
+  });
+  const base = process.env.APP_URL?.replace(/\/$/, "") ?? "https://nexopoint.com.br";
+  let sent = 0;
+  for (const u of users) {
+    const last = u.createdAt <= h(48);
+    const until = welcomeFeeLabel(u.createdAt);
+    const subject = last ? "Último dia da sua taxa zero na Nexo" : "Sua taxa zero na Nexo ainda está valendo";
+    const text = (last ? `Sua taxa zero termina ${until}. ` : `Você vende sem pagar taxa nenhuma até ${until}. `) + "Anunciar é grátis e leva 1 minuto: jogo, título, preço e uma foto.";
+    let html: string;
+    if (!u.emailVerifiedAt) {
+      const token = await issueToken(u.id, "VERIFY");
+      if (!token) continue;
+      html = layout(subject, text + " Antes, confirme seu e-mail pelo botão abaixo.", { label: "Confirmar e-mail e anunciar", href: `${base}/verificar-email?token=${token}` });
+    } else {
+      html = layout(subject, text, { label: "Criar meu anúncio", href: `${base}/vender` });
+    }
+    if (await sendEmail(u.email, subject, html).catch(() => false)) sent++;
+  }
+  return sent;
+}
