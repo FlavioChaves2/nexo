@@ -56,3 +56,11 @@ export async function updateProgramAction(id: string, _: GrowthState, form: Form
     "Salvo.",
   );
 }
+
+export async function sendListingNudgesAction(_: GrowthState): Promise<GrowthState> {
+  const admin = await requireAdmin();
+  const { sendListingNudges } = await import("@/lib/email");
+  const r = await sendListingNudges(admin.id);
+  revalidatePath("/admin");
+  return r.error ? { error: r.error } : { ok: `Enviado para ${r.sent} de ${r.total} pessoas.` };
+}

@@ -105,3 +105,27 @@ export async function sendWelcomeFeeReminders(now = new Date()) {
   }
   return sent;
 }
+
+/**
+ * "Agora é só anunciar": e-mail para quem se cadastrou nos últimos 7 dias e ainda não anunciou.
+ * Disparado à mão pelo admin (painel). Trava de 20 h entre um envio e outro para não virar spam.
+ */
+export async function sendListingNudges(adminId: string) {
+  if (!emailEnabled()) return { sent: 0, total: 0, error: "Envio de e-mail desligado (falta RESEND_API_KEY)." };
+  const last = await db.adminAction.findFirst({ where: { kind: "LEMBRETE_ANUNCIO" }, orderBy: { createdAt: "desc" } });
+  if (last && last.createdAt > new Date(Date.now() - 20 * 3_600_000)) return { sent: 0, total: 0, error: "Já foi enviado nas últimas 20 horas." };
+  const { inWelcomeFee, welcomeFeeLabel } = await import("./welcome-fee");
+  const users = await db.user.findMany({
+    where: { createdAt: { gte: new Date(Date.now() - 7 * 86_400_000) }, suspendedAt: null, role: { not: "ADMIN" }, listings: { none: {} } },
+    select: { email: true, username: true, createdAt: true },
+  });
+  const base = process.env.APP_URL?.replace(/\/$/, "") ?? "https://nexopoint.com.br";
+  let sent = 0;
+  for (const u of users) {
+    const fee = inWelcomeFee(u.createdAt) ? ` Sua taxa zero vale até ${welcomeFeeLabel(u.createdAt)}: o que vender até lá é 100% seu.` : "";
+    const html = layout(`Oi, ${u.username}! Seu anúncio está a 1 minuto`, `Tiramos a etapa de confirmar e-mail: agora é só anunciar.${fee} Leva 1 minuto: jogo, título, preço e uma foto. Dúvidas? Responda este e-mail.`, { label: "Criar meu anúncio", href: `${base}/vender` });
+    if (await sendEmail(u.email, "Agora é só anunciar na Nexo", html).catch(() => false)) sent++;
+  }
+  await db.adminAction.create({ data: { adminId, kind: "LEMBRETE_ANUNCIO", targetId: "-", label: `${sent} de ${users.length} e-mails`, note: "Agora é só anunciar" } });
+  return { sent, total: users.length };
+}

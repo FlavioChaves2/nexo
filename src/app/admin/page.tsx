@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { money, dateTime } from "@/lib/format";
+import { NudgeButton } from "@/components/NudgeButton";
 
 const KIND: Record<string, string> = {
   DISPUTA_LIBERADA: "Disputa liberada ao vendedor",
@@ -18,11 +19,12 @@ const KIND: Record<string, string> = {
   CUPOM_CRIADO: "Cupom criado",
   CUPOM_ATIVADO: "Cupom ativado",
   CUPOM_DESATIVADO: "Cupom desativado",
+  LEMBRETE_ANUNCIO: "E-mail “Agora é só anunciar”",
 };
 
 export default async function AdminHome() {
   const since = new Date(Date.now() - 30 * 86_400_000);
-  const [disputes, pendingW, completed, held, actions, orbit, waiting] = await Promise.all([
+  const [disputes, pendingW, completed, held, actions, orbit, waiting, noListing] = await Promise.all([
     db.order.count({ where: { status: "DISPUTA" } }),
     db.withdrawal.aggregate({ where: { status: "PENDENTE" }, _sum: { amountCents: true }, _count: true }),
     db.order.aggregate({ where: { status: "CONCLUIDO", completedAt: { gte: since } }, _sum: { totalCents: true, feeCents: true }, _count: true }),
@@ -30,6 +32,7 @@ export default async function AdminHome() {
     db.adminAction.findMany({ include: { admin: { select: { username: true } } }, orderBy: { createdAt: "desc" }, take: 15 }),
     db.boost.aggregate({ where: { createdAt: { gte: since } }, _sum: { amountCents: true }, _count: true }),
     db.supportTicket.count({ where: { status: "ABERTO", waiting: true } }),
+    db.user.count({ where: { createdAt: { gte: new Date(Date.now() - 7 * 86_400_000) }, suspendedAt: null, role: { not: "ADMIN" }, listings: { none: {} } } }),
   ]);
 
   return (
@@ -66,6 +69,8 @@ export default async function AdminHome() {
           <span className="muted small">{orbit._count} destaque(s) vendido(s)</span>
         </div>
       </div>
+
+      <NudgeButton count={noListing} />
 
       <div className="panel">
         <div className="box" style={{ paddingBottom: 0 }}><h3>Últimas ações da equipe</h3></div>
