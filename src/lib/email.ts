@@ -76,7 +76,7 @@ export async function sendResetEmail(user: { id: string; email: string }) {
 export async function emailBlock(userId: string) {
   if (!emailEnabled()) return null;
   const u = await db.user.findUnique({ where: { id: userId }, select: { emailVerifiedAt: true } });
-  return u?.emailVerifiedAt ? null : "Confirme seu e-mail antes (veja o aviso em Minha conta).";
+  return u?.emailVerifiedAt ? null : "Confirme seu e-mail antes: abra o link que mandamos (se não achar, olhe no Spam e em Promoções) ou peça outro em Minha conta.";
 }
 
 /**

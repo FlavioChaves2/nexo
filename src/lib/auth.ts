@@ -69,7 +69,7 @@ export const getCurrentUser = cache(async () => {
   if (!session) return null;
   const found = await db.user.findUnique({
     where: { id: session.sub },
-    select: { id: true, email: true, username: true, balanceCents: true, role: true, totpEnabled: true, suspendedAt: true, createdAt: true, verification: true, passwordChangedAt: true },
+    select: { id: true, email: true, username: true, balanceCents: true, role: true, totpEnabled: true, suspendedAt: true, createdAt: true, verification: true, passwordChangedAt: true, emailVerifiedAt: true },
   });
   if (!found) return null;
   const { passwordChangedAt, ...user } = found;
