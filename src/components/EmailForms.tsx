@@ -51,7 +51,7 @@ export function VerifyBanner({ email }: { email: string }) {
   const [res, setRes] = useState<FormState>();
   return (
     <div className="note warn" style={{ alignItems: "center", flexWrap: "wrap" }}>
-      <span style={{ flex: 1 }}><b>Confirme seu e-mail.</b> Enviamos um link para {email}. Sem confirmar, você não consegue vender nem sacar. <b>Não achou? Olhe no Spam e em Promoções do Gmail.</b></span>
+      <span style={{ flex: 1 }}><b>Confirme seu e-mail.</b> Enviamos um link para {email}. Você já pode anunciar; para sacar, precisa confirmar. <b>Não achou? Olhe no Spam e em Promoções do Gmail.</b></span>
       <button className="btn btn-ghost btn-sm" type="button" disabled={pending} onClick={() => start(async () => setRes(await resendVerification()))}>Reenviar link</button>
       {res && <span className={res.error ? "error" : "lime small"} style={{ width: "100%" }}>{res.error ?? res.ok}</span>}
     </div>

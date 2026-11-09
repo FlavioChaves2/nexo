@@ -13,7 +13,6 @@ import { contactError, contactErrorIn } from "@/lib/contact-filter";
 import { matchAlerts } from "@/lib/alerts";
 import { notifyFollowers } from "@/lib/store";
 import { after } from "next/server";
-import { emailBlock } from "@/lib/email";
 import { cleanDisplayName } from "@/lib/store-names";
 
 export type ListingFormState = { error?: string } | undefined;
@@ -60,8 +59,7 @@ export async function createListing(_: ListingFormState, form: FormData): Promis
   const user = await getCurrentUser();
   if (!user) redirect("/entrar?next=/vender");
   return guard(async () => {
-    const blocked = await emailBlock(user.id);
-    if (blocked) throw new OrderError(blocked);
+    // Anunciar não exige e-mail confirmado (era o que travava os cadastros novos); sacar continua exigindo.
     const parsed = schema.safeParse(Object.fromEntries(form));
     if (!parsed.success) throw new OrderError(parsed.error.issues[0].message);
     const d = parsed.data;

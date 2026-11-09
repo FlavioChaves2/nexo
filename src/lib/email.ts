@@ -62,7 +62,7 @@ export async function sendVerifyEmail(user: { id: string; email: string }) {
   const token = await issueToken(user.id, "VERIFY");
   if (!token) return false;
   const link = `${await appUrl()}/verificar-email?token=${token}`;
-  return sendEmail(user.email, "Confirme seu e-mail na Nexo", layout("Confirme seu e-mail", "Falta só um passo para vender e sacar na Nexo. O link vale por 7 dias.", { label: "Confirmar e-mail", href: link }));
+  return sendEmail(user.email, "Confirme seu e-mail na Nexo", layout("Confirme seu e-mail", "Confirme para poder sacar o dinheiro das suas vendas na Nexo. O link vale por 7 dias.", { label: "Confirmar e-mail", href: link }));
 }
 
 export async function sendResetEmail(user: { id: string; email: string }) {
@@ -72,7 +72,7 @@ export async function sendResetEmail(user: { id: string; email: string }) {
   return sendEmail(user.email, "Redefinir sua senha da Nexo", layout("Redefinir senha", "Recebemos um pedido para trocar a sua senha. O link vale por 1 hora.", { label: "Criar nova senha", href: link }));
 }
 
-/** Exige e-mail confirmado para vender e sacar, mas só quando o envio de e-mail está ligado. */
+/** Exige e-mail confirmado para sacar (e responder pedidos de compra), mas só quando o envio de e-mail está ligado. */
 export async function emailBlock(userId: string) {
   if (!emailEnabled()) return null;
   const u = await db.user.findUnique({ where: { id: userId }, select: { emailVerifiedAt: true } });
@@ -99,14 +99,8 @@ export async function sendWelcomeFeeReminders(now = new Date()) {
     const until = welcomeFeeLabel(u.createdAt);
     const subject = last ? "Último dia da sua taxa zero na Nexo" : "Sua taxa zero na Nexo ainda está valendo";
     const text = (last ? `Sua taxa zero termina ${until}. ` : `Você vende sem pagar taxa nenhuma até ${until}. `) + "Anunciar é grátis e leva 1 minuto: jogo, título, preço e uma foto.";
-    let html: string;
-    if (!u.emailVerifiedAt) {
-      const token = await issueToken(u.id, "VERIFY");
-      if (!token) continue;
-      html = layout(subject, text + " Antes, confirme seu e-mail pelo botão abaixo.", { label: "Confirmar e-mail e anunciar", href: `${base}/verificar-email?token=${token}` });
-    } else {
-      html = layout(subject, text, { label: "Criar meu anúncio", href: `${base}/vender` });
-    }
+    // Anunciar não exige e-mail confirmado: o botão vai direto para o formulário.
+    const html = layout(subject, text, { label: "Criar meu anúncio", href: `${base}/vender` });
     if (await sendEmail(u.email, subject, html).catch(() => false)) sent++;
   }
   return sent;

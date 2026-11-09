@@ -45,10 +45,10 @@ export function WelcomeModal() {
         <h3 id="welcome-title">Conta criada! Bem-vindo à Nexo 🎉</h3>
         {data.sent ? (
           <p className="muted small">
-            Enviamos um link de confirmação para <b className="welcome-mail">{data.email}</b>. Abra o e-mail e toque em <b>Confirmar e-mail</b> para poder vender e sacar. Não chegou? Olhe no spam ou peça outro em <Link className="lime" href="/conta" onClick={close}>Minha conta</Link>.
+            Enviamos um link de confirmação para <b className="welcome-mail">{data.email}</b>. Abra o e-mail e toque em <b>Confirmar e-mail</b> para poder sacar o dinheiro das vendas (anunciar você já pode). Não chegou? Olhe no spam ou peça outro em <Link className="lime" href="/conta" onClick={close}>Minha conta</Link>.
           </p>
         ) : (
-          <p className="muted small">Você já pode comprar. Para vender e sacar, confirme seu e-mail em <Link className="lime" href="/conta" onClick={close}>Minha conta</Link>.</p>
+          <p className="muted small">Você já pode comprar e anunciar. Para sacar, confirme seu e-mail em <Link className="lime" href="/conta" onClick={close}>Minha conta</Link>.</p>
         )}
         <div className="welcome-actions">
           <button className="btn btn-primary" type="button" onClick={close}>{path === "/conta/perfil" ? "Completar meu perfil" : "Começar a explorar"}</button>
