@@ -34,7 +34,8 @@ export function ListingForm({ games, seller, feeBps, edit, welcomeUntil }: { gam
   const [state, run, pending] = useActionState<ListingFormState, FormData>(action, undefined);
   const keepRun = useKeepForm(state, run);
   const [v, setV] = useState({
-    gameSlug: edit?.gameSlug ?? games[0]?.slug ?? "",
+    // Anúncio novo começa sem jogo: antes vinha o primeiro da lista e muita gente publicava no jogo errado.
+    gameSlug: edit?.gameSlug ?? "",
     type: edit?.type ?? "CONTA",
     title: edit?.title ?? "",
     server: edit?.server ?? "",
@@ -42,6 +43,7 @@ export function ListingForm({ games, seller, feeBps, edit, welcomeUntil }: { gam
     auto: edit?.autoDelivery ?? false,
   });
   const [picked, setPicked] = useState(0);
+  const [gameErr, setGameErr] = useState(false);
   // No anúncio novo, os campos opcionais ficam recolhidos para o primeiro anúncio sair em 1 minuto.
   const [more, setMore] = useState(!!edit);
   const [photo, setPhoto] = useState<string | undefined>(edit?.images[0] ? imageUrl(edit.images[0].id) : undefined);
@@ -89,7 +91,10 @@ export function ListingForm({ games, seller, feeBps, edit, welcomeUntil }: { gam
 
   return (
     <div className="two-col">
-      <form action={run} {...keepRun} onSubmit={(e) => { dropDraft(); keepRun.onSubmit(e); }} onInput={saveDraft} className="panel box">
+      <form action={run} {...keepRun} onSubmit={(e) => {
+        if (!v.gameSlug) { e.preventDefault(); setGameErr(true); document.getElementById("gameSlug")?.focus(); return; }
+        dropDraft(); keepRun.onSubmit(e);
+      }} onInput={saveDraft} className="panel box">
         {draftNote && (
           <div className="note" style={{ marginBottom: 14 }}>
             <Icon name="edit" />
@@ -99,7 +104,8 @@ export function ListingForm({ games, seller, feeBps, edit, welcomeUntil }: { gam
         <div className="form-grid">
           <div className="field">
             <label htmlFor="gameSlug">Jogo</label>
-            <GamePicker id="gameSlug" games={games} name="gameSlug" value={v.gameSlug} onChange={(s) => setV({ ...v, gameSlug: s })} />
+            <GamePicker id="gameSlug" games={games} name="gameSlug" value={v.gameSlug} onChange={(s) => { setGameErr(false); setV({ ...v, gameSlug: s }); }} />
+            {gameErr && <span className="small" style={{ color: "#ff6b6b" }}>Escolha o jogo do anúncio (digite o nome, ex.: Free Fire).</span>}
           </div>
           <div className="field">
             <label htmlFor="type">Tipo</label>
