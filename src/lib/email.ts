@@ -16,13 +16,14 @@ export async function appUrl() {
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
 
 /** Layout simples na identidade da Nexo. */
-function layout(title: string, text: string, button: { label: string; href: string }) {
+function layout(title: string, text: string, button: { label: string; href: string }, extra?: { label: string; href: string }) {
   return `<div style="background:#111311;padding:32px 16px;font-family:Arial,sans-serif">
   <div style="max-width:480px;margin:0 auto;background:#181B17;border:1px solid #2A2F28;border-radius:14px;padding:28px;color:#F1F4EC">
     <div style="font-weight:800;font-size:22px;letter-spacing:-1px;margin-bottom:18px">NEXO<span style="color:#C5F04A">.</span></div>
     <h1 style="font-size:20px;margin:0 0 10px">${esc(title)}</h1>
     <p style="color:#B9BFB3;line-height:1.5;margin:0 0 22px">${esc(text)}</p>
     <a href="${button.href}" style="display:inline-block;background:#C5F04A;color:#12160A;font-weight:700;text-decoration:none;padding:12px 20px;border-radius:8px">${esc(button.label)}</a>
+    ${extra ? `<p style="margin:14px 0 0"><a href="${extra.href}" style="color:#C5F04A">${esc(extra.label)}</a></p>` : ""}
     <p style="color:#959C8F;font-size:12px;margin:22px 0 0">Se você não pediu isso, ignore este e-mail.</p>
   </div></div>`;
 }
@@ -100,7 +101,7 @@ export async function sendWelcomeFeeReminders(now = new Date()) {
     const subject = last ? "Último dia da sua taxa zero na Nexo" : "Sua taxa zero na Nexo ainda está valendo";
     const text = (last ? `Sua taxa zero termina ${until}. ` : `Você vende sem pagar taxa nenhuma até ${until}. `) + "Anunciar é grátis e leva 1 minuto: jogo, título, preço e uma foto.";
     // Anunciar não exige e-mail confirmado: o botão vai direto para o formulário.
-    const html = layout(subject, text, { label: "Criar meu anúncio", href: `${base}/vender` });
+    const html = layout(subject, text, { label: "Criar meu anúncio", href: `${base}/vender` }, { label: "Primeira vez? Veja o passo a passo", href: `${base}/como-anunciar` });
     if (await sendEmail(u.email, subject, html).catch(() => false)) sent++;
   }
   return sent;
@@ -123,7 +124,7 @@ export async function sendListingNudges(adminId: string) {
   let sent = 0;
   for (const u of users) {
     const fee = inWelcomeFee(u.createdAt) ? ` Sua taxa zero vale até ${welcomeFeeLabel(u.createdAt)}: o que vender até lá é 100% seu.` : "";
-    const html = layout(`Oi, ${u.username}! Seu anúncio está a 1 minuto`, `Tiramos a etapa de confirmar e-mail: agora é só anunciar.${fee} Leva 1 minuto: jogo, título, preço e uma foto. Dúvidas? Responda este e-mail.`, { label: "Criar meu anúncio", href: `${base}/vender` });
+    const html = layout(`Oi, ${u.username}! Seu anúncio está a 1 minuto`, `Tiramos a etapa de confirmar e-mail: agora é só anunciar.${fee} Leva 1 minuto: jogo, título, preço e uma foto. Dúvidas? Responda este e-mail.`, { label: "Criar meu anúncio", href: `${base}/vender` }, { label: "Primeira vez? Veja o passo a passo", href: `${base}/como-anunciar` });
     if (await sendEmail(u.email, "Agora é só anunciar na Nexo", html).catch(() => false)) sent++;
   }
   await db.adminAction.create({ data: { adminId, kind: "LEMBRETE_ANUNCIO", targetId: "-", label: `${sent} de ${users.length} e-mails`, note: "Agora é só anunciar" } });

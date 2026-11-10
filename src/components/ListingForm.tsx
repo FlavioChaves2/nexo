@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useEffect, useState } from "react";
 import type { Game } from "@prisma/client";
 import { createListing, updateListing, type ListingFormState } from "@/app/actions/listings";
@@ -101,6 +102,12 @@ export function ListingForm({ games, seller, feeBps, edit, welcomeUntil }: { gam
             <span>Recuperamos o rascunho que você começou neste aparelho. <button type="button" className="linkish" onClick={() => { dropDraft(); location.reload(); }}>Começar do zero</button></span>
           </div>
         )}
+        {!edit && (
+          <div className="note" style={{ marginBottom: 14 }}>
+            <Icon name="bolt" />
+            <span>Primeira vez? <Link className="lime" href="/como-anunciar" target="_blank">Veja o passo a passo</Link> (jogo, tipo, título que vende e foto).</span>
+          </div>
+        )}
         <div className="form-grid">
           <div className="field">
             <label htmlFor="gameSlug">Jogo</label>
@@ -115,7 +122,7 @@ export function ListingForm({ games, seller, feeBps, edit, welcomeUntil }: { gam
           </div>
           <div className="field full">
             <label htmlFor="title">Título</label>
-            <input className="input" id="title" name="title" maxLength={80} required placeholder="Ex.: Conta Valorant Diamante 3 · 22 skins" value={v.title} onChange={(e) => setV({ ...v, title: e.target.value })} />
+            <input className="input" id="title" name="title" maxLength={80} required placeholder="Ex.: Conta Free Fire nível 70 · 40 skins" value={v.title} onChange={(e) => setV({ ...v, title: e.target.value })} />
           </div>
           <div className="field full" style={more ? undefined : { display: "none" }}>
             <label htmlFor="server">Servidor ou região (opcional)</label>
@@ -124,7 +131,7 @@ export function ListingForm({ games, seller, feeBps, edit, welcomeUntil }: { gam
           </div>
           <div className="field full">
             <label htmlFor="description">Descrição</label>
-            <textarea className="input" id="description" name="description" rows={5} required minLength={20} defaultValue={edit?.description} placeholder="O que vem no anúncio, como é a entrega, regras de garantia…" />
+            <textarea className="input" id="description" name="description" rows={5} required minLength={20} defaultValue={edit?.description} placeholder={"Ex.: Conta antiga, nível 70, 40 skins e 2 passes de elite. Entrego login e senha pelo chat do pedido e ajudo a trocar o e-mail."} />
           </div>
 
           <div className="field full">
