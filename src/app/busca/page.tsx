@@ -134,7 +134,7 @@ export default async function BuscaPage({ searchParams }: { searchParams: Promis
             <Nexinho3D className="sad-bot" mood="sad" decor={false} interactive={false} zoom={11} label="Nexinho triste: nada encontrado" />
             <h3>{game && !q && !tipo ? `Ainda ninguém anunciou ${game.name}` : "Nenhum anúncio com esses filtros"}</h3>
             <p className="muted">A Nexo acabou de abrir e a vitrine está enchendo agora. Escolha o seu caminho:</p>
-            <EarlyShelf game={game} foundersLeft={foundersLeft} logged={!!user} />
+            <EarlyShelf game={game} foundersLeft={foundersLeft} logged={!!user} search={q} tipo={tipo} />
             {hasFilter && (
               <>
                 <p className="muted small">Ou crie um alerta: avisamos no seu celular assim que alguém anunciar isso.</p>

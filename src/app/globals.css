@@ -1650,3 +1650,24 @@ body:has(.lp) header.top, body:has(.lp) footer:not(.lp-foot), body:has(.lp) .hel
   .lp-calc-best b { font-size: 30px; }
 }
 @media (prefers-reduced-motion: reduce) { .lp-ribbon, .lp-zero, .lp-live { animation: none; } .lp-notif { animation: none; opacity: 1; } }
+
+/* /comecar: tela "O que você quer fazer?" (vender ou comprar) */
+.lp-choose { display: grid; gap: 26px; padding-top: 34px; padding-bottom: 48px; max-width: 860px; }
+.lp-choose-head { text-align: center; display: grid; gap: 10px; justify-items: center; }
+.lp-choose-head h1 { font-size: clamp(28px, 5vw, 46px); line-height: 1.08; letter-spacing: -1px; margin: 0; }
+.lp-choose-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.lp-choice { display: grid; gap: 10px; align-content: start; padding: 24px; border-radius: 18px; border: 1px solid var(--line); background: var(--surface); color: inherit; text-decoration: none; transition: transform .15s, border-color .15s, box-shadow .15s; }
+.lp-choice:hover, .lp-choice:focus-visible { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(197, 240, 74, .12); }
+.lp-choice b { font-size: 24px; letter-spacing: -.5px; }
+.lp-choice .btn { margin-top: 6px; }
+.lp-choice-ic { width: 46px; height: 46px; display: grid; place-items: center; border-radius: 12px; background: rgba(197, 240, 74, .12); color: var(--accent); }
+.lp-choice-ic svg { width: 24px; height: 24px; }
+.lp-choice-tag { justify-self: start; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); }
+.lp-choice.buy .lp-choice-tag { background: rgba(197, 240, 74, .14); color: var(--accent); }
+.lp-choose-trust { justify-content: center; }
+.lp-buyer .lp-zero-n svg { width: 22px; height: 22px; }
+@media (max-width: 700px) {
+  .lp-choose { padding-top: 20px; gap: 18px; }
+  .lp-choose-grid { grid-template-columns: 1fr; }
+  .lp-choice { padding: 18px; }
+}

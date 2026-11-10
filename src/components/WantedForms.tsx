@@ -12,7 +12,7 @@ function Feedback({ s }: { s: WantedState }) {
   return null;
 }
 
-export function WantedForm({ games, gameSlug }: { games: PickGame[]; gameSlug?: string }) {
+export function WantedForm({ games, gameSlug, type, title }: { games: PickGame[]; gameSlug?: string; type?: string; title?: string }) {
   const [state, run, pending] = useActionState(createWanted, undefined);
   const v = state?.values ?? {};
   return (
@@ -24,13 +24,13 @@ export function WantedForm({ games, gameSlug }: { games: PickGame[]; gameSlug?: 
         </div>
         <div className="field">
           <label htmlFor="type">Tipo</label>
-          <select className="input" id="type" name="type" defaultValue={v.type}>
+          <select className="input" id="type" name="type" defaultValue={v.type ?? (type && (LISTING_TYPES as readonly string[]).includes(type) ? type : undefined)}>
             {LISTING_TYPES.map((t) => <option key={t} value={t}>{TYPE_LABEL[t]}</option>)}
           </select>
         </div>
         <div className="field full">
           <label htmlFor="title">O que você procura</label>
-          <input className="input" id="title" name="title" defaultValue={v.title} required minLength={8} maxLength={80} placeholder="Ex.: Conta Valorant com Vandal Reaver" />
+          <input className="input" id="title" name="title" defaultValue={v.title ?? title} required minLength={8} maxLength={80} placeholder="Ex.: Conta Valorant com Vandal Reaver" />
         </div>
         <div className="field full">
           <label htmlFor="description">Detalhes</label>
