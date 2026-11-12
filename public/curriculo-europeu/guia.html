@@ -181,11 +181,11 @@ Carta de condução (B) · Disponibilidade para turnos</pre>
         <div class="r"><i class="h"></i><i class="g"></i><br><i></i><i></i><i style="width:80%"></i><br><i class="h" style="width:45%;height:7px"></i><i></i><i></i><i style="width:70%"></i><br><i class="h" style="width:45%;height:7px"></i><i></i><i style="width:60%"></i></div>
       </div>
       <div class="price">
-        <div class="old">De €29</div>
+        <div class="old" style="text-decoration:none;font-weight:700">Preço de lançamento</div>
         <div class="v"><small>por </small>€11,97</div>
         <div style="color:var(--green);font-weight:800">Pagamento único · acesso na hora</div>
         <a class="btn" id="buy" href="#">QUERO O KIT CURRÍCULO PRO<small>Menos que um café por semana</small></a>
-        <div class="timer">⏳ Este preço vale por <span id="cd">15:00</span></div>
+        <div class="timer" style="color:var(--navy)">💡 Menos do que uma revisão de currículo, e você faz quantas versões quiser</div>
         <div class="g7">🔒 Garantia de 7 dias: não gostou, devolvemos o valor.</div>
         <div class="sent" id="sent">✅ Pedido recebido! Em breve você recebe no seu e-mail o link de pagamento. Assim que pagar, o acesso é liberado.</div>
       </div>
@@ -198,7 +198,7 @@ Carta de condução (B) · Disponibilidade para turnos</pre>
   O conteúdo é educativo e não garante emprego.<br>
   <a href="/privacidade">Política de privacidade</a>
 </footer>
-<div class="sticky" id="sticky"><a class="btn" href="#oferta">CURRÍCULO PROFISSIONAL POR €11,97</a></div>
+<div class="sticky" id="sticky"><a class="btn" href="#oferta">KIT CURRÍCULO PRO POR €11,97</a></div>
 
 <script>
 // Link de pagamento (Stripe, Hotmart, Kiwify...). Enquanto estiver vazio, o botão registra o pedido
@@ -209,22 +209,19 @@ var CHECKOUT_URL = "https://pay.kiwify.com/mcr5RQX";
   var lead={};try{lead=JSON.parse(localStorage.getItem("ce_lead")||"{}")}catch(e){}
   if(lead.n)document.getElementById("hi").textContent=", "+lead.n;
   document.getElementById("cp").onclick=function(){var t=document.getElementById("tpl").textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){document.getElementById("cp").textContent="✅ Copiado!"},function(){prompt("Copie o modelo:",t)})};
-  // Contador de 15 min, começa quando a pessoa vê a oferta.
-  var end=0,cd=document.getElementById("cd"),started=false;
-  try{end=+localStorage.getItem("ce_offer_end")||0}catch(e){}
-  function p(n){return(n<10?"0":"")+n}
-  function tick(){if(!end)return;var s=Math.max(0,Math.floor((end-Date.now())/1e3));cd.textContent=p(Math.floor(s/60))+":"+p(s%60)}
+  // Avisa o Pixel quando a pessoa chega na oferta.
+  var started=false;
   var off=document.getElementById("oferta"),st=document.getElementById("sticky");
   addEventListener("scroll",function(){
     var r=off.getBoundingClientRect();
     st.classList.toggle("show",r.top>innerHeight&&scrollY>600);
-    if(!started&&r.top<innerHeight*.7){started=true;if(!end||end<Date.now()){end=Date.now()+15*60e3;try{localStorage.setItem("ce_offer_end",end)}catch(e){}}tick();setInterval(tick,1000);try{fbq("track","ViewContent",{content_name:"oferta-curriculo-pro",value:11.97,currency:"EUR"})}catch(e){}}
+    if(!started&&r.top<innerHeight*.7){started=true;try{fbq("track","ViewContent",{content_name:"oferta-curriculo-pro",value:11.97,currency:"EUR"})}catch(e){}}
   },{passive:true});
   var k=new URLSearchParams(location.search).get("k")||"";
   document.getElementById("buy").onclick=function(ev){
     ev.preventDefault();
     try{fbq("track","InitiateCheckout",{content_name:"curriculo-pro",value:11.97,currency:"EUR"})}catch(e){}
-    if(CHECKOUT_URL){location.href=CHECKOUT_URL+(lead.e?(CHECKOUT_URL.indexOf("?")<0?"?":"&")+"email="+encodeURIComponent(lead.e):"");return}
+    if(CHECKOUT_URL){var u=CHECKOUT_URL+(lead.e?(CHECKOUT_URL.indexOf("?")<0?"?":"&")+"email="+encodeURIComponent(lead.e):"");this.style.opacity=.7;setTimeout(function(){location.href=u},450);return}
     var email=lead.e||prompt("Qual o seu e-mail para receber o link de pagamento?")||"";
     if(!/^\S+@\S+\.\S+$/.test(email))return;
     this.style.opacity=.7;
