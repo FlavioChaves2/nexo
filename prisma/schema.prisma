@@ -704,3 +704,18 @@ model SellerProgram {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
+
+// Contatos captados em landing pages avulsas (ex.: /curriculo-europeu). Não são usuários da Nexo.
+model CourseLead {
+  id        String   @id @default(cuid())
+  product   String   // ex.: "curriculo-europeu"
+  name      String
+  email     String
+  whatsapp  String   @default("")
+  country   String   @default("")
+  source    String   @default("") // utm_source / utm_campaign
+  createdAt DateTime @default(now())
+
+  @@unique([product, email])
+  @@index([createdAt])
+}

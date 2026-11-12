@@ -35,7 +35,10 @@ const nextConfig: NextConfig = {
     ];
   },
   async rewrites() {
-    return [{ source: "/divulgadores-oyikbtkx", destination: "/divulgadores-oyikbtkx/index.html" }];
+    return [
+      { source: "/divulgadores-oyikbtkx", destination: "/divulgadores-oyikbtkx/index.html" },
+      { source: "/curriculo-europeu", destination: "/curriculo-europeu/index.html" },
+    ];
   },
   experimental: {
     serverActions: { allowedOrigins: ["*.trycloudflare.com"], bodySizeLimit: "4mb" },
