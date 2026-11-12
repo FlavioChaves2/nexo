@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Currículo Profissional Padrão Europeu</title>
+<style>
+:root{--c:#1e3a5f;--accent:#e0a800}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:#e8ebf2;color:#1f2937}
+.bar{position:sticky;top:0;z-index:5;background:#0b1a3a;color:#fff;padding:10px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.bar b{font-size:14px;margin-right:6px}
+.bar button,.bar label.b{background:#fff;color:#0b1a3a;border:0;border-radius:8px;padding:9px 13px;font-weight:700;cursor:pointer;font-size:14px;font-family:inherit}
+.bar .pdf{background:#ffcc33}
+.sw{width:26px;height:26px;border-radius:50%;border:2px solid #fff;cursor:pointer}
+.help{max-width:820px;margin:16px auto 0;background:#fffbea;border:1px solid #fde68a;border-radius:10px;padding:12px 16px;font-size:14px;line-height:1.5}
+.page{width:210mm;min-height:297mm;margin:18px auto 40px;background:#fff;box-shadow:0 10px 40px rgba(0,0,0,.15);display:grid;grid-template-columns:72mm 1fr}
+.side{background:var(--c);color:#fff;padding:14mm 8mm}
+.photo{width:36mm;height:36mm;border-radius:50%;margin:0 auto 8mm;background:#cbd5e1 center/cover;display:grid;place-items:center;color:#475569;font-size:12px;text-align:center;cursor:pointer;border:3px solid rgba(255,255,255,.6)}
+.nophoto .photo{display:none}
+.side h3{font-size:11pt;letter-spacing:1.5px;text-transform:uppercase;border-bottom:2px solid var(--accent);padding-bottom:4px;margin:7mm 0 3mm}
+.side p,.side li{font-size:9.5pt;line-height:1.5;color:#e2e8f0}
+.side ul{list-style:none}
+.side li{margin:4px 0}
+.lvl{display:flex;justify-content:space-between;gap:8px}
+.lvl span:last-child{font-weight:700;color:#fff}
+.main{padding:14mm 12mm}
+h1{font-size:25pt;color:var(--c);line-height:1.1;letter-spacing:-.3px}
+.role{font-size:13pt;color:var(--accent);font-weight:700;margin-top:2mm;text-transform:uppercase;letter-spacing:1px}
+.main h2{font-size:11.5pt;color:var(--c);text-transform:uppercase;letter-spacing:1.5px;border-bottom:2px solid #e5e7eb;padding-bottom:3px;margin:7mm 0 3mm;display:flex;align-items:center;gap:8px}
+.main h2:before{content:"";width:9px;height:9px;background:var(--accent);border-radius:2px}
+.main p{font-size:10pt;line-height:1.55}
+.job{margin-bottom:4.5mm}
+.jh{display:flex;justify-content:space-between;gap:10px;font-size:10.5pt}
+.jh b{color:#111827}
+.jh span{color:#6b7280;font-size:9.5pt;white-space:nowrap}
+.co{font-size:9.5pt;color:#4b5563;font-style:italic;margin:1px 0 3px}
+.job ul{padding-left:16px}
+.job li{font-size:9.8pt;line-height:1.5;margin:1.5px 0}
+[contenteditable]{outline:none;border-radius:3px}
+[contenteditable]:hover{background:rgba(255,204,51,.18)}
+[contenteditable]:focus{background:rgba(255,204,51,.28)}
+.tools{display:flex;gap:6px;margin-top:2px}
+.tools button{font-size:11px;border:1px dashed #94a3b8;background:#fff;color:#475569;border-radius:5px;padding:2px 7px;cursor:pointer}
+@media (max-width:860px){.page{transform-origin:top left;transform:scale(calc((100vw - 16px)/794));margin:10px 8px calc((297mm * ((100vw - 16px)/794)) - 297mm)}}
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff}
+  .bar,.help,.tools{display:none!important}
+  .page{margin:0;box-shadow:none;transform:none!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  [contenteditable]:hover,[contenteditable]:focus{background:none}
+}
+</style>
+</head>
+<body>
+<div class="bar">
+  <b>Cor:</b>
+  <span class="sw" style="background:#1e3a5f" data-c="#1e3a5f" data-a="#e0a800"></span>
+  <span class="sw" style="background:#0f3d3e" data-c="#0f3d3e" data-a="#2dd4bf"></span>
+  <span class="sw" style="background:#3b1f4a" data-c="#3b1f4a" data-a="#f472b6"></span>
+  <span class="sw" style="background:#1f2937" data-c="#1f2937" data-a="#60a5fa"></span>
+  <span class="sw" style="background:#7c2d12" data-c="#7c2d12" data-a="#fbbf24"></span>
+  <button id="tph">Foto: sim</button>
+  <button id="rst">Recomeçar</button>
+  <button class="pdf" id="pdf">⬇ Salvar em PDF</button>
+</div>
+<div class="help">✍️ <b>Como usar:</b> clique em qualquer texto e escreva por cima. Use os botões “+” para adicionar experiências e “Enter” para criar novos tópicos. Tudo é salvo automaticamente neste navegador. No fim, clique em <b>Salvar em PDF</b> e escolha “Salvar como PDF”. <b>Irlanda:</b> desligue a foto e escreva em inglês.</div>
+
+<div class="page" id="page">
+  <aside class="side">
+    <div class="photo" id="photo">Clique para<br>adicionar foto</div>
+    <input type="file" id="file" accept="image/*" hidden>
+    <h3 contenteditable>Contacto</h3>
+    <ul contenteditable>
+      <li>📍 Lisboa, Portugal</li>
+      <li>📞 +351 912 345 678</li>
+      <li>✉️ seu.nome@gmail.com</li>
+      <li>🔗 linkedin.com/in/seunome</li>
+      <li>🪪 Autorização de residência</li>
+    </ul>
+    <h3 contenteditable>Competências</h3>
+    <ul contenteditable>
+      <li>Atendimento ao cliente</li>
+      <li>Gestão de equipas</li>
+      <li>Microsoft Excel (avançado)</li>
+      <li>Organização e planeamento</li>
+      <li>Resolução de problemas</li>
+    </ul>
+    <h3 contenteditable>Idiomas</h3>
+    <ul contenteditable>
+      <li class="lvl"><span>Português</span><span>Nativo</span></li>
+      <li class="lvl"><span>Inglês</span><span>B2</span></li>
+      <li class="lvl"><span>Espanhol</span><span>B1</span></li>
+    </ul>
+    <h3 contenteditable>Outros</h3>
+    <ul contenteditable>
+      <li>Carta de condução (B)</li>
+      <li>Disponibilidade imediata</li>
+      <li>Disponível para turnos</li>
+    </ul>
+  </aside>
+
+  <section class="main">
+    <h1 contenteditable>Seu Nome Completo</h1>
+    <div class="role" contenteditable>Cargo que procura</div>
+
+    <h2 contenteditable>Perfil profissional</h2>
+    <p contenteditable>Profissional com 6 anos de experiência em atendimento e operações. Coordenei equipas de até 12 pessoas e aumentei a satisfação dos clientes em 25%. Disponibilidade imediata para trabalhar em Lisboa e região.</p>
+
+    <h2 contenteditable>Experiência profissional</h2>
+    <div id="jobs">
+      <div class="job" contenteditable>
+        <div class="jh"><b>Supervisor de Atendimento</b><span>03/2021 – Atual</span></div>
+        <div class="co">Empresa XYZ · São Paulo, Brasil</div>
+        <ul><li>Liderei uma equipa de 12 pessoas, com 95% de avaliações positivas.</li><li>Reduzi o tempo médio de resposta de 24h para 6h.</li><li>Treinei 30 novos colaboradores em processos e atendimento.</li></ul>
+      </div>
+      <div class="job" contenteditable>
+        <div class="jh"><b>Assistente Administrativo</b><span>01/2018 – 02/2021</span></div>
+        <div class="co">Empresa ABC · Rio de Janeiro, Brasil</div>
+        <ul><li>Organizei a rotina financeira de um departamento de 20 pessoas.</li><li>Implementei controlo em Excel que reduziu atrasos de pagamento em 30%.</li></ul>
+      </div>
+    </div>
+    <div class="tools"><button id="addJob">+ experiência</button><button id="delJob">− remover última</button></div>
+
+    <h2 contenteditable>Formação</h2>
+    <div class="job" contenteditable>
+      <div class="jh"><b>Licenciatura em Administração</b><span>2017</span></div>
+      <div class="co">Universidade Federal · Brasil</div>
+    </div>
+    <div class="job" contenteditable>
+      <div class="jh"><b>Curso de Inglês — Nível B2</b><span>2022</span></div>
+      <div class="co">Escola de Idiomas · Online</div>
+    </div>
+
+    <h2 contenteditable>Cursos e certificações</h2>
+    <p contenteditable>Excel Avançado (2023) · Liderança de Equipas (2022) · Atendimento ao Cliente (2020)</p>
+  </section>
+</div>
+
+<script>
+(function(){
+  var KEY="cvpro_v1",page=document.getElementById("page"),root=document.documentElement;
+  var original=page.innerHTML;
+  function save(){try{localStorage.setItem(KEY,JSON.stringify({h:page.innerHTML,c:root.style.getPropertyValue("--c"),a:root.style.getPropertyValue("--accent"),np:page.classList.contains("nophoto")}))}catch(e){}}
+  function setColor(c,a){root.style.setProperty("--c",c);root.style.setProperty("--accent",a)}
+  try{var s=JSON.parse(localStorage.getItem(KEY)||"null");if(s){page.innerHTML=s.h;if(s.c)setColor(s.c,s.a);if(s.np)page.classList.add("nophoto")}}catch(e){}
+  page.addEventListener("input",save);
+  document.querySelectorAll(".sw").forEach(function(b){b.onclick=function(){setColor(b.dataset.c,b.dataset.a);save()}});
+  var tph=document.getElementById("tph");
+  function phLabel(){tph.textContent="Foto: "+(page.classList.contains("nophoto")?"não":"sim")}
+  phLabel();tph.onclick=function(){page.classList.toggle("nophoto");phLabel();save()};
+  document.getElementById("rst").onclick=function(){if(confirm("Apagar tudo e voltar ao modelo original?")){page.innerHTML=original;page.classList.remove("nophoto");setColor("#1e3a5f","#e0a800");save();phLabel()}};
+  document.getElementById("pdf").onclick=function(){window.print()};
+  page.addEventListener("click",function(e){
+    if(e.target.closest("#photo"))document.getElementById("file").click();
+    if(e.target.id==="addJob"){var jobs=document.getElementById("jobs"),c=jobs.lastElementChild.cloneNode(true);jobs.appendChild(c);save()}
+    if(e.target.id==="delJob"){var j=document.getElementById("jobs");if(j.children.length>1){j.lastElementChild.remove();save()}}
+  });
+  document.body.addEventListener("change",function(e){
+    if(e.target.id!=="file"||!e.target.files[0])return;
+    var r=new FileReader();r.onload=function(){
+      var img=new Image();img.onload=function(){var cv=document.createElement("canvas"),z=320;cv.width=cv.height=z;var m=Math.min(img.width,img.height);cv.getContext("2d").drawImage(img,(img.width-m)/2,(img.height-m)/2,m,m,0,0,z,z);
+        var ph=document.getElementById("photo");ph.style.backgroundImage="url("+cv.toDataURL("image/jpeg",.85)+")";ph.textContent="";save()};img.src=r.result};
+    r.readAsDataURL(e.target.files[0]);
+  });
+})();
+</script>
+</body>
+</html>

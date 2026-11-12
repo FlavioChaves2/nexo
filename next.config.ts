@@ -32,12 +32,16 @@ const nextConfig: NextConfig = {
       // Material dos divulgadores: só abre com o link, e o Google não guarda.
       { source: "/divulgadores-oyikbtkx/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }] },
       { source: "/divulgadores-oyikbtkx", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }] },
+      { source: "/cv-pro-ba56bcbef8/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }] },
+      { source: "/cv-pro-ba56bcbef8", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }] },
     ];
   },
   async rewrites() {
     return [
       { source: "/divulgadores-oyikbtkx", destination: "/divulgadores-oyikbtkx/index.html" },
       { source: "/curriculo-europeu", destination: "/curriculo-europeu/index.html" },
+      { source: "/curriculo-europeu/guia", destination: "/curriculo-europeu/guia.html" },
+      { source: "/cv-pro-ba56bcbef8", destination: "/cv-pro-ba56bcbef8/index.html" },
     ];
   },
   experimental: {

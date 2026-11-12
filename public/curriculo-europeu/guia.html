@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Guia do Currículo Europeu</title>
+<meta name="theme-color" content="#0b1a3a">
+<script>
+// Só abre para quem deixou o contato (link do e-mail com ?k= ou cadastro feito neste navegador).
+(function(){var ok=false;try{ok=!!localStorage.getItem("ce_lead")}catch(e){}
+if(!ok&&!/[?&]k=\w{8,}/.test(location.search))location.replace("/curriculo-europeu");
+if(!ok){try{localStorage.setItem("ce_lead",JSON.stringify({n:"",e:""}))}catch(e){}}})();
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","1380892450588060");fbq("track","PageView");fbq("track","ViewContent",{content_name:"guia-curriculo-europeu"});
+</script>
+<style>
+:root{--navy:#0b1a3a;--navy2:#13265a;--gold:#ffcc33;--gold2:#ffb800;--ink:#0f172a;--muted:#5b6478;--bg:#f6f7fb;--line:#e3e6ef;--red:#dc2626;--green:#16a34a}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.65}
+.top{background:linear-gradient(160deg,var(--navy),var(--navy2));color:#fff;padding:40px 18px 46px;text-align:center}
+.top .ok{display:inline-block;background:var(--green);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px}
+.top h1{font-size:clamp(28px,5vw,42px);line-height:1.12;margin:14px auto 10px;max-width:760px}
+.top p{opacity:.85;max-width:620px;margin:0 auto}
+.toc{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:20px}
+.toc a{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:6px 12px;font-size:13px}
+main{max-width:760px;margin:0 auto;padding:10px 18px 40px}
+h2{font-size:clamp(23px,3.4vw,30px);line-height:1.2;margin:46px 0 12px;scroll-margin-top:16px}
+h2 .n{display:inline-grid;place-items:center;width:36px;height:36px;background:var(--gold);color:var(--navy);border-radius:10px;font-size:18px;margin-right:8px;vertical-align:middle}
+p{margin:10px 0}
+.err{background:#fff;border:1px solid var(--line);border-left:5px solid var(--red);border-radius:12px;padding:14px 16px;margin:12px 0}
+.err b{display:block}
+.err .fix{color:var(--green);font-weight:600;margin-top:4px}
+.box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:14px 0}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line);font-size:15px;margin:12px 0}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:#eef1f8}
+ol.struct{padding-left:22px}
+ol.struct li{margin:8px 0}
+pre{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;border-radius:12px;padding:18px;font-size:14px;line-height:1.55;font-family:ui-monospace,Consolas,monospace}
+.copy{margin-top:8px;background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:9px 14px;font-weight:700;cursor:pointer;font-family:inherit}
+.tip{background:#fffbea;border:1px solid #fde68a;border-radius:12px;padding:14px 16px;margin:14px 0}
+/* Oferta */
+.offer{background:linear-gradient(160deg,var(--navy),var(--navy2));color:#fff;padding:56px 18px;margin-top:50px}
+.offer .in{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center}
+.offer .tag{display:inline-block;background:var(--red);color:#fff;font-weight:900;font-size:13px;padding:5px 12px;border-radius:6px}
+.offer h2{margin:14px 0 10px;color:#fff}
+.offer ul{list-style:none;display:grid;gap:8px;margin:16px 0}
+.offer li{padding-left:28px;position:relative}
+.offer li:before{content:"✓";position:absolute;left:0;width:20px;height:20px;border-radius:50%;background:var(--gold);color:var(--navy);font-weight:900;font-size:12px;display:grid;place-items:center;top:3px}
+.cv{background:#fff;border-radius:6px;aspect-ratio:1/1.414;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);display:grid;grid-template-columns:34% 66%;overflow:hidden;transform:rotate(-2deg)}
+.cv .l{background:#1e3a5f;padding:14px 10px}
+.cv .ph{width:46px;height:46px;border-radius:50%;background:#94a3b8;margin:0 auto 10px}
+.cv .r{padding:16px 12px}
+.cv i{display:block;height:6px;border-radius:3px;background:#cbd5e1;margin:6px 0}
+.cv .l i{background:rgba(255,255,255,.35)}
+.cv .h{height:11px;background:#1e3a5f;width:70%}
+.cv .g{background:#ffcc33;width:40%}
+.price{background:#fff;color:var(--ink);border-radius:18px;padding:24px;text-align:center;margin-top:18px}
+.price .old{color:var(--muted);text-decoration:line-through}
+.price .v{font-size:52px;font-weight:900;color:var(--navy);line-height:1}
+.price .v small{font-size:20px}
+.btn{display:block;width:100%;margin-top:14px;border:0;cursor:pointer;background:linear-gradient(180deg,var(--gold),var(--gold2));color:#1a1300;font-weight:900;font-size:18px;padding:16px;border-radius:12px;box-shadow:0 8px 0 #c98f00;text-align:center;text-decoration:none;font-family:inherit}
+.btn:active{transform:translateY(6px);box-shadow:0 2px 0 #c98f00}
+.btn small{display:block;font-size:12px;font-weight:600;opacity:.75}
+.timer{font-size:14px;color:var(--red);font-weight:800;margin-top:10px}
+.g7{font-size:13px;color:var(--muted);margin-top:8px}
+.sent{display:none;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;border-radius:12px;padding:14px;margin-top:12px;font-weight:600}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:28px 18px 100px}
+footer a{color:var(--muted)}
+.sticky{position:fixed;left:0;right:0;bottom:0;background:rgba(11,26,58,.97);padding:10px 14px;z-index:9;display:none}
+.sticky .btn{max-width:480px;margin:0 auto;font-size:16px;padding:12px;box-shadow:none}
+.sticky.show{display:block}
+@media (max-width:820px){.offer .in{grid-template-columns:1fr}.cv{max-width:260px;margin:0 auto}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <span class="ok">✓ Acesso liberado<span id="hi"></span></span>
+  <h1>Guia do Currículo Europeu</h1>
+  <p>Leia com calma e aplique no seu currículo hoje. Deixamos o link deste guia no seu e-mail também.</p>
+  <div class="toc">
+    <a href="#erros">7 erros</a><a href="#estrutura">Estrutura</a><a href="#perfil">Perfil</a><a href="#idiomas">Idiomas</a><a href="#paises">Portugal e Irlanda</a><a href="#modelo">Modelo</a>
+  </div>
+</div>
+
+<main>
+  <h2 id="erros"><span class="n">1</span>Os 7 erros que derrubam o currículo brasileiro</h2>
+  <p>O recrutador europeu passa poucos segundos no primeiro olhar. Qualquer um destes erros faz o seu currículo ir para a pilha do “não”.</p>
+  <div class="err"><b>1. Dados pessoais demais</b>CPF, RG, estado civil, filhos, religião, data de nascimento.<div class="fix">→ Coloque só nome, cidade/país, telefone, e-mail e LinkedIn.</div></div>
+  <div class="err"><b>2. Objetivo genérico</b>“Busco uma oportunidade para crescer profissionalmente.”<div class="fix">→ Troque por um perfil profissional de 3 linhas (veja a seção 3).</div></div>
+  <div class="err"><b>3. Lista de tarefas sem resultado</b>“Responsável pelo atendimento ao cliente.”<div class="fix">→ Mostre resultado: “Atendi 60 clientes por dia, com 95% de avaliações positivas.”</div></div>
+  <div class="err"><b>4. Currículo longo demais</b>3, 4 páginas com tudo o que você já fez.<div class="fix">→ Máximo de 2 páginas. Com menos de 10 anos de experiência, 1 página.</div></div>
+  <div class="err"><b>5. Idiomas sem nível</b>“Inglês intermediário”, “espanhol básico”.<div class="fix">→ Use a escala europeia A1–C2 (seção 4).</div></div>
+  <div class="err"><b>6. Formatação que quebra nos filtros</b>Tabelas, colunas em imagem, ícones no lugar de texto.<div class="fix">→ Muitas empresas usam sistemas de triagem (ATS). Use texto real, títulos claros e envie em PDF.</div></div>
+  <div class="err"><b>7. Mesmo currículo para todas as vagas</b>Um arquivo só, enviado para tudo.<div class="fix">→ Ajuste o perfil e as palavras-chave a cada vaga. Leva 5 minutos e muda tudo.</div></div>
+
+  <h2 id="estrutura"><span class="n">2</span>A estrutura certa, seção por seção</h2>
+  <ol class="struct">
+    <li><b>Cabeçalho:</b> nome, cargo que você busca, cidade e país, telefone com código do país, e-mail profissional, LinkedIn.</li>
+    <li><b>Perfil profissional:</b> 3 linhas sobre quem você é, sua experiência e o que entrega.</li>
+    <li><b>Experiência profissional:</b> da mais recente para a mais antiga. Cargo, empresa, cidade e país, mês/ano de início e fim, e 3 a 5 conquistas.</li>
+    <li><b>Formação:</b> curso, instituição, país e ano. Explique o equivalente quando ajudar (ex.: “Ensino Médio — equivalente ao 12.º ano”).</li>
+    <li><b>Competências:</b> técnicas (programas, máquinas, certificações) e comportamentais com exemplos.</li>
+    <li><b>Idiomas:</b> na escala A1–C2.</li>
+    <li><b>Extras (se tiver):</b> voluntariado, cursos curtos, carta de condução (CNH), disponibilidade imediata, visto ou autorização de residência.</li>
+  </ol>
+  <div class="tip">💡 <b>Visto e documentos:</b> se você já tem autorização de residência ou cidadania europeia, escreva no cabeçalho. Isso tira a principal dúvida do recrutador logo de cara.</div>
+
+  <h2 id="perfil"><span class="n">3</span>O perfil profissional em 3 linhas</h2>
+  <p>Use a fórmula: <b>quem você é + experiência + o que você entrega</b>.</p>
+  <div class="box">❌ “Sou uma pessoa dedicada, proativa e em busca de novos desafios.”</div>
+  <div class="box">✅ “Assistente administrativa com 6 anos de experiência em empresas de logística. Organizei a rotina financeira de equipes de até 20 pessoas e reduzi atrasos de pagamento em 30%. Disponibilidade imediata em Lisboa.”</div>
+
+  <h2 id="idiomas"><span class="n">4</span>Idiomas no padrão europeu (A1–C2)</h2>
+  <table>
+    <tr><th>Nível</th><th>O que significa</th><th>Equivale a</th></tr>
+    <tr><td><b>A1–A2</b></td><td>Frases simples, situações do dia a dia</td><td>“básico”</td></tr>
+    <tr><td><b>B1</b></td><td>Se vira em viagens e no trabalho com apoio</td><td>“intermediário”</td></tr>
+    <tr><td><b>B2</b></td><td>Conversa com fluidez, participa de reuniões</td><td>“intermediário avançado”</td></tr>
+    <tr><td><b>C1</b></td><td>Usa o idioma com facilidade no trabalho</td><td>“avançado”</td></tr>
+    <tr><td><b>C2</b></td><td>Domínio completo</td><td>“fluente”</td></tr>
+  </table>
+  <p>Português, escreva <b>“Nativo”</b>. Seja honesto no nível: muitas entrevistas testam o idioma na hora.</p>
+
+  <h2 id="paises"><span class="n">5</span>Dicas para Portugal e Irlanda</h2>
+  <div class="box"><b>🇵🇹 Portugal</b><br>Foto é comum, mas opcional: se usar, que seja profissional. O modelo Europass é bem aceito. Escreva em português de Portugal (“equipa”, “telemóvel”, “gestão”). Inclua NIF e NISS se já tiver.</div>
+  <div class="box"><b>🇮🇪 Irlanda</b><br>Chamam de <i>CV</i>, sempre em inglês. <b>Sem foto</b> e sem data de nascimento. Máximo de 2 páginas. Coloque o Stamp/visto (ex.: Stamp 1G, Stamp 4) e o PPS Number se já tiver. Termine com “References available upon request”.</div>
+
+  <h2 id="modelo"><span class="n">6</span>Modelo de texto para copiar</h2>
+  <p>Copie, cole no Word ou Google Docs e troque pelos seus dados.</p>
+<pre id="tpl">SEU NOME COMPLETO
+Cargo que você procura
+Cidade, País · +351 900 000 000 · seu.email@gmail.com · linkedin.com/in/seunome
+Autorização de residência: (sim / em processo / cidadania europeia)
+
+PERFIL PROFISSIONAL
+[Cargo] com [X] anos de experiência em [área]. [Conquista com número].
+[O que você entrega]. Disponibilidade [imediata / a partir de mês].
+
+EXPERIÊNCIA PROFISSIONAL
+Cargo — Empresa · Cidade, País          mm/aaaa – mm/aaaa
+• Conquista com número e resultado
+• Conquista com número e resultado
+• Responsabilidade principal
+
+FORMAÇÃO
+Curso — Instituição · País              aaaa
+
+COMPETÊNCIAS
+Técnicas: programa, ferramenta, certificação
+Comportamentais: exemplo concreto
+
+IDIOMAS
+Português: Nativo · Inglês: B2 · Espanhol: B1
+
+OUTROS
+Carta de condução (B) · Disponibilidade para turnos</pre>
+  <button class="copy" id="cp">📋 Copiar modelo</button>
+</main>
+
+<section class="offer" id="oferta">
+  <div class="in">
+    <div>
+      <span class="tag">OFERTA SÓ PARA QUEM LEU O GUIA</span>
+      <h2>Quer pular essa parte e já ter um currículo profissional pronto?</h2>
+      <p>O texto acima funciona. Mas o recrutador também julga pela aparência. O <b>Currículo Profissional Padrão Europeu</b> é um modelo com design moderno que você preenche no próprio navegador e salva em PDF em minutos.</p>
+      <ul>
+        <li>Design profissional, aprovado nos filtros ATS</li>
+        <li>Edita direto na tela, sem instalar nada</li>
+        <li>Salva em PDF pronto para enviar</li>
+        <li>Textos-exemplo em cada seção para guiar você</li>
+        <li>Funciona no celular e no computador</li>
+      </ul>
+    </div>
+    <div>
+      <div class="cv" aria-hidden="true">
+        <div class="l"><div class="ph"></div><i></i><i></i><i style="width:60%"></i><br><i></i><i style="width:70%"></i><i></i></div>
+        <div class="r"><i class="h"></i><i class="g"></i><br><i></i><i></i><i style="width:80%"></i><br><i class="h" style="width:45%;height:7px"></i><i></i><i></i><i style="width:70%"></i><br><i class="h" style="width:45%;height:7px"></i><i></i><i style="width:60%"></i></div>
+      </div>
+      <div class="price">
+        <div class="old">De €29</div>
+        <div class="v"><small>por </small>€11,97</div>
+        <div style="color:var(--green);font-weight:800">Pagamento único · acesso na hora</div>
+        <a class="btn" id="buy" href="#">QUERO MEU CURRÍCULO PROFISSIONAL<small>Menos que um café por semana</small></a>
+        <div class="timer">⏳ Este preço vale por <span id="cd">15:00</span></div>
+        <div class="g7">🔒 Garantia de 7 dias: não gostou, devolvemos o valor.</div>
+        <div class="sent" id="sent">✅ Pedido recebido! Em breve você recebe no seu e-mail o link de pagamento. Assim que pagar, o acesso é liberado.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Este site não faz parte do Facebook nem da Meta Platforms, Inc.<br>
+  O conteúdo é educativo e não garante emprego.<br>
+  <a href="/privacidade">Política de privacidade</a>
+</footer>
+<div class="sticky" id="sticky"><a class="btn" href="#oferta">CURRÍCULO PROFISSIONAL POR €11,97</a></div>
+
+<script>
+// Link de pagamento (Stripe, Hotmart, Kiwify...). Enquanto estiver vazio, o botão registra o pedido
+// e você manda o link de pagamento manualmente.
+var CHECKOUT_URL = "";
+
+(function(){
+  var lead={};try{lead=JSON.parse(localStorage.getItem("ce_lead")||"{}")}catch(e){}
+  if(lead.n)document.getElementById("hi").textContent=", "+lead.n;
+  document.getElementById("cp").onclick=function(){var t=document.getElementById("tpl").textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){document.getElementById("cp").textContent="✅ Copiado!"},function(){prompt("Copie o modelo:",t)})};
+  // Contador de 15 min, começa quando a pessoa vê a oferta.
+  var end=0,cd=document.getElementById("cd"),started=false;
+  try{end=+localStorage.getItem("ce_offer_end")||0}catch(e){}
+  function p(n){return(n<10?"0":"")+n}
+  function tick(){if(!end)return;var s=Math.max(0,Math.floor((end-Date.now())/1e3));cd.textContent=p(Math.floor(s/60))+":"+p(s%60)}
+  var off=document.getElementById("oferta"),st=document.getElementById("sticky");
+  addEventListener("scroll",function(){
+    var r=off.getBoundingClientRect();
+    st.classList.toggle("show",r.top>innerHeight&&scrollY>600);
+    if(!started&&r.top<innerHeight*.7){started=true;if(!end||end<Date.now()){end=Date.now()+15*60e3;try{localStorage.setItem("ce_offer_end",end)}catch(e){}}tick();setInterval(tick,1000);try{fbq("track","ViewContent",{content_name:"oferta-curriculo-pro",value:11.97,currency:"EUR"})}catch(e){}}
+  },{passive:true});
+  var k=new URLSearchParams(location.search).get("k")||"";
+  document.getElementById("buy").onclick=function(ev){
+    ev.preventDefault();
+    try{fbq("track","InitiateCheckout",{content_name:"curriculo-pro",value:11.97,currency:"EUR"})}catch(e){}
+    if(CHECKOUT_URL){location.href=CHECKOUT_URL+(lead.e?(CHECKOUT_URL.indexOf("?")<0?"?":"&")+"email="+encodeURIComponent(lead.e):"");return}
+    var email=lead.e||prompt("Qual o seu e-mail para receber o link de pagamento?")||"";
+    if(!/^\S+@\S+\.\S+$/.test(email))return;
+    this.style.opacity=.7;
+    fetch("/api/leads",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({product:"curriculo-pro",name:lead.n||"Interessado",email:email,source:"oferta-guia "+k})})
+      .finally(function(){document.getElementById("buy").style.display="none";document.getElementById("sent").style.display="block"});
+  };
+})();
+</script>
+</body>
+</html>

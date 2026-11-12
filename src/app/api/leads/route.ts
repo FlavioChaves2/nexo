@@ -15,24 +15,41 @@ const schema = z.object({
 });
 
 const NOTIFY = "paraibanogames@gmail.com";
+const FROM = "Currículo Europeu <nao-responda@nexopoint.com.br>";
 const esc = (s: string) => s.replace(/[<>&"]/g, (c) => `&#${c.charCodeAt(0)};`);
+
+function guideEmail(name: string, link: string) {
+  return `<div style="background:#f6f7fb;padding:28px 14px;font-family:Arial,sans-serif">
+  <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:14px;padding:28px;color:#0f172a">
+    <h1 style="font-size:22px;margin:0 0 10px">Seu guia chegou, ${esc(name)}! 🇪🇺</h1>
+    <p style="line-height:1.55;color:#334155">Aqui está o acesso ao <b>Guia do Currículo Europeu</b>: os 7 erros que derrubam o currículo brasileiro, a estrutura certa, a tabela de idiomas e um modelo pronto para copiar.</p>
+    <p style="margin:24px 0"><a href="${link}" style="background:#ffcc33;color:#1a1300;font-weight:800;text-decoration:none;padding:14px 22px;border-radius:10px;display:inline-block">Abrir o guia</a></p>
+    <p style="font-size:13px;color:#64748b">Guarde este e-mail para voltar ao guia quando quiser.</p>
+  </div></div>`;
+}
 
 export async function POST(req: Request) {
   const parsed = schema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ ok: false, error: "Confira nome e e-mail." }, { status: 400 });
   const { website: _bot, ...d } = parsed.data;
-  const lead = await db.courseLead.upsert({
-    where: { product_email: { product: d.product, email: d.email } },
-    create: d,
-    update: { name: d.name, whatsapp: d.whatsapp || undefined, country: d.country || undefined },
-  });
-  const isNew = Date.now() - lead.createdAt.getTime() < 5000;
-  if (isNew) {
-    await sendEmail(
-      NOTIFY,
-      `Novo contato: ${d.product}`,
-      `<p><b>${esc(d.name)}</b><br>${esc(d.email)}<br>WhatsApp: ${esc(d.whatsapp)}<br>País: ${esc(d.country)}<br>Origem: ${esc(d.source)}</p>`,
-    ).catch(() => {});
+  const existing = await db.courseLead.findUnique({ where: { product_email: { product: d.product, email: d.email } } });
+  const lead = existing
+    ? await db.courseLead.update({ where: { id: existing.id }, data: { name: d.name, whatsapp: d.whatsapp || undefined, country: d.country || undefined } })
+    : await db.courseLead.create({ data: d });
+
+  if (!existing) {
+    const tasks: Promise<unknown>[] = [
+      sendEmail(
+        NOTIFY,
+        d.product === "curriculo-pro" ? `💶 Quer comprar o Currículo Pro: ${d.email}` : `Novo contato: ${d.product}`,
+        `<p><b>${esc(d.name)}</b><br>${esc(d.email)}<br>WhatsApp: ${esc(d.whatsapp)}<br>País: ${esc(d.country)}<br>Origem: ${esc(d.source)}</p>`,
+      ),
+    ];
+    if (d.product === "curriculo-europeu") {
+      const base = (process.env.APP_URL ?? "https://nexopoint.com.br").replace(/\/$/, "");
+      tasks.push(sendEmail(d.email, "Seu Guia do Currículo Europeu chegou", guideEmail(d.name.split(" ")[0], `${base}/curriculo-europeu/guia?k=${lead.id}`), FROM));
+    }
+    await Promise.allSettled(tasks);
   }
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, key: lead.id });
 }
