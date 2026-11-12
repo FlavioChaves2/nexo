@@ -182,7 +182,7 @@ Carta de condução (B) · Disponibilidade para turnos</pre>
       </div>
       <div class="price">
         <div class="old" style="text-decoration:none;font-weight:700">Preço de lançamento</div>
-        <div class="v"><small>por </small>€11,97</div>
+        <div class="v"><small>por </small>€14,90</div>
         <div style="color:var(--green);font-weight:800">Pagamento único · acesso na hora</div>
         <a class="btn" id="buy" href="#">QUERO O KIT CURRÍCULO PRO<small>Menos que um café por semana</small></a>
         <div class="timer" style="color:var(--navy)">💡 Menos do que uma revisão de currículo, e você faz quantas versões quiser</div>
@@ -198,7 +198,7 @@ Carta de condução (B) · Disponibilidade para turnos</pre>
   O conteúdo é educativo e não garante emprego.<br>
   <a href="/privacidade">Política de privacidade</a>
 </footer>
-<div class="sticky" id="sticky"><a class="btn" href="#oferta">KIT CURRÍCULO PRO POR €11,97</a></div>
+<div class="sticky" id="sticky"><a class="btn" href="#oferta">KIT CURRÍCULO PRO POR €14,90</a></div>
 
 <script>
 // Link de pagamento (Stripe, Hotmart, Kiwify...). Enquanto estiver vazio, o botão registra o pedido
@@ -215,12 +215,12 @@ var CHECKOUT_URL = "https://pay.kiwify.com/mcr5RQX";
   addEventListener("scroll",function(){
     var r=off.getBoundingClientRect();
     st.classList.toggle("show",r.top>innerHeight&&scrollY>600);
-    if(!started&&r.top<innerHeight*.7){started=true;try{fbq("track","ViewContent",{content_name:"oferta-curriculo-pro",value:11.97,currency:"EUR"})}catch(e){}}
+    if(!started&&r.top<innerHeight*.7){started=true;try{fbq("track","ViewContent",{content_name:"oferta-curriculo-pro",value:14.90,currency:"EUR"})}catch(e){}}
   },{passive:true});
   var k=new URLSearchParams(location.search).get("k")||"";
   document.getElementById("buy").onclick=function(ev){
     ev.preventDefault();
-    try{fbq("track","InitiateCheckout",{content_name:"curriculo-pro",value:11.97,currency:"EUR"})}catch(e){}
+    try{fbq("track","InitiateCheckout",{content_name:"curriculo-pro",value:14.90,currency:"EUR"})}catch(e){}
     if(CHECKOUT_URL){var u=CHECKOUT_URL+(lead.e?(CHECKOUT_URL.indexOf("?")<0?"?":"&")+"email="+encodeURIComponent(lead.e):"");this.style.opacity=.7;setTimeout(function(){location.href=u},450);return}
     var email=lead.e||prompt("Qual o seu e-mail para receber o link de pagamento?")||"";
     if(!/^\S+@\S+\.\S+$/.test(email))return;
