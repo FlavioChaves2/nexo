@@ -26,10 +26,20 @@ function guideEmail(name: string, link: string) {
     <p style="margin:24px 0"><a href="${link}" style="background:#ffcc33;color:#1a1300;font-weight:800;text-decoration:none;padding:14px 22px;border-radius:10px;display:inline-block">Abrir o guia</a></p>
     <p style="font-size:13px;color:#64748b">Guarde este e-mail para voltar ao guia quando quiser.</p>
     <div style="margin-top:22px;padding:16px 18px;background:#fffbea;border:1px solid #fde68a;border-radius:12px;line-height:1.5;color:#334155;font-size:14px">
-      <b>P.S.:</b> quer o currículo já pronto, sem montar do zero? O <b>Kit Currículo Europeu Pro</b> monta o seu com textos da sua profissão (em português de Portugal ou inglês), escreve a carta de apresentação e mostra onde enviar. <b>€14,90</b>, com garantia de 7 dias.
+      <b>P.S.:</b> quer o currículo já pronto, sem montar do zero? O <b>Kit Currículo Europeu Pro</b> monta o seu com textos da sua profissão (em português de Portugal ou inglês), escreve a carta de apresentação e mostra onde enviar. <b>€14,90</b> na oferta de boas-vindas, que vale por 48 horas (depois o kit custa €19,90). Garantia de 7 dias.
       <br><a href="${link}#oferta" style="color:#1d4ed8;font-weight:700">Ver o Kit Currículo Pro →</a>
     </div>
   </div></div>`;
+}
+
+// A página do guia pergunta quando a pessoa se cadastrou, para contar o prazo real da oferta de boas-vindas.
+// Só devolve a data, nada de nome ou e-mail.
+export async function GET(req: Request) {
+  const k = new URL(req.url).searchParams.get("k") ?? "";
+  if (!/^[a-z0-9]{20,40}$/i.test(k)) return NextResponse.json({ ok: false }, { status: 400 });
+  const lead = await db.courseLead.findUnique({ where: { id: k }, select: { createdAt: true, product: true } });
+  if (!lead || lead.product !== "curriculo-europeu") return NextResponse.json({ ok: false }, { status: 404 });
+  return NextResponse.json({ ok: true, since: lead.createdAt.toISOString() }, { headers: { "Cache-Control": "no-store" } });
 }
 
 export async function POST(req: Request) {

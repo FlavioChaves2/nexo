@@ -64,6 +64,9 @@ pre{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;border-radius:12px;pad
 .btn:active{transform:translateY(6px);box-shadow:0 2px 0 #c98f00}
 .btn small{display:block;font-size:12px;font-weight:600;opacity:.75}
 .timer{font-size:14px;color:var(--red);font-weight:800;margin-top:10px}
+.cdwrap{display:inline-block;margin:10px 0 4px;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:10px;padding:7px 12px;font-size:14px;font-weight:700}
+.cdwrap b{font-variant-numeric:tabular-nums;font-size:17px}
+.cdwrap span{display:block;font-weight:600;font-size:12px;color:#7f1d1d}
 .g7{font-size:13px;color:var(--muted);margin-top:8px}
 .sent{display:none;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;border-radius:12px;padding:14px;margin-top:12px;font-weight:600}
 footer{text-align:center;color:var(--muted);font-size:13px;padding:28px 18px 100px}
@@ -181,11 +184,12 @@ Carta de condução (B) · Disponibilidade para turnos</pre>
         <div class="r"><i class="h"></i><i class="g"></i><br><i></i><i></i><i style="width:80%"></i><br><i class="h" style="width:45%;height:7px"></i><i></i><i></i><i style="width:70%"></i><br><i class="h" style="width:45%;height:7px"></i><i></i><i style="width:60%"></i></div>
       </div>
       <div class="price">
-        <div class="old" style="text-decoration:none;font-weight:700">Preço de lançamento</div>
-        <div class="v"><small>por </small>€14,90</div>
+        <div class="old" style="text-decoration:none;font-weight:800;color:var(--red)" id="plabel">🎁 Oferta de boas-vindas</div>
+        <div class="v" id="pval">€14,90</div>
+        <div class="cdwrap" id="cdwrap">Termina em <b id="cdt">48:00:00</b><span id="cdd"></span></div>
         <div style="color:var(--green);font-weight:800">Pagamento único · acesso na hora</div>
         <a class="btn" id="buy" href="#">QUERO O KIT CURRÍCULO PRO<small>Menos que um café por semana</small></a>
-        <div class="timer" style="color:var(--navy)">💡 Menos do que uma revisão de currículo, e você faz quantas versões quiser</div>
+        <div class="timer" style="color:var(--navy)" id="pnote">Depois desse prazo, o kit passa a custar €19,90.</div>
         <div class="g7">🔒 Garantia de 7 dias: não gostou, devolvemos o valor.</div>
         <div class="sent" id="sent">✅ Pedido recebido! Em breve você recebe no seu e-mail o link de pagamento. Assim que pagar, o acesso é liberado.</div>
       </div>
@@ -198,16 +202,39 @@ Carta de condução (B) · Disponibilidade para turnos</pre>
   O conteúdo é educativo e não garante emprego.<br>
   <a href="/privacidade">Política de privacidade</a>
 </footer>
-<div class="sticky" id="sticky"><a class="btn" href="#oferta">KIT CURRÍCULO PRO POR €14,90</a></div>
+<div class="sticky" id="sticky"><a class="btn" href="#oferta" id="stbtn">KIT CURRÍCULO PRO POR €14,90</a></div>
 
 <script>
 // Link de pagamento (Stripe, Hotmart, Kiwify...). Enquanto estiver vazio, o botão registra o pedido
 // e você manda o link de pagamento manualmente.
-var CHECKOUT_URL = "https://pay.kiwify.com/mcr5RQX";
+var CHECKOUT_URL = "https://pay.kiwify.com/mcr5RQX";      // €14,90: oferta de boas-vindas (48h desde o cadastro)
+var CHECKOUT_URL_FULL = "https://pay.kiwify.com/2VaShcR"; // €19,90: preço normal depois do prazo
+var OFFER_HOURS = 48;
 
 (function(){
   var lead={};try{lead=JSON.parse(localStorage.getItem("ce_lead")||"{}")}catch(e){}
   if(lead.n)document.getElementById("hi").textContent=", "+lead.n;
+  // Oferta de boas-vindas: o prazo conta a partir do cadastro (data guardada no servidor), e o preço sobe de verdade depois.
+  var price=14.90,url=CHECKOUT_URL,deadline=0;
+  var start=0;try{start=+localStorage.getItem("ce_offer_start")||0;if(!start){start=Date.now();localStorage.setItem("ce_offer_start",start)}}catch(e){start=Date.now()}
+  function setStart(t){deadline=t+OFFER_HOURS*3600e3;paint()}
+  function z(n){return(n<10?"0":"")+n}
+  function paint(){
+    var left=deadline-Date.now(),open=left>0;
+    price=open?14.90:19.90;url=open?CHECKOUT_URL:CHECKOUT_URL_FULL;
+    var pv=open?"€14,90":"€19,90";
+    document.getElementById("pval").textContent=pv;
+    document.getElementById("stbtn").textContent="KIT CURRÍCULO PRO POR "+pv;
+    document.getElementById("plabel").textContent=open?"🎁 Oferta de boas-vindas":"Kit Currículo Europeu Pro";
+    document.getElementById("plabel").style.color=open?"":"var(--muted)";
+    var w=document.getElementById("cdwrap");w.style.display=open?"":"none";
+    document.getElementById("pnote").textContent=open?"Depois desse prazo, o kit passa a custar €19,90.":"A oferta de boas-vindas de 48 horas terminou.";
+    if(open){var s=Math.floor(left/1e3);document.getElementById("cdt").textContent=z(Math.floor(s/3600))+":"+z(Math.floor(s%3600/60))+":"+z(s%60);
+      document.getElementById("cdd").textContent="até "+new Date(deadline).toLocaleString("pt-PT",{weekday:"long",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"})}
+  }
+  setStart(start);setInterval(paint,1000);
+  var lk=new URLSearchParams(location.search).get("k")||lead.k||"";
+  if(lk)fetch("/api/leads?k="+encodeURIComponent(lk)).then(function(r){return r.json()}).then(function(r){if(r&&r.ok&&r.since){var t=Date.parse(r.since);if(t){try{localStorage.setItem("ce_offer_start",t)}catch(e){}setStart(t)}}}).catch(function(){});
   document.getElementById("cp").onclick=function(){var t=document.getElementById("tpl").textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){document.getElementById("cp").textContent="✅ Copiado!"},function(){prompt("Copie o modelo:",t)})};
   // Avisa o Pixel quando a pessoa chega na oferta.
   var started=false;
@@ -215,13 +242,13 @@ var CHECKOUT_URL = "https://pay.kiwify.com/mcr5RQX";
   addEventListener("scroll",function(){
     var r=off.getBoundingClientRect();
     st.classList.toggle("show",r.top>innerHeight&&scrollY>600);
-    if(!started&&r.top<innerHeight*.7){started=true;try{fbq("track","ViewContent",{content_name:"oferta-curriculo-pro",value:14.90,currency:"EUR"})}catch(e){}}
+    if(!started&&r.top<innerHeight*.7){started=true;try{fbq("track","ViewContent",{content_name:"oferta-curriculo-pro",value:price,currency:"EUR"})}catch(e){}}
   },{passive:true});
   var k=new URLSearchParams(location.search).get("k")||"";
   document.getElementById("buy").onclick=function(ev){
     ev.preventDefault();
-    try{fbq("track","InitiateCheckout",{content_name:"curriculo-pro",value:14.90,currency:"EUR"})}catch(e){}
-    if(CHECKOUT_URL){var u=CHECKOUT_URL+(lead.e?(CHECKOUT_URL.indexOf("?")<0?"?":"&")+"email="+encodeURIComponent(lead.e):"");this.style.opacity=.7;setTimeout(function(){location.href=u},450);return}
+    try{fbq("track","InitiateCheckout",{content_name:"curriculo-pro",value:price,currency:"EUR"})}catch(e){}
+    if(url){var u=url+(lead.e?(url.indexOf("?")<0?"?":"&")+"email="+encodeURIComponent(lead.e):"");this.style.opacity=.7;setTimeout(function(){location.href=u},450);return}
     var email=lead.e||prompt("Qual o seu e-mail para receber o link de pagamento?")||"";
     if(!/^\S+@\S+\.\S+$/.test(email))return;
     this.style.opacity=.7;

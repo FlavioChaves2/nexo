@@ -167,7 +167,7 @@ footer a{color:var(--muted)}
       .then(function(r){
         if(!r.ok)throw new Error(r.error||"erro");
         try{fbq("track","Lead",{content_name:"guia-curriculo-europeu"})}catch(e){}
-        try{localStorage.setItem("ce_lead",JSON.stringify({n:d.name.split(" ")[0],e:d.email}))}catch(e){}
+        try{localStorage.setItem("ce_lead",JSON.stringify({n:d.name.split(" ")[0],e:d.email,k:r.key}))}catch(e){}
         var to="/curriculo-europeu/guia?k="+encodeURIComponent(r.key);setTimeout(function(){location.href=to},500);
       })
       .catch(function(e){err.textContent=(e&&e.message&&e.message!=="erro")?e.message:"Não deu certo. Tente de novo.";go.disabled=false;go.style.opacity=1;go.firstChild.nodeValue="QUERO O GUIA GRÁTIS"});
