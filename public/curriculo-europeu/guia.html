@@ -248,6 +248,7 @@ var OFFER_HOURS = 48;
   document.getElementById("buy").onclick=function(ev){
     ev.preventDefault();
     try{fbq("track","InitiateCheckout",{content_name:"curriculo-pro",value:price,currency:"EUR"})}catch(e){}
+    var ik=k||lead.k||"";if(ik){try{var bd=JSON.stringify({k:ik,price:price});if(!(navigator.sendBeacon&&navigator.sendBeacon("/api/leads/intent",new Blob([bd],{type:"application/json"}))))fetch("/api/leads/intent",{method:"POST",headers:{"Content-Type":"application/json"},body:bd,keepalive:true})}catch(e){}}
     if(url){var u=url+(lead.e?(url.indexOf("?")<0?"?":"&")+"email="+encodeURIComponent(lead.e):"");this.style.opacity=.7;setTimeout(function(){location.href=u},450);return}
     var email=lead.e||prompt("Qual o seu e-mail para receber o link de pagamento?")||"";
     if(!/^\S+@\S+\.\S+$/.test(email))return;
