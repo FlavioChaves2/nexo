@@ -807,13 +807,12 @@ function openDrawer(target){
   DR.kind=target==="profile"?"p":target==="skills"?"s":target==="role"?"r":"b";
   $("drArea").value=DR.area;drawDrawer();$("dr").classList.add("on");
 }
-function targetName(){var t=DR.target;if(t==="profile")return"o perfil";if(t==="skills")return"as competências";if(t==="role")return"o cargo";var i=+t.split(",")[1];return"a experiência "+(i+1)}
 function drawDrawer(){
   document.querySelectorAll("#drLang button").forEach(function(b){b.classList.toggle("on",b.dataset.l===DR.lang)});
   $("drTabs").innerHTML=KINDS.map(function(k){return'<button data-kind="'+k[0]+'" class="'+(DR.kind===k[0]?"on":"")+'">'+k[1]+"</button>"}).join("");
   var list=area(DR.area)[DR.lang][DR.kind],dest=DR.kind==="p"?"profile":DR.kind==="s"?"skills":DR.kind==="r"?"role":(DR.target.indexOf("job")===0?DR.target:"job,0");
   var verb=DR.kind==="b"||DR.kind==="s"?"Adicionar":"Usar";
-  $("drHint").textContent=(DR.kind==="b"?"Adiciona à "+(dest==="job,0"&&DR.target.indexOf("job")!==0?"experiência 1":targetName())+". ":"")+"Depois troque o que estiver entre [colchetes] pelos seus números.";
+  $("drHint").textContent=(DR.kind==="b"?"Vai para a experiência "+(+dest.split(",")[1]+1)+". ":"")+"Depois troque o que estiver entre [colchetes] pelos seus dados.";
   $("drList").innerHTML=list.map(function(x,i){return'<div class="ph-i"><span>'+hx(x)+'</span><button data-ins="'+i+'" data-dest="'+dest+'">'+verb+"</button></div>"}).join("");
 }
 $("drArea").onchange=function(){DR.area=this.value;S.area=this.value;save();drawDrawer()};
