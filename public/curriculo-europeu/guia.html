@@ -357,5 +357,11 @@ var OFFER_HOURS = 48;
   };
 })();
 </script>
+<script>
+// Separa quem leu de quem entrou e saiu: dispara uma vez quando a pessoa rola metade da página ou fica 30 segundos.
+(function(){var done=false;function fire(why){if(done)return;done=true;try{fbq("trackCustom","Engajou",{pagina:"guia",motivo:why})}catch(e){}}
+setTimeout(function(){if(!document.hidden)fire("30s")},30000);
+addEventListener("scroll",function(){var h=document.documentElement;if((scrollY+innerHeight)/h.scrollHeight>=.5)fire("rolou-50")},{passive:true});})();
+</script>
 </body>
 </html>
