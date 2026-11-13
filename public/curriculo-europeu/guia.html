@@ -252,7 +252,7 @@ Carta de condução (B) · Disponibilidade para turnos</pre>
       <li>Currículo no padrão europeu, com textos da sua profissão</li>
       <li>Carta de apresentação pronta e e-mail de candidatura</li>
       <li>Lista de onde enviar e como responder na entrevista</li>
-      <li>Tudo por €14,90, pagamento único, com garantia de 7 dias</li>
+      <li>Tudo por €9,90, pagamento único, com garantia de 7 dias</li>
     </ul></div>
   </div>
   <div class="faq">
@@ -283,11 +283,11 @@ Carta de condução (B) · Disponibilidade para turnos</pre>
       <img class="cvimg" src="/curriculo-europeu/kit/4.jpg" alt="Exemplo de currículo feito com o kit" loading="lazy" width="540" height="1000">
       <div class="price">
         <div class="old" style="text-decoration:none;font-weight:800;color:var(--red)" id="plabel">🎁 Oferta de boas-vindas</div>
-        <div class="v" id="pval">€14,90</div>
+        <div class="v" id="pval">€9,90</div>
         <div class="cdwrap" id="cdwrap">Termina em <b id="cdt">48:00:00</b><span id="cdd"></span></div>
         <div style="color:var(--green);font-weight:800">Pagamento único · acesso na hora</div>
         <a class="btn" id="buy" href="#">QUERO O KIT CURRÍCULO PRO<small>Menos que um café por semana</small></a>
-        <div class="timer" style="color:var(--navy)" id="pnote">Depois desse prazo, o kit passa a custar €19,90.</div>
+        <div class="timer" style="color:var(--navy)" id="pnote">Depois desse prazo, o kit passa a custar €14,90.</div>
         <div class="g7">🔒 Garantia de 7 dias: não gostou, devolvemos o valor.</div>
         <div class="sent" id="sent">✅ Pedido recebido! Em breve você recebe no seu e-mail o link de pagamento. Assim que pagar, o acesso é liberado.</div>
       </div>
@@ -300,33 +300,33 @@ Carta de condução (B) · Disponibilidade para turnos</pre>
   O conteúdo é educativo e não garante emprego.<br>
   <a href="/privacidade">Política de privacidade</a>
 </footer>
-<div class="sticky" id="sticky"><a class="btn" href="#oferta" id="stbtn">KIT CURRÍCULO PRO POR €14,90</a></div>
+<div class="sticky" id="sticky"><a class="btn" href="#oferta" id="stbtn">KIT CURRÍCULO PRO POR €9,90</a></div>
 
 <script>
 // Link de pagamento (Stripe, Hotmart, Kiwify...). Enquanto estiver vazio, o botão registra o pedido
 // e você manda o link de pagamento manualmente.
-var CHECKOUT_URL = "https://pay.kiwify.com/mcr5RQX";      // €14,90: oferta de boas-vindas (48h desde o cadastro)
-var CHECKOUT_URL_FULL = "https://pay.kiwify.com/2VaShcR"; // €19,90: preço normal depois do prazo
+var CHECKOUT_URL = "https://pay.kiwify.com/mcr5RQX";      // €9,90: oferta de boas-vindas (48h desde o cadastro)
+var CHECKOUT_URL_FULL = "https://pay.kiwify.com/2VaShcR"; // €14,90: preço normal depois do prazo
 var OFFER_HOURS = 48;
 
 (function(){
   var lead={};try{lead=JSON.parse(localStorage.getItem("ce_lead")||"{}")}catch(e){}
   if(lead.n)document.getElementById("hi").textContent=", "+lead.n;
   // Oferta de boas-vindas: o prazo conta a partir do cadastro (data guardada no servidor), e o preço sobe de verdade depois.
-  var price=14.90,url=CHECKOUT_URL,deadline=0;
+  var price=9.90,url=CHECKOUT_URL,deadline=0;
   var start=0;try{start=+localStorage.getItem("ce_offer_start")||0;if(!start){start=Date.now();localStorage.setItem("ce_offer_start",start)}}catch(e){start=Date.now()}
   function setStart(t){deadline=t+OFFER_HOURS*3600e3;paint()}
   function z(n){return(n<10?"0":"")+n}
   function paint(){
     var left=deadline-Date.now(),open=left>0;
-    price=open?14.90:19.90;url=open?CHECKOUT_URL:CHECKOUT_URL_FULL;
-    var pv=open?"€14,90":"€19,90";
+    price=open?9.90:14.90;url=open?CHECKOUT_URL:CHECKOUT_URL_FULL;
+    var pv=open?"€9,90":"€14,90";
     document.getElementById("pval").textContent=pv;
     document.getElementById("stbtn").textContent="KIT CURRÍCULO PRO POR "+pv;
     document.getElementById("plabel").textContent=open?"🎁 Oferta de boas-vindas":"Kit Currículo Europeu Pro";
     document.getElementById("plabel").style.color=open?"":"var(--muted)";
     var w=document.getElementById("cdwrap");w.style.display=open?"":"none";
-    document.getElementById("pnote").textContent=open?"Depois desse prazo, o kit passa a custar €19,90.":"A oferta de boas-vindas de 48 horas terminou.";
+    document.getElementById("pnote").textContent=open?"Depois desse prazo, o kit passa a custar €14,90.":"A oferta de boas-vindas de 48 horas terminou.";
     if(open){var s=Math.floor(left/1e3);document.getElementById("cdt").textContent=z(Math.floor(s/3600))+":"+z(Math.floor(s%3600/60))+":"+z(s%60);
       document.getElementById("cdd").textContent="até "+new Date(deadline).toLocaleString("pt-PT",{weekday:"long",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"})}
   }
