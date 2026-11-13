@@ -100,7 +100,7 @@ footer a{color:var(--muted)}
 .promise li{padding-left:28px;position:relative;color:#1f2937}
 .promise li:before{content:"✓";position:absolute;left:0;top:2px;width:20px;height:20px;border-radius:50%;background:var(--green);color:#fff;font-weight:900;font-size:12px;display:grid;place-items:center}
 .promise small{color:var(--muted)}
-.cvimg{display:block;width:100%;max-width:300px;margin:0 auto;border-radius:16px;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.cvimg{display:block;width:100%;max-width:300px;height:300px;object-fit:cover;object-position:top;margin:0 auto 14px;border-radius:16px;box-shadow:0 18px 40px rgba(0,0,0,.35);background:#eef1f7}
 @media (min-width:900px){.rail{justify-content:flex-start}}
 .pain{background:#0b1a3a;color:#fff;padding:50px 18px}
 .pain .in{max-width:760px;margin:0 auto}
@@ -129,6 +129,11 @@ footer a{color:var(--muted)}
 .midcta h3{margin:0 0 6px;font-size:19px;color:#fff}
 .midcta p{margin:0 0 14px;color:#c9d6f0;font-size:15px}
 .midcta a{display:block;text-align:center;background:linear-gradient(180deg,var(--gold),var(--gold2));color:#1a1300;font-weight:900;text-decoration:none;padding:14px;border-radius:12px}
+.after{background:#fff;padding:40px 0 30px}
+.endcta{max-width:520px;margin:26px auto 0;padding:0 18px;text-align:center}
+.endcta .btn{display:block}
+.endcta p{font-size:13px;color:var(--muted);margin-top:10px}
+@media (min-width:900px){.rail{flex-wrap:wrap;justify-content:center;overflow:visible;scroll-snap-type:none}.st{flex:0 0 220px}.hint{display:none}}
 </style>
 <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","zd2q8ffefc");</script>
 </head>
@@ -255,35 +260,6 @@ Carta de condução (B) · Disponibilidade para turnos</pre>
     <div class="st"><div class="ph"><img src="/curriculo-europeu/kit/7.jpg" alt="Enviar e passar na entrevista" loading="lazy" width="540" height="1000"></div><b><span>7</span>Enviar e passar na entrevista</b><p>Sites de vagas por país, e-mails prontos e as 10 perguntas que mais caem.</p></div>
   </div>
   <p class="hint">Arraste para o lado para ver todas as telas →</p>
-  <div class="promise"><div class="bx">
-    <h3>✅ Seu currículo sai perfeito, ou você recebe o dinheiro de volta</h3>
-    <ul>
-      <li>A nota de qualidade aponta cada erro (dados demais, palavras do Brasil, idiomas sem nível, falta de resultados) até chegar a 100/100.</li>
-      <li>Ficou com dúvida em qualquer etapa? Há um botão de ajuda no WhatsApp dentro do kit, com atendimento de uma pessoa.</li>
-      <li>Se não gostar do resultado, peça o reembolso em até 7 dias e devolvemos 100% do valor, sem perguntas.</li>
-    </ul>
-    <small>O kit deixa a sua candidatura no padrão europeu. A contratação depende de cada empresa.</small>
-  </div></div>
-  <div class="cmp">
-    <div class="bad"><h4>❌ Continuar como está</h4><ul>
-      <li>Mais semanas a mandar currículos sem resposta</li>
-      <li>Tentar adivinhar o que o recrutador quer</li>
-      <li>Escrever tudo do zero, sozinho, em português de Portugal ou inglês</li>
-    </ul></div>
-    <div class="good"><h4>✅ Com o Kit, ainda hoje</h4><ul>
-      <li>Currículo no padrão europeu, com textos da sua profissão</li>
-      <li>Carta de apresentação pronta e e-mail de candidatura</li>
-      <li>Lista de onde enviar e como responder na entrevista</li>
-      <li>Tudo por €9,90, pagamento único, com garantia de 7 dias</li>
-    </ul></div>
-  </div>
-  <div class="faq">
-    <details><summary>Não sou bom com tecnologia. Vou conseguir?</summary><p>Sim. Você responde 3 perguntas e o currículo aparece pronto. Depois é trocar os textos entre [colchetes] pelos seus dados. Se travar em algo, o botão de ajuda abre o WhatsApp.</p></details>
-    <details><summary>Não falo inglês. Serve para mim?</summary><p>Serve. Para Portugal o kit usa português de Portugal. Para Irlanda e Reino Unido as frases prontas já vêm em inglês, é só escolher.</p></details>
-    <details><summary>A minha profissão está incluída?</summary><p>Há frases prontas para 12 áreas (restauração, limpeza, construção, armazém, vendas, apoio ao cliente, administrativo, cuidador(a), motorista, tecnologia, beleza) e para primeiro emprego. Qualquer texto pode ser editado livremente.</p></details>
-    <details><summary>E se eu não gostar?</summary><p>Peça o reembolso em até 7 dias pela Kiwify e recebe 100% do valor de volta.</p></details>
-  </div>
-
 </section>
 
 <section class="offer" id="oferta">
@@ -316,6 +292,39 @@ Carta de condução (B) · Disponibilidade para turnos</pre>
       </div>
     </div>
   </div>
+</section>
+
+<section class="after">
+  <div class="promise"><div class="bx">
+    <h3>✅ Seu currículo sai perfeito, ou você recebe o dinheiro de volta</h3>
+    <ul>
+      <li>A nota de qualidade aponta cada erro (dados demais, palavras do Brasil, idiomas sem nível, falta de resultados) até chegar a 100/100.</li>
+      <li>Ficou com dúvida em qualquer etapa? Há um botão de ajuda no WhatsApp dentro do kit, com atendimento de uma pessoa.</li>
+      <li>Se não gostar do resultado, peça o reembolso em até 7 dias e devolvemos 100% do valor, sem perguntas.</li>
+    </ul>
+    <small>O kit deixa a sua candidatura no padrão europeu. A contratação depende de cada empresa.</small>
+  </div></div>
+  <div class="cmp">
+    <div class="bad"><h4>❌ Continuar como está</h4><ul>
+      <li>Mais semanas a mandar currículos sem resposta</li>
+      <li>Tentar adivinhar o que o recrutador quer</li>
+      <li>Escrever tudo do zero, sozinho, em português de Portugal ou inglês</li>
+    </ul></div>
+    <div class="good"><h4>✅ Com o Kit, ainda hoje</h4><ul>
+      <li>Currículo no padrão europeu, com textos da sua profissão</li>
+      <li>Carta de apresentação pronta e e-mail de candidatura</li>
+      <li>Lista de onde enviar e como responder na entrevista</li>
+      <li>Tudo por €9,90, pagamento único, com garantia de 7 dias</li>
+    </ul></div>
+  </div>
+  <div class="faq">
+    <details><summary>Não sou bom com tecnologia. Vou conseguir?</summary><p>Sim. Você responde 3 perguntas e o currículo aparece pronto. Depois é trocar os textos entre [colchetes] pelos seus dados. Se travar em algo, o botão de ajuda abre o WhatsApp.</p></details>
+    <details><summary>Não falo inglês. Serve para mim?</summary><p>Serve. Para Portugal o kit usa português de Portugal. Para Irlanda e Reino Unido as frases prontas já vêm em inglês, é só escolher.</p></details>
+    <details><summary>A minha profissão está incluída?</summary><p>Há frases prontas para 12 áreas (restauração, limpeza, construção, armazém, vendas, apoio ao cliente, administrativo, cuidador(a), motorista, tecnologia, beleza) e para primeiro emprego. Qualquer texto pode ser editado livremente.</p></details>
+    <details><summary>E se eu não gostar?</summary><p>Peça o reembolso em até 7 dias pela Kiwify e recebe 100% do valor de volta.</p></details>
+  </div>
+
+  <div class="endcta"><a class="btn" href="#oferta" id="endbtn">QUERO O KIT POR <span class="gp">€9,90</span></a><p>Pagamento único · acesso na hora · garantia de 7 dias</p></div>
 </section>
 
 <footer>
