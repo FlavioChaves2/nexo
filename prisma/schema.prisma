@@ -719,3 +719,13 @@ model CourseLead {
   @@unique([product, email])
   @@index([createdAt])
 }
+
+// Passos anônimos do funil do guia (abriu o guia, viu a oferta, clicou em comprar...), uma vez por aparelho.
+model FunnelEvent {
+  id        String   @id @default(cuid())
+  name      String   // ex.: "abriu-guia"
+  source    String   @default("") // utm_content do anúncio
+  createdAt DateTime @default(now())
+
+  @@index([name, createdAt])
+}

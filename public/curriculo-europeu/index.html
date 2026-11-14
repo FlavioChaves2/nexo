@@ -87,8 +87,8 @@ footer a{color:var(--muted)}
     <p class="lead">Não é a sua experiência. São <b>7 erros</b> que quase todo brasileiro comete e que fazem o recrutador europeu descartar o currículo em segundos. O guia mostra quais são e como corrigir hoje.</p>
     <p class="lead desk" style="margin-top:14px;opacity:.8">O erro nº 1 está logo no topo da folha, e é justamente o que no Brasil parece normal.</p>
     <div class="cta" id="inscricao">
-      <a class="btn open-form" href="#cadastro">QUERO O GUIA GRÁTIS<small>Acesso imediato, nesta mesma tela</small></a>
-      <p class="note">✓ 100% grátis &nbsp;·&nbsp; ✓ Só nome e e-mail &nbsp;·&nbsp; ✓ Sem spam</p>
+      <a class="btn open-form" href="/curriculo-europeu/guia">QUERO O GUIA GRÁTIS<small>Abre na hora, sem cadastro</small></a>
+      <p class="note">✓ 100% grátis &nbsp;·&nbsp; ✓ Sem cadastro &nbsp;·&nbsp; ✓ Sem spam</p>
     </div>
   </div>
 </header>
@@ -122,7 +122,7 @@ footer a{color:var(--muted)}
   <div class="wrap">
     <h2>Descubra os 7 erros antes de mandar o próximo currículo.</h2>
     <p class="sub">Leva 30 segundos. É grátis.</p>
-    <a class="btn open-form" href="#cadastro">QUERO O GUIA GRÁTIS</a>
+    <a class="btn open-form" href="/curriculo-europeu/guia">QUERO O GUIA GRÁTIS</a>
   </div>
 </section>
 
@@ -152,7 +152,7 @@ footer a{color:var(--muted)}
   </div>
 </div>
 
-<div class="sticky" id="sticky"><a class="btn open-form" href="#cadastro">QUERO O GUIA GRÁTIS</a></div>
+<div class="sticky" id="sticky"><a class="btn open-form" href="/curriculo-europeu/guia">QUERO O GUIA GRÁTIS</a></div>
 
 <script>
 (function(){
@@ -163,7 +163,8 @@ footer a{color:var(--muted)}
   var f=document.getElementById("f"),err=document.getElementById("err"),go=document.getElementById("go");
   // Formulário em 2 passos: a pessoa decide no botão e só então vê os campos (nome e e-mail).
   var modal=document.getElementById("cadastro"),opened=false;
-  function openForm(ev){if(ev)ev.preventDefault();modal.classList.add("open");document.body.classList.add("lock");
+  // Teste de 15/11: o botão abre o guia direto, sem formulário (o e-mail virou opcional dentro do guia).
+  function openForm(ev){if(ev)ev.preventDefault();try{fbq("trackCustom","AbriuCadastro")}catch(e){}setTimeout(function(){location.href="/curriculo-europeu/guia"+location.search},300);return;modal.classList.add("open");document.body.classList.add("lock");
     if(!opened){opened=true;try{fbq("trackCustom","AbriuCadastro")}catch(e){}}
     setTimeout(function(){try{f.name.focus()}catch(e){}},60)}
   function closeForm(){modal.classList.remove("open");document.body.classList.remove("lock")}

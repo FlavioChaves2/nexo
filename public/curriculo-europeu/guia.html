@@ -10,10 +10,8 @@
 <title>Guia do Currículo Europeu</title>
 <meta name="theme-color" content="#0b1a3a">
 <script>
-// Só abre para quem deixou o contato (link do e-mail com ?k= ou cadastro feito neste navegador).
-(function(){var ok=false;try{ok=!!localStorage.getItem("ce_lead")}catch(e){}
-if(!ok&&!/[?&]k=\w{8,}/.test(location.search))location.replace("/curriculo-europeu");
-if(!ok){try{localStorage.setItem("ce_lead",JSON.stringify({n:"",e:""}))}catch(e){}}})();
+// Guia aberto, sem cadastro (teste de 15/11). Guarda de qual anúncio a pessoa veio, para contar o funil.
+(function(){try{var c=new URLSearchParams(location.search).get("utm_content");if(c)localStorage.setItem("ce_src",c)}catch(e){}})();
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","1380892450588060");fbq("track","PageView");fbq("track","ViewContent",{content_name:"guia-curriculo-europeu"});
 </script>
 <style>
@@ -247,6 +245,17 @@ OUTROS
 Carta de condução (B) · Disponibilidade para turnos</pre>
   <button class="copy" id="cp">📋 Copiar modelo</button>
 
+  <div class="wa" id="em" style="display:none">
+    <b>📩 Quer guardar este guia?</b>
+    <p>Opcional. Mandamos o link para o seu e-mail, para você voltar quando for montar o currículo.</p>
+    <form id="emf" novalidate>
+      <input id="emn" autocomplete="given-name" placeholder="Seu nome" aria-label="Seu nome">
+      <input id="eme" type="email" inputmode="email" autocomplete="email" placeholder="voce@email.com" aria-label="Seu e-mail">
+      <button type="submit" id="emb">Enviar</button>
+    </form>
+    <div class="msg" id="emm"></div>
+  </div>
+
   <div class="wa" id="wa">
     <b>📲 Quer receber vagas e dicas de currículo no WhatsApp?</b>
     <p>Opcional. Mandamos poucas mensagens, só o que ajuda a conseguir entrevista na Europa. Pode sair quando quiser.</p>
@@ -395,9 +404,29 @@ var OFFER_HOURS = 48;
   setStart(start);setInterval(paint,1000);
   var lk=new URLSearchParams(location.search).get("k")||lead.k||"";
   if(lk)fetch("/api/leads?k="+encodeURIComponent(lk)).then(function(r){return r.json()}).then(function(r){if(r&&r.ok&&r.since){var t=Date.parse(r.since);if(t){try{localStorage.setItem("ce_offer_start",t)}catch(e){}setStart(t)}}}).catch(function(){});
-  // WhatsApp opcional, pedido só depois que a pessoa já recebeu o guia.
-  (function(){var wk=lk,box=document.getElementById("wa");
-    if(!wk){box.style.display="none";return}
+  // Conta cada passo uma vez por aparelho (abriu o guia, viu a oferta, clicou em comprar, deixou e-mail).
+  var src="";try{src=localStorage.getItem("ce_src")||""}catch(e){}
+  function step(e){try{if(localStorage.getItem("ce_ev_"+e))return;localStorage.setItem("ce_ev_"+e,"1")}catch(x){}
+    try{var bd=JSON.stringify({e:e,s:src});if(!(navigator.sendBeacon&&navigator.sendBeacon("/api/funnel",new Blob([bd],{type:"application/json"}))))fetch("/api/funnel",{method:"POST",headers:{"Content-Type":"application/json"},body:bd,keepalive:true})}catch(x){}}
+  step("abriu-guia");
+  // E-mail opcional para guardar o guia (só para quem ainda não deixou).
+  (function(){var box=document.getElementById("em");if(lk)return;box.style.display="";
+    var f=document.getElementById("emf"),n=document.getElementById("emn"),em=document.getElementById("eme"),m=document.getElementById("emm"),b=document.getElementById("emb");
+    f.onsubmit=function(ev){ev.preventDefault();var d={product:"curriculo-europeu",name:n.value.trim(),email:em.value.trim(),source:"guia aberto / "+src};
+      if(d.name.length<2){m.style.color="var(--red)";m.textContent="Digite seu nome.";n.focus();return}
+      if(!/^\S+@\S+\.\S+$/.test(d.email)){m.style.color="var(--red)";m.textContent="Digite um e-mail válido.";em.focus();return}
+      b.disabled=true;b.style.opacity=.7;
+      fetch("/api/leads",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)}).then(function(r){return r.json()}).then(function(r){
+        if(!r.ok)throw new Error(r.error||"");
+        lead={n:d.name.split(" ")[0],e:d.email,k:r.key};lk=r.key;try{localStorage.setItem("ce_lead",JSON.stringify(lead))}catch(e){}
+        try{fbq("track","Lead",{content_name:"guia-curriculo-europeu"})}catch(e){}
+        step("deu-email");
+        f.style.display="none";m.style.color="var(--green)";m.textContent="✅ Enviado! Confira o seu e-mail (veja também o spam).";initWA();
+      }).catch(function(e){b.disabled=false;b.style.opacity=1;m.style.color="var(--red)";m.textContent=(e&&e.message)||"Não deu certo. Tente de novo."})}
+  })();
+  // WhatsApp opcional, pedido só depois que a pessoa já deixou o e-mail.
+  function initWA(){var wk=lk,box=document.getElementById("wa");
+    if(!wk){box.style.display="none";return}box.style.display="";
     try{if(localStorage.getItem("ce_wa")){box.style.display="none";return}}catch(e){}
     var wf=document.getElementById("waf"),wn=document.getElementById("wan"),wm=document.getElementById("wam"),wb=document.getElementById("wab");
     wf.onsubmit=function(ev){ev.preventDefault();var w=wn.value.trim();
@@ -408,7 +437,8 @@ var OFFER_HOURS = 48;
         try{fbq("trackCustom","DeuWhatsApp")}catch(e){}
         wf.style.display="none";wm.style.color="var(--green)";wm.textContent="✅ Pronto! Você vai receber as dicas no WhatsApp."
       }).catch(function(e){wb.disabled=false;wb.style.opacity=1;wm.style.color="var(--red)";wm.textContent=(e&&e.message)||"Não deu certo. Tente de novo."})}
-  })();
+  }
+  initWA();
   document.getElementById("cp").onclick=function(){var t=document.getElementById("tpl").textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){document.getElementById("cp").textContent="✅ Copiado!"},function(){prompt("Copie o modelo:",t)})};
   // Avisa o Pixel quando a pessoa chega na oferta.
   var started=false;
@@ -416,11 +446,11 @@ var OFFER_HOURS = 48;
   addEventListener("scroll",function(){
     var r=off.getBoundingClientRect();
     st.classList.toggle("show",r.top>innerHeight&&scrollY>600);
-    if(!started&&r.top<innerHeight*.7){started=true;try{fbq("track","ViewContent",{content_name:"oferta-curriculo-pro",value:price,currency:"EUR"})}catch(e){}}
+    if(!started&&r.top<innerHeight*.7){started=true;step("viu-oferta");try{fbq("track","ViewContent",{content_name:"oferta-curriculo-pro",value:price,currency:"EUR"})}catch(e){}}
   },{passive:true});
   var k=new URLSearchParams(location.search).get("k")||"";
   document.getElementById("buy").onclick=function(ev){
-    ev.preventDefault();
+    ev.preventDefault();step("clicou-comprar");
     try{fbq("track","InitiateCheckout",{content_name:"curriculo-pro",value:price,currency:"EUR"})}catch(e){}
     var ik=k||lead.k||"";if(ik){try{var bd=JSON.stringify({k:ik,price:price});if(!(navigator.sendBeacon&&navigator.sendBeacon("/api/leads/intent",new Blob([bd],{type:"application/json"}))))fetch("/api/leads/intent",{method:"POST",headers:{"Content-Type":"application/json"},body:bd,keepalive:true})}catch(e){}}
     if(url){var u=url+(lead.e?(url.indexOf("?")<0?"?":"&")+"email="+encodeURIComponent(lead.e):"");this.style.opacity=.7;setTimeout(function(){location.href=u},450);return}
