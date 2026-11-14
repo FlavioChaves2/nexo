@@ -33,6 +33,13 @@ h2 .n{display:inline-grid;place-items:center;width:36px;height:36px;background:v
 p{margin:10px 0}
 .err{background:#fff;border:1px solid var(--line);border-left:5px solid var(--red);border-radius:12px;padding:14px 16px;margin:12px 0}
 .err b{display:block}
+.wa{background:#effaf3;border:1px solid #bbe5c8;border-radius:14px;padding:16px 18px;margin:26px 0 0}
+.wa b{display:block;font-size:16px}
+.wa p{margin:4px 0 10px;color:var(--muted);font-size:14px;line-height:1.45}
+.wa form{display:flex;gap:8px;flex-wrap:wrap}
+.wa input{flex:1 1 200px;padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;font-size:16px;font-family:inherit;background:#fff}
+.wa button{flex:0 0 auto;border:0;border-radius:10px;background:var(--green);color:#fff;font-weight:800;font-size:15px;padding:12px 16px;cursor:pointer;font-family:inherit}
+.wa .msg{font-size:13px;margin-top:8px;min-height:1em}
 .err .fix{color:var(--green);font-weight:600;margin-top:4px}
 .box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:14px 0}
 table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line);font-size:15px;margin:12px 0}
@@ -239,6 +246,16 @@ Português: Nativo · Inglês: B2 · Espanhol: B1
 OUTROS
 Carta de condução (B) · Disponibilidade para turnos</pre>
   <button class="copy" id="cp">📋 Copiar modelo</button>
+
+  <div class="wa" id="wa">
+    <b>📲 Quer receber vagas e dicas de currículo no WhatsApp?</b>
+    <p>Opcional. Mandamos poucas mensagens, só o que ajuda a conseguir entrevista na Europa. Pode sair quando quiser.</p>
+    <form id="waf" novalidate>
+      <input id="wan" type="tel" inputmode="tel" autocomplete="tel" placeholder="+351 912 345 678" aria-label="Seu WhatsApp com código do país">
+      <button type="submit" id="wab">Quero receber</button>
+    </form>
+    <div class="msg" id="wam">Com o código do país (+351, +353, +55…).</div>
+  </div>
 </main>
 
 <section class="pain" id="dor">
@@ -378,6 +395,20 @@ var OFFER_HOURS = 48;
   setStart(start);setInterval(paint,1000);
   var lk=new URLSearchParams(location.search).get("k")||lead.k||"";
   if(lk)fetch("/api/leads?k="+encodeURIComponent(lk)).then(function(r){return r.json()}).then(function(r){if(r&&r.ok&&r.since){var t=Date.parse(r.since);if(t){try{localStorage.setItem("ce_offer_start",t)}catch(e){}setStart(t)}}}).catch(function(){});
+  // WhatsApp opcional, pedido só depois que a pessoa já recebeu o guia.
+  (function(){var wk=lk,box=document.getElementById("wa");
+    if(!wk){box.style.display="none";return}
+    try{if(localStorage.getItem("ce_wa")){box.style.display="none";return}}catch(e){}
+    var wf=document.getElementById("waf"),wn=document.getElementById("wan"),wm=document.getElementById("wam"),wb=document.getElementById("wab");
+    wf.onsubmit=function(ev){ev.preventDefault();var w=wn.value.trim();
+      if(w.replace(/\D/g,"").length<8){wm.style.color="var(--red)";wm.textContent="Digite o número com o código do país.";wn.focus();return}
+      wb.disabled=true;wb.style.opacity=.7;
+      fetch("/api/leads",{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({k:wk,whatsapp:w})}).then(function(r){return r.json()}).then(function(r){
+        if(!r.ok)throw new Error(r.error||"");try{localStorage.setItem("ce_wa","1")}catch(e){}
+        try{fbq("trackCustom","DeuWhatsApp")}catch(e){}
+        wf.style.display="none";wm.style.color="var(--green)";wm.textContent="✅ Pronto! Você vai receber as dicas no WhatsApp."
+      }).catch(function(e){wb.disabled=false;wb.style.opacity=1;wm.style.color="var(--red)";wm.textContent=(e&&e.message)||"Não deu certo. Tente de novo."})}
+  })();
   document.getElementById("cp").onclick=function(){var t=document.getElementById("tpl").textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){document.getElementById("cp").textContent="✅ Copiado!"},function(){prompt("Copie o modelo:",t)})};
   // Avisa o Pixel quando a pessoa chega na oferta.
   var started=false;

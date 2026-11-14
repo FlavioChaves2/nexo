@@ -67,3 +67,30 @@ export async function POST(req: Request) {
   }
   return NextResponse.json({ ok: true, key: lead.id });
 }
+
+// O guia pede o WhatsApp depois do cadastro, como opcional. Atualiza só esse campo (e o país), pela chave do lead.
+const patchSchema = z.object({
+  k: z.string().regex(/^[a-z0-9]{20,40}$/i),
+  whatsapp: z.string().trim().min(8).max(30).regex(/^[+\d\s().-]+$/),
+});
+
+function countryFromPhone(w: string) {
+  const d = w.replace(/[^\d+]/g, "").replace(/^00/, "+");
+  if (d.startsWith("+351")) return "Portugal";
+  if (d.startsWith("+353")) return "Irlanda";
+  if (d.startsWith("+55")) return "Brasil";
+  if (d.startsWith("+44")) return "Reino Unido";
+  if (d.startsWith("+34")) return "Espanha";
+  return "";
+}
+
+export async function PATCH(req: Request) {
+  const parsed = patchSchema.safeParse(await req.json().catch(() => null));
+  if (!parsed.success) return NextResponse.json({ ok: false, error: "Confira o número com o código do país." }, { status: 400 });
+  const { k, whatsapp } = parsed.data;
+  const lead = await db.courseLead.findUnique({ where: { id: k }, select: { product: true, country: true } });
+  if (!lead || lead.product !== "curriculo-europeu") return NextResponse.json({ ok: false }, { status: 404 });
+  const country = countryFromPhone(whatsapp);
+  await db.courseLead.update({ where: { id: k }, data: { whatsapp, ...(country ? { country } : {}) } });
+  return NextResponse.json({ ok: true });
+}
