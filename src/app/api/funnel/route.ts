@@ -6,6 +6,7 @@ import { sendEmail } from "@/lib/email";
 const EVENTS = new Set([
   "abriu-guia", "viu-oferta", "clicou-comprar", "deu-email", "viu-atalho", "clicou-atalho",
   "assistiu-video", "video-metade", "video-fim",
+  "abriu-venda", "viu-oferta-venda", "clicou-comprar-venda",
 ]);
 
 // Avisa o dono por e-mail quando alguém começa ou termina o vídeo do kit (no máximo 20 por hora).
