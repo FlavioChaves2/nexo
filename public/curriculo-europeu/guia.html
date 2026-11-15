@@ -269,7 +269,7 @@ Carta de condução (B) · Disponibilidade para turnos</pre>
 
 <section class="pain" id="dor">
   <div class="in">
-    <h2>Se você se reconhece em alguma destas, o problema não é você. É o currículo.</h2>
+    <h2>Se você se reconhece em alguma destas, o seu currículo pode estar dificultando as suas candidaturas.</h2>
     <div class="q">
       <div>😶 Mandou dezenas de currículos e ninguém respondeu.</div>
       <div>📭 Vê a vaga perfeita, candidata-se e recebe só o e-mail automático de "não seguimos".</div>
@@ -453,7 +453,7 @@ var OFFER_HOURS = 48;
     ev.preventDefault();step("clicou-comprar");
     try{fbq("track","InitiateCheckout",{content_name:"curriculo-pro",value:price,currency:"EUR"})}catch(e){}
     var ik=k||lead.k||"";if(ik){try{var bd=JSON.stringify({k:ik,price:price});if(!(navigator.sendBeacon&&navigator.sendBeacon("/api/leads/intent",new Blob([bd],{type:"application/json"}))))fetch("/api/leads/intent",{method:"POST",headers:{"Content-Type":"application/json"},body:bd,keepalive:true})}catch(e){}}
-    if(url){var u=url+(lead.e?(url.indexOf("?")<0?"?":"&")+"email="+encodeURIComponent(lead.e):"");this.style.opacity=.7;setTimeout(function(){location.href=u},450);return}
+    if(url){var u=url;try{var cu=new URL(url),qs=new URLSearchParams(location.search);["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(function(p){var v=qs.get(p);if(v)cu.searchParams.set(p,v)});if(!cu.searchParams.get("utm_content")&&src)cu.searchParams.set("utm_content",src);if(lead.e)cu.searchParams.set("email",lead.e);u=cu.toString()}catch(x){}this.style.opacity=.7;setTimeout(function(){location.href=u},450);return}
     var email=lead.e||prompt("Qual o seu e-mail para receber o link de pagamento?")||"";
     if(!/^\S+@\S+\.\S+$/.test(email))return;
     this.style.opacity=.7;
