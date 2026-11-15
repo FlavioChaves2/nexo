@@ -407,6 +407,7 @@ Carta de condução (B) · Disponibilidade para turnos</pre>
 var CHECKOUT_URL = "https://pay.kiwify.com/mcr5RQX";      // €9,90: oferta de boas-vindas (48h desde o cadastro)
 var CHECKOUT_URL_FULL = "https://pay.kiwify.com/2VaShcR"; // €14,90: preço normal depois do prazo
 var OFFER_HOURS = 48;
+var FIXED_PRICE = true; // preço fixo €9,90, sem contagem nem "depois €14,90" (false = volta a oferta de 48h)
 
 (function(){
   var lead={};try{lead=JSON.parse(localStorage.getItem("ce_lead")||"{}")}catch(e){}
@@ -417,19 +418,20 @@ var OFFER_HOURS = 48;
   function setStart(t){deadline=t+OFFER_HOURS*3600e3;paint()}
   function z(n){return(n<10?"0":"")+n}
   function paint(){
-    var left=deadline-Date.now(),open=left>0;
+    var left=deadline-Date.now(),open=FIXED_PRICE||left>0;
     price=open?9.90:14.90;url=open?CHECKOUT_URL:CHECKOUT_URL_FULL;
     var pv=open?"€9,90":"€14,90";
     document.getElementById("pval").textContent=pv;
     document.getElementById("stbtn").textContent="KIT CURRÍCULO PRO POR "+pv;
     [].forEach.call(document.querySelectorAll(".gp"),function(e){e.textContent=pv});
-    [].forEach.call(document.querySelectorAll(".gx,.gc"),function(e){e.style.display=open?"":"none"});
-    [].forEach.call(document.querySelectorAll(".gl"),function(e){e.textContent=open?"Presente de boas-vindas:":"Quer o currículo pronto?"});
-    document.getElementById("plabel").textContent=open?"🎁 Oferta de boas-vindas":"Kit Currículo Europeu Pro";
-    document.getElementById("plabel").style.color=open?"":"var(--muted)";
-    var w=document.getElementById("cdwrap");w.style.display=open?"":"none";
-    document.getElementById("pnote").textContent=open?"Depois desse prazo, o kit passa a custar €14,90.":"A oferta de boas-vindas de 48 horas terminou.";
-    if(open){var s=Math.floor(left/1e3),hms=z(Math.floor(s/3600))+":"+z(Math.floor(s%3600/60))+":"+z(s%60);document.getElementById("cdt").textContent=hms;[].forEach.call(document.querySelectorAll(".cdt2"),function(e){e.textContent=hms});
+    var promo=open&&!FIXED_PRICE;
+    [].forEach.call(document.querySelectorAll(".gx,.gc"),function(e){e.style.display=promo?"":"none"});
+    [].forEach.call(document.querySelectorAll(".gl"),function(e){e.textContent=promo?"Presente de boas-vindas:":"Quer o currículo pronto?"});
+    document.getElementById("plabel").textContent=promo?"🎁 Oferta de boas-vindas":"Kit Currículo Europeu Pro";
+    document.getElementById("plabel").style.color=promo?"":"var(--muted)";
+    var w=document.getElementById("cdwrap");w.style.display=promo?"":"none";
+    document.getElementById("pnote").textContent=promo?"Depois desse prazo, o kit passa a custar €14,90.":"";
+    if(promo){var s=Math.floor(left/1e3),hms=z(Math.floor(s/3600))+":"+z(Math.floor(s%3600/60))+":"+z(s%60);document.getElementById("cdt").textContent=hms;[].forEach.call(document.querySelectorAll(".cdt2"),function(e){e.textContent=hms});
       document.getElementById("cdd").textContent="até "+new Date(deadline).toLocaleString("pt-PT",{weekday:"long",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"})}
   }
   setStart(start);setInterval(paint,1000);
