@@ -39,7 +39,8 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       { source: "/divulgadores-oyikbtkx", destination: "/divulgadores-oyikbtkx/index.html" },
-      { source: "/curriculo-europeu", destination: "/curriculo-europeu/index.html" },
+      // Teste de 15/11: quem clica no anúncio já abre o guia (a página de entrada antiga segue em /curriculo-europeu/index.html).
+      { source: "/curriculo-europeu", destination: "/curriculo-europeu/guia.html" },
       { source: "/curriculo-europeu/guia", destination: "/curriculo-europeu/guia.html" },
       { source: "/cv-pro-ba56bcbef8", destination: "/cv-pro-ba56bcbef8/index.html" },
     ];
