@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
 // Conta os passos do funil do guia sem identificar ninguém (sem nome, e-mail ou IP).
-const EVENTS = new Set(["abriu-guia", "viu-oferta", "clicou-comprar", "deu-email"]);
+const EVENTS = new Set(["abriu-guia", "viu-oferta", "clicou-comprar", "deu-email", "viu-atalho", "clicou-atalho"]);
 
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
