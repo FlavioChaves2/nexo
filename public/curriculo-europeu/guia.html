@@ -148,6 +148,7 @@ footer a{color:var(--muted)}
 .endcta .btn{display:block}
 .endcta p{font-size:13px;color:var(--muted);margin-top:10px}
 @media (max-width:600px){.top{padding:22px 16px 40px}.top .toc{display:none}.top h1{font-size:26px;margin:10px auto 8px}.top p{font-size:15px;line-height:1.45}}
+.qvid{margin:14px auto 4px;text-align:center}.qvid span{display:block;font-weight:700;font-size:14px;margin-bottom:8px}.qvid video{display:block;margin:0 auto;width:min(260px,70%);height:auto;border-radius:12px;background:#0b1a3a;box-shadow:0 8px 20px -10px rgba(15,23,42,.5)}
 .quick{max-width:560px;margin:-26px auto 0;padding:0 14px;position:relative;z-index:2}
 .quick .bx{background:#fff;border:2px solid var(--gold);border-radius:18px;padding:16px 16px 14px;box-shadow:0 16px 36px -14px rgba(15,23,42,.45)}
 .quick .qh{display:flex;gap:14px;align-items:flex-start}
@@ -188,6 +189,8 @@ footer a{color:var(--muted)}
   <span class="qc gc">🎁 Preço de boas-vindas termina em <b class="cdt2">48:00:00</b></span>
   <a class="btn buyq" href="#">QUERO MONTAR MEU CV — <span class="gp">€9,90</span></a>
   <small>🔒 Pagamento seguro · ⚡ Acesso na hora · 🛡️ Garantia de 7 dias</small>
+  <div class="qvid"><span>▶ Veja o kit funcionando (54 s, com som)</span>
+    <video id="kvid" controls playsinline preload="none" poster="/curriculo-europeu/kit/video-capa.jpg" width="540" height="960"><source src="/curriculo-europeu/kit/video.mp4" type="video/mp4"></video></div>
   <a class="ql" href="#erros">Ler os 7 erros grátis ↓</a>
   <small style="margin-top:4px">O guia continua grátis aqui embaixo. O kit é pago e opcional, para montar mais rápido.</small>
 </div></div>
@@ -437,6 +440,10 @@ var OFFER_HOURS = 48;
   function step(e){try{if(localStorage.getItem("ce_ev_"+e))return;localStorage.setItem("ce_ev_"+e,"1")}catch(x){}
     try{var bd=JSON.stringify({e:e,s:src});if(!(navigator.sendBeacon&&navigator.sendBeacon("/api/funnel",new Blob([bd],{type:"application/json"}))))fetch("/api/funnel",{method:"POST",headers:{"Content-Type":"application/json"},body:bd,keepalive:true})}catch(x){}}
   step("abriu-guia");
+  // Vídeo do kit: conta quem deu play, quem chegou na metade e quem viu até o fim.
+  (function(){var v=document.getElementById("kvid");if(!v)return;
+    v.addEventListener("play",function(){step("assistiu-video")});
+    v.addEventListener("timeupdate",function(){if(!v.duration)return;var p=v.currentTime/v.duration;if(p>=.5)step("video-metade");if(p>=.9)step("video-fim")})})();
   // E-mail opcional para guardar o guia (só para quem ainda não deixou).
   (function(){var box=document.getElementById("em");if(lk)return;box.style.display="";
     var f=document.getElementById("emf"),n=document.getElementById("emn"),em=document.getElementById("eme"),m=document.getElementById("emm"),b=document.getElementById("emb");
