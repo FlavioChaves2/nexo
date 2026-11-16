@@ -91,7 +91,19 @@ footer a{color:var(--muted)}
 .sticky{position:fixed;left:0;right:0;bottom:0;background:rgba(11,26,58,.97);padding:10px 14px;z-index:9;transform:translateY(110%);transition:transform .25s}
 .sticky .btn{max-width:480px;margin:0 auto;font-size:16px;padding:12px;box-shadow:none}
 .sticky.show{transform:none}
+.ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 4px;max-width:520px}
+.ab a{display:block;position:relative;border-radius:12px;overflow:hidden;height:160px;text-decoration:none;color:inherit}
+.ab .lb{position:absolute;left:0;right:0;top:0;z-index:2;font-size:11px;font-weight:900;letter-spacing:.5px;padding:5px 8px;color:#fff}
+.ab .old{background:#e5e7eb;border:2px solid #dc2626}.ab .old .lb{background:#dc2626}
+.ab .old .pg{position:absolute;left:10px;right:10px;top:30px}
+.ab .old i{display:block;height:7px;background:#9ca3af;border-radius:4px;margin:7px 0;width:70%}
+.ab .old .ph{float:right;width:30px;height:38px;background:#9ca3af;border-radius:4px;margin-left:6px}
+.ab .old b{display:inline-block;background:#fee2e2;color:#b91c1c;font-size:10.5px;font-weight:900;padding:2px 6px;border-radius:5px;border:1.5px solid #dc2626;margin:3px 0;transform:rotate(-2deg)}
+.ab .new{background:#fff;border:2px solid #22c55e}.ab .new .lb{background:#16a34a}
+.ab .new img{position:absolute;left:0;top:-58px;width:100%;height:auto}.ab .new .lb,.ab .old .lb{white-space:nowrap}
+.ab .play{position:absolute;right:8px;bottom:8px;z-index:2;background:rgba(11,26,58,.9);color:#fff;font-size:11.5px;font-weight:800;padding:5px 9px;border-radius:999px}
 @media (max-width:760px){
+  .top .sub.long{display:none}
   .top{padding:18px 14px 24px}
   .hero{grid-template-columns:1fr;gap:0}
   .hero .pic{display:none}
@@ -111,8 +123,12 @@ footer a{color:var(--muted)}
   <div>
     <span class="tag">PARA BRASILEIROS EM PORTUGAL</span>
     <h1>Seu currículo no <em>padrão europeu</em>, pronto em cerca de 15 minutos</h1>
-    <p class="sub">Escolha a sua profissão, adicione textos prontos em português de Portugal, preencha os seus dados e baixe o PDF de 1 página.</p>
+    <p class="sub long">Escolha a sua profissão, adicione textos prontos em português de Portugal, preencha os seus dados e baixe o PDF de 1 página.</p>
     <ul><li>3 modelos pensados para Portugal e Irlanda</li><li>Frases prontas para 12 profissões (PT-PT e inglês)</li><li>Carta de apresentação automática</li></ul>
+    <div class="ab">
+      <a href="#kvid" class="old abtap" aria-label="Exemplo de currículo no formato brasileiro"><span class="lb">✕ ANTES · formato BR</span><span class="pg"><span class="ph"></span><i></i><i style="width:45%"></i><b>CPF e RG</b><br><b>Estado civil</b><br><b>3 páginas</b></span></a>
+      <a href="#kvid" class="new abtap" aria-label="Currículo no padrão europeu feito com o kit"><span class="lb">✓ DEPOIS · padrão UE</span><img src="/curriculo-europeu/kit/4.jpg" alt="Currículo de 1 página no padrão europeu" width="540" height="1000"><span class="play">▶ ver o kit (1 min)</span></a>
+    </div>
     <div class="buybox">
       <div class="pr"><span class="pv gp">€9,90</span><span class="px">pagamento único · IVA incluído</span></div>
       <a class="btn buy" href="https://pay.kiwify.com/mcr5RQX">QUERO MEU CURRÍCULO EUROPEU</a>
@@ -204,6 +220,7 @@ var FIXED_PRICE = true; // preço fixo €9,90, sem contagem nem "depois €14,9
   step("abriu-venda");
   var v=document.getElementById("kvid");
   v.addEventListener("play",function(){step("assistiu-video")});
+  [].forEach.call(document.querySelectorAll(".abtap"),function(a){a.onclick=function(ev){ev.preventDefault();step("tocou-antes-depois");v.scrollIntoView({behavior:"smooth",block:"center"});try{var pr=v.play();if(pr&&pr.catch)pr.catch(function(){})}catch(e){}}});
   v.addEventListener("timeupdate",function(){if(!v.duration)return;var p=v.currentTime/v.duration;if(p>=.5)step("video-metade");if(p>=.9)step("video-fim")});
   // Leva os parâmetros do anúncio para o link do guia grátis também.
   try{if(location.search){var fl=document.getElementById("freelink");fl.href=fl.getAttribute("href")+location.search}}catch(e){}
