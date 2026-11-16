@@ -318,6 +318,15 @@ table.dic th{background:#f8fafc;font-size:12.5px;text-transform:uppercase;color:
   <button class="lnk" id="reWz" style="display:block;margin:8px auto 0">Recomeçar com o assistente</button>
 </div></div>
 
+<!-- Como salvar o PDF -->
+<div class="ov" id="pd"><div class="md">
+  <h2 id="pdT">Como salvar o seu PDF</h2>
+  <div id="pdB" style="line-height:1.55;margin-top:8px"></div>
+  <label id="pdNoW" style="display:flex;gap:8px;align-items:center;margin-top:10px;font-size:14px;color:#475569"><input type="checkbox" id="pdNo"> Já sei, não mostrar de novo</label>
+  <button class="btn y" id="pdGo" style="width:100%;margin-top:14px;padding:13px">Continuar ⬇</button>
+  <button class="btn o" style="width:100%;margin-top:8px" data-close>Voltar</button>
+</div></div>
+
 <!-- Frases prontas -->
 <div class="dr" id="dr">
   <div class="dh">
@@ -761,7 +770,9 @@ document.addEventListener("click",function(e){
   if(t.id==="bkNew"){if(confirm("Apagar este currículo e começar de novo? Baixe uma cópia antes, se quiser guardar.")){openWizard()}return}
   if(t.id==="lRegen"){S.letter.custom=false;S.letter.body=genLetter();$("lBody").value=S.letter.body;save();schedule();toast("Texto reescrito.");return}
   if(t.id==="lCopy"){copy(S.letter.body);return}
-  if(t.id==="pdfBtn"){doPrint();return}
+  if(t.id==="pdfBtn"){pdfFlow();return}
+  if(t.id==="pdGo"){if($("pdNo").checked)lsSet("cvpro_pdfhelp",1);$("pd").classList.remove("on");setTimeout(doPrint,150);return}
+  if(t.id==="iaCopy"||t.id==="pdCopy"){copy(location.href.split("#")[0]);return}
   if(t.id==="helpBtn"){$("hp").classList.add("on");return}
   if(t.hasAttribute("data-close")){t.closest(".ov").classList.remove("on");return}
   if(t.id==="reWz"){$("hp").classList.remove("on");openWizard();return}
@@ -785,6 +796,20 @@ function setTab(t){
 function renderFab(){$("fab").innerHTML='<button class="btn o" id="showEd">✏️ Editar</button><button class="btn" id="showPv" style="background:#0b1a3a;color:#fff">👁 Ver folha</button><button class="btn y" onclick="document.getElementById(\'pdfBtn\').click()">⬇ PDF</button>'}
 
 /* ---------- PDF ---------- */
+/* Navegador dentro de app (Gmail, Instagram, Facebook, app da Kiwify…): o PDF não funciona e o texto pode se perder. */
+var UA=navigator.userAgent||"",IS_IOS=/iPhone|iPad|iPod/i.test(UA),IS_AND=/Android/i.test(UA);
+var IN_APP=/FBAN|FBAV|FB_IAB|Instagram|Line\/|KAKAOTALK|Snapchat|TikTok|musical_ly|Twitter|GSA\/|; wv\)/i.test(UA)||(IS_IOS&&!/Safari\//i.test(UA)&&!/CriOS|FxiOS|EdgiOS/i.test(UA));
+var IS_MOB=IS_IOS||IS_AND||matchMedia("(pointer:coarse)").matches;
+function pdfSteps(){
+  if(IS_IOS)return'<ol><li>Toque em <b>Continuar</b>.</li><li>Na janela que abrir, toque no <b>ícone de compartilhar</b> (quadrado com seta) no canto de cima.</li><li>Escolha <b>“Salvar em Arquivos”</b>. Pronto: o PDF fica no app Arquivos, para anexar no e-mail.</li></ol>';
+  if(IS_AND)return'<ol><li>Toque em <b>Continuar</b>.</li><li>No topo da janela, em <b>“Impressora”</b>, escolha <b>“Salvar como PDF”</b>.</li><li>Toque no botão redondo <b>PDF</b> e depois em <b>Salvar</b>. O arquivo fica em <b>Downloads</b>.</li></ol>';
+  return'<ol><li>Clique em <b>Continuar</b>.</li><li>Em <b>“Destino”</b>, escolha <b>“Salvar como PDF”</b>.</li><li>Em “Mais definições”: papel <b>A4</b>, margens <b>Nenhuma</b> e <b>Gráficos de fundo</b> ativado. Clique em <b>Salvar</b>.</li></ol>';
+}
+function pdfFlow(){
+  if(IN_APP){$("pdT").textContent="Abra o kit no navegador para baixar o PDF";$("pdB").innerHTML='<p>Você abriu o kit dentro de um aplicativo (e-mail, Instagram ou outro). Aqui o botão de PDF não funciona.</p><ol><li>Toque em <b>Copiar link do kit</b>.</li><li>Abra o <b>'+(IS_IOS?"Safari":"Chrome")+'</b> e cole o link na barra de endereço.</li><li>Lá, use o botão <b>⬇ Baixar PDF</b>.</li></ol><p class="hint">O que você escreveu aqui fica neste aplicativo. Se não aparecer no navegador, use “Cópia de segurança” (última seção) para levar o currículo.</p><button class="btn y" id="pdCopy" style="width:100%;padding:12px">📋 Copiar link do kit</button>';$("pdGo").style.display="none";$("pdNoW").style.display="none";$("pd").classList.add("on");return}
+  if(lsGet("cvpro_pdfhelp",0)){doPrint();return}
+  $("pdT").textContent="Como salvar o seu PDF";$("pdB").innerHTML=pdfSteps()+'<p class="hint">Se algo não funcionar, toque no botão verde <b>Ajuda</b> e fale conosco no WhatsApp.</p>';$("pdGo").style.display="";$("pdNoW").style.display="flex";$("pd").classList.add("on");
+}
 function doPrint(){
   var isLetter=document.body.classList.contains("t-letter");
   if(document.body.classList.contains("t-guide"))setTab("cv");
@@ -890,7 +915,7 @@ function buildGuide(){
     '<div class="tpl-box" style="margin-top:14px">'+hx(MAIL_EN)+'</div><button class="btn s o" data-cp="en">📋 Copiar (inglês)</button>'+
     '<p style="margin-top:16px"><b>Sem resposta em 7 dias?</b> Mande este seguimento (funciona mais do que parece):</p><div class="tpl-box">'+hx(FOLLOW)+'</div><button class="btn s o" data-cp="fu">📋 Copiar seguimento</button></div>';
   h+='<div class="gc"><h3>📋 Controlo das minhas candidaturas</h3><p class="hint" style="margin:0 0 8px">Anote cada envio. Depois de 7 dias sem resposta, a linha fica laranja: é hora de mandar o seguimento.</p><div style="overflow-x:auto"><table class="trk"><thead><tr><th>Empresa</th><th>Vaga</th><th style="width:130px">Data</th><th style="width:140px">Estado</th><th style="width:36px"></th></tr></thead><tbody id="trk"></tbody></table></div><button class="add" id="trkAdd">+ Nova candidatura</button></div>';
-  h+='<div class="gc"><h3>🎤 As 10 perguntas que mais caem na entrevista</h3>'+QA.map(function(q){return'<details class="qa"><summary>'+esc(q[0])+'</summary><p class="en">🇬🇧 '+esc(q[1])+"</p><p>"+q[2]+"</p></details>"}).join("")+
+  h+='<div class="gc"><h3>🎤 10 perguntas comuns na entrevista</h3>'+QA.map(function(q){return'<details class="qa"><summary>'+esc(q[0])+'</summary><p class="en">🇬🇧 '+esc(q[1])+"</p><p>"+q[2]+"</p></details>"}).join("")+
     '<p class="hint" style="margin-top:12px"><b>No dia:</b> chegue 10 minutos antes, leve o currículo impresso e os documentos, vista-se um pouco acima do que a função pede e, numa entrevista online, teste a câmara e o som antes.</p></div>';
   h+='<div class="gc"><h3>🇧🇷→🇵🇹 Dicionário do currículo</h3><p class="hint" style="margin:0 0 8px">Em Portugal, escrever “à portuguesa” mostra cuidado e adaptação.</p><table class="dic"><thead><tr><th>No Brasil</th><th>Em Portugal</th></tr></thead><tbody>'+DIC.map(function(d){return"<tr><td>"+esc(d[0])+"</td><td><b>"+esc(d[1])+"</b></td></tr>"}).join("")+"</tbody></table></div>";
   h+='<div class="gc"><h3>🚫 O que nunca colocar no currículo europeu</h3><ul>'+NEVER.map(function(n){return"<li>"+esc(n)+"</li>"}).join("")+"</ul></div>";
@@ -931,7 +956,8 @@ buildGuide();renderFab();
 if(!S){S=seed("pt","hotel","");buildCv();buildLetter();renderAll();openWizard()}else{buildCv();buildLetter();renderAll()}
 setTab("cv");
 addEventListener("resize",function(){clearTimeout(fit.t);fit.t=setTimeout(fit,120)});
-addEventListener("afterprint",function(){setTimeout(fit,50)});
+addEventListener("afterprint",function(){setTimeout(fit,50);setTimeout(function(){toast("✅ PDF pronto? Se não conseguiu salvar, toque em Ajuda (WhatsApp).")},400)});
+if(IN_APP){var ia=document.createElement("div");ia.className="iabar";ia.innerHTML='⚠️ Você está usando o kit dentro de um aplicativo. Para baixar o PDF e não perder o que escreveu, abra no <b>'+(IS_IOS?"Safari":"Chrome")+'</b>. <button id="iaCopy">📋 Copiar link</button>';document.body.insertBefore(ia,document.body.firstChild)}
 /* guarda na hora quando a pessoa fecha ou troca de app (no celular) */
 function flush(){clearTimeout(save.t);if(S)lsSet(KEY,S)}
 addEventListener("pagehide",flush);
@@ -939,6 +965,6 @@ document.addEventListener("visibilitychange",function(){if(document.visibilitySt
 })();
 </script>
 <a class="wa" href="https://wa.me/5583993855900?text=Ol%C3%A1!%20Comprei%20o%20Kit%20Curr%C3%ADculo%20Europeu%20Pro%20e%20preciso%20de%20ajuda." target="_blank" rel="noopener" title="Precisa de ajuda? Fale no WhatsApp" aria-label="Ajuda pelo WhatsApp"><svg viewBox="0 0 24 24" width="22" height="22" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.4.6c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 2 1.1.9 2 1.2 2.3 1.4.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg><span>Ajuda</span></a>
-<style>.wa{position:fixed;right:16px;bottom:16px;z-index:45;display:flex;align-items:center;gap:6px;background:#25d366;color:#fff;font:700 14px/1 system-ui,sans-serif;text-decoration:none;padding:10px 14px;border-radius:999px;box-shadow:0 8px 22px rgba(0,0,0,.25)}@media (max-width:900px){.wa{bottom:78px;right:12px;padding:10px}.wa span{display:none}body.t-guide .wa{bottom:16px}}@media print{.wa{display:none!important}}</style>
+<style>.iabar{background:#fff3cd;color:#5c4400;border-bottom:1px solid #f0d58a;padding:10px 14px;font:600 14px/1.4 system-ui,sans-serif;text-align:center}.iabar button{margin-left:6px;border:0;background:#0b1a3a;color:#fff;border-radius:8px;padding:6px 10px;font:700 13px system-ui,sans-serif;cursor:pointer}@media print{.iabar{display:none!important}}.wa{position:fixed;right:16px;bottom:16px;z-index:45;display:flex;align-items:center;gap:6px;background:#25d366;color:#fff;font:700 14px/1 system-ui,sans-serif;text-decoration:none;padding:10px 14px;border-radius:999px;box-shadow:0 8px 22px rgba(0,0,0,.25)}@media (max-width:900px){.wa{bottom:78px;right:12px;padding:10px}.wa span{display:none}body.t-guide .wa{bottom:16px}}@media print{.wa{display:none!important}}</style>
 </body>
 </html>
