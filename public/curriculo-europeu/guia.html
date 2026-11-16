@@ -353,7 +353,7 @@ Carta de condução (B) · Disponibilidade para turnos</pre>
         <a class="btn" id="buy" href="#">QUERO O KIT CURRÍCULO PRO<small>Menos que um café por semana</small></a>
         <div class="timer" style="color:var(--navy)" id="pnote"></div>
         <div class="seals"><div><b>🔒</b>Pagamento seguro</div><div><b>🛡️</b>Garantia de 7 dias</div><div><b>⚡</b>Acesso imediato</div></div>
-        <div class="paynote">O pagamento é processado pela Kiwify, com ligação encriptada. Não temos acesso aos dados do seu cartão. Não gostou? Devolvemos 100% em até 7 dias. <br><b>Preço final, com IVA incluído.</b> Se a página de pagamento abrir em inglês, é normal: "Pay" = Pagar.</div>
+        <div class="paynote">O pagamento é processado pela Hotmart, com ligação encriptada: MB WAY, Multibanco, cartão, Apple Pay ou Google Pay. Não temos acesso aos dados do seu cartão. Não gostou? Devolvemos 100% em até 7 dias. <br><b>Preço final, com IVA incluído.</b></div>
         <div class="sent" id="sent">✅ Pedido recebido! Em breve você recebe no seu e-mail o link de pagamento. Assim que pagar, o acesso é liberado.</div>
       </div>
     </div>
@@ -387,7 +387,7 @@ Carta de condução (B) · Disponibilidade para turnos</pre>
     <details><summary>Não sou bom com tecnologia. Vou conseguir?</summary><p>Sim. Você responde 3 perguntas e o currículo aparece pronto. Depois é trocar os textos entre [colchetes] pelos seus dados. Se travar em algo, o botão de ajuda abre o WhatsApp.</p></details>
     <details><summary>Não falo inglês. Serve para mim?</summary><p>Serve. Para Portugal o kit usa português de Portugal. Para Irlanda e Reino Unido as frases prontas já vêm em inglês, é só escolher.</p></details>
     <details><summary>A minha profissão está incluída?</summary><p>Há frases prontas para 12 áreas (restauração, limpeza, construção, armazém, vendas, apoio ao cliente, administrativo, cuidador(a), motorista, tecnologia, beleza) e para primeiro emprego. Qualquer texto pode ser editado livremente.</p></details>
-    <details><summary>E se eu não gostar?</summary><p>Peça o reembolso em até 7 dias pela Kiwify e recebe 100% do valor de volta.</p></details>
+    <details><summary>E se eu não gostar?</summary><p>Peça o reembolso em até 7 dias pela Hotmart e recebe 100% do valor de volta.</p></details>
   </div>
 
   <div class="endcta"><a class="btn" href="#oferta" id="endbtn">QUERO O KIT POR <span class="gp">€9,90</span></a><p>Pagamento único · acesso na hora · garantia de 7 dias</p></div>
@@ -403,8 +403,8 @@ Carta de condução (B) · Disponibilidade para turnos</pre>
 <script>
 // Link de pagamento (Stripe, Hotmart, Kiwify...). Enquanto estiver vazio, o botão registra o pedido
 // e você manda o link de pagamento manualmente.
-var CHECKOUT_URL = "https://pay.kiwify.com/mcr5RQX";      // €9,90: oferta de boas-vindas (48h desde o cadastro)
-var CHECKOUT_URL_FULL = "https://pay.kiwify.com/2VaShcR"; // €14,90: preço normal depois do prazo
+var CHECKOUT_URL = "https://pay.hotmart.com/T108522483K?off=3ejtj83g"; // Hotmart €9,90
+var CHECKOUT_URL_FULL = CHECKOUT_URL; // preço fixo
 var OFFER_HOURS = 48;
 var FIXED_PRICE = true; // preço fixo €9,90, sem contagem nem "depois €14,90" (false = volta a oferta de 48h)
 
