@@ -18,7 +18,7 @@
 <script>
 // Guarda de qual anúncio a pessoa veio (valores "teste" nunca ficam guardados).
 (function(){try{var c=new URLSearchParams(location.search).get("utm_content");if(c&&!/^teste/i.test(c))localStorage.setItem("cn_src",c);var o=localStorage.getItem("cn_src");if(o&&/^teste/i.test(o))localStorage.removeItem("cn_src")}catch(e){}})();
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","1380892450588060");fbq("track","PageView");
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","1650097203249181");fbq("track","PageView");
 </script>
 <style>
 :root{--red:#B3261E;--red2:#8E1B15;--green:#1F6B3A;--green2:#16502B;--cream:#FFF8EC;--gold:#FFC93C;--gold2:#F2A900;--ink:#2B2320;--muted:#6B625C;--line:#EADFCC;--bg:#FFFCF6}
@@ -296,7 +296,8 @@ var CHECKOUT_URL = "https://pay.hotmart.com/E108528818A?checkoutMode=10"; // Hot
   [].forEach.call(document.querySelectorAll(".buy"),function(b){b.addEventListener("click",function(){this.href=buyUrl();if(!CHECKOUT_URL)return;
     try{fbq("track","InitiateCheckout",{content_name:"ceia-natal",value:price,currency:"BRL"})}catch(e){}})});
   var st=document.getElementById("sticky"),off=document.getElementById("oferta"),hb=document.getElementById("buybox");
-  addEventListener("scroll",function(){var a=hb.getBoundingClientRect(),o=off.getBoundingClientRect();st.classList.toggle("show",a.bottom<0&&(o.top>innerHeight||o.bottom<0))},{passive:true});
+  addEventListener("scroll",function(){var a=hb.getBoundingClientRect(),o=off.getBoundingClientRect();st.classList.toggle("show",a.bottom<0&&(o.top>innerHeight||o.bottom<0));
+    if(!window._viuOferta&&o.top<innerHeight*.7){window._viuOferta=1;try{fbq("trackCustom","ViuOferta",{content_name:"ceia-natal"})}catch(e){}}},{passive:true});
 })();
 </script>
 </body>
