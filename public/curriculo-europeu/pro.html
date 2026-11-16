@@ -208,7 +208,7 @@ var FIXED_PRICE = true; // preço fixo €9,90, sem contagem nem "depois €14,9
   // Leva os parâmetros do anúncio para o link do guia grátis também.
   try{if(location.search){var fl=document.getElementById("freelink");fl.href=fl.getAttribute("href")+location.search}}catch(e){}
   function buyClick(ev){ev.preventDefault();step("clicou-comprar");step("clicou-comprar-venda");
-    try{fbq("track","InitiateCheckout",{content_name:"curriculo-pro",value:price,currency:"EUR"})}catch(e){}
+    try{fbq("trackCustom","CliqueComprar",{content_name:"curriculo-pro",value:price,currency:"EUR"})}catch(e){}
     var u=url;try{var cu=new URL(url),qs=new URLSearchParams(location.search);["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(function(p){var x=qs.get(p);if(x)cu.searchParams.set(p,x)});if(!cu.searchParams.get("utm_content")&&src)cu.searchParams.set("utm_content",src);if(lead.e)cu.searchParams.set("email",lead.e);u=cu.toString()}catch(x){}
     this.style.opacity=.7;setTimeout(function(){location.href=u},450)}
   [].forEach.call(document.querySelectorAll(".buy"),function(b){b.onclick=buyClick});

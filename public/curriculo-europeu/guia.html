@@ -487,7 +487,7 @@ var FIXED_PRICE = true; // preço fixo €9,90, sem contagem nem "depois €14,9
   var k=new URLSearchParams(location.search).get("k")||"";
   function buyClick(ev){
     ev.preventDefault();step("clicou-comprar");if(this.classList.contains("buyq"))step("clicou-atalho");
-    try{fbq("track","InitiateCheckout",{content_name:"curriculo-pro",value:price,currency:"EUR"})}catch(e){}
+    try{fbq("trackCustom","CliqueComprar",{content_name:"curriculo-pro",value:price,currency:"EUR"})}catch(e){}
     var ik=k||lead.k||"";if(ik){try{var bd=JSON.stringify({k:ik,price:price});if(!(navigator.sendBeacon&&navigator.sendBeacon("/api/leads/intent",new Blob([bd],{type:"application/json"}))))fetch("/api/leads/intent",{method:"POST",headers:{"Content-Type":"application/json"},body:bd,keepalive:true})}catch(e){}}
     if(url){var u=url;try{var cu=new URL(url),qs=new URLSearchParams(location.search);["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(function(p){var v=qs.get(p);if(v)cu.searchParams.set(p,v)});if(!cu.searchParams.get("utm_content")&&src)cu.searchParams.set("utm_content",src);if(lead.e)cu.searchParams.set("email",lead.e);u=cu.toString()}catch(x){}this.style.opacity=.7;setTimeout(function(){location.href=u},450);return}
     var email=lead.e||prompt("Qual o seu e-mail para receber o link de pagamento?")||"";
