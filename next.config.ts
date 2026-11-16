@@ -45,6 +45,8 @@ const nextConfig: NextConfig = {
       { source: "/curriculo-europeu/pro", destination: "/curriculo-europeu/pro.html" },
       { source: "/cv-pro-ba56bcbef8", destination: "/cv-pro-ba56bcbef8/index.html" },
       { source: "/ceia-natal", destination: "/ceia-natal/index.html" },
+      { source: "/ceia-natal/janeiro", destination: "/ceia-natal/janeiro.html" },
+      { source: "/ceia-natal/listas-janeiro", destination: "/ceia-natal/listas-janeiro.html" },
     ];
   },
   experimental: {

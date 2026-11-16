@@ -46,12 +46,18 @@
   .dia .d{background:var(--verde);color:#fff;border-radius:3mm;text-align:center;padding:3mm 1mm;font-weight:800}
   .dia .d span{display:block;font-family:'Playfair Display',serif;font-size:22pt;line-height:1}
   .fonte{font-size:8.5pt;color:var(--cinza)}
+  /* árvore de Natal */
+  .arvore{position:absolute;z-index:2;right:24mm;top:96mm;width:46mm;height:46mm;background:#FFF8EC;border-radius:50%;padding:6mm;box-shadow:0 4mm 10mm rgba(0,0,0,.25)}
+  .arvore img{width:100%;height:100%}
+  h2:before{content:"";display:inline-block;width:6.5mm;height:6.5mm;margin-right:2mm;vertical-align:-0.8mm;background:url(../../public/ceia-natal/arvore.svg) center/contain no-repeat}
+  .fim img{width:16mm;height:16mm;display:block;margin:0 auto 3mm}
 </style>
 </head>
 <body>
 
 <!-- CAPA -->
 <section class="pg capa">
+  <div class="arvore"><img src="../../public/ceia-natal/arvore.svg" alt="Árvore de Natal"></div>
   <div style="position:relative;z-index:1">
     <small>Kit digital · Natal 2026</small>
     <h1>Ceia de Natal<br>Econômica</h1>
@@ -83,7 +89,7 @@
 
 <!-- LISTAS DE COMPRAS -->
 <section class="pg">
-  <h2>Lista de compras · 8 pessoas <small style="font-family:Nunito;font-size:9pt;color:#6B6B6B;font-weight:600">marque no mercado · outro nº de pessoas: use a planilha</small></h2>
+  <h2>Lista de compras · 8 pessoas</h2>
   <h3>Cardápio Econômico</h3>
   <table class="ck"><thead><tr><th></th><th>Item</th><th>Comprar</th><th class="n">Ref.</th></tr></thead><tbody>
     <tr><td></td><td>Frango inteiro</td><td>2 frangos de ~1,8 kg</td><td class="n">R$ 41,36</td></tr>
@@ -363,7 +369,7 @@
     <div class="card"><h3>Pudim de panetone</h3>Panetone em pedaços + 2 ovos + ½ litro de leite + açúcar. Asse em banho-maria por 40 min.</div>
   </div>
   <div class="box aviso" style="margin-top:5mm"><b>Segurança:</b> guarde as sobras na geladeira em até 2 horas depois de servir, em potes fechados, e consuma em até 3 dias. Saladas com maionese não devem ficar fora da geladeira por mais de 2 horas.</div>
-  <p style="text-align:center;margin-top:10mm;font-family:'Playfair Display',serif;font-size:16pt;color:var(--verm)">Feliz Natal, com a mesa cheia e o bolso em paz. 🎄</p>
+  <p class="fim" style="text-align:center;margin-top:10mm;font-family:'Playfair Display',serif;font-size:16pt;color:var(--verm)"><img src="../../public/ceia-natal/arvore.svg" alt="">Feliz Natal, com a mesa cheia e o bolso em paz.</p>
 </section>
 
 </body>
