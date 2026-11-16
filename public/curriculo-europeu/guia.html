@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#0b1a3a">
 <script>
 // Guia aberto, sem cadastro (teste de 15/11). Guarda de qual anúncio a pessoa veio, para contar o funil.
-(function(){try{var c=new URLSearchParams(location.search).get("utm_content");if(c)localStorage.setItem("ce_src",c)}catch(e){}})();
+(function(){try{var c=new URLSearchParams(location.search).get("utm_content");if(c&&!/^teste/i.test(c))localStorage.setItem("ce_src",c);var o=localStorage.getItem("ce_src");if(o&&/^teste/i.test(o))localStorage.removeItem("ce_src")}catch(e){}})(); // valores de teste nunca ficam guardados
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","1380892450588060");fbq("track","PageView");fbq("track","ViewContent",{content_name:"guia-curriculo-europeu"});
 </script>
 <style>
@@ -437,7 +437,7 @@ var FIXED_PRICE = true; // preço fixo €9,90, sem contagem nem "depois €14,9
   var lk=new URLSearchParams(location.search).get("k")||lead.k||"";
   if(lk)fetch("/api/leads?k="+encodeURIComponent(lk)).then(function(r){return r.json()}).then(function(r){if(r&&r.ok&&r.since){var t=Date.parse(r.since);if(t){try{localStorage.setItem("ce_offer_start",t)}catch(e){}setStart(t)}}}).catch(function(){});
   // Conta cada passo uma vez por aparelho (abriu o guia, viu a oferta, clicou em comprar, deixou e-mail).
-  var src="";try{src=localStorage.getItem("ce_src")||""}catch(e){}
+  var src="";try{src=new URLSearchParams(location.search).get("utm_content")||localStorage.getItem("ce_src")||""}catch(e){}
   function step(e){try{if(localStorage.getItem("ce_ev_"+e))return;localStorage.setItem("ce_ev_"+e,"1")}catch(x){}
     try{var bd=JSON.stringify({e:e,s:src});if(!(navigator.sendBeacon&&navigator.sendBeacon("/api/funnel",new Blob([bd],{type:"application/json"}))))fetch("/api/funnel",{method:"POST",headers:{"Content-Type":"application/json"},body:bd,keepalive:true})}catch(x){}}
   step("abriu-guia");
