@@ -155,7 +155,7 @@ footer a{color:var(--muted)}
     <div class="box">
       <div class="pr" style="justify-content:center"><span class="pv gp">€9,90</span><span class="px">pagamento único · IVA incluído</span></div>
       <a class="btn buy" href="https://pay.kiwify.com/mcr5RQX">QUERO MEU CURRÍCULO EUROPEU</a>
-      <span class="trust">🔒 Pagamento seguro pela Kiwify · ⚡ Acesso na hora · 💳 Cartão</span>
+      <span class="trust">🔒 Pagamento seguro pela Kiwify · ⚡ Acesso na hora · 💳 Cartão de débito ou crédito · Apple Pay</span>
     </div>
   </section>
 
@@ -166,7 +166,7 @@ footer a{color:var(--muted)}
     <details><summary>Não sou bom com tecnologia. Vou conseguir?</summary><p>Sim. Você escolhe o país e a profissão e o currículo aparece já preenchido com textos de exemplo. Depois é trocar o que estiver entre [colchetes] pelos seus dados.</p></details>
     <details><summary>Não falo inglês. Serve para mim?</summary><p>Serve. Para Portugal o kit usa português de Portugal. Para Irlanda e Reino Unido as frases já vêm em inglês.</p></details>
     <details><summary>Como recebo o acesso?</summary><p>Logo depois do pagamento, a Kiwify envia o acesso para o seu e-mail. O checkout pode aparecer em inglês para quem está em Portugal; o kit é em português.</p></details>
-    <details><summary>Quais formas de pagamento?</summary><p>Cartão de crédito ou débito, com pagamento único. Não é assinatura.</p></details>
+    <details><summary>Quais formas de pagamento?</summary><p>Cartão de débito ou de crédito (Visa ou Mastercard) e Apple Pay. É um pagamento único, não é assinatura. Por enquanto não aceitamos MB WAY nem referência Multibanco.</p></details>
     <details><summary>O kit garante que eu vou ser chamado para entrevista?</summary><p>Não. Nenhum currículo garante isso. O kit organiza o seu currículo no formato mais usado na Europa e ajuda a evitar erros comuns.</p></details>
   </div>
 
@@ -196,7 +196,7 @@ var FIXED_PRICE = true; // preço fixo €9,90, sem contagem nem "depois €14,9
     [].forEach.call(document.querySelectorAll(".gp"),function(e){e.textContent=pv});
     [].forEach.call(document.querySelectorAll(".gx,.gc"),function(e){e.style.display=open&&!FIXED_PRICE?"":"none"});
     if(open&&!FIXED_PRICE){var s=Math.floor(left/1e3),hms=z(Math.floor(s/3600))+":"+z(Math.floor(s%3600/60))+":"+z(s%60);[].forEach.call(document.querySelectorAll(".cdt"),function(e){e.textContent=hms})}}
-  paint();setInterval(paint,1000);
+  paint();if(!FIXED_PRICE)setInterval(paint,1000);
   try{fbq("track","ViewContent",{content_name:"pagina-kit-curriculo-pro",value:price,currency:"EUR"})}catch(e){}
   var src="";try{src=localStorage.getItem("ce_src")||""}catch(e){}
   function step(e){try{if(localStorage.getItem("ce_ev_"+e))return;localStorage.setItem("ce_ev_"+e,"1")}catch(x){}
