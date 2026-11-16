@@ -115,7 +115,7 @@ footer a{color:var(--muted)}
     <ul><li>3 modelos pensados para Portugal e Irlanda</li><li>Frases prontas para 12 profissões (PT-PT e inglês)</li><li>Carta de apresentação automática</li></ul>
     <div class="buybox">
       <div class="pr"><span class="pv gp">€9,90</span><span class="px">pagamento único · IVA incluído</span></div>
-      <a class="btn buy" href="#">QUERO MEU CURRÍCULO EUROPEU</a>
+      <a class="btn buy" href="https://pay.kiwify.com/mcr5RQX">QUERO MEU CURRÍCULO EUROPEU</a>
       <span class="trust">🔒 Pagamento seguro · ⚡ Acesso na hora · 🛡️ Garantia de 7 dias</span>
     </div>
   </div>
@@ -154,7 +154,7 @@ footer a{color:var(--muted)}
     <h2>Kit Currículo Europeu Pro</h2>
     <div class="box">
       <div class="pr" style="justify-content:center"><span class="pv gp">€9,90</span><span class="px">pagamento único · IVA incluído</span></div>
-      <a class="btn buy" href="#">QUERO MEU CURRÍCULO EUROPEU</a>
+      <a class="btn buy" href="https://pay.kiwify.com/mcr5RQX">QUERO MEU CURRÍCULO EUROPEU</a>
       <span class="trust">🔒 Pagamento seguro pela Kiwify · ⚡ Acesso na hora · 💳 Cartão</span>
     </div>
   </section>
@@ -178,7 +178,7 @@ footer a{color:var(--muted)}
   O conteúdo é educativo e não garante emprego.<br>
   <a href="/privacidade">Política de privacidade</a>
 </footer>
-<div class="sticky" id="sticky"><a class="btn buy" href="#">QUERO O KIT — <span class="gp">€9,90</span></a></div>
+<div class="sticky" id="sticky"><a class="btn buy" href="https://pay.kiwify.com/mcr5RQX">QUERO O KIT — <span class="gp">€9,90</span></a></div>
 
 <script>
 var CHECKOUT_URL = "https://pay.kiwify.com/mcr5RQX";      // €9,90: oferta de boas-vindas (48h desde a 1ª visita)
@@ -207,10 +207,14 @@ var FIXED_PRICE = true; // preço fixo €9,90, sem contagem nem "depois €14,9
   v.addEventListener("timeupdate",function(){if(!v.duration)return;var p=v.currentTime/v.duration;if(p>=.5)step("video-metade");if(p>=.9)step("video-fim")});
   // Leva os parâmetros do anúncio para o link do guia grátis também.
   try{if(location.search){var fl=document.getElementById("freelink");fl.href=fl.getAttribute("href")+location.search}}catch(e){}
-  function buyClick(ev){ev.preventDefault();step("clicou-comprar");step("clicou-comprar-venda");
+  // Link real do checkout direto no href (funciona mesmo sem JS). O script só acrescenta os UTMs ao link
+  // e registra o clique, sem segurar a navegação.
+  function buyUrl(){var u=url;try{var cu=new URL(url),qs=new URLSearchParams(location.search);["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(function(p){var x=qs.get(p);if(x)cu.searchParams.set(p,x)});if(!cu.searchParams.get("utm_content")&&src)cu.searchParams.set("utm_content",src);if(lead.e)cu.searchParams.set("email",lead.e);u=cu.toString()}catch(x){}return u}
+  function setHrefs(){var u=buyUrl();[].forEach.call(document.querySelectorAll(".buy"),function(b){b.href=u})}
+  setHrefs();setInterval(setHrefs,5000);
+  function buyClick(){this.href=buyUrl();step("clicou-comprar");step("clicou-comprar-venda");
     try{fbq("trackCustom","CliqueComprar",{content_name:"curriculo-pro",value:price,currency:"EUR"})}catch(e){}
-    var u=url;try{var cu=new URL(url),qs=new URLSearchParams(location.search);["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(function(p){var x=qs.get(p);if(x)cu.searchParams.set(p,x)});if(!cu.searchParams.get("utm_content")&&src)cu.searchParams.set("utm_content",src);if(lead.e)cu.searchParams.set("email",lead.e);u=cu.toString()}catch(x){}
-    this.style.opacity=.7;setTimeout(function(){location.href=u},450)}
+    this.style.opacity=.7}
   [].forEach.call(document.querySelectorAll(".buy"),function(b){b.onclick=buyClick});
   var st=document.getElementById("sticky"),off=document.getElementById("oferta"),hb=document.querySelector(".buybox");
   addEventListener("scroll",function(){var a=hb.getBoundingClientRect(),o=off.getBoundingClientRect();
