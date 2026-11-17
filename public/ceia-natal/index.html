@@ -26,6 +26,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 a,button,summary{-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{font-family:Nunito,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;font-size:16.5px}
 img,video{max-width:100%;height:auto;display:block}
 h1,h2,h3{font-family:"Playfair Display",Georgia,serif;line-height:1.15}
@@ -90,7 +91,8 @@ h2{font-size:clamp(25px,3.8vw,34px);margin:46px 0 10px;text-align:center;color:v
 .vid{max-width:320px;margin:14px auto 0;display:none}
 .vid.on{display:block}
 .vid video{width:100%;height:auto;border-radius:16px;background:#000;box-shadow:0 16px 30px -16px rgba(0,0,0,.6)}
-.gal{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 14px;margin-top:12px;-webkit-overflow-scrolling:touch}
+.gal{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 14px;margin-top:12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.gal::-webkit-scrollbar{display:none}
 .gal figure{flex:0 0 220px;scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px}
 .gal img{border-radius:8px;width:100%;height:300px;object-fit:cover;object-position:top}
 .gal figcaption{font-size:13px;font-weight:800;text-align:center;padding:6px 2px 2px}
@@ -140,7 +142,7 @@ h2{font-size:clamp(25px,3.8vw,34px);margin:46px 0 10px;text-align:center;color:v
 .faq details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px 16px;margin:8px 0}
 .faq summary{font-weight:800;cursor:pointer}
 .faq p{color:var(--muted);margin-top:8px;font-size:15.5px}
-footer{text-align:center;color:var(--muted);font-size:12.8px;padding:24px 16px 96px;border-top:1px solid var(--line);margin-top:20px}
+footer{text-align:center;color:var(--muted);font-size:12.8px;padding:24px 16px calc(100px + env(safe-area-inset-bottom));border-top:1px solid var(--line);margin-top:20px}
 .sticky{position:fixed;left:0;right:0;bottom:0;background:rgba(142,27,21,.97);padding:10px 14px calc(10px + env(safe-area-inset-bottom));z-index:9;transform:translateY(110%);transition:transform .25s}
 .sticky .btn{max-width:480px;margin:0 auto;font-size:16.5px;padding:12px;box-shadow:none;animation:none}
 .sticky.show{transform:none}
@@ -260,7 +262,6 @@ footer{text-align:center;color:var(--muted);font-size:12.8px;padding:24px 16px 9
 
   <h2>Veja por dentro</h2>
   <p class="lead">São páginas reais do kit que você recebe.</p>
-  <div class="vid" id="vidbox"><video id="kvid" controls playsinline preload="none" poster="/ceia-natal/kit/capa.jpg"><source src="/ceia-natal/kit/video.mp4" type="video/mp4"></video></div>
   <div class="gal" id="gal">
     <figure><img src="/ceia-natal/kit/comece.jpg" alt="Página com os 3 cardápios e preços" width="816" height="1152"><figcaption>Os 3 cardápios e o custo de cada um</figcaption></figure>
     <figure><img src="/ceia-natal/kit/lista.jpg" alt="Lista de compras para 8 pessoas" width="816" height="1152"><figcaption>Lista de compras para marcar no mercado</figcaption></figure>
@@ -355,9 +356,6 @@ var CHECKOUT_URL = "https://pay.cakto.com.br/pncckeu_1334373"; // Cakto R$ 19,90
     var txt=d>1?"Faltam "+d+" dias":d===1?"Falta 1 dia":"É Natal";
     if(d>=0&&d<=60)[].forEach.call(document.querySelectorAll(".dias"),function(e){e.textContent=txt})}catch(e){}
   var src="";try{src=new URLSearchParams(location.search).get("utm_content")||localStorage.getItem("cn_src")||""}catch(e){}
-  // Mostra o vídeo só quando o arquivo existir.
-  var v=document.getElementById("kvid");
-  try{fetch("/ceia-natal/kit/video.mp4",{method:"HEAD"}).then(function(r){if(r.ok)document.getElementById("vidbox").classList.add("on")}).catch(function(){})}catch(e){}
   function buyUrl(){if(!CHECKOUT_URL)return"#oferta";var u=CHECKOUT_URL;try{var cu=new URL(CHECKOUT_URL),qs=new URLSearchParams(location.search);["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(function(p){var x=qs.get(p);if(x)cu.searchParams.set(p,x)});if(!cu.searchParams.get("utm_content")&&src)cu.searchParams.set("utm_content",src);if(cu.searchParams.get("utm_content"))cu.searchParams.set("sck",cu.searchParams.get("utm_content"));u=cu.toString()}catch(x){}return u}
   function setHrefs(){var u=buyUrl();[].forEach.call(document.querySelectorAll(".buy"),function(b){b.href=u})}
   setHrefs();
