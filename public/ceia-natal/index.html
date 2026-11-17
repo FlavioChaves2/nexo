@@ -143,9 +143,6 @@ h2{font-size:clamp(25px,3.8vw,34px);margin:46px 0 10px;text-align:center;color:v
 .faq summary{font-weight:800;cursor:pointer}
 .faq p{color:var(--muted);margin-top:8px;font-size:15.5px}
 footer{text-align:center;color:var(--muted);font-size:12.8px;padding:24px 16px calc(100px + env(safe-area-inset-bottom));border-top:1px solid var(--line);margin-top:20px}
-.sticky{position:fixed;left:0;right:0;bottom:0;background:rgba(142,27,21,.97);padding:10px 14px calc(10px + env(safe-area-inset-bottom));z-index:9;transform:translateY(110%);transition:transform .25s}
-.sticky .btn{max-width:480px;margin:0 auto;font-size:16.5px;padding:12px;box-shadow:none;animation:none}
-.sticky.show{transform:none}
 /* luzes de Natal no topo */
 .lights{position:absolute;left:0;right:0;top:0;height:22px;z-index:2;pointer-events:none;display:flex;justify-content:space-around}
 .lights i{width:9px;height:9px;border-radius:50%;margin-top:6px;animation:blink 1.8s ease-in-out infinite}
@@ -153,6 +150,15 @@ footer{text-align:center;color:var(--muted);font-size:12.8px;padding:24px 16px c
 .lights i:nth-child(4n+2){background:#7CD992;box-shadow:0 0 10px #7CD992;animation-delay:.45s}
 .lights i:nth-child(4n+3){background:#fff;box-shadow:0 0 10px #fff;animation-delay:.9s}
 .lights i:nth-child(4n){background:#5BB8F0;box-shadow:0 0 10px #5BB8F0;animation-delay:1.35s}
+.sticky{position:fixed;left:0;right:0;bottom:0;background:transparent;padding:0 16px calc(14px + env(safe-area-inset-bottom));z-index:9;pointer-events:none;transform:translateY(140%);opacity:0;transition:transform .45s cubic-bezier(.2,1.4,.4,1),opacity .25s}
+.sticky.show{transform:none;opacity:1}
+.sticky .btn{pointer-events:auto;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:12px;max-width:420px;margin:0 auto;font-size:19px;letter-spacing:.6px;padding:15px 18px;border-radius:999px;border:2px solid rgba(255,255,255,.35);box-shadow:0 10px 24px -6px rgba(22,80,43,.65),0 0 0 0 rgba(46,139,78,.55);animation:stkPulse 2.2s ease-in-out infinite}
+.sticky .btn::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:stkShine 3s ease-in-out infinite}
+.sticky .btn span{background:var(--gold);color:#3a2600;border-radius:999px;padding:3px 11px;font-size:15.5px;font-weight:900}
+.sticky .btn:active{transform:scale(.97)}
+@keyframes stkPulse{0%,100%{box-shadow:0 10px 24px -6px rgba(22,80,43,.65),0 0 0 0 rgba(46,139,78,.5)}50%{box-shadow:0 10px 24px -6px rgba(22,80,43,.65),0 0 0 10px rgba(46,139,78,0)}}
+@keyframes stkShine{0%,55%{left:-60%}85%,100%{left:130%}}
+@media(prefers-reduced-motion:reduce){.sticky .btn,.sticky .btn::after{animation:none}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
 .top{padding-top:30px!important}
 /* kit no topo, só no celular */
@@ -174,8 +180,6 @@ footer{text-align:center;color:var(--muted);font-size:12.8px;padding:24px 16px c
 .gdots i{width:8px;height:8px;border-radius:50%;background:var(--line);transition:all .25s}
 .gdots i.on{background:var(--red);width:22px;border-radius:6px}
 /* barra fixa */
-.sticky .btn{display:flex;align-items:center;justify-content:center;gap:10px}
-.sticky .btn span{background:var(--gold);color:#3a2600;border-radius:8px;padding:2px 8px;font-size:15px}
 .menu,.step,.inc,.cmp>div,.pain div{transition:transform .2s ease,box-shadow .2s ease}
 @media (hover:hover){.menu:hover,.step:hover{transform:translateY(-4px);box-shadow:0 14px 26px -16px rgba(0,0,0,.35)}}
 @media (prefers-reduced-motion:reduce){.lights i,.btn{animation:none}.js .rv{opacity:1;transform:none;transition:none}}
@@ -344,7 +348,7 @@ footer{text-align:center;color:var(--muted);font-size:12.8px;padding:24px 16px c
   Valores calculados com preços de referência de nov/2026; variam por região. Óleo, sal e temperos básicos não estão incluídos.<br>
   Este site não faz parte do Facebook, Instagram ou Meta.
 </footer>
-<div class="sticky" id="sticky"><a class="btn buy" href="https://pay.cakto.com.br/pncckeu_1334373">QUERO MINHA CEIA <span>R$ 19,90</span></a></div>
+<div class="sticky" id="sticky"><a class="btn buy" href="https://pay.cakto.com.br/pncckeu_1334373">QUERO AGORA <span>R$ 19,90</span></a></div>
 
 <script>
 // Link do checkout da Cakto (produto Ceia de Natal Econômica, R$ 19,90). Se ficar vazio, os botões levam para a oferta.
