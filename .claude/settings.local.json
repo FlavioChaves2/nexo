@@ -1,7 +1,21 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(winget install --id Cloudflare.cloudflared --accept-package-agreements --accept-source-agreements --silent)"
+      "PowerShell(winget install --id Cloudflare.cloudflared --accept-package-agreements --accept-source-agreements --silent)",
+      "PowerShell(git config user.email)",
+      "PowerShell(npx vercel --version)",
+      "PowerShell(npx vercel whoami)",
+      "PowerShell(npx vercel link --yes --project nexo)",
+      "PowerShell(npx vercel --prod --yes)",
+      "PowerShell(Stop-Process -Name node -ErrorAction SilentlyContinue; $d=\"$env:TEMP\\\\claude\\\\C--Users-FLAVIO-Desktop-Nexo-Marketplace\\\\908c6483-61e9-4a76-879a-5ff797b83979\\\\scratchpad\\\\deploy\"; robocopy . $d /E /XD .git node_modules .next /NFL /NDL /NJH /NJS | Out-Null; Set-Location $d; npx vercel --prod --yes 2>&1 | Select-Object -Last 6)",
+      "PowerShell($d=\"$env:TEMP\\\\claude\\\\C--Users-FLAVIO-Desktop-Nexo-Marketplace\\\\908c6483-61e9-4a76-879a-5ff797b83979\\\\scratchpad\\\\deploy\"; Set-Location $d; npx vercel deploy --prod --yes 2>&1 | Out-String | Select-Object -First 1)",
+      "Bash(rtk grep *)",
+      "Bash(grep -nIE \"postgres\\(ql\\)?://[^ :]+:[^ @]+@|re_[A-Za-z0-9]{20,}|sk_live\")",
+      "PowerShell(gh repo edit FlavioChaves2/nexo --visibility public --accept-visibility-change-consequences)",
+      "PowerShell(gh repo view FlavioChaves2/nexo --json visibility)",
+      "Bash(rtk read *)",
+      "mcp__claude-in-chrome__navigate",
+      "mcp__claude-in-chrome__get_page_text"
     ]
   }
 }
