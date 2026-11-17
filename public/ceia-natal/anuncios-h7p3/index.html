@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Anúncios da Ceia de Natal</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,800&display=swap">
+<style>
+/* Layout: cabeçalho curto com a configuração da campanha, depois uma grade de "cartões de anúncio" que imitam o feed (mídia em cima, texto embaixo). */
+:root{
+  --bg:#f6f3ee; --card:#ffffff; --fg:#2a211d; --muted:#6d625b; --line:#e6ddd2;
+  --red:#a8241c; --green:#1d6237; --chip:#f1e9df;
+  --display:"Fraunces",Georgia,serif; --body:"Nunito Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#1a1614; --card:#24201d; --fg:#f1ebe4; --muted:#b3a79d; --line:#3a332e;
+  --red:#ef7d70; --green:#79c995; --chip:#302a26; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1a1614; --card:#24201d; --fg:#f1ebe4; --muted:#b3a79d; --line:#3a332e;
+  --red:#ef7d70; --green:#79c995; --chip:#302a26; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
+.wrap{max-width:1180px;margin:0 auto;display:grid;gap:28px}
+header{display:grid;gap:10px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,4vw,40px);line-height:1.1;margin:0;text-wrap:balance}
+.lead{color:var(--muted);margin:0;max-width:68ch}
+.setup{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.setup span{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:4px 11px;font-size:13px;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;align-items:start}
+.ad{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:grid;min-width:0}
+.media{background:#000;display:flex;justify-content:center}
+.media video,.media img{display:block;width:100%;max-width:100%}
+.media video{aspect-ratio:9/16;max-height:520px;object-fit:contain;background:#000}
+.media img{aspect-ratio:1/1;object-fit:cover}
+.body{padding:14px 16px 16px;display:grid;gap:10px;min-width:0}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.name{font-weight:800;font-size:15px}
+.kind{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.angle{font-size:13.5px;color:var(--green);font-weight:700}
+.copy{white-space:pre-wrap;font-size:14px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:0;max-height:240px;overflow:auto}
+.headline{display:flex;justify-content:space-between;gap:10px;align-items:center;border-top:1px solid var(--line);padding-top:10px}
+.headline b{font-family:var(--display);font-weight:600;font-size:16px;line-height:1.25}
+.headline small{display:block;color:var(--muted);font-size:12.5px;font-family:var(--body)}
+.cta{flex:0 0 auto;background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:12.5px;font-weight:800}
+.note{color:var(--muted);font-size:13px;margin:0}
+@media (max-width:420px){.grid{grid-template-columns:1fr}}
+</style>
+</head><body>
+
+<div class="wrap">
+  <header>
+    <h1>Anúncios da Ceia de Natal</h1>
+    <p class="lead">Os 10 anúncios da campanha <b>CBO 1-1-10 | CEIA NATAL | 18/11</b>, como aparecem no feed: mídia, texto principal, título, descrição e botão. Aperte o play para ouvir a narração.</p>
+    <div class="setup">
+      <span>Início 17/11 às 23:59</span><span>R$ 100/dia (CBO)</span><span>Brasil 18+ aberto</span><span>Evento: Comprar</span><span>Página: Ceia de Natal Econômica</span><span>@ceia_natalina_</span>
+    </div>
+  </header>
+  <section class="grid" id="grid"></section>
+  <p class="note">Todos levam para nexopoint.com.br/ceia-natal com UTMs. Descrição de todos: "R$ 19,90 · acesso imediato". Preços de referência de nov/2026; variam por região.</p>
+</div>
+
+<script>
+const ADS=[
+ {n:"CT01 | notinha",k:"Vídeo",m:"m/CT01-1080x1920.mp4",a:"Preço subiu: R$ 453 × R$ 113",t:"Ceia pra 8 pessoas por uns R$ 113*",cta:"Saiba mais",
+  x:"A ceia de Natal subiu de novo. 🧾\n\nEm 2025 a ceia tradicional custou em média R$ 453 (IPC-Fipe). Com a lista do nosso kit, uma ceia completa pra 8 pessoas sai por uns R$ 113, menos de R$ 15 por pessoa.*\n\nEm dezembro o mercado lota e os preços sobem: quem chega com a lista pronta compra só o que precisa.\n\n✅ 3 cardápios ✅ lista de compras ✅ 14 receitas ✅ cronograma ✅ planilha\n\n💳 R$ 19,90 · acesso na hora · garantia de 7 dias\n\n*Cardápio Econômico, preços de referência de nov/2026; variam por região."},
+ {n:"CT02 | pergunta",k:"Vídeo",m:"m/CT02-1080x1920.mp4",a:"Indecisão: não sabe o que fazer",t:"Cardápio, lista e receitas prontos pro Natal",cta:"Saiba mais",
+  x:"Ainda não sabe o que fazer na ceia de Natal? 👀\n\nTodo ano é a mesma coisa: a lista não fecha e o dinheiro some no mercado. Nesse kit vem tudo pronto pra você só seguir:\n\n✅ 3 cardápios para 8 pessoas\n✅ Lista de compras item por item\n✅ 14 receitas passo a passo\n✅ Cronograma dos dias 22, 23 e 24\n✅ Planilha que faz as contas\n\nA partir de R$ 15 por pessoa.*\n\n💳 R$ 19,90 · acesso na hora no e-mail\n\n*Preços de referência de nov/2026; variam por região."},
+ {n:"CT03 | por pessoa",k:"Vídeo",m:"m/CT03-1080x1920.mp4",a:"Valor por pessoa dos 3 cardápios",t:"Ceia completa a partir de R$ 15 por pessoa",cta:"Saiba mais",
+  x:"Ceia de Natal completa a partir de R$ 15 por pessoa*. Sim, é possível. 🎄\n\n3 cardápios para 8 pessoas, cada um com a lista de compras e o valor de referência:\n🍗 Econômico (frango recheado): cerca de R$ 14 por pessoa\n🍊 Clássico (lombo com laranja): cerca de R$ 22 por pessoa\n🍖 Caprichado (pernil): cerca de R$ 29 por pessoa\n\nCom 14 receitas, cronograma e planilha que recalcula tudo.\n\n💳 R$ 19,90 · acesso na hora · garantia de 7 dias\n\n*Preços de referência de nov/2026; variam por região."},
+ {n:"CT04 | família grande",k:"Vídeo · fundo verde · voz masculina",m:"m/CT04-1080x1920.mp4",a:"Família grande, planilha que calcula",t:"Calcule a ceia pro tamanho da sua família",cta:"Saiba mais",
+  x:"Família grande e dinheiro curto no Natal? 👨‍👩‍👧‍👦\n\nCom a planilha do kit você coloca quantas pessoas vêm e ela calcula sozinha as quantidades e o total da ceia. Exemplo no cardápio Econômico: 6 pessoas por R$ 85, 8 por R$ 113, 12 por R$ 170.*\n\n✅ Lista de compras pronta\n✅ 14 receitas passo a passo\n✅ Cronograma dos dias 22, 23 e 24\n\n💳 R$ 19,90 · acesso na hora no e-mail · garantia de 7 dias\n\n*Preços de referência de nov/2026; variam por região."},
+ {n:"CT05 | cronograma",k:"Vídeo · fundo creme · voz masculina",m:"m/CT05-1080x1920.mp4",a:"Sem correria no dia 24",t:"Ceia pronta sem correria no dia 24",cta:"Saiba mais",
+  x:"Chega de passar o dia 24 inteiro na cozinha. ⏰\n\nO kit divide a ceia em 3 dias, com o que fazer em cada um:\n📅 22/12: compras e pré-preparo\n📅 23/12: sobremesas e marinadas\n📅 24/12: assados e mesa posta\n\nJunto vem a lista de compras, 14 receitas passo a passo e a planilha de custos. Ceia completa a partir de R$ 15 por pessoa.*\n\n💳 R$ 19,90 · acesso na hora · garantia de 7 dias\n\n*Preços de referência de nov/2026; variam por região."},
+ {n:"CT06 | janeiro",k:"Vídeo",m:"m/CT06-1080x1920.mp4",a:"Orçamento de janeiro em dia",t:"Saiba quanto a ceia vai custar antes do mercado",cta:"Saiba mais",
+  x:"Comece janeiro com o orçamento em dia. 💙\n\nO kit mostra o que comprar e quanto a sua ceia vai custar antes de você sair de casa. Assim você decide o valor e não leva susto no caixa.\n\nVem 3 cardápios pra 8 pessoas (a partir de R$ 15 por pessoa*), lista de compras, 14 receitas, cronograma e uma planilha que soma tudo.\n\n💳 R$ 19,90 · pagamento único · garantia de 7 dias\n\n*Preços de referência de nov/2026; variam por região."},
+ {n:"CT07 | mesa bonita",k:"Vídeo · fundo verde · voz masculina",m:"m/CT07-1080x1920.mp4",a:"Ceia bonita gastando pouco",t:"Mesa de Natal linda gastando pouco",cta:"Saiba mais",
+  x:"Ceia de Natal bonita não precisa ser cara ✨\n\nNo kit você encontra cardápios completos, receitas caprichadas, trocas pra gastar menos e ideias pra aproveitar as sobras no dia 25. Tudo com valores de referência, a partir de R$ 15 por pessoa.*\n\nCom a lista em mãos, dá pra aproveitar as promoções de dezembro e montar uma mesa linda sem estourar o orçamento.\n\n💳 R$ 19,90 · acesso na hora · garantia de 7 dias\n\n*Preços de referência de nov/2026; variam por região."},
+ {n:"IMG01 | 3 cardápios",k:"Imagem",m:"m/IMG01-1080x1080.png",a:"Quantidade: o que vem por R$ 19,90",t:"3 cardápios + 14 receitas por R$ 19,90",cta:"Ver detalhes",
+  x:"Ceia de Natal completa para 8 pessoas, a partir de R$ 15 por pessoa* 🎄\n\n✅ 3 cardápios prontos\n✅ Lista de compras\n✅ 14 receitas passo a passo\n✅ Cronograma dos dias 22, 23 e 24\n✅ Planilha que recalcula para sua família\n\n💳 R$ 19,90 · Pix ou cartão · acesso imediato no e-mail · garantia de 7 dias\n\n*Preços de referência de nov/2026; variam por região."},
+ {n:"IMG02 | kit checklist",k:"Imagem",m:"m/IMG02-1080x1080.png",a:"Organização em 3 passos",t:"Cardápio, lista e cronograma prontos",cta:"Ver detalhes",
+  x:"Seu Natal organizado em 3 passos 📝\n\n1️⃣ Escolha um dos 3 cardápios\n2️⃣ Leve a lista pronta ao mercado (a planilha ajusta pro número de pessoas)\n3️⃣ Siga o cronograma dos dias 22, 23 e 24 e chegue na ceia sem correria\n\nVem tudo no kit: guia em PDF, 14 receitas passo a passo e planilha. Abre no celular.\n\n💳 R$ 19,90 · Pix ou cartão · garantia de 7 dias"},
+ {n:"IMG03 | 453 × 113",k:"Imagem",m:"m/IMG03-1080x1080.png",a:"Comparação e as trocas que barateiam",t:"De R$ 453 pra uns R$ 113: veja a lista*",cta:"Ver detalhes",
+  x:"A ceia tradicional custou em média R$ 453 em 2025 (IPC-Fipe). 🧾\n\nCom a lista do nosso kit, a ceia pra 8 pessoas sai por uns R$ 113, menos de R$ 15 por pessoa.* A diferença está nas trocas: frango recheado no lugar do peru, farofa caprichada, sobremesa caseira.\n\nVocê recebe a lista, as 14 receitas, o cronograma e a planilha que faz as contas.\n\n💳 R$ 19,90 · acesso na hora · garantia de 7 dias\n\n*Cardápio Econômico, preços de referência de nov/2026; variam por região."}
+];
+const g=document.getElementById('grid');
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+g.innerHTML=ADS.map(a=>`<article class="ad">
+  <div class="media">${a.m.endsWith('.mp4')?`<video src="/ceia-natal/anuncios-h7p3/${a.m}" controls playsinline preload="metadata"></video>`:`<img src="/ceia-natal/anuncios-h7p3/${a.m}" alt="${esc(a.n)}" loading="lazy">`}</div>
+  <div class="body">
+    <div class="top"><span class="name">${esc(a.n)}</span><span class="kind">${esc(a.k)}</span></div>
+    <div class="angle">${esc(a.a)}</div>
+    <p class="copy">${esc(a.x)}</p>
+    <div class="headline"><b>${esc(a.t)}<small>R$ 19,90 · acesso imediato</small></b><span class="cta">${esc(a.cta)}</span></div>
+  </div></article>`).join('');
+</script>
+</body></html>
