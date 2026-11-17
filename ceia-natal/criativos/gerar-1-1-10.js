@@ -17,6 +17,17 @@ const b64 = (f) => 'data:' + (f.endsWith('.svg') ? 'image/svg+xml' : 'image/jpeg
 const TREE = b64(path.join(pub, 'arvore.svg'));
 const IMG = (n) => b64(path.join(pub, 'kit', n + '.jpg'));
 const VOICE = 'pt-BR-FranciscaNeural';
+// Variações de fundo e voz para diversificar os criativos (os que tendem a performar menos).
+const TEMA = { CT04: { voz: 'pt-BR-AntonioNeural', cls: 'verde' }, CT05: { voz: 'pt-BR-AntonioNeural', cls: 'creme' }, CT07: { voz: 'pt-BR-AntonioNeural', cls: 'verde' } };
+const TEMA_CSS = `
+body.verde{background:linear-gradient(165deg,#2E8B57,#14472A)}
+body.creme{background:linear-gradient(165deg,#FFF6E8,#F1DEC2)}
+body.creme .big{color:#B3261E}
+body.creme .sub{color:#1F6B3A}
+body.creme [style*="color:#fff"]{color:#2B2320!important}
+body.creme .fine{color:#5a4a3a}
+body.creme .chk,body.creme .card{border:3px solid #E2CBA6}
+`;
 
 const CSS = `
 
@@ -126,12 +137,12 @@ const FINE = '*Preços de referência de nov/2026; variam por região.';
 
 // ---------- áudio ----------
 const dur = (f) => { const r = spawnSync(ffmpeg, ['-i', f], { encoding: 'utf8' }); const m = /Duration: (\d+):(\d+):([\d.]+)/.exec(r.stderr); return +m[1] * 3600 + +m[2] * 60 + +m[3]; };
-async function tts(text, file) {
+async function tts(text, file, voz = VOICE) {
   if (fs.existsSync(file)) return;
   for (let tent = 0; tent < 4; tent++) {
     try {
       const t = new MsEdgeTTS();
-      await t.setMetadata(VOICE, OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3);
+      await t.setMetadata(voz, OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3);
       const dir = file + '_d'; fs.mkdirSync(dir, { recursive: true });
       await t.toFile(dir, text);
       t.close();
@@ -165,8 +176,8 @@ async function video(b, nome, roteiro) {
   // 1) narração por cena
   const cenas = [];
   for (let i = 0; i < roteiro.length; i++) {
-    const f = path.join(TMP, `${nome}-${i}.wav`);
-    await tts(roteiro[i][0], f);
+    const f = path.join(TMP, `${nome}-${(TEMA[nome] || {}).voz ? 'm-' : ''}${i}.wav`);
+    await tts(roteiro[i][0], f, (TEMA[nome] || {}).voz);
     cenas.push({ f, d: dur(f) + 0.25 });
   }
   let t0 = 0.3; cenas.forEach((c) => { c.t = t0; t0 += c.d; });
@@ -176,7 +187,7 @@ async function video(b, nome, roteiro) {
     ${roteiro.map((r, i) => `<div class="cap" data-s="${cenas[i].t}" data-e="${i + 1 < cenas.length ? cenas[i + 1].t : 999}"><span>${(r[2] || r[0])}</span></div>`).join('')}
     <div class="fine">${FINE}</div>`;
   const p = await b.newPage(); await p.setViewport({ width: 1080, height: H });
-  await p.setContent(`<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Nunito:wght@600;700;800;900&display=block"><style>:root{--H:${H}px;--T:${T}px;--A:${AH}px;--C:${T + AH + 20}px;--F:${H - 290}px}${CSS}</style></head><body>${html}</body></html>`, { waitUntil: 'networkidle0' });
+  await p.setContent(`<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Nunito:wght@600;700;800;900&display=block"><style>:root{--H:${H}px;--T:${T}px;--A:${AH}px;--C:${T + AH + 20}px;--F:${H - 290}px}${CSS}${TEMA_CSS}</style></head><body class="${(TEMA[nome] || {}).cls || ''}">${html}</body></html>`, { waitUntil: 'networkidle0' });
   await p.evaluateHandle('document.fonts.ready');
   await p.evaluate(() => {
     const ease = (x) => 1 - Math.pow(1 - x, 3);
