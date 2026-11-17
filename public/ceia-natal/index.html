@@ -18,7 +18,7 @@
 <script>
 // Guarda de qual anúncio a pessoa veio (valores "teste" nunca ficam guardados).
 (function(){try{var c=new URLSearchParams(location.search).get("utm_content");if(c&&!/^teste/i.test(c))localStorage.setItem("cn_src",c);var o=localStorage.getItem("cn_src");if(o&&/^teste/i.test(o))localStorage.removeItem("cn_src")}catch(e){}})();
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","1650097203249181");fbq("track","PageView");
+// Pixel do Meta: quem dispara é a Utmify (script no fim do <head>), com deduplicação. Não recolocar o fbq aqui.
 </script>
 <script>document.documentElement.className+=" js"</script>
 <style>
@@ -348,7 +348,6 @@ var CHECKOUT_URL = "https://pay.cakto.com.br/pncckeu_1334373"; // Cakto R$ 19,90
   try{var now=new Date(),brt=new Date(now.getTime()+(now.getTimezoneOffset()-180)*6e4),xmas=new Date(brt.getFullYear(),11,25),d=Math.ceil((xmas-brt)/864e5);
     var txt=d>1?"Faltam "+d+" dias":d===1?"Falta 1 dia":"É Natal";
     if(d>=0&&d<=60)[].forEach.call(document.querySelectorAll(".dias"),function(e){e.textContent=txt})}catch(e){}
-  try{fbq("track","ViewContent",{content_name:"ceia-natal",value:price,currency:"BRL"})}catch(e){}
   var src="";try{src=new URLSearchParams(location.search).get("utm_content")||localStorage.getItem("cn_src")||""}catch(e){}
   // Mostra o vídeo só quando o arquivo existir.
   var v=document.getElementById("kvid");
@@ -356,11 +355,10 @@ var CHECKOUT_URL = "https://pay.cakto.com.br/pncckeu_1334373"; // Cakto R$ 19,90
   function buyUrl(){if(!CHECKOUT_URL)return"#oferta";var u=CHECKOUT_URL;try{var cu=new URL(CHECKOUT_URL),qs=new URLSearchParams(location.search);["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(function(p){var x=qs.get(p);if(x)cu.searchParams.set(p,x)});if(!cu.searchParams.get("utm_content")&&src)cu.searchParams.set("utm_content",src);if(cu.searchParams.get("utm_content"))cu.searchParams.set("sck",cu.searchParams.get("utm_content"));u=cu.toString()}catch(x){}return u}
   function setHrefs(){var u=buyUrl();[].forEach.call(document.querySelectorAll(".buy"),function(b){b.href=u})}
   setHrefs();
-  [].forEach.call(document.querySelectorAll(".buy"),function(b){b.addEventListener("click",function(){this.href=buyUrl();if(!CHECKOUT_URL)return;
-    try{fbq("track","InitiateCheckout",{content_name:"ceia-natal",value:price,currency:"BRL"})}catch(e){}})});
+  [].forEach.call(document.querySelectorAll(".buy"),function(b){b.addEventListener("click",function(){this.href=buyUrl()})});
   var st=document.getElementById("sticky"),off=document.getElementById("oferta"),hb=document.getElementById("buybox");
   addEventListener("scroll",function(){var a=hb.getBoundingClientRect(),o=off.getBoundingClientRect();st.classList.toggle("show",a.bottom<0&&(o.top>innerHeight||o.bottom<0));
-    if(!window._viuOferta&&o.top<innerHeight*.7){window._viuOferta=1;try{fbq("trackCustom","ViuOferta",{content_name:"ceia-natal"})}catch(e){}}},{passive:true});
+    },{passive:true});
   // Entrada suave dos blocos ao rolar
   try{var els=document.querySelectorAll("main h2,.lead,.pain>div,.answer,.menu,.gal,.inc>div,.step,.cmp>div,.offer,.gar,.faq details");
     if("IntersectionObserver" in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{rootMargin:"0px 0px -8% 0px"});
