@@ -300,7 +300,7 @@ footer{text-align:center;color:var(--muted);font-size:12.8px;padding:24px 16px c
     <div><i>💡</i><p><b>Trocas e sobras</b><span>10 trocas para gastar menos e 6 receitas para as sobras virarem o almoço do dia 25.</span></p></div>
   </div>
 
-  <div class="bonus rv">
+  <div class="bonus">
     <span class="selo">🎁 Bônus digital incluído</span>
     <img src="/ceia-natal/kit/amigo-secreto.png" alt="Capa do Kit de Brincadeiras para Amigo Secreto" width="600" height="600" loading="lazy">
     <div>
@@ -394,7 +394,7 @@ var CHECKOUT_URL = "https://pay.cakto.com.br/pncckeu_1334373"; // Cakto R$ 19,90
   addEventListener("scroll",function(){var a=hb.getBoundingClientRect(),o=off.getBoundingClientRect();st.classList.toggle("show",a.bottom<0&&(o.top>innerHeight||o.bottom<0));
     },{passive:true});
   // Entrada suave dos blocos ao rolar
-  try{var els=document.querySelectorAll("main h2,.lead,.pain>div,.answer,.menu,.gal,.inc>div,.step,.cmp>div,.offer,.gar,.faq details");
+  try{var els=document.querySelectorAll("main h2,.lead,.pain>div,.answer,.menu,.gal,.inc>div,.step,.cmp>div,.offer,.gar,.faq details,.bonus");
     if("IntersectionObserver" in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{rootMargin:"0px 0px -8% 0px"});
       [].forEach.call(els,function(e,i){e.classList.add("rv");e.style.transitionDelay=(i%3)*70+"ms";io.observe(e)})}}catch(e){}
   // Pontos da galeria e uma "dica" de deslizar quando aparece
