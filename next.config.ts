@@ -48,6 +48,7 @@ const nextConfig: NextConfig = {
       { source: "/ceia-natal/janeiro", destination: "/ceia-natal/janeiro.html" },
       { source: "/ceia-natal/listas-janeiro", destination: "/ceia-natal/listas-janeiro.html" },
       { source: "/ceia-natal/obrigado", destination: "/ceia-natal/obrigado.html" },
+      { source: "/ceia-natal/acesso-7k2q9x", destination: "/ceia-natal/acesso-7k2q9x/index.html" },
     ];
   },
   experimental: {
