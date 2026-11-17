@@ -44,7 +44,7 @@ const page = (body, cls = '') => `<!doctype html><html><head><meta charset="utf-
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Nunito:wght@600;700;900&display=swap" rel="stylesheet">
 <style>${CSS}</style></head><body><div class="s ${cls}">${body}</div></body></html>`;
 
-const QUEM = 'Ceia de Natal Econômica é um produto da Nexo Marketplace<br>CNPJ 64.162.695/0001-90 · contato@nexopoint.com.br';
+const QUEM = 'Dúvidas: contato@nexopoint.com.br · direct do Instagram';
 
 const POSTS = {
   // Carrossel 1: o kit por dentro (páginas reais)
