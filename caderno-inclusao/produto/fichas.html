@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<title>Caderno de Inclusão Escolar · fichas</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Fichas A4 do Caderno de Inclusão Escolar. Cada <section> é uma página.
+   body.vazia esconde o preenchimento (versão em branco). Caso 100% fictício. */
+@page{size:A4;margin:0}
+:root{--iv:#FAF8F3;--gr:#173D38;--te:#D66A3D;--cz:#45545A;--ln:#D9D3C6;--hand:#1F4FA8}
+*{box-sizing:border-box}
+body{margin:0;background:#e9e5dc;font-family:Inter,Arial,sans-serif;color:var(--cz);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+section{width:210mm;height:297mm;background:#fff;margin:0 auto 10mm;padding:16mm 15mm 14mm;position:relative;overflow:hidden;page-break-after:always}
+@media print{body{background:#fff}section{margin:0}}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid var(--gr);padding-bottom:4mm;margin-bottom:5mm}
+.hd .k{font-size:8.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--te);font-weight:700}
+.hd h1{font-family:Fraunces,Georgia,serif;color:var(--gr);font-size:22pt;margin:1mm 0 0;line-height:1.05}
+.hd .n{font-family:Fraunces,Georgia,serif;font-size:30pt;color:var(--ln);font-weight:700;line-height:1}
+.id{display:grid;grid-template-columns:2fr 1fr 1fr;gap:3mm;margin-bottom:4mm}
+.f{border:1px solid var(--ln);border-radius:2mm;padding:1.6mm 2.4mm;min-height:11mm}
+.f label{display:block;font-size:7pt;letter-spacing:.08em;text-transform:uppercase;color:#7b8589;font-weight:600}
+.v{font-family:"Segoe Print","Bradley Hand","Comic Sans MS",cursive;color:var(--hand);font-size:10.5pt;line-height:1.35}
+body.vazia .v{visibility:hidden}
+.tip{background:var(--iv);border-left:3px solid var(--te);padding:2.4mm 3mm;font-size:8.6pt;line-height:1.4;margin-bottom:4mm;border-radius:0 2mm 2mm 0}
+.tip b{color:var(--gr)}
+table{width:100%;border-collapse:collapse;font-size:8.6pt}
+th{background:var(--gr);color:#fff;text-align:left;font-weight:600;padding:2mm;font-size:7.6pt;letter-spacing:.04em;text-transform:uppercase}
+td{border:1px solid var(--ln);padding:1.8mm 2mm;vertical-align:top;height:21mm}
+td.d{width:15mm;font-weight:700;color:var(--gr);font-size:8.4pt}
+h2{font-family:Fraunces,Georgia,serif;color:var(--gr);font-size:12.5pt;margin:4mm 0 2mm}
+.box{border:1px solid var(--ln);border-radius:2mm;padding:2.4mm 3mm;margin-bottom:3mm;min-height:22mm}
+.box label{display:block;font-size:7.4pt;letter-spacing:.06em;text-transform:uppercase;color:var(--te);font-weight:700;margin-bottom:1mm}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:3mm}
+.chk{display:flex;flex-wrap:wrap;gap:1.5mm 5mm;font-size:8.6pt;margin-top:1mm}
+.chk span:before{content:"☐ ";color:var(--gr)}
+.chk span.on:before{content:"☑ ";color:var(--hand)}
+body.vazia .chk span.on:before{content:"☐ ";color:var(--gr)}
+.scale{display:flex;gap:2mm;margin-top:1.5mm;font-size:8pt}
+.scale span{flex:1;text-align:center;border:1px solid var(--ln);border-radius:1.5mm;padding:1.4mm 0}
+.scale span.on{border-color:var(--hand);background:#e8eefb;color:var(--hand);font-weight:700}
+body.vazia .scale span.on{border-color:var(--ln);background:none;color:inherit;font-weight:400}
+.ft{position:absolute;left:15mm;right:15mm;bottom:8mm;display:flex;justify-content:space-between;font-size:7pt;color:#9aa3a6;border-top:1px solid var(--ln);padding-top:2mm}
+.fic{position:absolute;top:7mm;right:15mm;font-size:7pt;letter-spacing:.1em;text-transform:uppercase;color:var(--te);font-weight:700;border:1px solid var(--te);border-radius:99px;padding:.8mm 3mm}
+body.vazia .fic{display:none}
+.lines{background:repeating-linear-gradient(transparent 0 6.4mm,var(--ln) 6.4mm 6.6mm);min-height:20mm}
+.letter{font-size:10pt;line-height:1.6}
+.sig{display:grid;grid-template-columns:1fr 1fr;gap:10mm;margin-top:8mm;font-size:8pt;text-align:center}
+.sig div{border-top:1px solid var(--cz);padding-top:1.5mm}
+</style></head>
+<body class="">
+
+<!-- 1. OBSERVAÇÃO SEMANAL -->
+<section id="p1">
+  <span class="fic">Exemplo fictício</span>
+  <div class="hd"><div><div class="k">Ficha 1 · Registro da semana</div><h1>Observação semanal</h1></div><div class="n">01</div></div>
+  <div class="id">
+    <div class="f"><label>Estudante (iniciais ou código)</label><div class="v">M. S. — caso fictício</div></div>
+    <div class="f"><label>Ano / turma</label><div class="v">3º ano B</div></div>
+    <div class="f"><label>Semana</label><div class="v">10 a 14/03</div></div>
+  </div>
+  <div class="tip"><b>Como usar:</b> anote fatos observáveis (o que aconteceu, em qual atividade e por quanto tempo), sem interpretações. Use iniciais ou um código: não é preciso escrever o nome completo.</div>
+  <table>
+    <tr><th>Dia</th><th>O que observei (fato)</th><th>Atividade / contexto</th><th>Apoio usado</th><th>Resultado</th></tr>
+    <tr><td class="d">Seg</td><td><div class="v">Começou a cópia do quadro e parou após 3 linhas.</div></td><td><div class="v">Língua Portuguesa, cópia longa</div></td><td><div class="v">Nenhum</div></td><td><div class="v">Concluiu 1/3</div></td></tr>
+    <tr><td class="d">Ter</td><td><div class="v">Fez a tarefa dividida em 3 partes, marcando cada uma.</div></td><td><div class="v">Matemática, 6 contas</div></td><td><div class="v">Checklist de etapas</div></td><td><div class="v">Concluiu tudo</div></td></tr>
+    <tr><td class="d">Qua</td><td><div class="v">Pediu ajuda levantando o cartão de dúvida.</div></td><td><div class="v">Leitura em dupla</div></td><td><div class="v">Cartão de ajuda</div></td><td><div class="v">Retomou sozinho</div></td></tr>
+    <tr><td class="d">Qui</td><td><div class="v">Na troca de atividade, demorou ~5 min para iniciar.</div></td><td><div class="v">Após o recreio</div></td><td><div class="v">Aviso 2 min antes</div></td><td><div class="v">Iniciou em 1 min</div></td></tr>
+    <tr><td class="d">Sex</td><td><div class="v">Concluiu a produção de texto curta com o roteiro.</div></td><td><div class="v">Produção de texto</div></td><td><div class="v">Roteiro em 3 perguntas</div></td><td><div class="v">Concluiu</div></td></tr>
+  </table>
+  <h2>Resumo da semana</h2>
+  <div class="box"><label>O que funcionou</label><div class="v">Dividir a tarefa em etapas curtas e avisar antes das trocas de atividade.</div></div>
+  <div class="box"><label>Próximo passo</label><div class="v">Usar o checklist de etapas também nas cópias longas de Língua Portuguesa.</div></div>
+  <div class="ft"><span>Caderno de Inclusão Escolar · modelo de apoio ao trabalho docente</span><span>Ficha 1</span></div>
+</section>
+
+<!-- 2. OBJETIVO E APOIO -->
+<section id="p2">
+  <span class="fic">Exemplo fictício</span>
+  <div class="hd"><div><div class="k">Ficha 2 · Planejamento</div><h1>Objetivo e apoio</h1></div><div class="n">02</div></div>
+  <div class="id">
+    <div class="f"><label>Estudante (iniciais ou código)</label><div class="v">M. S. — caso fictício</div></div>
+    <div class="f"><label>Período</label><div class="v">Março e abril</div></div>
+    <div class="f"><label>Componente</label><div class="v">Todos</div></div>
+  </div>
+  <div class="tip"><b>Como usar:</b> escreva um objetivo de cada vez, em linguagem simples e observável. Liste o apoio que será oferecido e como você vai saber se deu certo. Baseie-se nas observações da Ficha 1.</div>
+  <div class="box"><label>Objetivo (o que o estudante vai conseguir fazer)</label><div class="v">Concluir atividades de até 20 minutos seguindo etapas marcadas, com no máximo um lembrete do professor.</div></div>
+  <div class="box"><label>Por que este objetivo (base nas observações)</label><div class="v">Nas semanas de 03/03 e 10/03, concluiu as tarefas divididas em etapas e parou nas tarefas longas sem divisão.</div></div>
+  <div class="box"><label>Apoios que serão usados</label>
+    <div class="chk"><span class="on">Tarefa em etapas</span><span class="on">Checklist visual</span><span class="on">Aviso antes das trocas</span><span>Tempo extra</span><span>Lugar próximo ao professor</span><span class="on">Cartão de ajuda</span><span>Material ampliado</span><span>Outro: ________</span></div>
+  </div>
+  <div class="g2">
+    <div class="box"><label>Como vou acompanhar</label><div class="v">Marcar na Ficha 1 se concluiu e quantos lembretes foram necessários.</div></div>
+    <div class="box"><label>Quem participa</label><div class="v">Professora regente e professora AEE (troca às sextas).</div></div>
+  </div>
+  <div class="box"><label>Combinados com a família</label><div class="v">Usar o mesmo checklist nas tarefas de casa, uma vez por semana.</div></div>
+  <div class="ft"><span>Caderno de Inclusão Escolar · modelo de apoio ao trabalho docente</span><span>Ficha 2</span></div>
+</section>
+
+<!-- 3. REVISÃO DO PERÍODO -->
+<section id="p3">
+  <span class="fic">Exemplo fictício</span>
+  <div class="hd"><div><div class="k">Ficha 3 · Acompanhamento</div><h1>Revisão do período</h1></div><div class="n">03</div></div>
+  <div class="id">
+    <div class="f"><label>Estudante (iniciais ou código)</label><div class="v">M. S. — caso fictício</div></div>
+    <div class="f"><label>Período revisado</label><div class="v">03/03 a 25/04</div></div>
+    <div class="f"><label>Data</label><div class="v">28/04</div></div>
+  </div>
+  <div class="tip"><b>Como usar:</b> releia as Fichas 1 e 2 do período. Marque como está o objetivo e registre o que manter e o que ajustar. Esta ficha é a base da devolutiva para a família.</div>
+  <div class="box"><label>Objetivo do período (copiado da Ficha 2)</label><div class="v">Concluir atividades de até 20 minutos seguindo etapas marcadas, com no máximo um lembrete.</div></div>
+  <div class="box"><label>Como está o objetivo</label>
+    <div class="scale"><span>Ainda não iniciado</span><span>Com muito apoio</span><span class="on">Com pouco apoio</span><span>Com autonomia</span></div>
+  </div>
+  <div class="box"><label>O que as observações mostram</label><div class="v">Em 7 de 8 semanas concluiu as tarefas com checklist. Os lembretes caíram de 3 para 1 por atividade. Trocas de atividade ficaram mais rápidas com o aviso prévio.</div></div>
+  <div class="g2">
+    <div class="box"><label>Manter</label><div class="v">Checklist de etapas e aviso 2 minutos antes das trocas.</div></div>
+    <div class="box"><label>Ajustar</label><div class="v">Testar retirar o checklist em Matemática, mantendo em Língua Portuguesa.</div></div>
+  </div>
+  <div class="box"><label>Próximo objetivo sugerido</label><div class="v">Organizar o próprio material no início da aula com um roteiro de 3 passos.</div></div>
+  <div class="ft"><span>Caderno de Inclusão Escolar · modelo de apoio ao trabalho docente</span><span>Ficha 3</span></div>
+</section>
+
+<!-- 4. DEVOLUTIVA À FAMÍLIA -->
+<section id="p4">
+  <span class="fic">Exemplo fictício</span>
+  <div class="hd"><div><div class="k">Ficha 4 · Comunicação</div><h1>Devolutiva à família</h1></div><div class="n">04</div></div>
+  <div class="id">
+    <div class="f"><label>Estudante</label><div class="v">M. S. — caso fictício</div></div>
+    <div class="f"><label>Ano / turma</label><div class="v">3º ano B</div></div>
+    <div class="f"><label>Data</label><div class="v">30/04</div></div>
+  </div>
+  <div class="tip"><b>Como usar:</b> escreva para a família em linguagem simples, começando pelo que o estudante já consegue. Use os dados da Ficha 3. Evite termos técnicos e comparações com outros estudantes.</div>
+  <div class="box letter"><label>Mensagem</label><div class="v">Olá, família! Nos meses de março e abril, M. trabalhou para concluir as atividades seguindo etapas. Com uma lista de passos na mesa, ela passou a terminar as tarefas de até 20 minutos precisando de apenas um lembrete. Também ficou mais tranquila nas trocas de atividade quando avisamos alguns minutos antes.</div></div>
+  <div class="g2">
+    <div class="box"><label>O que já conquistamos</label><div class="v">Conclui as tarefas com a lista de passos. Pede ajuda com o cartão.</div></div>
+    <div class="box"><label>No que vamos focar agora</label><div class="v">Organizar o próprio material no começo da aula.</div></div>
+  </div>
+  <div class="box"><label>Como a família pode ajudar em casa</label><div class="v">Uma vez por semana, usar a lista de passos (enviada na pasta) em uma tarefa de casa.</div></div>
+  <div class="box"><label>Espaço para a família (dúvidas e observações)</label><div class="lines"></div></div>
+  <div class="sig"><div>Professor(a)</div><div>Responsável</div></div>
+  <div class="ft"><span>Caderno de Inclusão Escolar · modelo de apoio ao trabalho docente</span><span>Ficha 4</span></div>
+</section>
+
+</body></html>
