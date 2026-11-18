@@ -53,6 +53,8 @@ const nextConfig: NextConfig = {
       { source: "/ceia-natal/extra-doces-t9k3", destination: "/ceia-natal/extra-doces-t9k3/index.html" },
       { source: "/ceia-natal/extra-mesa-r2x6", destination: "/ceia-natal/extra-mesa-r2x6/index.html" },
       { source: "/ceia-natal/extra-anonovo-q4m8", destination: "/ceia-natal/extra-anonovo-q4m8/index.html" },
+      { source: "/ceia-natal/janeiro-acesso-w5n8", destination: "/ceia-natal/janeiro-acesso-w5n8/index.html" },
+      { source: "/ceia-natal/listas-acesso-p3v7", destination: "/ceia-natal/listas-acesso-p3v7/index.html" },
     ];
   },
   experimental: {
