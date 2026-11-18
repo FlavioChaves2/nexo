@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="/caderno-inclusao/img/ficha1.webp" type="image/webp">
+<link rel="preload" as="image" href="/caderno-inclusao/img/mockup.webp" type="image/webp">
 <style>
 :root{--iv:#FAF8F3;--gr:#173D38;--gr2:#0F2B27;--te:#D66A3D;--te2:#B8532B;--cz:#45545A;--ln:#E3DDD0;--wh:#fff;--mut:#5d6b70}
 *{box-sizing:border-box}
@@ -298,6 +298,9 @@ footer.site b{color:#fff}
   .ocard .pr b{font-size:38px}
   .ocard .safe{margin-top:8px}
 }
+.stack.mock{aspect-ratio:828/685;max-width:min(100%,340px)}
+@media(min-width:900px){.stack.mock{max-width:560px}}
+.stack.mock img{position:static;width:100%;height:auto;transform:none;box-shadow:none;background:none;border-radius:12px}
 </style>
 
 <!-- Rastreamento: Utmify (UTMs). O pixel da Utmify só carrega quando UTMIFY_PIXEL_ID estiver preenchido no fim da página. -->
@@ -332,13 +335,7 @@ footer.site b{color:#fff}
       </ul>
       <p class="micro">Arquivos digitais em DOCX e PDF A4. Pagamento único. Acesso enviado por e-mail depois da compra.</p>
     </div>
-    <div class="stack" aria-label="Três fichas do Caderno preenchidas com um exemplo fictício">
-      <img class="s1" src="/caderno-inclusao/img/ficha1.webp" width="900" height="1273" alt="Ficha 1, Observação semanal, preenchida com um exemplo fictício" fetchpriority="high">
-      <img class="s2" src="/caderno-inclusao/img/ficha3.webp" width="900" height="1273" alt="Ficha 3, Revisão do período, preenchida com um exemplo fictício">
-      <img class="s3" src="/caderno-inclusao/img/ficha4.webp" width="900" height="1273" alt="Ficha 4, Devolutiva à família, preenchida com um exemplo fictício">
-      <span class="tag t1">✎ Registro da semana</span>
-      <span class="tag t2">→ Devolutiva pronta</span>
-    </div>
+    <div class="stack mock"><img src="/caderno-inclusao/img/mockup.webp" width="828" height="685" alt="Caixa do Caderno de Inclusão Escolar com as fichas e o bônus Banco de 80 Frases" fetchpriority="high"></div>
   </div>
 </header>
 
@@ -538,7 +535,7 @@ footer.site b{color:#fff}
     <span class="ey" style="color:#F3B79C">Oferta</span>
     <h2>Tudo o que você precisa para começar a registrar com mais clareza</h2>
     <div class="ocard" style="text-align:left">
-      <img class="combo" src="/caderno-inclusao/img/oferta-combo.webp" width="720" height="360" loading="lazy" alt="As fichas do Caderno de Inclusão Escolar e a capa do bônus Banco de 80 Frases">
+      <img class="combo" src="/caderno-inclusao/img/mockup.webp" width="828" height="685" loading="lazy" alt="As fichas do Caderno de Inclusão Escolar e a capa do bônus Banco de 80 Frases">
       <div class="nm">Caderno de Inclusão Escolar</div>
       <p class="grp">A sequência completa, em 4 etapas</p>
       <ul>
