@@ -51,6 +51,11 @@ cakto-upsell-reject::part(button){width:100%;background:transparent;color:#6B625
 .cost b{display:block;font-size:26px;color:var(--red);font-family:"Playfair Display",serif}
 .gar{display:flex;gap:14px;align-items:center;background:#fff;border:2px dashed var(--green);border-radius:16px;padding:15px 17px;margin-top:26px}
 .gar i{font-style:normal;font-size:38px}.gar b{display:block}.gar span{color:var(--muted);font-size:15px}
+.res{list-style:none;text-align:left;margin:14px auto 2px;max-width:340px;font-size:15px;font-weight:700}
+.res li{padding:3px 0 3px 26px;position:relative}.res li:before{content:"✓";position:absolute;left:4px;color:var(--green);font-weight:900}
+.faq details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 16px;margin-top:10px}
+.faq summary{font-weight:800;cursor:pointer}.faq p{color:var(--muted);font-size:15px;margin-top:6px}
+.back{text-align:center;margin-top:14px}.back a{color:var(--green);font-weight:800}
 footer{text-align:center;color:var(--muted);font-size:12.8px;padding:24px 16px 40px;border-top:1px solid var(--line);margin-top:24px}
 @media (max-width:600px){.cost{grid-template-columns:1fr}}
 </style>
@@ -61,18 +66,19 @@ footer{text-align:center;color:var(--muted);font-size:12.8px;padding:24px 16px 4
 <header class="top"><div class="wrap">
   <span class="alert">⚠️ ESPERE: OFERTA SÓ NESTA PÁGINA</span>
   <h1>O Natal está resolvido. E o <em>janeiro</em>?</h1>
-  <p>Depois das festas vêm as contas, o material escolar e o IPVA. O <b>Janeiro sem Dívida</b> organiza almoço e jantar do mês inteiro para 4 pessoas, com as listas de compras prontas e o custo de cada semana.</p>
+  <p>Depois das festas vêm as contas, o material escolar e o IPVA. O <b>Janeiro sem Dívida</b> é um <b>guia em PDF</b> com o cardápio de almoço e jantar dos 30 dias para 4 pessoas, as listas de compras prontas e quanto cada semana custa. Você vai ao mercado sabendo o que comprar e quanto vai gastar.</p>
 </div></header>
 
 <main>
-  <div class="box">
+  <div class="box" id="oferta">
     <div class="pv">R$ 37</div>
     <div class="px">pagamento único · no cartão é um clique, sem digitar de novo</div>
+    <ul class="res"><li>Cardápio de 30 dias: almoço e jantar para 4 pessoas</li><li>Listas de compras prontas, com o custo de cada semana</li><li>12 receitas simples e 7 regras para gastar menos</li></ul>
     <cakto-upsell-buttons>
       <cakto-upsell-accept bg-color="#1F6B3A" text-color="#ffffff" upsell-accept-url="https://nexopoint.com.br/ceia-natal/obrigado" offer-id="kkgbc6s" app-base-url="https://app.cakto.com.br" offer-type="upsell" upsell-reject-url="https://nexopoint.com.br/ceia-natal/listas-janeiro">SIM, QUERO O JANEIRO SEM DÍVIDA</cakto-upsell-accept>
       <cakto-upsell-reject upsell-reject-url="https://nexopoint.com.br/ceia-natal/listas-janeiro">Não, obrigado(a). Quero só a Ceia.</cakto-upsell-reject>
     </cakto-upsell-buttons>
-    <p class="note">🛡️ Garantia de 7 dias pela Cakto, como na Ceia.</p>
+    <p class="note">📩 Chega em um e-mail separado da Cakto, com o PDF para baixar.<br>🛡️ Garantia de 7 dias, como na Ceia.</p>
   </div>
 
   <h2>Quanto custa o mês</h2>
@@ -86,7 +92,7 @@ footer{text-align:center;color:var(--muted);font-size:12.8px;padding:24px 16px 4
   <h2>O que você recebe</h2>
   <div class="inc">
     <div><i>📅</i><p><b>Cardápio de 30 dias</b><span>Almoço e jantar, dia a dia, para 4 pessoas. O jantar aproveita o almoço sempre que dá.</span></p></div>
-    <div><i>🛒</i><p><b>5 listas de compras semanais</b><span>Item por item, com a embalagem certa e o custo de referência de cada semana.</span></p></div>
+    <div><i>🛒</i><p><b>5 listas de compras prontas</b><span>Uma para cada semana e uma para os dias 29 e 30. Item por item, com a embalagem certa e o custo de referência.</span></p></div>
     <div><i>👩‍🍳</i><p><b>12 receitas do dia a dia</b><span>Frango ensopado, macarronada, escondidinho, feijão tropeiro, torta de sardinha e mais.</span></p></div>
     <div><i>💡</i><p><b>As 7 regras para gastar menos</b><span>Cozinhar uma vez e comer duas, congelar em porções, trocas que mantêm o cardápio.</span></p></div>
     <div><i>📊</i><p><b>Quadro de gastos</b><span>Para comparar o que gastou com o planejado, semana a semana.</span></p></div>
@@ -99,6 +105,15 @@ footer{text-align:center;color:var(--muted);font-size:12.8px;padding:24px 16px 4
     <figure><img src="/ceia-natal/kit/jan-lista.jpg" alt="Lista de compras semanal" loading="lazy" width="816" height="1152"><figcaption>Lista da semana</figcaption></figure>
     <figure><img src="/ceia-natal/kit/jan-receita.jpg" alt="Receitas" loading="lazy" width="816" height="1152"><figcaption>Receitas passo a passo</figcaption></figure>
   </div>
+
+  <h2>Perguntas rápidas</h2>
+  <div class="faq">
+    <details><summary>É um curso de finanças?</summary><p>Não. É um planejamento da comida do mês: o que cozinhar em cada dia e o que comprar no mercado, para o gasto com comida não sair do controle em janeiro.</p></details>
+    <details><summary>Como eu recebo?</summary><p>Em um e-mail da Cakto separado do e-mail da Ceia, com o link para baixar o PDF. Abre no celular e dá para imprimir.</p></details>
+    <details><summary>E se aqui em casa não forem 4 pessoas?</summary><p>As quantidades são para 4. Para 2 pessoas, use metade; para 6, uma vez e meia. O cardápio continua o mesmo.</p></details>
+    <details><summary>Inclui café da manhã?</summary><p>Não. São almoço e jantar. Café da manhã, lanches, óleo, sal e temperos ficam fora da conta.</p></details>
+  </div>
+  <p class="back"><a href="#oferta">↑ Voltar para a oferta</a></p>
 
   <div class="gar"><i>🛡️</i><p><b>Garantia de 7 dias</b><span>Se não gostar, peça o reembolso pela Cakto e receba 100% do valor de volta.</span></p></div>
 </main>
