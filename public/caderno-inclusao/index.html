@@ -71,7 +71,7 @@ header.hero{padding:22px 0 44px;background:linear-gradient(180deg,#fff 0%,var(--
 .ticks{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:6px;font-size:14.5px}
 .ticks li{padding-left:24px;position:relative}
 .ticks li:before{content:"";position:absolute;left:2px;top:7px;width:12px;height:7px;border-left:2.5px solid var(--gr);border-bottom:2.5px solid var(--gr);transform:rotate(-45deg)}
-@media(min-width:900px){.hero .grid{grid-template-columns:1.05fr .95fr;grid-template-areas:"a s" "b s";row-gap:0}header.hero{padding:56px 0 70px}}
+@media(min-width:900px){.hero .grid{grid-template-columns:1.05fr .95fr;grid-template-areas:"a s" "b s";row-gap:0}header.hero{padding:30px 0 50px}}
 
 /* Problema */
 .cards3{display:grid;gap:14px;margin-top:22px}
@@ -155,6 +155,56 @@ header.hero{padding:22px 0 44px;background:linear-gradient(180deg,#fff 0%,var(--
 .ocard li.bon{background:#FFF4EE;border-radius:10px;padding:8px 10px 8px 34px;margin-left:-6px}
 .ocard li.bon:before{left:10px;top:15px}
 
+/* Primeira dobra compacta no celular: título, fichas, bullets e botão na mesma tela */
+.hsub{grid-area:d}
+@media(max-width:899px){
+  header.hero{padding:16px 0 30px}
+  .hero .grid{grid-template-areas:"a" "s" "b" "d";gap:14px}
+  .ha .ey{font-size:12px;margin-bottom:8px;letter-spacing:.08em}
+  .ha h1{font-size:clamp(26px,7vw,34px)}
+  .stack{max-width:min(100%,272px)}
+  .hb .price-inline{margin-bottom:8px}.hb .price-inline b{font-size:28px}
+  .hb .incl{margin:0 0 10px;font-size:13.5px;padding:7px 10px}
+  .hb .ticks{margin-top:12px}
+  .hsub .sub{margin:0}
+  .stack .t1{bottom:auto;top:0;left:0}
+}
+@media(min-width:900px){.hero .grid{grid-template-areas:"a s" "d s" "b s"}.hsub .sub{margin:14px 0 18px}}
+/* Carrossel horizontal das fichas no celular */
+@media(max-width:999px){
+  .flow{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;padding:4px 2px 12px;margin-left:-18px;margin-right:-18px;padding-left:18px;padding-right:18px;scrollbar-width:none}
+  .flow::-webkit-scrollbar{display:none}
+  .flow .step{flex:0 0 78%;scroll-snap-align:center}
+  .swipe{display:block}
+}
+.swipe{display:none;text-align:center;font-size:13.5px;color:var(--mut);margin-top:6px}
+/* Antes e depois */
+.ba{display:grid;gap:14px;margin-top:22px}
+.ba>div{border-radius:16px;padding:20px 20px 16px}
+.ba h3{font-size:19px;margin-bottom:10px}
+.ba ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.ba li{padding-left:28px;position:relative;font-size:15.5px}
+.ba .sem{background:#fff;border:1px solid var(--ln)}
+.ba .sem h3{color:var(--cz)}
+.ba .sem li:before{content:"×";position:absolute;left:5px;top:-2px;color:var(--te2);font-weight:800;font-size:19px}
+.ba .com{background:#fff;border:2px solid var(--gr)}
+.ba .com li:before{content:"✓";position:absolute;left:4px;top:0;color:var(--gr);font-weight:800}
+@media(min-width:820px){.ba{grid-template-columns:1fr 1fr}}
+/* Oferta: imagem do que vem na compra */
+.ocard .combo{margin:-6px auto 6px;width:100%;max-width:420px}
+/* Depois da compra + garantia */
+.after{display:grid;gap:12px;margin-top:20px}
+.after .st2{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:16px 18px 16px 62px;position:relative}
+.after .st2 b{display:block;color:var(--gr);font-size:16.5px}
+.after .st2 span{font-size:15px}
+.after .st2 i{position:absolute;left:16px;top:16px;width:32px;height:32px;border-radius:50%;background:var(--gr);color:#fff;font-style:normal;font-weight:700;display:grid;place-items:center}
+@media(min-width:900px){.after{grid-template-columns:repeat(3,1fr)}}
+.gar{margin-top:16px;background:#fff;border:2px dashed var(--te);border-radius:16px;padding:16px 18px;display:flex;gap:14px;align-items:flex-start}
+.gar .ic{font-size:28px;line-height:1}
+.gar b{display:block;color:var(--gr);font-size:16.5px}
+.gar p{margin:2px 0 0;font-size:15px}
+.fecho{text-align:center;font-family:Fraunces,Georgia,serif;color:var(--gr);font-size:clamp(21px,5vw,28px);line-height:1.3;max-width:720px;margin:0 auto;padding:10px 0 44px}
+
 /* Passos */
 .steps{counter-reset:s;display:grid;gap:12px;margin-top:22px}
 .st{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:18px 18px 18px 64px;position:relative}
@@ -230,6 +280,19 @@ footer.site b{color:#fff}
 .rv{opacity:0;transform:translateY(14px);transition:opacity .5s,transform .5s}
 .rv.in{opacity:1;transform:none}
 .no-js .rv{opacity:1;transform:none}
+@media(max-width:600px){
+  .offer{padding:40px 0}
+  .offer h2{font-size:23px;margin-bottom:4px}
+  .ocard{padding:16px 16px 18px;margin-top:16px}
+  .ocard .combo{max-width:300px;margin:-4px auto 2px}
+  .ocard .nm{font-size:19px;margin-bottom:6px}
+  .ocard .grp{margin:0 0 6px}
+  .ocard ul{gap:5px;margin-bottom:12px}
+  .ocard li{font-size:14.5px}
+  .ocard .pr{padding-top:10px;margin-bottom:10px}
+  .ocard .pr b{font-size:38px}
+  .ocard .safe{margin-top:8px}
+}
 </style>
 
 <!-- Rastreamento: Utmify (UTMs). O pixel da Utmify só carrega quando UTMIFY_PIXEL_ID estiver preenchido no fim da página. -->
@@ -247,18 +310,19 @@ footer.site b{color:#fff}
       <span class="ey">Material digital para professores · Ensino Fundamental I e AEE</span>
       <h1>Do registro da aula à devolutiva para a família, com mais organização.</h1>
     </div>
-    <div class="hb">
+    <div class="hsub">
       <p class="sub">Fichas editáveis, exemplos preenchidos e um passo a passo para organizar observações, registrar os apoios utilizados e preparar devolutivas claras, sem começar cada documento do zero.</p>
+    </div>
+    <div class="hb">
       <div class="price-inline"><b>R$ 39,00</b><span>pagamento único</span></div>
       <p class="incl">✅ Inclui 4 fichas editáveis + 2 casos preenchidos + bônus gratuito com 80 frases para relatórios e devolutivas.</p>
       <a class="btn buy" href="#oferta" data-cta="hero"><span>Quero meu Caderno <span class="nw">· R$ 39,00</span></span></a>
-      <p class="micro">Arquivos digitais em DOCX e PDF A4. Pagamento único. Acesso enviado por e-mail depois da compra.</p>
-      <a class="heroalt" href="#demonstracao">▶ Ver as fichas sendo preenchidas</a>
       <ul class="ticks">
         <li>A sequência completa: registro, planejamento, revisão e devolutiva</li>
         <li>Exemplos fictícios preenchidos, do registro à devolutiva</li>
         <li>Edita no Word ou LibreOffice e imprime em preto e branco</li>
       </ul>
+      <p class="micro">Arquivos digitais em DOCX e PDF A4. Pagamento único. Acesso enviado por e-mail depois da compra.</p>
     </div>
     <div class="stack" aria-label="Três fichas do Caderno preenchidas com um exemplo fictício">
       <img class="s1" src="/caderno-inclusao/img/ficha1.webp" width="900" height="1273" alt="Ficha 1, Observação semanal, preenchida com um exemplo fictício" fetchpriority="high">
@@ -331,6 +395,7 @@ footer.site b{color:#fff}
           <figcaption>A devolutiva sai da revisão, em linguagem simples: o que já foi conquistado, o próximo foco e como a família pode ajudar.</figcaption></figure>
       </div>
     </div>
+    <p class="swipe">← arraste para ver as 4 etapas →</p>
     <p class="center" style="margin-top:14px"><span class="fic">Exemplo fictício · nenhum dado real de estudante</span></p>
     <div class="cta-mid">
       <a class="btn buy" href="#oferta" data-cta="demo"><span>Quero meu Caderno <span class="nw">· R$ 39,00</span></span></a>
@@ -351,6 +416,28 @@ footer.site b{color:#fff}
         <a class="btn ghost" href="/caderno-inclusao/amostra-ficha-observacao.pdf" target="_blank" rel="noopener" data-amostra>Baixar amostra em PDF</a>
         <p class="micro">PDF, 1 página, cerca de 180 KB. Não pedimos e-mail.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANTES E DEPOIS -->
+<section style="padding-bottom:0">
+  <div class="wrap">
+    <span class="ey">Antes e depois</span>
+    <h2>O mesmo trabalho, com outra organização</h2>
+    <div class="ba">
+      <div class="sem rv"><h3>Sem o Caderno</h3><ul>
+        <li>Anotações em papéis soltos, no caderno e no celular</li>
+        <li>A mesma informação reescrita no planejamento, na revisão e no recado</li>
+        <li>Devolutiva escrita de memória, na véspera da reunião</li>
+        <li>Difícil mostrar o que foi feito e o que funcionou</li>
+      </ul></div>
+      <div class="com rv"><h3>Com o Caderno</h3><ul>
+        <li>Registro da semana em um só lugar, com fatos e apoios</li>
+        <li>Objetivo definido a partir do que foi registrado</li>
+        <li>Revisão com dados das semanas, não só impressões</li>
+        <li>Devolutiva em linguagem simples, saindo da revisão</li>
+      </ul></div>
     </div>
   </div>
 </section>
@@ -443,6 +530,7 @@ footer.site b{color:#fff}
     <span class="ey" style="color:#F3B79C">Oferta</span>
     <h2>Tudo o que você precisa para começar a registrar com mais clareza</h2>
     <div class="ocard" style="text-align:left">
+      <img class="combo" src="/caderno-inclusao/img/oferta-combo.webp" width="720" height="360" loading="lazy" alt="As fichas do Caderno de Inclusão Escolar e a capa do bônus Banco de 80 Frases">
       <div class="nm">Caderno de Inclusão Escolar</div>
       <p class="grp">A sequência completa, em 4 etapas</p>
       <ul>
@@ -450,15 +538,28 @@ footer.site b{color:#fff}
         <li><b>Planejamento:</b> ficha de objetivo e apoio</li>
         <li><b>Revisão:</b> ficha de revisão do período</li>
         <li><b>Devolutiva:</b> ficha de devolutiva à família</li>
-        <li>Dois casos fictícios completos, preenchidos do começo ao fim</li>
-        <li>Passo a passo de uso</li>
-        <li>Arquivos DOCX editáveis e PDF A4 para imprimir</li>
+        <li>2 casos fictícios preenchidos + passo a passo de uso</li>
+        <li>DOCX editável + PDF A4 para imprimir</li>
         <li class="bon"><b>Bônus grátis:</b> Banco de 80 Frases para Relatórios e Devolutivas Escolares (PDF + DOCX)</li>
       </ul>
       <div class="pr"><b>R$ 39,00</b><span>pagamento único · não é assinatura · bônus incluído</span></div>
       <a class="btn buy" href="#oferta" data-cta="oferta" id="ctaOferta">Quero meu Caderno</a>
-      <p class="safe">Pagamento processado pela Cakto · Pix ou cartão · acesso por e-mail</p>
+      <p class="safe">🔒 Compra segura pela Cakto · ⚡ Acesso imediato · Pix ou cartão</p>
     </div>
+  </div>
+</section>
+
+<!-- DEPOIS DA COMPRA -->
+<section style="padding-bottom:0">
+  <div class="wrap">
+    <span class="ey">Depois da compra</span>
+    <h2>Como você recebe</h2>
+    <div class="after">
+      <div class="st2 rv"><i>1</i><b>Pague com Pix ou cartão</b><span>O pagamento é feito na Cakto, em ambiente seguro.</span></div>
+      <div class="st2 rv"><i>2</i><b>Receba o acesso no e-mail</b><span>Você recebe o link da área de membros no e-mail informado na compra.</span></div>
+      <div class="st2 rv"><i>3</i><b>Baixe e comece</b><span>Veja o vídeo de 30 segundos, baixe as fichas, os exemplos e o bônus.</span></div>
+    </div>
+    <div class="gar rv"><span class="ic" aria-hidden="true">🛡️</span><div><b>7 dias para desistir</b><p>Se não for o que você esperava, peça o reembolso em até 7 dias pela Cakto ou pelo nosso e-mail, como prevê o direito de arrependimento do Código de Defesa do Consumidor.</p></div></div>
   </div>
 </section>
 
@@ -472,10 +573,11 @@ footer.site b{color:#fff}
       <details><summary>Serve para todas as escolas?</summary><p>Os modelos são adaptáveis, mas devem ser ajustados às orientações e exigências da sua rede de ensino. Eles apoiam o trabalho docente e não substituem os documentos oficiais pedidos pela escola.</p></details>
       <details><summary>Preciso cadastrar dados dos alunos?</summary><p>Não. Os arquivos ficam no seu computador ou impressos. Nesta página não pedimos nenhum dado de estudante. Nas fichas, a orientação é usar iniciais ou um código no lugar do nome.</p></details>
       <details><summary>Serve para estudantes com TDAH ou autismo?</summary><p>As fichas servem para registrar observações e apoios de qualquer estudante que precise de acompanhamento, com ou sem laudo. Elas não fazem diagnóstico nem substituem a avaliação de profissionais.</p></details>
-      <details><summary>Como recebo depois de comprar? O que vem na compra?</summary><p>O pagamento é feito pela Cakto, com Pix ou cartão. Depois da confirmação, o link de acesso aos arquivos chega no e-mail informado na compra. A compra inclui:</p><ul><li>4 fichas editáveis em PDF e DOCX</li><li>2 exemplos fictícios preenchidos</li><li>Passo a passo de utilização</li><li>Bônus gratuito: Banco de 80 Frases para Relatórios e Devolutivas Escolares (PDF + DOCX)</li></ul></details>
+      <details><summary>Como recebo depois de comprar? O que vem na compra?</summary><p>O pagamento é feito pela Cakto, com Pix ou cartão. Depois da confirmação, você recebe no e-mail informado na compra o acesso à área de membros, onde estão todos os arquivos para baixar. A compra inclui:</p><ul><li>4 fichas editáveis em PDF e DOCX</li><li>2 exemplos fictícios preenchidos</li><li>Passo a passo de utilização</li><li>Bônus gratuito: Banco de 80 Frases para Relatórios e Devolutivas Escolares (PDF + DOCX)</li></ul></details>
       <details><summary>E se eu me arrepender?</summary><p>Você pode pedir o cancelamento e o reembolso em até 7 dias depois da compra, como prevê o direito de arrependimento do Código de Defesa do Consumidor (art. 49). O pedido é feito pela Cakto ou pelo nosso e-mail.</p></details>
       <details><summary>Como falo com vocês?</summary><p>Pelo e-mail <a href="mailto:contato@nexopoint.com.br">contato@nexopoint.com.br</a>.</p></details>
     </div>
+    <p class="fecho" style="padding:34px 0 0">Menos tempo procurando anotações. Mais clareza para conversar com a família.</p>
     <div class="cta-mid"><a class="btn buy" href="#oferta" data-cta="faq"><span>Quero meu Caderno <span class="nw">· R$ 39,00</span></span></a></div>
   </div>
 </section>
@@ -528,8 +630,11 @@ var UTMIFY_PIXEL_ID = "";
       return cu.toString(); }catch(e){ return CHECKOUT_URL; }
   }
   var buys=document.querySelectorAll("a.buy");
+  // Só o botão da oferta leva ao checkout (assim o "início de compra" medido é de quem viu o preço).
+  // O botão do topo leva à demonstração; os demais, à oferta.
+  [].forEach.call(buys,function(a){ if(a.dataset.cta!=="oferta") a.href = a.dataset.cta==="hero" ? "#demonstracao" : "#oferta"; });
   if (CHECKOUT_URL) {
-    [].forEach.call(buys,function(a){ a.href=buyUrl(); });
+    var ob=document.getElementById("ctaOferta"); if(ob) ob.href=buyUrl();
   } else {
     // Sem checkout: o botão da oferta vira um botão desativado (não é link, para nenhum script reescrever).
     var o=document.getElementById("ctaOferta"), bt=document.createElement("button");
@@ -538,7 +643,7 @@ var UTMIFY_PIXEL_ID = "";
   }
   // InitiateCheckout só no clique real que leva ao checkout.
   [].forEach.call(buys,function(a){ a.addEventListener("click",function(){
-    if(!CHECKOUT_URL) return;
+    if(!CHECKOUT_URL || a.dataset.cta!=="oferta") return;
     try{ if(window.clarity) clarity("event","clique_checkout"); }catch(e){}
   }); });
   // Marca no Clarity quem chegou na demonstração.
