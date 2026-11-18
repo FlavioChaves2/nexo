@@ -131,6 +131,27 @@ header.hero{padding:22px 0 44px;background:linear-gradient(180deg,#fff 0%,var(--
 @media(min-width:640px){.inc{grid-template-columns:1fr 1fr}}
 @media(min-width:980px){.inc{grid-template-columns:repeat(4,1fr)}.extra{grid-template-columns:1fr 1fr}}
 
+/* Bônus */
+.bonus{padding-top:0}
+.bbox{background:#fff;border:2px solid var(--te);border-radius:22px;padding:24px 20px;position:relative}
+.bbox .tag{position:absolute;top:-14px;left:20px;background:var(--te);color:#fff;font-weight:700;font-size:12.5px;letter-spacing:.08em;border-radius:99px;padding:5px 12px}
+.bbox h2{font-size:clamp(23px,5.4vw,32px);margin:6px 0 10px}
+.bbox .bgrid{display:grid;gap:22px;align-items:center}
+.bprev{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:440px;margin:0 auto;width:100%}
+.bprev img{border-radius:6px;box-shadow:0 14px 28px -18px rgba(0,0,0,.55);cursor:zoom-in}
+.bprev .pg{position:relative;max-height:260px;overflow:hidden;border-radius:6px}
+.bprev .pg:after{content:"";position:absolute;left:0;right:0;bottom:0;height:70px;background:linear-gradient(transparent,#fff)}
+.bprev small{grid-column:1/-1;text-align:center;font-size:13px;color:var(--mut)}
+.bl{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:8px}
+.bl li{padding-left:28px;position:relative;font-size:15.5px}
+.bl li:before{content:"";position:absolute;left:3px;top:7px;width:13px;height:7px;border-left:2.5px solid var(--te);border-bottom:2.5px solid var(--te);transform:rotate(-45deg)}
+.bthemes{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.bthemes span{font-size:12.5px;font-weight:600;color:var(--gr);background:#E6EEEC;border-radius:99px;padding:4px 10px}
+@media(max-width:600px){.bthemes{display:none}}
+@media(min-width:880px){.bbox{padding:34px}.bbox .bgrid{grid-template-columns:1.1fr .9fr}}
+.ocard li.bon{background:#FFF4EE;border-radius:10px;padding:8px 10px 8px 34px;margin-left:-6px}
+.ocard li.bon:before{left:10px;top:15px}
+
 /* Passos */
 .steps{counter-reset:s;display:grid;gap:12px;margin-top:22px}
 .st{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:18px 18px 18px 64px;position:relative}
@@ -349,6 +370,33 @@ footer.site b{color:#fff}
   </div>
 </section>
 
+<!-- BÔNUS GRATUITO -->
+<section class="bonus" id="bonus">
+  <div class="wrap">
+    <div class="bbox rv">
+      <span class="tag">🎁 BÔNUS GRATUITO</span>
+      <div class="bgrid">
+        <div>
+          <h2>Banco de 80 Frases para Relatórios e Devolutivas Escolares</h2>
+          <p>Além das quatro fichas editáveis, você recebe gratuitamente um banco com 80 sugestões de frases para organizar registros, descrever avanços e preparar devolutivas às famílias com mais clareza e praticidade.</p>
+          <ul class="bl">
+            <li>80 sugestões organizadas por tema</li>
+            <li>PDF + DOCX editável</li>
+            <li>Aplicação prática no cotidiano escolar, com instruções para personalizar cada frase a partir das suas observações</li>
+            <li>Incluso gratuitamente na compra</li>
+          </ul>
+          <div class="bthemes" aria-label="Temas do banco de frases"><span>Participação · 15</span><span>Aprendizagem · 15</span><span>Comunicação e interação · 15</span><span>Autonomia e organização · 15</span><span>Apoios e adaptações · 10</span><span>Avanços e próximos passos · 10</span></div>
+        </div>
+        <div class="bprev">
+          <img src="/caderno-inclusao/img/bonus-capa.webp" width="720" height="1018" loading="lazy" alt="Capa do bônus Banco de 80 Frases para Relatórios e Devolutivas Escolares" data-zoom>
+          <div class="pg"><img src="/caderno-inclusao/img/bonus-pagina.webp" width="720" height="1018" loading="lazy" alt="Prévia de uma página do bônus: frases do tema Participação e envolvimento, com os campos a personalizar destacados"></div>
+          <small>Capa e trecho de uma página do arquivo que você recebe</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- 05 COMO USAR -->
 <section style="padding-top:0">
   <div class="wrap">
@@ -401,8 +449,9 @@ footer.site b{color:#fff}
         <li>Dois casos fictícios completos, preenchidos do começo ao fim</li>
         <li>Passo a passo de uso</li>
         <li>Arquivos DOCX editáveis e PDF A4 para imprimir</li>
+        <li class="bon"><b>Bônus grátis:</b> Banco de 80 Frases para Relatórios e Devolutivas Escolares (PDF + DOCX)</li>
       </ul>
-      <div class="pr"><b>R$ 39,00</b><span>pagamento único · não é assinatura</span></div>
+      <div class="pr"><b>R$ 39,00</b><span>pagamento único · não é assinatura · bônus incluído</span></div>
       <a class="btn buy" href="#oferta" data-cta="oferta" id="ctaOferta">Quero meu Caderno</a>
       <p class="safe">Pagamento processado pela Cakto · Pix ou cartão · acesso por e-mail</p>
     </div>
