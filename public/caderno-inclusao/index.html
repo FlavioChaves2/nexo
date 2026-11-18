@@ -302,6 +302,30 @@ footer.site b{color:#fff}
 @media(min-width:900px){.stack.mock{max-width:560px}}
 .stack.mock img{position:static;width:100%;height:auto;transform:none;box-shadow:none;background:none;border-radius:0;mix-blend-mode:multiply}
 .ocard .combo{mix-blend-mode:multiply}
+/* Processo completo (percepção de valor) */
+.proc{background:var(--gr);color:#E9F1EE;padding:56px 0}
+.proc .ey{color:#F2A37E}
+.proc h2{color:#fff;font-size:clamp(26px,6vw,38px);max-width:760px}
+.proc .lead{color:#CFE0DA;margin:12px 0 26px}
+.pflow{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.pflow li{position:relative;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px 16px 14px 64px}
+.pflow li b{display:block;color:#fff;font-size:17px}
+.pflow li span{font-size:14.5px;color:#CFE0DA}
+.pflow .ic{position:absolute;left:14px;top:14px;width:36px;height:36px;border-radius:50%;background:var(--te);display:grid;place-items:center}
+.pflow .ic svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pflow li:not(:last-child):after{content:"";position:absolute;left:31px;bottom:-11px;width:2px;height:12px;background:var(--te)}
+.pnote{font-size:13.5px;color:#F2A37E;margin:10px 0 0}
+.pben{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:10px}
+.pben li{padding-left:28px;position:relative;font-size:15.5px;color:#E9F1EE}
+.pben li:before{content:"✓";position:absolute;left:4px;top:0;color:#F2A37E;font-weight:800}
+.pben b{color:#fff}
+.pquote{margin:30px 0 0;padding:18px 20px;border-left:4px solid var(--te);background:rgba(255,255,255,.05);border-radius:0 14px 14px 0;font-family:Fraunces,Georgia,serif;font-size:clamp(18px,4.6vw,22px);line-height:1.4;color:#fff}
+@media(min-width:900px){
+  .pflow{grid-template-columns:repeat(4,1fr);gap:14px}
+  .pflow li{padding:62px 16px 16px}
+  .pflow li:not(:last-child):after{left:auto;right:-13px;top:31px;bottom:auto;width:12px;height:2px}
+  .pben{grid-template-columns:1fr 1fr;column-gap:28px}
+}
 </style>
 
 <!-- Rastreamento: Utmify (UTMs). O pixel da Utmify só carrega quando UTMIFY_PIXEL_ID estiver preenchido no fim da página. -->
@@ -423,6 +447,30 @@ footer.site b{color:#fff}
         <p class="micro">PDF, 1 página, cerca de 180 KB. Não pedimos e-mail.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- PROCESSO COMPLETO (percepção de valor) -->
+<section class="proc">
+  <div class="wrap">
+    <span class="ey">Como o Caderno funciona</span>
+    <h2>Mais do que fichas. Um processo completo para organizar o acompanhamento escolar.</h2>
+    <p class="lead">Da primeira observação à devolutiva para a família, tenha tudo organizado em uma sequência prática, com documentos editáveis que se conectam.</p>
+    <ol class="pflow">
+      <li class="rv"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/></svg></span><b>1. Observe</b><span>Registre o desenvolvimento semanal.</span></li>
+      <li class="rv"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg></span><b>2. Planeje</b><span>Organize estratégias e próximos passos.</span></li>
+      <li class="rv"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></span><b>3. Acompanhe</b><span>Revise os avanços e as dificuldades.</span></li>
+      <li class="rv"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><b>4. Comunique</b><span>Prepare devolutivas claras para a família.</span></li>
+    </ol>
+    <p class="pnote">→ O que você registra em uma etapa ajuda a preencher a próxima.</p>
+    <ul class="pben">
+      <li><b>Tudo organizado:</b> quatro fichas que funcionam juntas, evitando registros espalhados.</li>
+      <li><b>Pronto para adaptar:</b> documentos editáveis em Word e disponíveis em PDF.</li>
+      <li><b>Facilidade no preenchimento:</b> exemplos completos para orientar a utilização.</li>
+      <li><b>Reutilizável:</b> utilize os modelos ao longo do ano letivo, adaptando-os às necessidades de cada estudante.</li>
+      <li><b>Mais praticidade:</b> menos esforço organizando documentos e mais atenção ao acompanhamento pedagógico.</li>
+    </ul>
+    <p class="pquote">Você não está adquirindo apenas quatro fichas. Está levando uma forma mais simples de organizar, acompanhar e documentar o desenvolvimento dos seus alunos.</p>
   </div>
 </section>
 
