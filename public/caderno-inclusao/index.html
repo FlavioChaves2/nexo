@@ -62,6 +62,9 @@ header.hero{padding:22px 0 44px;background:linear-gradient(180deg,#fff 0%,var(--
 .price-inline{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;flex-wrap:wrap}
 .price-inline b{font-family:Fraunces,Georgia,serif;font-size:34px;color:var(--gr)}
 .price-inline span{font-size:14px;color:var(--mut)}
+.price-inline s,.ocard .pr s{color:var(--mut);font-size:16px;font-weight:600;text-decoration-thickness:2px;text-decoration-color:var(--te2)}
+.ocard .pr s{display:block;margin-bottom:4px}
+.promo .cd{display:inline-block;background:rgba(0,0,0,.18);border-radius:6px;padding:1px 7px;margin-left:4px;font-variant-numeric:tabular-nums;font-weight:800}
 .stack{position:relative;aspect-ratio:1/.93;max-width:min(100%,330px);margin:0 auto;width:100%}
 @media(min-width:900px){.stack{max-width:520px}.hb{margin-top:18px;align-self:start}.ha{align-self:end}}
 .stack img{position:absolute;width:60%;border-radius:6px;box-shadow:0 22px 40px -22px rgba(15,43,39,.55),0 0 0 1px rgba(0,0,0,.05);background:#fff}
@@ -305,8 +308,8 @@ footer.site b{color:#fff}
 <body class="no-js">
 <script>document.body.classList.remove("no-js")</script>
 
-<!-- Barra de promoção (preço de lançamento; sem contagem regressiva nem prazo inventado) -->
-<div class="promo" role="note">🔥 Preço de lançamento: <b>R$ 39,00</b> por tempo limitado</div>
+<!-- Barra de promoção: prazo REAL definido em PROMO_FIM (fim do script). Quando acaba, a contagem some e não reinicia. -->
+<div class="promo" role="note" id="promo">🔥 De <s>R$ 149,00</s> por <b>R$ 39,00</b> · termina em <span class="cd" id="cd">--:--:--</span></div>
 
 <!-- 01 HERO -->
 <header class="hero">
@@ -319,7 +322,7 @@ footer.site b{color:#fff}
       <p class="sub">Fichas editáveis, exemplos preenchidos e um passo a passo para organizar observações, registrar os apoios utilizados e preparar devolutivas claras, sem começar cada documento do zero.</p>
     </div>
     <div class="hb">
-      <div class="price-inline"><b>R$ 39,00</b><span>pagamento único</span></div>
+      <div class="price-inline"><s>R$ 149,00</s><b>R$ 39,00</b><span>pagamento único</span></div>
       <p class="incl">✅ Inclui 4 fichas editáveis + 2 casos preenchidos + bônus gratuito com 80 frases para relatórios e devolutivas.</p>
       <a class="btn buy" href="#oferta" data-cta="hero"><span>Quero meu Caderno <span class="nw">· R$ 39,00</span></span></a>
       <ul class="ticks">
@@ -547,7 +550,7 @@ footer.site b{color:#fff}
         <li>DOCX editável + PDF A4 para imprimir</li>
         <li class="bon"><b>Bônus grátis:</b> Banco de 80 Frases para Relatórios e Devolutivas Escolares (PDF + DOCX)</li>
       </ul>
-      <div class="pr"><b>R$ 39,00</b><span>pagamento único · não é assinatura · bônus incluído</span></div>
+      <div class="pr"><s>De R$ 149,00</s><b>R$ 39,00</b><span>pagamento único · não é assinatura · bônus incluído</span></div>
       <a class="btn buy" href="#oferta" data-cta="oferta" id="ctaOferta">Quero meu Caderno</a>
       <p class="safe">🔒 Compra segura pela Cakto · ⚡ Acesso imediato · Pix ou cartão</p>
     </div>
@@ -626,6 +629,17 @@ var UTMIFY_PIXEL_ID = "";
 (function(){
   var PRICE = 39.00;
   if (UTMIFY_PIXEL_ID) { window.pixelId = UTMIFY_PIXEL_ID; var s=document.createElement("script"); s.src="https://cdn.utmify.com.br/scripts/pixel/pixel.js"; s.async=true; s.defer=true; document.head.appendChild(s); }
+
+  // Promoção: termina em 21/11/2026 00:00 (Brasília) = 48 h a partir da meia-noite de 18 para 19/11.
+  // Ao terminar, a contagem some (não reinicia). Para uma nova promoção, trocar PROMO_FIM por outra data real.
+  var PROMO_FIM = new Date("2026-11-21T00:00:00-03:00").getTime();
+  (function(){ var el=document.getElementById("cd"), bar=document.getElementById("promo"); if(!el||!bar) return;
+    function pad(n){ return (n<10?"0":"")+n; }
+    function tick(){ var ms=PROMO_FIM-Date.now();
+      if(ms<=0){ bar.innerHTML="🔥 Preço de lançamento: <b>R$ 39,00</b>"; return; }
+      var t=Math.floor(ms/1000), h=Math.floor(t/3600), m=Math.floor(t%3600/60), sec=t%60;
+      el.textContent=pad(h)+":"+pad(m)+":"+pad(sec); setTimeout(tick,1000); }
+    tick(); })();
 
   // Leva as UTMs e parâmetros de atribuição da URL para o checkout.
   function buyUrl(){
