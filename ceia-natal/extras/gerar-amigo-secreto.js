@@ -18,9 +18,9 @@ p{margin:0 0 2.2mm}
 ul,ol{margin:0 0 2.5mm;padding-left:5mm}li{margin-bottom:1mm}
 .pg{page-break-after:always}
 .kick{font-size:8pt;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--verde);margin-bottom:1mm}
-.capa{height:184mm;background:var(--verm);color:#fff;border-radius:5mm;padding:14mm 11mm 11mm;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between}
-.capa:after{content:"";position:absolute;right:-26mm;bottom:-30mm;width:92mm;height:92mm;border-radius:50%;background:var(--verde)}
-.capa:before{content:"";position:absolute;left:-14mm;top:-16mm;width:40mm;height:40mm;border-radius:50%;background:var(--verm2)}
+.capa{height:184mm;background:linear-gradient(160deg,#1E1B4B,#0D0F2E);color:#fff;border-radius:5mm;padding:14mm 11mm 11mm;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between}
+.capa:after{content:"";position:absolute;right:-26mm;bottom:-30mm;width:92mm;height:92mm;border-radius:50%;background:#2C2775}
+.capa:before{content:"";position:absolute;left:-14mm;top:-16mm;width:40mm;height:40mm;border-radius:50%;background:rgba(255,201,60,.14)}
 .capa>*{position:relative;z-index:1}
 .capa small{letter-spacing:.2em;text-transform:uppercase;font-weight:800;font-size:8pt;opacity:.9}
 .capa h1{font-size:26pt;line-height:1.05;margin:3mm 0 3mm}
@@ -174,15 +174,16 @@ const body = [
 const html = (corpo) => `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Kit de Brincadeiras para Amigo Secreto</title><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"><style>${CSS}</style></head><body>${corpo}</body></html>`;
 
 const CAPA_PNG = `<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800&family=Nunito:wght@800&display=swap" rel="stylesheet"><style>
-*{margin:0;box-sizing:border-box}body{width:600px;height:600px;background:#B3261E;color:#fff;font-family:Nunito,Arial;position:relative;overflow:hidden;padding:56px 46px}
-body:after{content:"";position:absolute;right:-110px;bottom:-130px;width:400px;height:400px;border-radius:50%;background:#1F6B3A}
-body:before{content:"";position:absolute;left:-60px;top:-70px;width:170px;height:170px;border-radius:50%;background:#8E1B15}
-*{position:relative;z-index:1}small{letter-spacing:.2em;text-transform:uppercase;font-size:17px;opacity:.9}
-h1{font-family:'Playfair Display',Georgia,serif;font-size:56px;line-height:1.04;margin:16px 0 18px}
-p{font-size:21px;line-height:1.35;max-width:430px}
-.g{position:absolute;right:56px;bottom:150px;font-size:110px;z-index:2}
-.s{position:absolute;left:46px;bottom:46px;background:#FFC93C;color:#3a2600;border-radius:40px;padding:14px 24px;font-size:21px}
-</style></head><body><small>Bônus digital incluído</small><h1>Kit de Brincadeiras para Amigo Secreto</h1><p>5 jeitos de revelar quem tirou quem</p><div class="g">🎁</div><div class="s">20 cartões + roteiro</div></body></html>`;
+*{margin:0;box-sizing:border-box}body{width:600px;height:600px;background:radial-gradient(circle at 85% 90%,#3B2F8F 0,transparent 60%),linear-gradient(160deg,#1E1B4B,#0D0F2E);color:#fff;font-family:Nunito,Arial;position:relative;overflow:hidden;padding:56px 46px}
+body:after{content:"";position:absolute;right:-110px;bottom:-130px;width:400px;height:400px;border-radius:50%;background:#2C2775;box-shadow:0 0 0 22px rgba(255,201,60,.12)}
+body:before{content:"";position:absolute;left:-60px;top:-70px;width:170px;height:170px;border-radius:50%;background:rgba(255,201,60,.14)}
+*{position:relative;z-index:1}small{letter-spacing:.2em;text-transform:uppercase;font-size:17px;color:#FFC93C}
+h1{font-family:'Playfair Display',Georgia,serif;font-size:56px;line-height:1.04;margin:16px 0 18px}h1 em{font-style:normal;color:#FFC93C}
+p{font-size:21px;line-height:1.35;max-width:430px;opacity:.92}
+.g{position:absolute;right:56px;bottom:150px;font-size:110px;z-index:2;filter:drop-shadow(0 12px 18px rgba(0,0,0,.45))}
+.s{position:absolute;left:46px;bottom:46px;background:#FFC93C;color:#2a1f00;border-radius:40px;padding:14px 24px;font-size:21px}
+i{position:absolute;border-radius:50%;z-index:0}
+</style></head><body><i style="width:10px;height:10px;background:#FFC93C;left:420px;top:70px"></i><i style="width:7px;height:7px;background:#FF6FB5;left:520px;top:130px"></i><i style="width:8px;height:8px;background:#5EE0C8;left:470px;top:300px"></i><i style="width:6px;height:6px;background:#FFC93C;left:300px;top:330px"></i><i style="width:9px;height:9px;background:#FF6FB5;left:80px;top:360px"></i><i style="width:6px;height:6px;background:#5EE0C8;left:230px;top:420px"></i><small>Bônus digital incluído</small><h1>Kit de Brincadeiras para <em>Amigo Secreto</em></h1><p>5 jeitos de revelar quem tirou quem</p><div class="g">🎁</div><div class="s">20 cartões + roteiro</div></body></html>`;
 
 (async () => {
   const out = path.join(__dirname, 'pdf');
