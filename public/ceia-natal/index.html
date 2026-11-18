@@ -59,6 +59,12 @@ h1,h2,h3{font-family:"Playfair Display",Georgia,serif;line-height:1.15}
 .mock .p2{position:absolute;right:0;top:12%;width:62%;transform:rotate(5deg);z-index:1}
 .mock .badge{position:absolute;z-index:3;left:-8px;bottom:-10px;background:var(--gold);color:#3a2600;font-weight:900;border-radius:14px;padding:8px 12px;font-size:14px;line-height:1.2;box-shadow:0 8px 18px -8px rgba(0,0,0,.6)}
 .mock .badge b{display:block;font-size:22px}
+.bn{position:absolute;z-index:4;animation:bnFloat 3.4s ease-in-out infinite}
+.bn img{display:block;width:100%;height:auto;border:4px solid #fff;border-radius:12px;box-shadow:0 18px 30px -14px rgba(0,0,0,.8)}
+.bn .rib{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-weight:900;font-size:12px;letter-spacing:.5px;padding:4px 11px;border-radius:999px;white-space:nowrap;border:2px solid #fff;box-shadow:0 6px 14px -6px rgba(0,0,0,.6)}
+.mock .bn{right:-26px;bottom:-30px;width:44%}
+@keyframes bnFloat{0%,100%{transform:rotate(7deg) translateY(0)}50%{transform:rotate(4deg) translateY(-6px)}}
+@media (prefers-reduced-motion:reduce){.bn{animation:none;transform:rotate(6deg)}}
 /* faixa */
 .strip{background:var(--green);color:#fff;text-align:center;font-weight:800;padding:10px 16px;font-size:15px}
 .strip b{color:var(--gold)}
@@ -202,6 +208,9 @@ footer{text-align:center;color:var(--muted);font-size:12.8px;padding:24px 16px c
   .mpic .b{transform:rotate(5deg) translateX(-14px) translateY(-10px);opacity:.95}
   .mpic .badge{position:absolute;z-index:3;right:calc(50% - 150px);bottom:6px;background:var(--gold);color:#3a2600;font-weight:900;border-radius:12px;padding:6px 10px;font-size:12.5px;line-height:1.15;box-shadow:0 8px 18px -8px rgba(0,0,0,.6)}
   .mpic .badge b{display:block;font-size:17px}
+  .mpic .bn{left:calc(50% - 168px);bottom:2px;width:86px}
+  .mpic .bn img{border-width:3px;border-radius:9px;width:100%;box-shadow:0 14px 24px -12px rgba(0,0,0,.8)}
+  .mpic .bn .rib{font-size:10.5px;padding:3px 8px;top:-11px}
   body{font-size:16px}
   .top{padding:16px 16px 26px}
   .hero{grid-template-columns:1fr;gap:0}
@@ -226,7 +235,7 @@ footer{text-align:center;color:var(--muted);font-size:12.8px;padding:24px 16px c
     <span class="tag">🎄 NATAL 2026 · KIT DIGITAL</span>
     <h1>Ceia de Natal completa <em>a partir de R$ 15</em> por pessoa</h1>
     <p class="sub">3 cardápios prontos para 8 pessoas, com <b>lista de compras, receitas passo a passo e cronograma</b>. Você sabe quanto vai gastar antes de sair de casa.</p>
-    <div class="mpic" aria-hidden="true"><img class="a" src="/ceia-natal/kit/capa.jpg" alt="" width="816" height="1152"><img class="b" src="/ceia-natal/kit/lista.jpg" alt="" width="816" height="1152"><span class="badge">8 pessoas por<b>R$ 113,64</b></span></div>
+    <div class="mpic" aria-hidden="true"><img class="a" src="/ceia-natal/kit/capa.jpg" alt="" width="816" height="1152"><img class="b" src="/ceia-natal/kit/lista.jpg" alt="" width="816" height="1152"><span class="badge">8 pessoas por<b>R$ 113,64</b></span><span class="bn"><img src="/ceia-natal/kit/amigo-secreto.png" alt="Bônus: Kit de Brincadeiras para Amigo Secreto" width="600" height="600"><span class="rib">🎁 + BÔNUS</span></span></div>
     <div class="buybox" id="buybox">
       <div class="pr"><span class="pv">R$ 19,90</span><span class="px">pagamento único · Pix ou cartão</span></div>
       <span class="cd">⏳ <span class="dias">Faltam poucos dias</span> para o Natal — compre até 21/12 para seguir o cronograma com calma</span>
@@ -239,6 +248,7 @@ footer{text-align:center;color:var(--muted);font-size:12.8px;padding:24px 16px c
     <img class="p1" src="/ceia-natal/kit/capa.jpg" alt="Capa do kit Ceia de Natal Econômica" width="816" height="1152">
     <img class="p2" src="/ceia-natal/kit/lista.jpg" alt="Página da lista de compras do kit" width="816" height="1152" loading="lazy">
     <span class="badge">8 pessoas por<b>R$ 113,64</b></span>
+    <span class="bn"><img src="/ceia-natal/kit/amigo-secreto.png" alt="Bônus: Kit de Brincadeiras para Amigo Secreto" width="600" height="600" loading="lazy"><span class="rib">🎁 + BÔNUS</span></span>
   </div></div>
 </div></header>
 
