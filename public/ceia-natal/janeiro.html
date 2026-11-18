@@ -9,9 +9,9 @@
 <link rel="icon" href="/ceia-natal/arvore.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<script>
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","1650097203249181");fbq("track","PageView");fbq("track","ViewContent",{content_name:"upsell-janeiro",value:37,currency:"BRL"});
-</script>
+<!-- Pixel da Utmify (mesmo código da página de vendas) -->
+<script>window.pixelId = "6afc82174644ce5acc18fcea";</script>
+<script src="https://cdn.utmify.com.br/scripts/pixel/pixel.js" async defer></script>
 <style>
 :root{--red:#B3261E;--green:#1F6B3A;--green2:#16502B;--cream:#FFF8EC;--gold:#FFC93C;--ink:#2B2320;--muted:#6B625C;--line:#EADFCC;--bg:#FFFCF6}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -32,7 +32,10 @@ h2{font-size:clamp(23px,3.6vw,31px);margin:38px 0 10px;text-align:center;color:v
 .box{background:#fff;border:3px solid var(--gold);border-radius:18px;padding:18px;margin:22px auto 0;max-width:520px;text-align:center;box-shadow:0 16px 30px -18px rgba(0,0,0,.5)}
 .box .pv{font-size:46px;font-weight:900;color:var(--green);line-height:1}
 .box .px{color:var(--muted);font-size:14px;font-weight:700;margin-top:4px}
-#hotmart-sales-funnel{margin-top:12px;min-height:60px}
+cakto-upsell-buttons{display:block;margin-top:14px}
+cakto-upsell-accept,cakto-upsell-reject{display:block}
+cakto-upsell-accept::part(button){width:100%;background:linear-gradient(180deg,#2E8B4E,#1F6B3A);color:#fff;font-family:Nunito,system-ui,Arial,sans-serif;font-weight:900;font-size:17px;letter-spacing:.4px;padding:15px 18px;border:0;border-radius:999px;box-shadow:0 10px 22px -8px rgba(22,80,43,.7),inset 0 -3px 0 rgba(0,0,0,.18);cursor:pointer}
+cakto-upsell-reject::part(button){width:100%;background:transparent;color:#6B625C;font-family:Nunito,system-ui,Arial,sans-serif;font-weight:700;font-size:14px;text-decoration:underline;border:0;padding:12px 8px 4px;cursor:pointer}
 .note{font-size:12.8px;color:var(--muted);margin-top:8px}
 .inc{background:#fff;border:1px solid var(--line);border-radius:18px;padding:6px 18px;margin-top:14px}
 .inc div{display:flex;gap:13px;padding:12px 0;border-bottom:1px solid var(--line)}
@@ -64,9 +67,12 @@ footer{text-align:center;color:var(--muted);font-size:12.8px;padding:24px 16px 4
 <main>
   <div class="box">
     <div class="pv">R$ 37</div>
-    <div class="px">pagamento único · um clique, sem digitar o cartão de novo</div>
-    <div id="hotmart-sales-funnel"></div>
-    <p class="note">🛡️ Garantia de 7 dias pela Hotmart, como na Ceia.</p>
+    <div class="px">pagamento único · no cartão é um clique, sem digitar de novo</div>
+    <cakto-upsell-buttons>
+      <cakto-upsell-accept bg-color="#1F6B3A" text-color="#ffffff" upsell-accept-url="https://nexopoint.com.br/ceia-natal/obrigado" offer-id="kkgbc6s" app-base-url="https://app.cakto.com.br" offer-type="upsell" upsell-reject-url="https://nexopoint.com.br/ceia-natal/listas-janeiro">SIM, QUERO O JANEIRO SEM DÍVIDA</cakto-upsell-accept>
+      <cakto-upsell-reject upsell-reject-url="https://nexopoint.com.br/ceia-natal/listas-janeiro">Não, obrigado(a). Quero só a Ceia.</cakto-upsell-reject>
+    </cakto-upsell-buttons>
+    <p class="note">🛡️ Garantia de 7 dias pela Cakto, como na Ceia.</p>
   </div>
 
   <h2>Quanto custa o mês</h2>
@@ -94,12 +100,11 @@ footer{text-align:center;color:var(--muted);font-size:12.8px;padding:24px 16px 4
     <figure><img src="/ceia-natal/kit/jan-receita.jpg" alt="Receitas" loading="lazy" width="816" height="1152"><figcaption>Receitas passo a passo</figcaption></figure>
   </div>
 
-  <div class="gar"><i>🛡️</i><p><b>Garantia de 7 dias</b><span>Se não gostar, peça o reembolso pela Hotmart e receba 100% do valor de volta.</span></p></div>
+  <div class="gar"><i>🛡️</i><p><b>Garantia de 7 dias</b><span>Se não gostar, peça o reembolso pela Cakto e receba 100% do valor de volta.</span></p></div>
 </main>
 <footer>Janeiro sem Dívida · Cardápio de referência, não é orientação nutricional individual. Valores variam por região.</footer>
 
-<!-- HOTMART - Sales Funnel Widget -->
-<script src="https://checkout.hotmart.com/lib/hotmart-checkout-elements.js"></script>
-<script>checkoutElements.init('salesFunnel').mount('#hotmart-sales-funnel')</script>
+<!-- Cakto: botões de upsell de um clique -->
+<script type="text/javascript" src="https://caktoscripts.nyc3.cdn.digitaloceanspaces.com/upsell.js"></script>
 </body>
 </html>
