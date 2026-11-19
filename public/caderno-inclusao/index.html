@@ -19,7 +19,9 @@
     if (!event.persisted && !interacted && !location.hash) {
       window.scrollTo({ top: 0, behavior: "instant" });
     }
-    if ("scrollRestoration" in history) history.scrollRestoration = "auto";
+    if (!event.persisted) requestAnimationFrame(function () {
+      if (!interacted && !location.hash) window.scrollTo({ top: 0, behavior: "instant" });
+    });
   }, { once: true });
 })();
 </script>
