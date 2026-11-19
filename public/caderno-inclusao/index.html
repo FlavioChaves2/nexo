@@ -326,6 +326,17 @@ footer.site b{color:#fff}
   .pflow li:not(:last-child):after{left:auto;right:-13px;top:31px;bottom:auto;width:12px;height:2px}
   .pben{grid-template-columns:1fr 1fr;column-gap:28px}
 }
+/* Provas sociais */
+.depo h2{max-width:720px}
+.dgrid{display:grid;gap:16px;margin-top:22px}
+.dcard{background:#fff;border:1px solid var(--ln);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.dcard q{display:block;padding:16px 18px 6px;font-family:Fraunces,Georgia,serif;color:var(--gr);font-size:17.5px;line-height:1.35;quotes:"“" "”"}
+.dcard .who{padding:0 18px 12px;font-size:13.5px;color:var(--mut)}.dcard .who b{color:var(--te2)}
+.dcard .shot{display:block;height:400px;overflow:hidden;border-top:1px solid var(--ln);background:#111}
+.dcard .shot img{width:100%;height:100%;object-fit:cover;object-position:top}
+.dstars{color:var(--te);letter-spacing:2px;font-size:15px}
+@media(max-width:899px){.dgrid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin:22px -18px 0;padding:0 18px 10px;scrollbar-width:none}.dgrid::-webkit-scrollbar{display:none}.dcard{flex:0 0 84%;scroll-snap-align:center}}
+@media(min-width:900px){.dgrid{grid-template-columns:repeat(4,1fr)}.dcard q{font-size:16px}.dcard .shot{height:360px}}
 </style>
 
 <!-- Rastreamento: Utmify (UTMs). O pixel da Utmify só carrega quando UTMIFY_PIXEL_ID estiver preenchido no fim da página. -->
@@ -575,6 +586,22 @@ footer.site b{color:#fff}
         <li>Avaliação individual do estudante</li>
       </ul></div>
     </div>
+  </div>
+</section>
+
+<!-- PROVAS SOCIAIS (prints reais enviados por compradoras, com autorização) -->
+<section class="depo" style="padding-bottom:0">
+  <div class="wrap">
+    <span class="ey">Quem usou, conta</span>
+    <h2>Professoras que já estão usando o Caderno na rotina</h2>
+    <p class="lead">Mensagens reais enviadas por quem comprou, compartilhadas com autorização.</p>
+    <div class="dgrid">
+      <figure class="dcard rv" style="margin:0"><q>Uma ficha ajudou a preencher a outra. Na devolutiva eu já tinha as observações separadas.</q><figcaption class="who"><b>Juliana</b> · professora que usou o Caderno</figcaption><a class="shot" href="/caderno-inclusao/img/depo-juliana.webp" target="_blank" rel="noopener"><img src="/caderno-inclusao/img/depo-juliana.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Juliana e foto da ficha Devolutiva à família preenchida"></a></figure>
+      <figure class="dcard rv" style="margin:0"><q>Antes minhas anotações ficavam espalhadas. Na hora de revisar, ajudou bastante.</q><figcaption class="who"><b>Fernanda</b> · professora que usou o Caderno</figcaption><a class="shot" href="/caderno-inclusao/img/depo-fernanda.webp" target="_blank" rel="noopener"><img src="/caderno-inclusao/img/depo-fernanda.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Fernanda e foto da ficha Observação semanal impressa e preenchida"></a></figure>
+      <figure class="dcard rv" style="margin:0"><q>Fui olhando o exemplo preenchido e consegui fazer o meu.</q><figcaption class="who"><b>Patrícia</b> · professora que usou o Caderno</figcaption><a class="shot" href="/caderno-inclusao/img/depo-patricia.webp" target="_blank" rel="noopener"><img src="/caderno-inclusao/img/depo-patricia.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Patrícia e foto de duas fichas preenchidas"></a></figure>
+      <figure class="dcard rv" style="margin:0"><q>Consegui editar no Word e manter a sequência das fichas do jeito da minha escola.</q><figcaption class="who"><b>Rafael</b> · professor que usou o Caderno</figcaption><a class="shot" href="/caderno-inclusao/img/depo-rafael.webp" target="_blank" rel="noopener"><img src="/caderno-inclusao/img/depo-rafael.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com o professor Rafael sobre editar as fichas no Word"></a></figure>
+    </div>
+    <p class="swipe">← arraste para ver mais →</p>
   </div>
 </section>
 
