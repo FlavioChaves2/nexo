@@ -174,7 +174,7 @@ header.hero{padding:22px 0 44px;background:linear-gradient(180deg,#fff 0%,var(--
 .hsub{grid-area:d}
 @media(max-width:899px){
   header.hero{padding:16px 0 30px}
-  .hero .grid{grid-template-areas:"a" "price" "buy" "preview" "s" "includes" "ticks" "micro" "d";gap:12px}
+  .hero .grid{grid-template-areas:"a" "price" "buy" "preview" "s" "includes" "d";gap:12px}
   .ha .ey{font-size:12px;margin-bottom:8px;letter-spacing:.08em}
   .ha h1{font-size:clamp(26px,7vw,34px)}
   .stack{max-width:min(100%,272px)}
@@ -385,107 +385,41 @@ footer.site b{color:#fff}
       <h1>Do registro da aula à devolutiva para a família, com mais organização.</h1>
     </div>
     <div class="hsub">
-      <p class="sub">Fichas editáveis, exemplos preenchidos e um passo a passo para organizar observações, registrar os apoios utilizados e preparar devolutivas claras, sem começar cada documento do zero.</p>
+      <p class="sub">Use as fichas do Caderno de Inclusão Escolar para registrar o que funcionou em aula e preparar a devolutiva para a família.</p>
     </div>
     <div class="hb">
       <div class="price-inline"><div class="price-before">De <s>R$ 89,00</s></div><div class="price-current"><b>R$ 39,00</b><span>em pagamento único</span></div></div>
-      <p class="incl">✅ Inclui 4 fichas editáveis + 2 casos preenchidos + bônus gratuito com 80 frases para relatórios e devolutivas.</p>
+      <p class="incl">4 fichas editáveis, 2 exemplos preenchidos e 80 frases para relatórios.</p>
       <a class="btn buy" href="#oferta" data-cta="hero">EU QUERO</a>
       <div class="preview-wrap"><a class="hero-preview" href="#demonstracao">Ver uma ficha preenchida</a></div>
-      <ul class="ticks">
-        <li>A sequência completa: registro, planejamento, revisão e devolutiva</li>
-        <li>Exemplos fictícios preenchidos, do registro à devolutiva</li>
-        <li>Edita no Word ou LibreOffice e imprime em preto e branco</li>
-      </ul>
-      <p class="micro">Arquivos digitais em DOCX e PDF A4. Pagamento único. Acesso enviado por e-mail depois da compra.</p>
+      
     </div>
     <div class="stack mock"><img src="/caderno-inclusao/img/mockup.webp" width="828" height="685" alt="Caixa do Caderno de Inclusão Escolar com as fichas e o bônus Banco de 80 Frases" fetchpriority="high"></div>
   </div>
 </header>
 
 <main>
-<!-- 02 PROBLEMA -->
-<section>
-  <div class="wrap">
-    <span class="ey">O dia a dia</span>
-    <h2>Suas anotações podem trabalhar a seu favor.</h2>
-    <p class="lead">Quem acompanha estudantes com necessidades específicas conhece estas situações:</p>
-    <div class="cards3">
-      <div class="pcard rv"><div class="ic">1</div><p>Você anota o que aconteceu na aula num caderno, num papel solto ou no celular. Na hora do relatório, precisa procurar tudo de novo.</p></div>
-      <div class="pcard rv"><div class="ic">2</div><p>A mesma informação é reescrita no planejamento, na revisão do bimestre e no recado para a família.</p></div>
-      <div class="pcard rv"><div class="ic">3</div><p>Na reunião com a família, falta um registro simples mostrando o que foi feito, qual apoio funcionou e qual é o próximo passo.</p></div>
-    </div>
-    <div class="sol rv">
-      <h3>Uma sequência, não documentos soltos</h3>
-      <p>Uma observação feita durante a aula pode servir de base para acompanhar estratégias e comunicar o que foi realizado. O Caderno conecta essas etapas com campos objetivos e exemplos fáceis de adaptar.</p>
-    </div>
-    <div class="bens">
-      <div class="ben rv"><span class="n">1</span><p>Registre o que aconteceu na aula, qual apoio foi utilizado e o próximo passo.</p></div>
-      <div class="ben rv"><span class="n">2</span><p>Encontre rapidamente a observação que fundamenta a devolutiva.</p></div>
-      <div class="ben rv"><span class="n">3</span><p>Adapte modelos editáveis à rotina e às orientações da sua escola.</p></div>
-      <div class="ben rv"><span class="n">4</span><p>Veja exemplos fictícios de preenchimento antes de usar.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- 03 DEMONSTRAÇÃO -->
-<section class="demo" id="demonstracao">
-  <div class="wrap">
-    <div class="center">
-      <span class="ey">Veja como funciona</span>
-      <h2>Da anotação da semana à devolutiva</h2>
-      <p class="lead">As páginas reais do Caderno, preenchidas com um exemplo 100% fictício. Cada etapa usa o que foi registrado na anterior.</p>
-      <ol class="seq" aria-label="Etapas do Caderno"><li><span>Registro</span></li><li><span>Planejamento</span></li><li><span>Revisão</span></li><li><span>Devolutiva</span></li></ol>
-    </div>
-    <div class="vid rv">
-      <video id="vdemo" muted playsinline loop controls preload="none" poster="/caderno-inclusao/video/poster.webp" width="720" height="1018" aria-label="Vídeo sem som: as quatro fichas sendo preenchidas, campo por campo, com o exemplo fictício"><source src="/caderno-inclusao/video/preenchimento.mp4" type="video/mp4"></video>
-      <p>30 segundos, sem som · as 4 fichas sendo preenchidas</p>
-    </div>
-    <p class="center" style="margin:28px 0 0">Toque em uma ficha para ampliar.</p>
-    <div class="flow">
-      <div class="step rv">
-        <div class="lbl"><b>1</b><span>Registro · Observação semanal</span></div>
-        <figure><img src="/caderno-inclusao/img/ficha1.webp" width="900" height="1273" loading="lazy" alt="Ficha de observação semanal preenchida: fatos de cada dia, atividade, apoio usado e resultado" data-zoom>
-          <figcaption>Você anota fatos de cada dia: a atividade, o apoio usado e o resultado. No fim da semana, resume o que funcionou.</figcaption></figure>
+<section id="demonstracao"><div id="amostra" class="wrap"><div class="sample rv">
+      <img src="/caderno-inclusao/img/ficha1.webp" width="900" height="1273" loading="lazy" alt="Amostra: ficha de observação semanal preenchida com exemplo fictício">
+      <div>
+        <span class="ey">Amostra gratuita</span>
+        <h2>Veja uma ficha preenchida</h2>
+        <p>Veja como registrar a atividade, o apoio usado e o resultado em uma semana de aula. A amostra usa um caso fictício.</p>
+        <a class="btn ghost" href="/caderno-inclusao/amostra-ficha-observacao.pdf" target="_blank" rel="noopener" data-amostra>Baixar amostra em PDF</a>
+        <p class="micro">1 página · acesso sem cadastro</p>
       </div>
-      <div class="step rv">
-        <div class="lbl"><b>2</b><span>Planejamento · Objetivo e apoio</span></div>
-        <figure><img src="/caderno-inclusao/img/ficha2.webp" width="900" height="1273" loading="lazy" alt="Ficha de objetivo e apoio preenchida: objetivo observável, base nas observações e apoios marcados" data-zoom>
-          <figcaption>Com base nas observações, você define um objetivo simples, marca os apoios e como vai acompanhar.</figcaption></figure>
-      </div>
-      <div class="step rv">
-        <div class="lbl"><b>3</b><span>Revisão · Revisão do período</span></div>
-        <figure><img src="/caderno-inclusao/img/ficha3.webp" width="900" height="1273" loading="lazy" alt="Ficha de revisão do período preenchida: como está o objetivo, o que as observações mostram, o que manter e o que ajustar" data-zoom>
-          <figcaption>No fim do período, você relê os registros, marca como está o objetivo e decide o que manter e o que ajustar.</figcaption></figure>
-      </div>
-      <div class="step rv">
-        <div class="lbl"><b>4</b><span>Devolutiva · À família</span></div>
-        <figure><img src="/caderno-inclusao/img/ficha4.webp" width="900" height="1273" loading="lazy" alt="Ficha de devolutiva à família preenchida, em linguagem simples" data-zoom>
-          <figcaption>A devolutiva sai da revisão, em linguagem simples: o que já foi conquistado, o próximo foco e como a família pode ajudar.</figcaption></figure>
-      </div>
-    </div>
-    <p class="swipe">← arraste para ver as 4 etapas →</p>
-    <p class="center" style="margin-top:14px"><span class="fic">Exemplo fictício · nenhum dado real de estudante</span></p>
-    <div class="cta-mid">
-      <a class="btn buy" href="#oferta" data-cta="demo">COMPRAR AGORA</a>
-      <p class="micro center">DOCX editável + PDF A4 · pagamento único</p>
-    </div>
-  </div>
-</section>
-
+    </div><div class="cta-mid"><a class="btn buy" href="#oferta" data-cta="demo">Quero as fichas editáveis</a></div></div></section>
 <!-- PROVAS SOCIAIS (prints reais enviados por compradoras, com autorização) -->
-<section class="depo" id="depoimentos" style="padding-bottom:0">
+<section class="depo" id="depoimentos">
   <div class="wrap">
-    <span class="ey">Quem usou, aprova</span>
-    <h2>Como o Caderno ajudou na rotina de sala de aula</h2>
-    <p class="lead">Mensagens reais enviadas por quem comprou, compartilhadas com autorização.</p>
+    <h2>O que os professores contam</h2>
     <div class="dcar">
       <div class="depo-nav"><button type="button" id="depo-prev" aria-label="Depoimento anterior">←</button><span id="depo-count" aria-live="polite"></span><button type="button" id="depo-next" aria-label="Próximo depoimento">→</button></div>
       <div class="dtrack" id="dtrack">
-      <figure class="dcard"><q>Uma ficha ajudou a preencher a outra. Na devolutiva eu já tinha as observações separadas.</q><figcaption class="who"><b>Juliana</b> · professora que usou o Caderno</figcaption><img src="/caderno-inclusao/img/depo-juliana.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Juliana e foto da ficha Devolutiva à família preenchida"></figure>
-      <figure class="dcard"><q>Antes minhas anotações ficavam espalhadas. Na hora de revisar, ajudou bastante.</q><figcaption class="who"><b>Fernanda</b> · professora que usou o Caderno</figcaption><img src="/caderno-inclusao/img/depo-fernanda.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Fernanda e foto da ficha Observação semanal impressa e preenchida"></figure>
-      <figure class="dcard"><q>Fui olhando o exemplo preenchido e consegui fazer o meu.</q><figcaption class="who"><b>Patrícia</b> · professora que usou o Caderno</figcaption><img src="/caderno-inclusao/img/depo-patricia.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Patrícia e foto de duas fichas preenchidas"></figure>
-      <figure class="dcard"><q>Consegui editar no Word e manter a sequência das fichas do jeito da minha escola.</q><figcaption class="who"><b>Rafael</b> · professor que usou o Caderno</figcaption><img src="/caderno-inclusao/img/depo-rafael.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com o professor Rafael sobre editar as fichas no Word"></figure>
+      <figure class="dcard"><img src="/caderno-inclusao/img/depo-juliana.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Juliana e foto da ficha Devolutiva à família preenchida"></figure>
+      <figure class="dcard"><img src="/caderno-inclusao/img/depo-fernanda.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Fernanda e foto da ficha Observação semanal impressa e preenchida"></figure>
+      <figure class="dcard"><img src="/caderno-inclusao/img/depo-patricia.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Patrícia e foto de duas fichas preenchidas"></figure>
+      <figure class="dcard"><img src="/caderno-inclusao/img/depo-rafael.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com o professor Rafael sobre editar as fichas no Word"></figure>
       </div>
 
     </div>
@@ -516,207 +450,23 @@ footer.site b{color:#fff}
 })();
 </script>
 
-<!-- 07 AMOSTRA GRATUITA -->
-<section id="amostra" style="padding-bottom:0">
-  <div class="wrap">
-    <div class="sample rv">
-      <img src="/caderno-inclusao/img/ficha1.webp" width="900" height="1273" loading="lazy" alt="Amostra: ficha de observação semanal preenchida com exemplo fictício">
-      <div>
-        <span class="ey">Amostra gratuita</span>
-        <h2>Veja uma ficha antes de comprar</h2>
-        <p>Baixe a Ficha 1, de observação semanal, preenchida com o exemplo fictício. É uma página do material, do jeito que você vai receber em PDF. Imprima, veja o tamanho dos campos e decida com calma.</p>
-        <a class="btn ghost" href="/caderno-inclusao/amostra-ficha-observacao.pdf" target="_blank" rel="noopener" data-amostra>Baixar amostra em PDF</a>
-        <p class="micro">PDF, 1 página, cerca de 180 KB. Não pedimos e-mail.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PROCESSO COMPLETO (percepção de valor) -->
-<section class="proc">
-  <div class="wrap">
-    <span class="ey">Como o Caderno funciona</span>
-    <h2>Mais do que fichas. Um processo completo para organizar o acompanhamento escolar.</h2>
-    <p class="lead">Da primeira observação à devolutiva para a família, tenha tudo organizado em uma sequência prática, com documentos editáveis que se conectam.</p>
-    <ol class="pflow">
-      <li class="rv"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/></svg></span><b>1. Observe</b><span>Registre o desenvolvimento semanal.</span></li>
-      <li class="rv"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg></span><b>2. Planeje</b><span>Organize estratégias e próximos passos.</span></li>
-      <li class="rv"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></span><b>3. Acompanhe</b><span>Revise os avanços e as dificuldades.</span></li>
-      <li class="rv"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><b>4. Comunique</b><span>Prepare devolutivas claras para a família.</span></li>
-    </ol>
-    <p class="pnote">→ O que você registra em uma etapa ajuda a preencher a próxima.</p>
-    <ul class="pben">
-      <li><b>Tudo organizado:</b> quatro fichas que funcionam juntas, evitando registros espalhados.</li>
-      <li><b>Pronto para adaptar:</b> documentos editáveis em Word e disponíveis em PDF.</li>
-      <li><b>Facilidade no preenchimento:</b> exemplos completos para orientar a utilização.</li>
-      <li><b>Reutilizável:</b> utilize os modelos ao longo do ano letivo, adaptando-os às necessidades de cada estudante.</li>
-      <li><b>Mais praticidade:</b> menos esforço organizando documentos e mais atenção ao acompanhamento pedagógico.</li>
-    </ul>
-    <p class="pquote">Você não está adquirindo apenas quatro fichas. Está levando uma forma mais simples de organizar, acompanhar e documentar o desenvolvimento dos seus alunos.</p>
-  </div>
-</section>
-
-<!-- ANTES E DEPOIS -->
-<section style="padding-bottom:0">
-  <div class="wrap">
-    <span class="ey">Antes e depois</span>
-    <h2>O mesmo trabalho, com outra organização</h2>
-    <div class="ba">
-      <div class="sem rv"><h3>Sem o Caderno</h3><ul>
-        <li>Anotações em papéis soltos, no caderno e no celular</li>
-        <li>A mesma informação reescrita no planejamento, na revisão e no recado</li>
-        <li>Devolutiva escrita de memória, na véspera da reunião</li>
-        <li>Difícil mostrar o que foi feito e o que funcionou</li>
-      </ul></div>
-      <div class="com rv"><h3>Com o Caderno</h3><ul>
-        <li>Registro da semana em um só lugar, com fatos e apoios</li>
-        <li>Objetivo definido a partir do que foi registrado</li>
-        <li>Revisão com dados das semanas, não só impressões</li>
-        <li>Devolutiva em linguagem simples, saindo da revisão</li>
-      </ul></div>
-    </div>
-  </div>
-</section>
-
-<!-- 04 O QUE ESTÁ INCLUÍDO -->
-<section id="incluido">
-  <div class="wrap">
-    <span class="ey">O que está incluído</span>
-    <h2>A sequência completa, não fichas soltas</h2>
-    <p class="lead">São quatro etapas ligadas: o que você registra na semana fundamenta o planejamento, a revisão e a devolutiva. Assim a mesma informação não precisa ser reescrita em cada documento. Todas vêm em branco, para editar, e preenchidas, para consultar.</p>
-    <div class="inc">
-      <div class="icard rv"><div class="th"><img src="/caderno-inclusao/img/ficha1-branco.webp" width="900" height="1273" loading="lazy" alt="Ficha 1 em branco"></div><div class="tx"><span class="stage">Etapa 1 · Registro</span><b>Observação semanal</b><p>Fatos de cada dia, atividade, apoio usado e resultado. Resumo da semana e próximo passo.</p><span class="fmt">DOCX + PDF</span></div></div>
-      <div class="icard rv"><div class="th"><img src="/caderno-inclusao/img/ficha2-branco.webp" width="900" height="1273" loading="lazy" alt="Ficha 2 em branco"></div><div class="tx"><span class="stage">Etapa 2 · Planejamento</span><b>Objetivo e apoio</b><p>Objetivo observável, base nas observações, apoios marcados, acompanhamento e combinados.</p><span class="fmt">DOCX + PDF</span></div></div>
-      <div class="icard rv"><div class="th"><img src="/caderno-inclusao/img/ficha3-branco.webp" width="900" height="1273" loading="lazy" alt="Ficha 3 em branco"></div><div class="tx"><span class="stage">Etapa 3 · Revisão</span><b>Revisão do período</b><p>Como está o objetivo, o que as observações mostram, o que manter e o que ajustar.</p><span class="fmt">DOCX + PDF</span></div></div>
-      <div class="icard rv"><div class="th"><img src="/caderno-inclusao/img/ficha4-branco.webp" width="900" height="1273" loading="lazy" alt="Ficha 4 em branco"></div><div class="tx"><span class="stage">Etapa 4 · Devolutiva</span><b>Devolutiva à família</b><p>Mensagem em linguagem simples, conquistas, próximo foco e como a família pode ajudar.</p><span class="fmt">DOCX + PDF</span></div></div>
-    </div>
-    <div class="extra">
-      <div class="xcard rv"><b>Dois casos fictícios completos</b><p>As 4 fichas preenchidas do começo ao fim, para você ver como cada campo é usado antes de começar.</p></div>
-      <div class="xcard rv"><b>Passo a passo de uso</b><p>Como ligar uma ficha à outra e transformar as anotações da semana em revisão e devolutiva.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- BÔNUS GRATUITO -->
-<section class="bonus" id="bonus">
-  <div class="wrap">
-    <div class="bbox rv">
-      <span class="tag">🎁 BÔNUS GRATUITO</span>
-      <div class="bgrid">
-        <div>
-          <h2>Banco de 80 Frases para Relatórios e Devolutivas Escolares</h2>
-          <p>Além das quatro fichas editáveis, você recebe gratuitamente um banco com 80 sugestões de frases para organizar registros, descrever avanços e preparar devolutivas às famílias com mais clareza e praticidade.</p>
-          <ul class="bl">
-            <li>80 sugestões organizadas por tema</li>
-            <li>PDF + DOCX editável</li>
-            <li>Aplicação prática no cotidiano escolar, com instruções para personalizar cada frase a partir das suas observações</li>
-            <li>Incluso gratuitamente na compra</li>
-          </ul>
-          <div class="bthemes" aria-label="Temas do banco de frases"><span>Participação · 15</span><span>Aprendizagem · 15</span><span>Comunicação e interação · 15</span><span>Autonomia e organização · 15</span><span>Apoios e adaptações · 10</span><span>Avanços e próximos passos · 10</span></div>
-        </div>
-        <div class="bprev">
-          <img src="/caderno-inclusao/img/bonus-capa.webp" width="720" height="1018" loading="lazy" alt="Capa do bônus Banco de 80 Frases para Relatórios e Devolutivas Escolares" data-zoom>
-          <div class="pg"><img src="/caderno-inclusao/img/bonus-pagina.webp" width="720" height="1018" loading="lazy" alt="Prévia de uma página do bônus: frases do tema Participação e envolvimento, com os campos a personalizar destacados"></div>
-          <small>Capa e trecho de uma página do arquivo que você recebe</small>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 05 COMO USAR -->
-<section style="padding-top:0">
-  <div class="wrap">
-    <span class="ey">Como usar</span>
-    <h2>Quatro passos simples</h2>
-    <div class="steps">
-      <div class="st rv"><b>Baixe os arquivos</b><p>O acesso chega no seu e-mail logo depois da compra.</p></div>
-      <div class="st rv"><b>Edite os modelos</b><p>Abra no Word ou no LibreOffice e ajuste à rotina da sua escola.</p></div>
-      <div class="st rv"><b>Registre durante as semanas</b><p>Anote fatos e apoios na Ficha 1. Defina o objetivo na Ficha 2.</p></div>
-      <div class="st rv"><b>Revise e prepare a devolutiva</b><p>No fim do período, use as Fichas 3 e 4 com o que já está registrado.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- 06 PARA QUEM É -->
-<section style="padding-top:0">
-  <div class="wrap">
-    <span class="ey">Para quem é</span>
-    <h2>Feito para a rotina da sala de aula</h2>
-    <div class="who">
-      <div class="wcol yes rv"><h3>É para você se</h3><ul>
-        <li>Você é professor(a) regente do Ensino Fundamental I</li>
-        <li>Você atua no AEE ou na sala de recursos</li>
-        <li>Você coordena e quer um modelo comum para a equipe</li>
-        <li>Você quer organizar registros que hoje ficam espalhados</li>
-      </ul></div>
-      <div class="wcol no rv"><h3>Não é</h3><ul>
-        <li>Curso ou material de diagnóstico</li>
-        <li>Plataforma ou sistema de gestão escolar</li>
-        <li>Substituto dos documentos oficiais exigidos pela sua rede</li>
-        <li>Avaliação individual do estudante</li>
-      </ul></div>
-    </div>
-  </div>
-</section>
-
 <!-- 08 OFERTA -->
 <section class="offer" id="oferta">
   <div class="wrap center">
-    <span class="ey" style="color:#F3B79C">Oferta</span>
-    <h2>Tudo o que você precisa para começar a registrar com mais clareza</h2>
+    <h2>Caderno de Inclusão Escolar</h2>
     <div class="ocard" style="text-align:left">
-      <img class="combo" src="/caderno-inclusao/img/mockup.webp" width="828" height="685" loading="lazy" alt="As fichas do Caderno de Inclusão Escolar e a capa do bônus Banco de 80 Frases">
-      <div class="nm">Caderno de Inclusão Escolar</div>
-      <p class="grp">A sequência completa, em 4 etapas</p>
       <ul>
-        <li><b>Registro:</b> ficha de observação semanal</li>
-        <li><b>Planejamento:</b> ficha de objetivo e apoio</li>
-        <li><b>Revisão:</b> ficha de revisão do período</li>
-        <li><b>Devolutiva:</b> ficha de devolutiva à família</li>
-        <li>2 casos fictícios preenchidos + passo a passo de uso</li>
-        <li>DOCX editável + PDF A4 para imprimir</li>
-        <li class="bon"><b>Bônus grátis:</b> Banco de 80 Frases para Relatórios e Devolutivas Escolares (PDF + DOCX)</li>
+        <li>4 fichas para observar, planejar, revisar e preparar a devolutiva.</li>
+        <li>Modelos para editar no Word ou LibreOffice e imprimir em PDF A4.</li>
+        <li>2 casos preenchidos, passo a passo e bônus com 80 frases.</li>
       </ul>
       <div class="pr"><s>De R$ 89,00</s><b>R$ 39,00</b><span>pagamento único · não é assinatura · bônus incluído</span></div>
-      <a class="btn buy" href="#oferta" data-cta="oferta" id="ctaOferta">Quero meu Caderno</a>
-      <p class="safe">🔒 Compra segura pela Cakto · ⚡ Acesso imediato · Pix ou cartão</p>
+      <a class="btn buy" href="#oferta" data-cta="oferta" id="ctaOferta">COMPRAR AGORA</a>
+      <p class="safe">Pix ou cartão pela Cakto. Acesso por e-mail após a confirmação. Reembolso em até 7 dias.</p>
     </div>
   </div>
 </section>
 
-<!-- DEPOIS DA COMPRA -->
-<section style="padding-bottom:0">
-  <div class="wrap">
-    <span class="ey">Depois da compra</span>
-    <h2>Como você recebe</h2>
-    <div class="after">
-      <div class="st2 rv"><i>1</i><b>Pague com Pix ou cartão</b><span>O pagamento é feito na Cakto, em ambiente seguro.</span></div>
-      <div class="st2 rv"><i>2</i><b>Receba o acesso no e-mail</b><span>Você recebe o link da área de membros no e-mail informado na compra.</span></div>
-      <div class="st2 rv"><i>3</i><b>Baixe e comece</b><span>Veja o vídeo de 30 segundos, baixe as fichas, os exemplos e o bônus.</span></div>
-    </div>
-    <div class="gar rv"><span class="ic" aria-hidden="true">🛡️</span><div><b>7 dias para desistir</b><p>Se não for o que você esperava, peça o reembolso em até 7 dias pela Cakto ou pelo nosso e-mail, como prevê o direito de arrependimento do Código de Defesa do Consumidor.</p></div></div>
-  </div>
-</section>
-
-<!-- 09 FAQ -->
-<section id="faq">
-  <div class="wrap">
-    <div class="center"><span class="ey">Dúvidas</span><h2>Perguntas frequentes</h2></div>
-    <div class="faq">
-      <details><summary>Os arquivos são editáveis?</summary><p>Sim. As 4 fichas vêm em DOCX, que você edita no Word ou no LibreOffice (gratuito). Os casos fictícios preenchidos e o passo a passo vêm em PDF, só para leitura e consulta. O bônus Banco de 80 Frases vem em PDF e em DOCX editável.</p></details>
-      <details><summary>Posso imprimir?</summary><p>Sim. Os arquivos estão em formato A4 e funcionam bem impressos em preto e branco.</p></details>
-      <details><summary>Serve para todas as escolas?</summary><p>Os modelos são adaptáveis, mas devem ser ajustados às orientações e exigências da sua rede de ensino. Eles apoiam o trabalho docente e não substituem os documentos oficiais pedidos pela escola.</p></details>
-      <details><summary>Preciso cadastrar dados dos alunos?</summary><p>Não. Os arquivos ficam no seu computador ou impressos. Nesta página não pedimos nenhum dado de estudante. Nas fichas, a orientação é usar iniciais ou um código no lugar do nome.</p></details>
-      <details><summary>Serve para estudantes com TDAH ou autismo?</summary><p>As fichas servem para registrar observações e apoios de qualquer estudante que precise de acompanhamento, com ou sem laudo. Elas não fazem diagnóstico nem substituem a avaliação de profissionais.</p></details>
-      <details><summary>Como recebo depois de comprar? O que vem na compra?</summary><p>O pagamento é feito pela Cakto, com Pix ou cartão. Depois da confirmação, você recebe no e-mail informado na compra o acesso à área de membros, onde estão todos os arquivos para baixar. A compra inclui:</p><ul><li>4 fichas editáveis em PDF e DOCX</li><li>2 exemplos fictícios preenchidos</li><li>Passo a passo de utilização</li><li>Bônus gratuito: Banco de 80 Frases para Relatórios e Devolutivas Escolares (PDF + DOCX)</li></ul></details>
-      <details><summary>E se eu me arrepender?</summary><p>Você pode pedir o cancelamento e o reembolso em até 7 dias depois da compra, como prevê o direito de arrependimento do Código de Defesa do Consumidor (art. 49). O pedido é feito pela Cakto ou pelo nosso e-mail.</p></details>
-      <details><summary>Como falo com vocês?</summary><p>Pelo e-mail <a href="mailto:contato@nexopoint.com.br">contato@nexopoint.com.br</a>.</p></details>
-    </div>
-    <p class="fecho" style="padding:34px 0 0">Menos tempo procurando anotações. Mais clareza para conversar com a família.</p>
-    <div class="cta-mid"><a class="btn buy" href="#oferta" data-cta="faq"><span>Quero meu Caderno <span class="nw">· R$ 39,00</span></span></a></div>
-  </div>
-</section>
 </main>
 
 <!-- 10 RODAPÉ -->
