@@ -344,16 +344,10 @@ footer.site b{color:#fff}
 .dcard{flex:0 0 100%;scroll-snap-align:start;margin:0;background:#fff;border:1px solid var(--ln);border-radius:18px;overflow:hidden}
 .dcard q{display:block;padding:14px 16px 4px;font-family:Fraunces,Georgia,serif;color:var(--gr);font-size:17px;line-height:1.35;quotes:"“" "”"}
 .dcard .who{padding:0 16px 10px;font-size:13.5px;color:var(--mut)}.dcard .who b{color:var(--te2)}
-.dcard .conversation{display:block;width:calc(100% - 32px);margin:0 16px 16px;padding:0;background:white;color:var(--te2);border:1px solid var(--ln);border-radius:12px;overflow:hidden;font:inherit;font-weight:700;cursor:zoom-in}
-.conversation img{display:block;width:100%;height:190px;object-fit:cover;object-position:center 28%}
-.conversation span{display:block;padding:12px}
+.dcard img{display:block;width:calc(100% - 32px);max-width:560px;height:auto;margin:0 auto 16px;border-radius:12px}
 .depo-nav{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-bottom:10px}
 .depo-nav button{width:44px;height:44px;border:1px solid var(--ln);border-radius:50%;background:white;color:var(--gr);font-size:22px;cursor:pointer}
 .depo-nav button:disabled{opacity:.4}
-#conversation-dialog{box-sizing:border-box;width:min(560px,96vw);max-height:90vh;padding:0 12px 12px;border:0;border-radius:12px;overflow:auto}
-#conversation-dialog::backdrop{background:rgb(0 0 0 / .75)}
-#conversation-dialog button{position:sticky;top:0;display:block;margin-left:auto;min-height:44px;padding:0 16px;background:white;color:var(--gr);border:1px solid var(--ln);border-radius:8px}
-#conversation-dialog img{display:block;width:100%;height:auto}
 @media(prefers-reduced-motion:reduce){.dtrack{scroll-behavior:auto}}
 @media(min-width:760px){.dcard{flex-basis:calc(50% - 8px)}}
 @media(min-width:1080px){.dcard{flex-basis:calc(33.333% - 11px)}}
@@ -475,12 +469,12 @@ footer.site b{color:#fff}
     <div class="dcar">
       <div class="depo-nav"><button type="button" id="depo-prev" aria-label="Depoimento anterior">←</button><span id="depo-count" aria-live="polite"></span><button type="button" id="depo-next" aria-label="Próximo depoimento">→</button></div>
       <div class="dtrack" id="dtrack">
-      <figure class="dcard"><q>Uma ficha ajudou a preencher a outra. Na devolutiva eu já tinha as observações separadas.</q><figcaption class="who"><b>Juliana</b> · professora que usou o Caderno</figcaption><button type="button" class="conversation" aria-label="Ampliar conversa de Juliana"><img src="/caderno-inclusao/img/depo-juliana.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Juliana e foto da ficha Devolutiva à família preenchida"><span>Ampliar conversa</span></button></figure>
-      <figure class="dcard"><q>Antes minhas anotações ficavam espalhadas. Na hora de revisar, ajudou bastante.</q><figcaption class="who"><b>Fernanda</b> · professora que usou o Caderno</figcaption><button type="button" class="conversation" aria-label="Ampliar conversa de Fernanda"><img src="/caderno-inclusao/img/depo-fernanda.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Fernanda e foto da ficha Observação semanal impressa e preenchida"><span>Ampliar conversa</span></button></figure>
-      <figure class="dcard"><q>Fui olhando o exemplo preenchido e consegui fazer o meu.</q><figcaption class="who"><b>Patrícia</b> · professora que usou o Caderno</figcaption><button type="button" class="conversation" aria-label="Ampliar conversa de Patrícia"><img src="/caderno-inclusao/img/depo-patricia.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Patrícia e foto de duas fichas preenchidas"><span>Ampliar conversa</span></button></figure>
-      <figure class="dcard"><q>Consegui editar no Word e manter a sequência das fichas do jeito da minha escola.</q><figcaption class="who"><b>Rafael</b> · professor que usou o Caderno</figcaption><button type="button" class="conversation" aria-label="Ampliar conversa de Rafael"><img src="/caderno-inclusao/img/depo-rafael.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com o professor Rafael sobre editar as fichas no Word"><span>Ampliar conversa</span></button></figure>
+      <figure class="dcard"><q>Uma ficha ajudou a preencher a outra. Na devolutiva eu já tinha as observações separadas.</q><figcaption class="who"><b>Juliana</b> · professora que usou o Caderno</figcaption><img src="/caderno-inclusao/img/depo-juliana.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Juliana e foto da ficha Devolutiva à família preenchida"></figure>
+      <figure class="dcard"><q>Antes minhas anotações ficavam espalhadas. Na hora de revisar, ajudou bastante.</q><figcaption class="who"><b>Fernanda</b> · professora que usou o Caderno</figcaption><img src="/caderno-inclusao/img/depo-fernanda.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Fernanda e foto da ficha Observação semanal impressa e preenchida"></figure>
+      <figure class="dcard"><q>Fui olhando o exemplo preenchido e consegui fazer o meu.</q><figcaption class="who"><b>Patrícia</b> · professora que usou o Caderno</figcaption><img src="/caderno-inclusao/img/depo-patricia.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Patrícia e foto de duas fichas preenchidas"></figure>
+      <figure class="dcard"><q>Consegui editar no Word e manter a sequência das fichas do jeito da minha escola.</q><figcaption class="who"><b>Rafael</b> · professor que usou o Caderno</figcaption><img src="/caderno-inclusao/img/depo-rafael.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com o professor Rafael sobre editar as fichas no Word"></figure>
       </div>
-      <dialog id="conversation-dialog" aria-label="Conversa ampliada"><button type="button" autofocus>Fechar</button><img alt=""></dialog>
+
     </div>
   </div>
 </section>
@@ -506,18 +500,6 @@ footer.site b{color:#fff}
   track.addEventListener("scroll",update,{passive:true});
   window.addEventListener("resize",update);
   update();
-  const dialog = document.getElementById("conversation-dialog");
-  const image = dialog.querySelector("img");
-  track.querySelectorAll(".conversation").forEach(button => {
-    button.onclick = () => {
-      const preview = button.querySelector("img");
-      image.src = preview.src;
-      image.alt = preview.alt;
-      dialog.showModal();
-      dialog.scrollTop = 0;
-    };
-  });
-  dialog.querySelector("button").onclick = () => dialog.close();
 })();
 </script>
 
