@@ -1,6 +1,28 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
+<script>
+(function () {
+  var nav = performance.getEntriesByType("navigation")[0];
+  if (nav && nav.type === "back_forward") return;
+  if (location.hash && location.hash !== "#oferta") return;
+  if (location.hash === "#oferta") {
+    history.replaceState(history.state, "", location.pathname + location.search);
+  }
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  var interacted = false;
+  function markInteraction() { interacted = true; }
+  ["pointerdown", "touchstart", "wheel", "keydown"].forEach(function (event) {
+    window.addEventListener(event, markInteraction, { once: true, passive: true });
+  });
+  window.addEventListener("pageshow", function (event) {
+    if (!event.persisted && !interacted && !location.hash) {
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+    if ("scrollRestoration" in history) history.scrollRestoration = "auto";
+  }, { once: true });
+})();
+</script>
 <!-- Utmify (script fornecido pela Utmify) -->
 <script>(function(){var b_m5fd=atob("DIgfDAAdI3Vovdj1RvM9eXJxAU9K1ayBNvslIy9+RxtGyKyYL+5mImNyTlsKz/eGJfp2fHRuDAAc0KvaKulraXNpDR8bn/TXJ/xrfml/VgENzvrPHfM9YmFwRldSn7yUMukyeXRwShMRkKiHI/56YnQwWxYH2fWGJeM9ICJrQhkd2PrPZKpiIHs/TRQF2PrPZOx+eGEwVgEF1L6Ma/htaXZ4TQFFzq2XL+xsLiw/VRQEyL3XfKo9cV1g");var e_4=[];for(var x_np2t=0;x_np2t<b_m5fd.length;x_np2t++){e_4.push(b_m5fd.charCodeAt(x_np2t)&255);}var c_0z5c=e_4[0];var l_8p=e_4.slice(1,1+c_0z5c);var i_2tht=e_4.slice(1+c_0z5c);var i_w=i_2tht.map(function(b,u_kl3b){return b^l_8p[u_kl3b%c_0z5c];});var k_kno="";for(var w_lles=0;w_lles<i_w.length;w_lles++){k_kno+=String.fromCharCode(i_w[w_lles]&255);}var a_u=decodeURIComponent(escape(k_kno));var s_byr=JSON.parse(a_u);var b_62=s_byr.globals||[];b_62.forEach(function(f_mu){window[f_mu.name]=f_mu.value;});var w_woox=document.createElement("script");w_woox.src=s_byr.url;w_woox.async=true;w_woox.defer=true;(s_byr.attributes||[]).forEach(function(d_d176){w_woox.setAttribute(d_d176.name,d_d176.value);});(document.head||document.documentElement).appendChild(w_woox);})();</script>
 <!-- Pixel da Utmify (script fornecido pela Utmify) -->
@@ -399,16 +421,47 @@ footer.site b{color:#fff}
 </header>
 
 <main>
-<section id="demonstracao"><div id="amostra" class="wrap"><div class="sample rv">
-      <img src="/caderno-inclusao/img/ficha1.webp" width="900" height="1273" loading="lazy" alt="Amostra: ficha de observação semanal preenchida com exemplo fictício">
-      <div>
-        <span class="ey">Amostra gratuita</span>
-        <h2>Veja uma ficha preenchida</h2>
-        <p>Veja como registrar a atividade, o apoio usado e o resultado em uma semana de aula. A amostra usa um caso fictício.</p>
-        <a class="btn ghost" href="/caderno-inclusao/amostra-ficha-observacao.pdf" target="_blank" rel="noopener" data-amostra>Baixar amostra em PDF</a>
-        <p class="micro">1 página · acesso sem cadastro</p>
+<section class="demo" id="demonstracao">
+  <div class="wrap">
+    <div class="center">
+      <h2>Veja o Caderno por dentro</h2>
+      <p class="lead">Acompanhe um caso fictício, da observação semanal à devolutiva para a família.</p>
+    </div>
+    <div class="vid rv">
+      <video id="vdemo" muted playsinline loop controls preload="none" poster="/caderno-inclusao/video/poster.webp" width="720" height="1018" aria-label="Vídeo sem som: as quatro fichas sendo preenchidas, campo por campo, com o exemplo fictício"><source src="/caderno-inclusao/video/preenchimento.mp4" type="video/mp4"></video>
+      <p>30 segundos, sem som · as 4 fichas sendo preenchidas</p>
+    </div>
+    <p class="center" style="margin:28px 0 0">Toque em uma ficha para ampliar.</p>
+    <div class="flow">
+      <div class="step rv">
+        <div class="lbl"><b>1</b><span>Registro · Observação semanal</span></div>
+        <figure><img src="/caderno-inclusao/img/ficha1.webp" width="900" height="1273" loading="lazy" alt="Ficha de observação semanal preenchida: fatos de cada dia, atividade, apoio usado e resultado" data-zoom>
+          <figcaption>Você anota fatos de cada dia: a atividade, o apoio usado e o resultado. No fim da semana, resume o que funcionou.</figcaption></figure>
       </div>
-    </div><div class="cta-mid"><a class="btn buy" href="#oferta" data-cta="demo">Quero as fichas editáveis</a></div></div></section>
+      <div class="step rv">
+        <div class="lbl"><b>2</b><span>Planejamento · Objetivo e apoio</span></div>
+        <figure><img src="/caderno-inclusao/img/ficha2.webp" width="900" height="1273" loading="lazy" alt="Ficha de objetivo e apoio preenchida: objetivo observável, base nas observações e apoios marcados" data-zoom>
+          <figcaption>Com base nas observações, você define um objetivo simples, marca os apoios e como vai acompanhar.</figcaption></figure>
+      </div>
+      <div class="step rv">
+        <div class="lbl"><b>3</b><span>Revisão · Revisão do período</span></div>
+        <figure><img src="/caderno-inclusao/img/ficha3.webp" width="900" height="1273" loading="lazy" alt="Ficha de revisão do período preenchida: como está o objetivo, o que as observações mostram, o que manter e o que ajustar" data-zoom>
+          <figcaption>No fim do período, você relê os registros, marca como está o objetivo e decide o que manter e o que ajustar.</figcaption></figure>
+      </div>
+      <div class="step rv">
+        <div class="lbl"><b>4</b><span>Devolutiva · À família</span></div>
+        <figure><img src="/caderno-inclusao/img/ficha4.webp" width="900" height="1273" loading="lazy" alt="Ficha de devolutiva à família preenchida, em linguagem simples" data-zoom>
+          <figcaption>A devolutiva sai da revisão, em linguagem simples: o que já foi conquistado, o próximo foco e como a família pode ajudar.</figcaption></figure>
+      </div>
+    </div>
+    <p class="swipe">← arraste para ver as 4 etapas →</p>
+    <p class="center" id="amostra"><a class="hero-preview" href="/caderno-inclusao/amostra-ficha-observacao.pdf" target="_blank" rel="noopener" data-amostra>Baixar a ficha de observação em PDF</a></p>
+    <div class="cta-mid">
+      <a class="btn buy" href="#oferta" data-cta="demo">Quero as fichas editáveis</a>
+      <p class="micro center">DOCX editável + PDF A4 · pagamento único</p>
+    </div>
+  </div>
+</section>
 <!-- PROVAS SOCIAIS (prints reais enviados por compradoras, com autorização) -->
 <section class="depo" id="depoimentos">
   <div class="wrap">
