@@ -350,6 +350,7 @@ footer.site b{color:#fff}
 .ddots button.on{background:var(--te);width:22px;border-radius:6px}
 @media(min-width:760px){.dcard{flex-basis:calc(50% - 8px)}}
 @media(min-width:1080px){.dcard{flex-basis:calc(33.333% - 11px)}}
+.hero-preview{display:inline-block;padding:12px 0;color:inherit;text-decoration:underline;text-underline-offset:3px}
 </style>
 
 <!-- Rastreamento: Utmify (UTMs). O pixel da Utmify está no <head>. -->
@@ -375,7 +376,8 @@ footer.site b{color:#fff}
     <div class="hb">
       <div class="price-inline"><s>R$ 89,00</s><b>R$ 39,00</b><span>pagamento único</span></div>
       <p class="incl">✅ Inclui 4 fichas editáveis + 2 casos preenchidos + bônus gratuito com 80 frases para relatórios e devolutivas.</p>
-      <a class="btn buy" href="#oferta" data-cta="hero"><span>Quero meu Caderno <span class="nw">· R$ 39,00</span></span></a>
+      <a class="btn buy" href="#oferta" data-cta="hero"><span>Comprar por <span class="nw">R$ 39,00</span></span></a>
+      <div><a class="hero-preview" href="#demonstracao">Ver uma ficha preenchida</a></div>
       <ul class="ticks">
         <li>A sequência completa: registro, planejamento, revisão e devolutiva</li>
         <li>Exemplos fictícios preenchidos, do registro à devolutiva</li>
@@ -751,26 +753,23 @@ var UTMIFY_PIXEL_ID = ""; // o pixel agora é carregado no <head>
   function buyUrl(){
     if(!CHECKOUT_URL) return "#oferta";
     try{ var cu=new URL(CHECKOUT_URL), qs=new URLSearchParams(location.search);
-      ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","fbclid","src","sck"].forEach(function(p){var v=qs.get(p); if(v) cu.searchParams.set(p,v)});
+      ["utm_id","utm_source","utm_medium","utm_campaign","utm_content","utm_term","fbclid","src","sck"].forEach(function(p){var v=qs.get(p); if(v) cu.searchParams.set(p,v)});
       return cu.toString(); }catch(e){ return CHECKOUT_URL; }
   }
-  var buys=document.querySelectorAll("a.buy");
-  // Só o botão da oferta leva ao checkout (assim o "início de compra" medido é de quem viu o preço).
-  // O botão do topo leva à demonstração; os demais, à oferta.
-  [].forEach.call(buys,function(a){ if(a.dataset.cta!=="oferta") a.href = a.dataset.cta==="hero" ? "#demonstracao" : "#oferta"; });
+  var checkoutLinks=document.querySelectorAll('a[data-cta="hero"], a[data-cta="oferta"]');
   if (CHECKOUT_URL) {
-    var ob=document.getElementById("ctaOferta"); if(ob) ob.href=buyUrl();
+    checkoutLinks.forEach(function(link){
+      link.href=buyUrl();
+      link.addEventListener("click",function(){
+        if(window.clarity) window.clarity("event","clique_checkout");
+      });
+    });
   } else {
     // Sem checkout: o botão da oferta vira um botão desativado (não é link, para nenhum script reescrever).
     var o=document.getElementById("ctaOferta"), bt=document.createElement("button");
     bt.type="button"; bt.className="btn"; bt.disabled=true; bt.id="ctaOferta"; bt.style.opacity=".55"; bt.style.cursor="not-allowed";
     bt.innerHTML="Checkout em configuração<small>Volte em breve</small>"; o.parentNode.replaceChild(bt,o);
   }
-  // InitiateCheckout só no clique real que leva ao checkout.
-  [].forEach.call(buys,function(a){ a.addEventListener("click",function(){
-    if(!CHECKOUT_URL || a.dataset.cta!=="oferta") return;
-    try{ if(window.clarity) clarity("event","clique_checkout"); }catch(e){}
-  }); });
   // Marca no Clarity quem chegou na demonstração.
   var vcSent=false, demo=document.getElementById("demonstracao");
   if("IntersectionObserver" in window && demo){ new IntersectionObserver(function(es,ob){ es.forEach(function(e){ if(e.isIntersecting&&!vcSent){ vcSent=true; ob.disconnect();
