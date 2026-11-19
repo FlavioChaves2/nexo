@@ -1,6 +1,15 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
+<!-- Pixel da Utmify (Meta) — pixel "Caderno" -->
+<script>
+  window.pixelId = "6afe31133742d51bd932f2ab";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
@@ -339,7 +348,7 @@ footer.site b{color:#fff}
 @media(min-width:900px){.dgrid{grid-template-columns:repeat(4,1fr)}.dcard q{font-size:16px}.dcard .shot{height:360px}}
 </style>
 
-<!-- Rastreamento: Utmify (UTMs). O pixel da Utmify só carrega quando UTMIFY_PIXEL_ID estiver preenchido no fim da página. -->
+<!-- Rastreamento: Utmify (UTMs). O pixel da Utmify está no <head>. -->
 <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck data-utmify-prevent-subids async defer></script>
 <!-- Microsoft Clarity (mesmo projeto do site; filtrar por /caderno-inclusao) -->
 <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","zd2q8ffefc");</script>
@@ -696,7 +705,7 @@ footer.site b{color:#fff}
 var CHECKOUT_URL = "https://pay.cakto.com.br/3aef4ks_1341493"; // Cakto · Caderno de Inclusão Escolar (R$ 38,01 + taxa R$ 0,99 = R$ 39,00)
 // Pixel da Utmify. Ele é o ÚNICO que envia eventos para a Meta (PageView, ViewContent, InitiateCheckout pelo navegador e,
 // pela integração Cakto → Utmify, o Purchase via servidor), com deduplicação. Não colocar fbq próprio nesta página. Vazio = não carrega.
-var UTMIFY_PIXEL_ID = "6afe31133742d51bd932f2ab";
+var UTMIFY_PIXEL_ID = ""; // o pixel agora é carregado no <head>
 // =========================
 
 (function(){
