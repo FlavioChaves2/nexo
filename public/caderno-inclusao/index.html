@@ -56,8 +56,14 @@ details li{margin:3px 0}
 
 /* Topo */
 .bar{background:var(--gr);color:#E9F0EE;font-size:13px;text-align:center;padding:8px 14px}
-.promo{background:var(--te);color:#fff;font-size:13.5px;font-weight:600;text-align:center;padding:8px 14px;line-height:1.35}
+.promo{background:#0d0d0d;color:#fff;font-size:13.5px;font-weight:600;text-align:center;padding:9px 12px;line-height:1.35;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 10px;border-bottom:3px solid var(--te)}
 .promo b{font-weight:800}
+.promo .bf{display:inline-flex;align-items:center;gap:6px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;font-size:12.5px}
+.promo .bf i{font-style:normal;background:var(--te);color:#fff;border-radius:5px;padding:2px 7px;letter-spacing:1px;animation:bfp 1.6s ease-in-out infinite}
+@keyframes bfp{0%,100%{box-shadow:0 0 0 0 rgba(214,106,61,.6)}50%{box-shadow:0 0 0 5px rgba(214,106,61,0)}}
+@media (prefers-reduced-motion:reduce){.promo .bf i{animation:none}}
+.promo .pz s{color:#bdbdbd;font-weight:600}.promo .pz b{color:#F2A37E;font-size:15px}
+.promo .tm{display:inline-flex;align-items:center;gap:6px;color:#ddd;font-size:12.5px}
 header.hero{padding:22px 0 44px;background:linear-gradient(180deg,#fff 0%,var(--iv) 100%);border-bottom:1px solid var(--ln)}
 .hero .grid{display:grid;gap:22px;align-items:center;grid-template-areas:"a" "s" "b"}
 .ha{grid-area:a}.hb{grid-area:b}.stack{grid-area:s}
@@ -68,7 +74,7 @@ header.hero{padding:22px 0 44px;background:linear-gradient(180deg,#fff 0%,var(--
 .price-inline span{font-size:14px;color:var(--mut)}
 .price-inline s,.ocard .pr s{color:var(--mut);font-size:16px;font-weight:600;text-decoration-thickness:2px;text-decoration-color:var(--te2)}
 .ocard .pr s{display:block;margin-bottom:4px}
-.promo .cd{display:inline-block;background:rgba(0,0,0,.18);border-radius:6px;padding:1px 7px;margin-left:4px;font-variant-numeric:tabular-nums;font-weight:800}
+.promo .cd{display:inline-block;background:#fff;color:#0d0d0d;border-radius:6px;padding:2px 8px;font-variant-numeric:tabular-nums;font-weight:900;font-size:13.5px;letter-spacing:.5px}
 .stack{position:relative;aspect-ratio:1/.93;max-width:min(100%,330px);margin:0 auto;width:100%}
 @media(min-width:900px){.stack{max-width:520px}.hb{margin-top:18px;align-self:start}.ha{align-self:end}}
 .stack img{position:absolute;width:60%;border-radius:6px;box-shadow:0 22px 40px -22px rgba(15,43,39,.55),0 0 0 1px rgba(0,0,0,.05);background:#fff}
@@ -354,7 +360,7 @@ footer.site b{color:#fff}
 <script>document.body.classList.remove("no-js")</script>
 
 <!-- Barra de promoção: prazo REAL definido em PROMO_FIM (fim do script). Quando acaba, a contagem some e não reinicia. -->
-<div class="promo" role="note" id="promo">🔥 De <s>R$ 89,00</s> por <b>R$ 39,00</b> · termina em <span class="cd" id="cd">--:--:--</span></div>
+<div class="promo" role="note" id="promo"><span class="bf"><i>BLACK FRIDAY</i> Oferta especial</span><span class="pz">De <s>R$ 89,00</s> por <b>R$ 39,00</b></span><span class="tm">⏳ termina em <span class="cd" id="cd">--:--:--</span></span></div>
 
 <!-- 01 HERO -->
 <header class="hero">
