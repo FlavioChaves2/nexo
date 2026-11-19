@@ -341,13 +341,20 @@ footer.site b{color:#fff}
 .dcar{position:relative;margin-top:22px}
 .dtrack{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;padding:2px 0 6px}
 .dtrack::-webkit-scrollbar{display:none}
-.dcard{flex:0 0 100%;scroll-snap-align:center;margin:0;background:#fff;border:1px solid var(--ln);border-radius:18px;overflow:hidden}
+.dcard{flex:0 0 100%;scroll-snap-align:start;margin:0;background:#fff;border:1px solid var(--ln);border-radius:18px;overflow:hidden}
 .dcard q{display:block;padding:14px 16px 4px;font-family:Fraunces,Georgia,serif;color:var(--gr);font-size:17px;line-height:1.35;quotes:"“" "”"}
 .dcard .who{padding:0 16px 10px;font-size:13.5px;color:var(--mut)}.dcard .who b{color:var(--te2)}
-.dcard img{display:block;width:100%;max-width:330px;height:auto;margin:0 auto 14px;border-radius:12px}
-.ddots{display:flex;justify-content:center;gap:8px;margin-top:10px}
-.ddots button{width:9px;height:9px;border-radius:50%;border:0;padding:0;background:var(--ln);cursor:pointer}
-.ddots button.on{background:var(--te);width:22px;border-radius:6px}
+.dcard .conversation{display:block;width:calc(100% - 32px);margin:0 16px 16px;padding:0;background:white;color:var(--te2);border:1px solid var(--ln);border-radius:12px;overflow:hidden;font:inherit;font-weight:700;cursor:zoom-in}
+.conversation img{display:block;width:100%;height:190px;object-fit:cover;object-position:center 28%}
+.conversation span{display:block;padding:12px}
+.depo-nav{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-bottom:10px}
+.depo-nav button{width:44px;height:44px;border:1px solid var(--ln);border-radius:50%;background:white;color:var(--gr);font-size:22px;cursor:pointer}
+.depo-nav button:disabled{opacity:.4}
+#conversation-dialog{box-sizing:border-box;width:min(560px,96vw);max-height:90vh;padding:0 12px 12px;border:0;border-radius:12px;overflow:auto}
+#conversation-dialog::backdrop{background:rgb(0 0 0 / .75)}
+#conversation-dialog button{position:sticky;top:0;display:block;margin-left:auto;min-height:44px;padding:0 16px;background:white;color:var(--gr);border:1px solid var(--ln);border-radius:8px}
+#conversation-dialog img{display:block;width:100%;height:auto}
+@media(prefers-reduced-motion:reduce){.dtrack{scroll-behavior:auto}}
 @media(min-width:760px){.dcard{flex-basis:calc(50% - 8px)}}
 @media(min-width:1080px){.dcard{flex-basis:calc(33.333% - 11px)}}
 .hero-preview{display:inline-block;padding:12px 0;color:inherit;text-decoration:underline;text-underline-offset:3px}
@@ -463,36 +470,54 @@ footer.site b{color:#fff}
 <section class="depo" id="depoimentos" style="padding-bottom:0">
   <div class="wrap">
     <span class="ey">Quem usou, aprova</span>
-    <h2>Professoras que já estão usando o Caderno na rotina</h2>
+    <h2>Como o Caderno ajudou na rotina de sala de aula</h2>
     <p class="lead">Mensagens reais enviadas por quem comprou, compartilhadas com autorização.</p>
     <div class="dcar">
+      <div class="depo-nav"><button type="button" id="depo-prev" aria-label="Depoimento anterior">←</button><span id="depo-count" aria-live="polite"></span><button type="button" id="depo-next" aria-label="Próximo depoimento">→</button></div>
       <div class="dtrack" id="dtrack">
-      <figure class="dcard"><q>Uma ficha ajudou a preencher a outra. Na devolutiva eu já tinha as observações separadas.</q><figcaption class="who"><b>Juliana</b> · professora que usou o Caderno</figcaption><img src="/caderno-inclusao/img/depo-juliana.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Juliana e foto da ficha Devolutiva à família preenchida"></figure>
-      <figure class="dcard"><q>Antes minhas anotações ficavam espalhadas. Na hora de revisar, ajudou bastante.</q><figcaption class="who"><b>Fernanda</b> · professora que usou o Caderno</figcaption><img src="/caderno-inclusao/img/depo-fernanda.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Fernanda e foto da ficha Observação semanal impressa e preenchida"></figure>
-      <figure class="dcard"><q>Fui olhando o exemplo preenchido e consegui fazer o meu.</q><figcaption class="who"><b>Patrícia</b> · professora que usou o Caderno</figcaption><img src="/caderno-inclusao/img/depo-patricia.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Patrícia e foto de duas fichas preenchidas"></figure>
-      <figure class="dcard"><q>Consegui editar no Word e manter a sequência das fichas do jeito da minha escola.</q><figcaption class="who"><b>Rafael</b> · professor que usou o Caderno</figcaption><img src="/caderno-inclusao/img/depo-rafael.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com o professor Rafael sobre editar as fichas no Word"></figure>
+      <figure class="dcard"><q>Uma ficha ajudou a preencher a outra. Na devolutiva eu já tinha as observações separadas.</q><figcaption class="who"><b>Juliana</b> · professora que usou o Caderno</figcaption><button type="button" class="conversation" aria-label="Ampliar conversa de Juliana"><img src="/caderno-inclusao/img/depo-juliana.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Juliana e foto da ficha Devolutiva à família preenchida"><span>Ampliar conversa</span></button></figure>
+      <figure class="dcard"><q>Antes minhas anotações ficavam espalhadas. Na hora de revisar, ajudou bastante.</q><figcaption class="who"><b>Fernanda</b> · professora que usou o Caderno</figcaption><button type="button" class="conversation" aria-label="Ampliar conversa de Fernanda"><img src="/caderno-inclusao/img/depo-fernanda.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Fernanda e foto da ficha Observação semanal impressa e preenchida"><span>Ampliar conversa</span></button></figure>
+      <figure class="dcard"><q>Fui olhando o exemplo preenchido e consegui fazer o meu.</q><figcaption class="who"><b>Patrícia</b> · professora que usou o Caderno</figcaption><button type="button" class="conversation" aria-label="Ampliar conversa de Patrícia"><img src="/caderno-inclusao/img/depo-patricia.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Patrícia e foto de duas fichas preenchidas"><span>Ampliar conversa</span></button></figure>
+      <figure class="dcard"><q>Consegui editar no Word e manter a sequência das fichas do jeito da minha escola.</q><figcaption class="who"><b>Rafael</b> · professor que usou o Caderno</figcaption><button type="button" class="conversation" aria-label="Ampliar conversa de Rafael"><img src="/caderno-inclusao/img/depo-rafael.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com o professor Rafael sobre editar as fichas no Word"><span>Ampliar conversa</span></button></figure>
       </div>
-      <div class="ddots" id="ddots" aria-label="Escolher depoimento"></div>
+      <dialog id="conversation-dialog" aria-label="Conversa ampliada"><button type="button" autofocus>Fechar</button><img alt=""></dialog>
     </div>
   </div>
 </section>
 <script>
 (function(){
-  var t=document.getElementById("dtrack"), d=document.getElementById("ddots"); if(!t||!d) return;
-  var cards=t.children, n=cards.length, i=0, timer=null, reduz=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
-  function porTela(){ return Math.max(1, Math.round(t.clientWidth / cards[0].getBoundingClientRect().width)); }
-  function passos(){ return Math.max(1, n - porTela() + 1); }
-  function marcar(){ [].forEach.call(d.children,function(b,k){ b.className = k===i ? "on" : ""; }); }
-  function montar(){ d.innerHTML=""; for(var k=0;k<passos();k++){ var b=document.createElement("button"); b.type="button"; b.setAttribute("aria-label","Depoimento "+(k+1)); (function(k){ b.onclick=function(){ ir(k); reiniciar(); }; })(k); d.appendChild(b); } if(i>=passos()) i=0; marcar(); }
-  function ir(k){ i=(k+passos())%passos(); t.scrollTo({left: cards[i].offsetLeft - t.offsetLeft, behavior: reduz ? "auto" : "smooth"}); marcar(); }
-  function iniciar(){ parar(); timer=setInterval(function(){ ir(i+1); }, 4500); }
-  function parar(){ if(timer){ clearInterval(timer); timer=null; } }
-  function reiniciar(){ parar(); setTimeout(iniciar, 6000); }
-  var fim; t.addEventListener("scroll", function(){ clearTimeout(fim); fim=setTimeout(function(){ var w=cards[0].getBoundingClientRect().width+16; var k=Math.round(t.scrollLeft / w); if(k!==i && k<passos()){ i=k; marcar(); } }, 120); }, {passive:true});
-  ["touchstart","mousedown"].forEach(function(ev){ t.addEventListener(ev, reiniciar, {passive:true}); });
-  t.addEventListener("mouseenter", parar); t.addEventListener("mouseleave", iniciar);
-  if("IntersectionObserver" in window){ new IntersectionObserver(function(es){ es[0].isIntersecting ? iniciar() : parar(); }, {threshold:.3}).observe(t); } else iniciar();
-  window.addEventListener("resize", montar); montar();
+  const track = document.getElementById("dtrack");
+  const cards = track.children;
+  const previous = document.getElementById("depo-prev");
+  const next = document.getElementById("depo-next");
+  const count = document.getElementById("depo-count");
+  function step(){ return cards[1].offsetLeft - cards[0].offsetLeft; }
+  function update(){
+    const first = Math.round(track.scrollLeft / step()) + 1;
+    const visible = Math.round((track.clientWidth + 16) / step());
+    const last = Math.min(cards.length, first + visible - 1);
+    const label = (last === first ? first : first + "–" + last) + " de " + cards.length;
+    if(count.textContent !== label) count.textContent = label;
+    previous.disabled = first === 1;
+    next.disabled = last === cards.length;
+  }
+  previous.onclick = () => track.scrollBy({left:-step()});
+  next.onclick = () => track.scrollBy({left:step()});
+  track.addEventListener("scroll",update,{passive:true});
+  window.addEventListener("resize",update);
+  update();
+  const dialog = document.getElementById("conversation-dialog");
+  const image = dialog.querySelector("img");
+  track.querySelectorAll(".conversation").forEach(button => {
+    button.onclick = () => {
+      const preview = button.querySelector("img");
+      image.src = preview.src;
+      image.alt = preview.alt;
+      dialog.showModal();
+      dialog.scrollTop = 0;
+    };
+  });
+  dialog.querySelector("button").onclick = () => dialog.close();
 })();
 </script>
 
