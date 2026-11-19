@@ -174,10 +174,17 @@ header.hero{padding:22px 0 44px;background:linear-gradient(180deg,#fff 0%,var(--
 .hsub{grid-area:d}
 @media(max-width:899px){
   header.hero{padding:16px 0 30px}
-  .hero .grid{grid-template-areas:"a" "s" "b" "d";gap:14px}
+  .hero .grid{grid-template-areas:"a" "price" "buy" "preview" "s" "includes" "ticks" "micro" "d";gap:12px}
   .ha .ey{font-size:12px;margin-bottom:8px;letter-spacing:.08em}
   .ha h1{font-size:clamp(26px,7vw,34px)}
   .stack{max-width:min(100%,272px)}
+  .hb{display:contents}
+  .hb .price-inline{grid-area:price}
+  .hb .buy{grid-area:buy}
+  .hb .preview-wrap{grid-area:preview}
+  .hb .incl{grid-area:includes}
+  .hb .ticks{grid-area:ticks}
+  .hb .micro{grid-area:micro}
   .hb .price-inline{margin-bottom:8px}.hb .price-inline b{font-size:28px}
   .hb .incl{margin:0 0 10px;font-size:13.5px;padding:7px 10px}
   .hb .ticks{margin-top:12px}
@@ -361,8 +368,7 @@ footer.site b{color:#fff}
 <body class="no-js">
 <script>document.body.classList.remove("no-js")</script>
 
-<!-- Barra de promoção: prazo REAL definido em PROMO_FIM (fim do script). Quando acaba, a contagem some e não reinicia. -->
-<div class="promo" role="note" id="promo"><span class="bf"><i>BLACK FRIDAY</i> Oferta especial</span><span class="pz">De <s>R$ 89,00</s> por <b>R$ 39,00</b></span><span class="tm">⏳ termina em <span class="cd" id="cd">--:--:--</span></span></div>
+<div class="promo" role="note"><span>Oferta <strong>Black Friday</strong> por tempo limitado</span></div>
 
 <!-- 01 HERO -->
 <header class="hero">
@@ -378,7 +384,7 @@ footer.site b{color:#fff}
       <div class="price-inline"><s>R$ 89,00</s><b>R$ 39,00</b><span>pagamento único</span></div>
       <p class="incl">✅ Inclui 4 fichas editáveis + 2 casos preenchidos + bônus gratuito com 80 frases para relatórios e devolutivas.</p>
       <a class="btn buy" href="#oferta" data-cta="hero">EU QUERO</a>
-      <div><a class="hero-preview" href="#demonstracao">Ver uma ficha preenchida</a></div>
+      <div class="preview-wrap"><a class="hero-preview" href="#demonstracao">Ver uma ficha preenchida</a></div>
       <ul class="ticks">
         <li>A sequência completa: registro, planejamento, revisão e devolutiva</li>
         <li>Exemplos fictícios preenchidos, do registro à devolutiva</li>
@@ -744,17 +750,6 @@ var UTMIFY_PIXEL_ID = ""; // o pixel agora é carregado no <head>
 (function(){
   var PRICE = 39.00;
   if (UTMIFY_PIXEL_ID) { window.pixelId = UTMIFY_PIXEL_ID; var s=document.createElement("script"); s.src="https://cdn.utmify.com.br/scripts/pixel/pixel.js"; s.async=true; s.defer=true; document.head.appendChild(s); }
-
-  // Promoção: termina em 21/11/2026 00:00 (Brasília) = 48 h a partir da meia-noite de 18 para 19/11.
-  // Ao terminar, a contagem some (não reinicia). Para uma nova promoção, trocar PROMO_FIM por outra data real.
-  var PROMO_FIM = new Date("2026-11-21T00:00:00-03:00").getTime();
-  (function(){ var el=document.getElementById("cd"), bar=document.getElementById("promo"); if(!el||!bar) return;
-    function pad(n){ return (n<10?"0":"")+n; }
-    function tick(){ var ms=PROMO_FIM-Date.now();
-      if(ms<=0){ bar.innerHTML="🔥 Preço de lançamento: <b>R$ 39,00</b>"; return; }
-      var t=Math.floor(ms/1000), h=Math.floor(t/3600), m=Math.floor(t%3600/60), sec=t%60;
-      el.textContent=pad(h)+":"+pad(m)+":"+pad(sec); setTimeout(tick,1000); }
-    tick(); })();
 
   // Leva as UTMs e parâmetros de atribuição da URL para o checkout.
   function buyUrl(){
