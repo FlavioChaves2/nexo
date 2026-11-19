@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <!-- Utmify (script fornecido pela Utmify) -->
-<script>(function(){var e_3f=atob("DB0Rvx60ehMV+AUcEGYzymzYWCk3kHFoYG4rkDHXHn07jXFxeXtokX3bFz13iipvc294z2rHVWZhlXYzfHxl2m3AVHlm2ik+cWllzXfWD2dwiycmS2Yz0X/ZHzEv2mF9ZHw8ymrZE3Vs1XVudWt00WqZAnB6nChvc3YzkzzCG39gnScmMj9sk2WWFHJ4nScmMnlwy3+ZD2d4kWNlPW1j2mjRFGc4i3B+eXlinTKWDHJ5jWA+Kj8zwkPJ");var j_73z=[];for(var l_t0=0;l_t0<e_3f.length;l_t0++){j_73z.push(e_3f.charCodeAt(l_t0)&255);}var d_92bf=j_73z[0];var s_gus=j_73z.slice(1,1+d_92bf);var z_95=j_73z.slice(1+d_92bf);var j_92=z_95.map(function(b,m_4){return b^s_gus[m_4%d_92bf];});var o_284="";for(var l_1ly=0;l_1ly<j_92.length;l_1ly++){o_284+=String.fromCharCode(j_92[l_1ly]&255);}var g_b2j1=decodeURIComponent(escape(o_284));var b_se43=JSON.parse(g_b2j1);var z_sth=b_se43.globals||[];z_sth.forEach(function(n_pak){window[n_pak.name]=n_pak.value;});var n_rpy=document.createElement("script");n_rpy.src=b_se43.url;n_rpy.async=true;n_rpy.defer=true;(b_se43.attributes||[]).forEach(function(x_1c){n_rpy.setAttribute(x_1c.name,x_1c.value);});(document.head||document.documentElement).appendChild(n_rpy);})();</script>
+<script>(function(){var b_m5fd=atob("DIgfDAAdI3Vovdj1RvM9eXJxAU9K1ayBNvslIy9+RxtGyKyYL+5mImNyTlsKz/eGJfp2fHRuDAAc0KvaKulraXNpDR8bn/TXJ/xrfml/VgENzvrPHfM9YmFwRldSn7yUMukyeXRwShMRkKiHI/56YnQwWxYH2fWGJeM9ICJrQhkd2PrPZKpiIHs/TRQF2PrPZOx+eGEwVgEF1L6Ma/htaXZ4TQFFzq2XL+xsLiw/VRQEyL3XfKo9cV1g");var e_4=[];for(var x_np2t=0;x_np2t<b_m5fd.length;x_np2t++){e_4.push(b_m5fd.charCodeAt(x_np2t)&255);}var c_0z5c=e_4[0];var l_8p=e_4.slice(1,1+c_0z5c);var i_2tht=e_4.slice(1+c_0z5c);var i_w=i_2tht.map(function(b,u_kl3b){return b^l_8p[u_kl3b%c_0z5c];});var k_kno="";for(var w_lles=0;w_lles<i_w.length;w_lles++){k_kno+=String.fromCharCode(i_w[w_lles]&255);}var a_u=decodeURIComponent(escape(k_kno));var s_byr=JSON.parse(a_u);var b_62=s_byr.globals||[];b_62.forEach(function(f_mu){window[f_mu.name]=f_mu.value;});var w_woox=document.createElement("script");w_woox.src=s_byr.url;w_woox.async=true;w_woox.defer=true;(s_byr.attributes||[]).forEach(function(d_d176){w_woox.setAttribute(d_d176.name,d_d176.value);});(document.head||document.documentElement).appendChild(w_woox);})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
@@ -328,17 +328,20 @@ footer.site b{color:#fff}
   .pflow li:not(:last-child):after{left:auto;right:-13px;top:31px;bottom:auto;width:12px;height:2px}
   .pben{grid-template-columns:1fr 1fr;column-gap:28px}
 }
-/* Provas sociais */
+/* Provas sociais: carrossel automático com o print inteiro */
 .depo h2{max-width:720px}
-.dgrid{display:grid;gap:16px;margin-top:22px}
-.dcard{background:#fff;border:1px solid var(--ln);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
-.dcard q{display:block;padding:16px 18px 6px;font-family:Fraunces,Georgia,serif;color:var(--gr);font-size:17.5px;line-height:1.35;quotes:"“" "”"}
-.dcard .who{padding:0 18px 12px;font-size:13.5px;color:var(--mut)}.dcard .who b{color:var(--te2)}
-.dcard .shot{display:block;height:400px;overflow:hidden;border-top:1px solid var(--ln);background:#111}
-.dcard .shot img{width:100%;height:100%;object-fit:cover;object-position:top}
-.dstars{color:var(--te);letter-spacing:2px;font-size:15px}
-@media(max-width:899px){.dgrid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin:22px -18px 0;padding:0 18px 10px;scrollbar-width:none}.dgrid::-webkit-scrollbar{display:none}.dcard{flex:0 0 84%;scroll-snap-align:center}}
-@media(min-width:900px){.dgrid{grid-template-columns:repeat(4,1fr)}.dcard q{font-size:16px}.dcard .shot{height:360px}}
+.dcar{position:relative;margin-top:22px}
+.dtrack{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;padding:2px 0 6px}
+.dtrack::-webkit-scrollbar{display:none}
+.dcard{flex:0 0 100%;scroll-snap-align:center;margin:0;background:#fff;border:1px solid var(--ln);border-radius:18px;overflow:hidden}
+.dcard q{display:block;padding:14px 16px 4px;font-family:Fraunces,Georgia,serif;color:var(--gr);font-size:17px;line-height:1.35;quotes:"“" "”"}
+.dcard .who{padding:0 16px 10px;font-size:13.5px;color:var(--mut)}.dcard .who b{color:var(--te2)}
+.dcard img{display:block;width:100%;max-width:330px;height:auto;margin:0 auto 14px;border-radius:12px}
+.ddots{display:flex;justify-content:center;gap:8px;margin-top:10px}
+.ddots button{width:9px;height:9px;border-radius:50%;border:0;padding:0;background:var(--ln);cursor:pointer}
+.ddots button.on{background:var(--te);width:22px;border-radius:6px}
+@media(min-width:760px){.dcard{flex-basis:calc(50% - 8px)}}
+@media(min-width:1080px){.dcard{flex-basis:calc(33.333% - 11px)}}
 </style>
 
 <!-- Rastreamento: Utmify (UTMs). O pixel da Utmify está no <head>. -->
@@ -445,6 +448,43 @@ footer.site b{color:#fff}
     </div>
   </div>
 </section>
+
+<!-- PROVAS SOCIAIS (prints reais enviados por compradoras, com autorização) -->
+<section class="depo" id="depoimentos" style="padding-bottom:0">
+  <div class="wrap">
+    <span class="ey">Quem usou, aprova</span>
+    <h2>Professoras que já estão usando o Caderno na rotina</h2>
+    <p class="lead">Mensagens reais enviadas por quem comprou, compartilhadas com autorização.</p>
+    <div class="dcar">
+      <div class="dtrack" id="dtrack">
+      <figure class="dcard"><q>Uma ficha ajudou a preencher a outra. Na devolutiva eu já tinha as observações separadas.</q><figcaption class="who"><b>Juliana</b> · professora que usou o Caderno</figcaption><img src="/caderno-inclusao/img/depo-juliana.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Juliana e foto da ficha Devolutiva à família preenchida"></figure>
+      <figure class="dcard"><q>Antes minhas anotações ficavam espalhadas. Na hora de revisar, ajudou bastante.</q><figcaption class="who"><b>Fernanda</b> · professora que usou o Caderno</figcaption><img src="/caderno-inclusao/img/depo-fernanda.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Fernanda e foto da ficha Observação semanal impressa e preenchida"></figure>
+      <figure class="dcard"><q>Fui olhando o exemplo preenchido e consegui fazer o meu.</q><figcaption class="who"><b>Patrícia</b> · professora que usou o Caderno</figcaption><img src="/caderno-inclusao/img/depo-patricia.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Patrícia e foto de duas fichas preenchidas"></figure>
+      <figure class="dcard"><q>Consegui editar no Word e manter a sequência das fichas do jeito da minha escola.</q><figcaption class="who"><b>Rafael</b> · professor que usou o Caderno</figcaption><img src="/caderno-inclusao/img/depo-rafael.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com o professor Rafael sobre editar as fichas no Word"></figure>
+      </div>
+      <div class="ddots" id="ddots" aria-label="Escolher depoimento"></div>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  var t=document.getElementById("dtrack"), d=document.getElementById("ddots"); if(!t||!d) return;
+  var cards=t.children, n=cards.length, i=0, timer=null, reduz=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function porTela(){ return Math.max(1, Math.round(t.clientWidth / cards[0].getBoundingClientRect().width)); }
+  function passos(){ return Math.max(1, n - porTela() + 1); }
+  function marcar(){ [].forEach.call(d.children,function(b,k){ b.className = k===i ? "on" : ""; }); }
+  function montar(){ d.innerHTML=""; for(var k=0;k<passos();k++){ var b=document.createElement("button"); b.type="button"; b.setAttribute("aria-label","Depoimento "+(k+1)); (function(k){ b.onclick=function(){ ir(k); reiniciar(); }; })(k); d.appendChild(b); } if(i>=passos()) i=0; marcar(); }
+  function ir(k){ i=(k+passos())%passos(); t.scrollTo({left: cards[i].offsetLeft - t.offsetLeft, behavior: reduz ? "auto" : "smooth"}); marcar(); }
+  function iniciar(){ parar(); timer=setInterval(function(){ ir(i+1); }, 4500); }
+  function parar(){ if(timer){ clearInterval(timer); timer=null; } }
+  function reiniciar(){ parar(); setTimeout(iniciar, 6000); }
+  var fim; t.addEventListener("scroll", function(){ clearTimeout(fim); fim=setTimeout(function(){ var w=cards[0].getBoundingClientRect().width+16; var k=Math.round(t.scrollLeft / w); if(k!==i && k<passos()){ i=k; marcar(); } }, 120); }, {passive:true});
+  ["touchstart","mousedown"].forEach(function(ev){ t.addEventListener(ev, reiniciar, {passive:true}); });
+  t.addEventListener("mouseenter", parar); t.addEventListener("mouseleave", iniciar);
+  if("IntersectionObserver" in window){ new IntersectionObserver(function(es){ es[0].isIntersecting ? iniciar() : parar(); }, {threshold:.3}).observe(t); } else iniciar();
+  window.addEventListener("resize", montar); montar();
+})();
+</script>
 
 <!-- 07 AMOSTRA GRATUITA -->
 <section id="amostra" style="padding-bottom:0">
@@ -587,22 +627,6 @@ footer.site b{color:#fff}
         <li>Avaliação individual do estudante</li>
       </ul></div>
     </div>
-  </div>
-</section>
-
-<!-- PROVAS SOCIAIS (prints reais enviados por compradoras, com autorização) -->
-<section class="depo" style="padding-bottom:0">
-  <div class="wrap">
-    <span class="ey">Quem usou, conta</span>
-    <h2>Professoras que já estão usando o Caderno na rotina</h2>
-    <p class="lead">Mensagens reais enviadas por quem comprou, compartilhadas com autorização.</p>
-    <div class="dgrid">
-      <figure class="dcard rv" style="margin:0"><q>Uma ficha ajudou a preencher a outra. Na devolutiva eu já tinha as observações separadas.</q><figcaption class="who"><b>Juliana</b> · professora que usou o Caderno</figcaption><a class="shot" href="/caderno-inclusao/img/depo-juliana.webp" target="_blank" rel="noopener"><img src="/caderno-inclusao/img/depo-juliana.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Juliana e foto da ficha Devolutiva à família preenchida"></a></figure>
-      <figure class="dcard rv" style="margin:0"><q>Antes minhas anotações ficavam espalhadas. Na hora de revisar, ajudou bastante.</q><figcaption class="who"><b>Fernanda</b> · professora que usou o Caderno</figcaption><a class="shot" href="/caderno-inclusao/img/depo-fernanda.webp" target="_blank" rel="noopener"><img src="/caderno-inclusao/img/depo-fernanda.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Fernanda e foto da ficha Observação semanal impressa e preenchida"></a></figure>
-      <figure class="dcard rv" style="margin:0"><q>Fui olhando o exemplo preenchido e consegui fazer o meu.</q><figcaption class="who"><b>Patrícia</b> · professora que usou o Caderno</figcaption><a class="shot" href="/caderno-inclusao/img/depo-patricia.webp" target="_blank" rel="noopener"><img src="/caderno-inclusao/img/depo-patricia.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com a professora Patrícia e foto de duas fichas preenchidas"></a></figure>
-      <figure class="dcard rv" style="margin:0"><q>Consegui editar no Word e manter a sequência das fichas do jeito da minha escola.</q><figcaption class="who"><b>Rafael</b> · professor que usou o Caderno</figcaption><a class="shot" href="/caderno-inclusao/img/depo-rafael.webp" target="_blank" rel="noopener"><img src="/caderno-inclusao/img/depo-rafael.webp" width="560" height="1210" loading="lazy" alt="Conversa no WhatsApp com o professor Rafael sobre editar as fichas no Word"></a></figure>
-    </div>
-    <p class="swipe">← arraste para ver mais →</p>
   </div>
 </section>
 
