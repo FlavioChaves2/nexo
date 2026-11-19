@@ -359,6 +359,13 @@ footer.site b{color:#fff}
 @media(min-width:760px){.dcard{flex-basis:calc(50% - 8px)}}
 @media(min-width:1080px){.dcard{flex-basis:calc(33.333% - 11px)}}
 .hero-preview{display:inline-block;padding:12px 0;color:inherit;text-decoration:underline;text-underline-offset:3px}
+
+.hb .price-inline{display:block;border-left:3px solid var(--te2);padding:3px 0 4px 14px;text-align:left}
+.price-before{font-size:14px;color:var(--mut);line-height:1.4}
+.hb .price-inline s{font-size:inherit;text-decoration-thickness:1.5px}
+.price-current{display:flex;align-items:baseline;gap:4px 10px;flex-wrap:wrap}
+.hb .price-current b{font-size:clamp(36px,5vw,46px);line-height:1.15;letter-spacing:-.035em;white-space:nowrap}
+.hb .price-current span{font-size:13px;white-space:nowrap}
 </style>
 
 <!-- Rastreamento: Utmify (UTMs). O pixel da Utmify está no <head>. -->
@@ -381,7 +388,7 @@ footer.site b{color:#fff}
       <p class="sub">Fichas editáveis, exemplos preenchidos e um passo a passo para organizar observações, registrar os apoios utilizados e preparar devolutivas claras, sem começar cada documento do zero.</p>
     </div>
     <div class="hb">
-      <div class="price-inline"><s>R$ 89,00</s><b>R$ 39,00</b><span>pagamento único</span></div>
+      <div class="price-inline"><div class="price-before">De <s>R$ 89,00</s></div><div class="price-current"><b>R$ 39,00</b><span>em pagamento único</span></div></div>
       <p class="incl">✅ Inclui 4 fichas editáveis + 2 casos preenchidos + bônus gratuito com 80 frases para relatórios e devolutivas.</p>
       <a class="btn buy" href="#oferta" data-cta="hero">EU QUERO</a>
       <div class="preview-wrap"><a class="hero-preview" href="#demonstracao">Ver uma ficha preenchida</a></div>
