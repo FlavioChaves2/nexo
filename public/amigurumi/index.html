@@ -55,6 +55,14 @@ h2{font-size:clamp(24px,5.4vw,34px);margin-bottom:10px}
 .btn-cta:active{transform:translateY(3px);box-shadow:0 3px 0 var(--terra2)}
 .btn-borda{border:2px solid var(--terra);color:var(--terra);font-size:15px;padding:14px 26px;text-transform:uppercase;letter-spacing:.5px}
 
+/* faixa de compra rápida */
+.topo-compra{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--fundo);border-bottom:1.5px solid var(--borda);padding:9px 16px;max-width:100%}
+.tc-nome{font-size:13.5px;font-weight:800;color:var(--tinta);line-height:1.25}
+.tc-nome b{color:var(--terra);white-space:nowrap}
+.tc-btn{flex:none;background:var(--terra);color:#fff;text-decoration:none;font-weight:900;font-size:13.5px;padding:9px 16px;border-radius:999px;box-shadow:0 3px 0 var(--terra2)}
+.tc-btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--terra2)}
+@media (min-width:700px){.topo-compra{justify-content:center;gap:18px}}
+
 /* 1. topo */
 .hero{background:var(--creme2);padding:34px 0 40px;text-align:center}
 .hero .lead{margin:14px auto 22px}
@@ -175,6 +183,11 @@ footer details p{margin-top:8px;font-size:13px}
 </style>
 </head>
 <body>
+
+<div class="topo-compra">
+  <span class="tc-nome">Manual 50 Mini Bichinhos <b>· R$ 10</b></span>
+  <a class="tc-btn" data-checkout href="https://pay.cakto.com.br/4oivh26_1346555">Comprar agora</a>
+</div>
 
 <!-- 1. TOPO -->
 <header class="hero">
