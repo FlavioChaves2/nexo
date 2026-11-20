@@ -217,12 +217,19 @@ footer details p{font-size:13.5px;margin-bottom:8px}
   section{padding:50px 0}
   .hero{padding:22px 0 44px}
   .hero-grid,.acesso-grid,.bonus-card{grid-template-columns:1fr;gap:28px}
-  .hero-foto{order:-1;max-width:290px;margin:8px auto 0;width:72%}
-  .hero-foto .polaroid{padding:9px 9px 10px}
+  .hero-grid{gap:16px}
+  .hero-foto{order:-1;max-width:215px;margin:6px auto 0;width:56%}
+  .hero-foto .polaroid{padding:7px 7px 8px}
   .hero-foto .leg{display:none}
-  .hero h1{font-size:31px}
-  .hero p.sub{font-size:17px}
-  .bilhete{font-size:23px}
+  .hero-foto .selo{width:70px;height:70px;right:-16px;top:-10px} .hero-foto .selo span{font-size:20px} .hero-foto .selo small{font-size:10px}
+  .bilhete{font-size:20px;padding:6px 14px 4px;margin-bottom:10px}
+  .hero h1{font-size:27px;margin-bottom:10px}
+  .hero p.sub{font-size:15.5px;margin-bottom:14px;line-height:1.5}
+  .chips{gap:6px;margin-bottom:16px}
+  .chip{font-size:12.5px;padding:4px 10px}
+  .hero-acoes{gap:10px}
+  .hero-acoes .btn-cta{padding:16px 18px;font-size:17px}
+  .hero-acoes .btn-sec{padding:10px 18px;font-size:15px}
   .hero-acoes .btn{width:100%}
   .galeria{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:80%;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 18px 20px;margin:0 -18px;-webkit-overflow-scrolling:touch}
   .foto{scroll-snap-align:center}
@@ -233,7 +240,7 @@ footer details p{font-size:13.5px;margin-bottom:8px}
   .selo{width:86px;height:86px;right:-8px;top:-14px} .selo span{font-size:25px}
   .por span{font-size:74px}
 }
-@media (max-width:380px){.stat b{font-size:20px}.stat span{font-size:12px}}
+@media (max-width:380px){.relogio{flex-wrap:wrap;white-space:normal;gap:4px 7px}.hero .chips{display:none}.hero-foto{width:50%}.hero h1{font-size:25px}.stat b{font-size:20px}.stat span{font-size:12px}}
 </style>
 </head>
 <body>
@@ -467,11 +474,11 @@ footer details p{font-size:13.5px;margin-bottom:8px}
   } else els.forEach(function(el){el.classList.add('vis');});
 
   // barra fixa: aparece depois do topo e some na oferta e no final
-  var fixa=document.getElementById('fixa'),hero=document.querySelector('.hero'),of=document.getElementById('oferta'),fim=document.querySelector('.final');
+  var fixa=document.getElementById('fixa'),hero=document.querySelector('.hero-acoes .btn-cta'),of=document.getElementById('oferta'),fim=document.querySelector('.final');
   var vHero=true,vOf=false,vFim=false;
   function upd(){fixa.classList.toggle('on',!vHero&&!vOf&&!vFim);}
   if('IntersectionObserver' in window){
-    new IntersectionObserver(function(e){vHero=e[0].isIntersecting;upd();}).observe(hero);
+    new IntersectionObserver(function(e){vHero=e[0].intersectionRatio>.95;upd();},{threshold:[0,.5,.96,1]}).observe(hero);
     new IntersectionObserver(function(e){vOf=e[0].isIntersecting;upd();}).observe(of);
     new IntersectionObserver(function(e){vFim=e[0].isIntersecting;upd();}).observe(fim);
   }
