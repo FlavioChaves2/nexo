@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap">
 <link rel="stylesheet" href="/futebol-kids/estilo.css?v=1">
-<link rel="preload" as="image" href="/futebol-kids/img/video-capa.webp">
+<link rel="preload" as="image" href="/futebol-kids/img/vsl-capa.jpg">
 
 <!-- Utmify: UTMs -->
 <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck data-utmify-prevent-subids async defer></script>
@@ -39,6 +39,25 @@
 .ck-mbox img{border-radius:16px;margin:12px auto;max-width:190px;width:100%}
 .ck-x{position:absolute;top:8px;right:12px;font-size:28px;line-height:1;color:#94a3b8;background:none;border:none;cursor:pointer;padding:6px}
 .ck-nao{display:block;margin-top:12px;color:var(--muted-foreground);font-size:14px;text-decoration:underline}
+.ck-car{position:relative}
+.ck-trilho{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:6px 0 10px}
+.ck-trilho::-webkit-scrollbar{display:none}
+.ck-slide{flex:0 0 78%;scroll-snap-align:center;padding:0 12px}
+@media(min-width:640px){.ck-slide{flex-basis:50%}}
+@media(min-width:1024px){.ck-slide{flex-basis:33.333%}}
+.ck-depo{position:relative;display:block;width:100%;cursor:zoom-in;transition:transform .2s;background:none;border:none;padding:0}
+.ck-depo:hover{transform:translateY(-4px)}
+.ck-depo img{display:block;width:100%;height:auto}
+.ck-zoom{position:absolute;right:12px;top:12px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.92);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.ck-seta{position:absolute;top:42%;z-index:2;width:44px;height:44px;border-radius:50%;background:#fff;color:var(--primary);border:1px solid var(--border);box-shadow:0 4px 14px rgba(0,0,0,.12);font-size:28px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.ck-ant{left:-6px}.ck-prox{right:-6px}
+.ck-pontos{display:flex;justify-content:center;gap:8px;margin-top:18px}
+.ck-pontos button{width:9px;height:9px;border-radius:99px;border:none;background:#c7d2e4;padding:0;cursor:pointer;transition:width .2s}
+.ck-pontos button.on{width:26px;background:var(--primary)}
+.ck-luz{position:fixed;inset:0;z-index:110;display:none;align-items:center;justify-content:center;background:rgba(10,24,60,.88);padding:18px}
+.ck-luz.on{display:flex}
+.ck-luz img{max-width:min(460px,100%);max-height:90vh;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.ck-luz button{position:absolute;top:12px;right:16px;color:#fff;font-size:36px;background:none;border:none;cursor:pointer}
 footer.ck-rod{background:var(--navy);color:var(--navy-foreground);text-align:center;font-size:13px;padding:28px 20px 34px}
 footer.ck-rod a{color:#fff}
 footer.ck-rod details{max-width:560px;margin:6px auto 0;text-align:left}
@@ -56,8 +75,8 @@ footer.ck-rod p{margin-top:8px}
 <h1 class="mx-auto mt-6 max-w-4xl font-display text-4xl font-extrabold leading-[1.1] tracking-tight md:text-6xl">Biblioteca de 200 Jogos e Dinâmicas de <span class="text-primary">Futebol Infantil</span></h1>
 <p class="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">Planeje suas aulas de futebol kids com jogos e dinâmicas para cada turma, faixa etária e objetivo — mais variedade para envolver as crianças e menos tempo procurando ideias.</p>
 <div class="ck-video relative mx-auto mt-9 w-[300px] rounded-[2.5rem] border-[10px] border-navy bg-navy shadow-soft" id="ckVideo">
-<video src="/futebol-kids/img/por-dentro.mp4" poster="/futebol-kids/img/video-capa.webp" playsinline muted loop preload="none" class="aspect-[9/16] w-full rounded-[1.8rem] object-cover" aria-label="Veja as páginas do material por dentro"></video>
-<button type="button" aria-label="Ver o material por dentro" class="ck-play absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-background text-3xl text-primary shadow-soft">▶</button>
+<video src="/futebol-kids/img/vsl.mp4" poster="/futebol-kids/img/vsl-capa.jpg" playsinline preload="none" class="aspect-[9/16] w-full rounded-[1.8rem] object-cover" aria-label="Vídeo de apresentação do Craque Kids"></video>
+<button type="button" aria-label="Reproduzir vídeo do Craque Kids" class="ck-play absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-background text-3xl text-primary shadow-soft">▶</button>
 </div>
 <div class="mt-10 flex justify-center">
 <a href="#oferta" class="btn-cta text-base md:text-lg">Quero transformar minhas aulas</a>
@@ -209,16 +228,23 @@ footer.ck-rod p{margin-top:8px}
 
 <!-- 8. DEPOIMENTOS -->
 <section class="bg-muted px-5 py-20">
-<div class="mx-auto max-w-3xl text-center">
+<div class="mx-auto max-w-6xl">
+<div class="mx-auto mb-12 max-w-3xl text-center">
 <h2 class="font-display text-3xl font-extrabold leading-tight text-foreground md:text-4xl">O Que Professores Kids Estão Dizendo</h2>
 <p class="mt-4 text-lg text-muted-foreground">Conversas reais de professores e treinadores que já usam o material no planejamento dos treinos infantis.</p>
 </div>
-<div class="mx-auto mt-12 grid max-w-6xl gap-6 md:grid-cols-2 lg:grid-cols-3">
-<figure><div class="rounded-3xl bg-chat p-4 shadow-soft"><div class="flex items-center gap-3 border-b border-chat-bubble pb-3"><img src="/futebol-kids/img/av-rafa.jpg" alt="Foto de perfil de @prof.rafa.escolinha" loading="lazy" width="36" height="36" class="h-9 w-9 rounded-full object-cover"><span class="text-sm font-semibold text-primary-foreground">@prof.rafa.escolinha</span></div><div class="mt-4 flex flex-col gap-2"><p class="max-w-[85%] rounded-2xl px-4 py-2 text-sm text-primary-foreground self-start bg-chat-bubble">Professor, passando pra agradecer! 🙏</p><p class="max-w-[85%] rounded-2xl px-4 py-2 text-sm text-primary-foreground self-start bg-chat-bubble">Apliquei 3 dinâmicas das 200 na turma sub-7 hoje e a criançada não queria ir embora do campo ⚽😂</p><p class="max-w-[85%] rounded-2xl px-4 py-2 text-sm text-primary-foreground self-end bg-chat-me">Que demais, Rafa! Isso que a gente ama ver 💙</p></div></div><figcaption class="mt-3 text-center text-sm font-semibold text-muted-foreground">@prof.rafa.escolinha</figcaption></figure>
-<figure><div class="rounded-3xl bg-chat p-4 shadow-soft"><div class="flex items-center gap-3 border-b border-chat-bubble pb-3"><img src="/futebol-kids/img/av-ju.jpg" alt="Foto de perfil de @tia.ju.futsal" loading="lazy" width="36" height="36" class="h-9 w-9 rounded-full object-cover"><span class="text-sm font-semibold text-primary-foreground">@tia.ju.futsal</span></div><div class="mt-4 flex flex-col gap-2"><p class="max-w-[85%] rounded-2xl px-4 py-2 text-sm text-primary-foreground self-start bg-chat-bubble">Devorei o material ontem à noite 😍</p><p class="max-w-[85%] rounded-2xl px-4 py-2 text-sm text-primary-foreground self-start bg-chat-bubble">Muito organizado por idade. Os planos de aula do bônus salvaram minha semana na escolinha de futsal!</p><p class="max-w-[85%] rounded-2xl px-4 py-2 text-sm text-primary-foreground self-end bg-chat-me">Fico muito feliz, Ju! Bons treinos 🙌</p></div></div><figcaption class="mt-3 text-center text-sm font-semibold text-muted-foreground">@tia.ju.futsal</figcaption></figure>
-<figure><div class="rounded-3xl bg-chat p-4 shadow-soft"><div class="flex items-center gap-3 border-b border-chat-bubble pb-3"><img src="/futebol-kids/img/av-bolanope.jpg" alt="Foto de perfil de @ct_bolanope" loading="lazy" width="36" height="36" class="h-9 w-9 rounded-full object-cover"><span class="text-sm font-semibold text-primary-foreground">@ct_bolanope</span></div><div class="mt-4 flex flex-col gap-2"><p class="max-w-[85%] rounded-2xl px-4 py-2 text-sm text-primary-foreground self-end bg-chat-me">Conseguiu acessar o material?</p><p class="max-w-[85%] rounded-2xl px-4 py-2 text-sm text-primary-foreground self-start bg-chat-bubble">Já chegou aqui no e-mail! Recebi na hora ✅</p><p class="max-w-[85%] rounded-2xl px-4 py-2 text-sm text-primary-foreground self-start bg-chat-bubble">Valeu demais, já vou usar no treino de sábado ⚽</p></div></div><figcaption class="mt-3 text-center text-sm font-semibold text-muted-foreground">@ct_bolanope</figcaption></figure>
-<figure><div class="rounded-3xl bg-chat p-4 shadow-soft"><div class="flex items-center gap-3 border-b border-chat-bubble pb-3"><img src="/futebol-kids/img/av-lucas.jpg" alt="Foto de perfil de @lucas.treinador.sub9" loading="lazy" width="36" height="36" class="h-9 w-9 rounded-full object-cover"><span class="text-sm font-semibold text-primary-foreground">@lucas.treinador.sub9</span></div><div class="mt-4 flex flex-col gap-2"><p class="max-w-[85%] rounded-2xl px-4 py-2 text-sm text-primary-foreground self-start bg-chat-bubble">Eu tinha muita dificuldade em prender a atenção dos pequenos no aquecimento</p><p class="max-w-[85%] rounded-2xl px-4 py-2 text-sm text-primary-foreground self-start bg-chat-bubble">Usei os jogos com bola e cones e o treino fluiu muito bem. Ninguém ficou parado! 🔥</p><p class="max-w-[85%] rounded-2xl px-4 py-2 text-sm text-primary-foreground self-end bg-chat-me">Show, Lucas! A ideia é essa 💪</p></div></div><figcaption class="mt-3 text-center text-sm font-semibold text-muted-foreground">@lucas.treinador.sub9</figcaption></figure>
-<figure><div class="rounded-3xl bg-chat p-4 shadow-soft"><div class="flex items-center gap-3 border-b border-chat-bubble pb-3"><img src="/futebol-kids/img/av-beto.jpg" alt="Foto de perfil de @mister.beto.futebol" loading="lazy" width="36" height="36" class="h-9 w-9 rounded-full object-cover"><span class="text-sm font-semibold text-primary-foreground">@mister.beto.futebol</span></div><div class="mt-4 flex flex-col gap-2"><p class="max-w-[85%] rounded-2xl px-4 py-2 text-sm text-primary-foreground self-start bg-chat-bubble">Achei que seria só um PDF simples...</p><p class="max-w-[85%] rounded-2xl px-4 py-2 text-sm text-primary-foreground self-start bg-chat-bubble">Mas tem dinâmica pra um ano inteiro de treino. Passe, drible, finalização, tudo de forma lúdica. Top demais! 🏆</p></div></div><figcaption class="mt-3 text-center text-sm font-semibold text-muted-foreground">@mister.beto.futebol</figcaption></figure>
+<div class="ck-car" aria-roledescription="carrossel">
+<button type="button" class="ck-seta ck-ant" aria-label="Conversa anterior">‹</button>
+<div class="ck-trilho" id="ckTrilho">
+<div class="ck-slide" role="group" aria-roledescription="slide" aria-label="1 de 5"><button type="button" class="ck-depo rounded-2xl shadow-soft" data-src="/futebol-kids/img/depo1.webp" aria-label="Ampliar conversa de @prof.rafa.escolinha"><img src="/futebol-kids/img/depo1.webp" alt="Captura de conversa no Instagram Direct: professor agradece e conta que aplicou 3 dinâmicas na turma sub-7 e que as crianças não queriam ir embora do campo." width="680" height="879" loading="lazy" decoding="async" class="rounded-2xl border bg-card"><span class="ck-zoom" aria-hidden="true">⤢</span></button><p class="mt-4 text-center font-display text-sm font-bold text-primary">@prof.rafa.escolinha</p></div>
+<div class="ck-slide" role="group" aria-roledescription="slide" aria-label="2 de 5"><button type="button" class="ck-depo rounded-2xl shadow-soft" data-src="/futebol-kids/img/depo2.webp" aria-label="Ampliar conversa de @tia.ju.futsal"><img src="/futebol-kids/img/depo2.webp" alt="Captura de conversa no Instagram Direct: professora diz que devorou o material, elogia a organização por idade e conta que os planos de aula do bônus salvaram a semana." width="680" height="693" loading="lazy" decoding="async" class="rounded-2xl border bg-card"><span class="ck-zoom" aria-hidden="true">⤢</span></button><p class="mt-4 text-center font-display text-sm font-bold text-primary">@tia.ju.futsal</p></div>
+<div class="ck-slide" role="group" aria-roledescription="slide" aria-label="3 de 5"><button type="button" class="ck-depo rounded-2xl shadow-soft" data-src="/futebol-kids/img/depo3.webp" aria-label="Ampliar conversa de @ct_bolanope"><img src="/futebol-kids/img/depo3.webp" alt="Captura de conversa no Instagram Direct: treinador confirma que recebeu o material no e-mail na hora e que vai usar no treino de sábado." width="680" height="637" loading="lazy" decoding="async" class="rounded-2xl border bg-card"><span class="ck-zoom" aria-hidden="true">⤢</span></button><p class="mt-4 text-center font-display text-sm font-bold text-primary">@ct_bolanope</p></div>
+<div class="ck-slide" role="group" aria-roledescription="slide" aria-label="4 de 5"><button type="button" class="ck-depo rounded-2xl shadow-soft" data-src="/futebol-kids/img/depo4.webp" aria-label="Ampliar conversa de @lucas.treinador.sub9"><img src="/futebol-kids/img/depo4.webp" alt="Captura de conversa no Instagram Direct: treinador conta que tinha dificuldade em prender a atenção dos pequenos e que com os jogos com bola e cones ninguém ficou parado." width="680" height="656" loading="lazy" decoding="async" class="rounded-2xl border bg-card"><span class="ck-zoom" aria-hidden="true">⤢</span></button><p class="mt-4 text-center font-display text-sm font-bold text-primary">@lucas.treinador.sub9</p></div>
+<div class="ck-slide" role="group" aria-roledescription="slide" aria-label="5 de 5"><button type="button" class="ck-depo rounded-2xl shadow-soft" data-src="/futebol-kids/img/depo5.webp" aria-label="Ampliar conversa de @mister.beto.futebol"><img src="/futebol-kids/img/depo5.webp" alt="Captura de conversa no Instagram Direct: treinador diz que achava que seria só um PDF simples, mas que há dinâmicas para um ano inteiro de treino." width="680" height="656" loading="lazy" decoding="async" class="rounded-2xl border bg-card"><span class="ck-zoom" aria-hidden="true">⤢</span></button><p class="mt-4 text-center font-display text-sm font-bold text-primary">@mister.beto.futebol</p></div>
+</div>
+<button type="button" class="ck-seta ck-prox" aria-label="Próxima conversa">›</button>
+</div>
+<div class="ck-pontos" id="ckPontos"></div>
 </div>
 </section>
 
@@ -259,6 +285,8 @@ footer.ck-rod p{margin-top:8px}
 <details><summary>Política de Privacidade</summary><p>Os dados informados no checkout são usados para processar o pagamento, entregar o material e prestar suporte. Para dúvidas sobre seus dados, escreva para suporte@nexopoint.com.br.</p></details>
 </footer>
 
+<div class="ck-luz" id="ckLuz" role="dialog" aria-modal="true" aria-label="Conversa ampliada"><button type="button" id="ckLuzX" aria-label="Fechar">×</button><img id="ckLuzImg" alt=""></div>
+
 <!-- pop-up ao escolher o básico -->
 <div class="ck-modal" id="ckModal" role="dialog" aria-modal="true" aria-labelledby="ckTit" aria-hidden="true">
 <div class="ck-mbox">
@@ -293,6 +321,19 @@ footer.ck-rod p{margin-top:8px}
   m.addEventListener('click',function(e){if(e.target===m)fechar();});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')fechar();});
   document.querySelectorAll('[data-checkout]').forEach(function(a){a.addEventListener('click',function(){ev('checkout_'+a.getAttribute('data-checkout'));});});
+  // carrossel de depoimentos
+  var tr=document.getElementById('ckTrilho'),sl=tr.querySelectorAll('.ck-slide'),pt=document.getElementById('ckPontos');
+  function passo(){return sl[0].getBoundingClientRect().width;}
+  sl.forEach(function(_,i){var b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Ir para a conversa '+(i+1));b.onclick=function(){tr.scrollTo({left:i*passo()-(tr.clientWidth-passo())/2,behavior:'smooth'});};pt.appendChild(b);});
+  function marca(){var i=Math.round((tr.scrollLeft+(tr.clientWidth-passo())/2)/passo());i=Math.max(0,Math.min(sl.length-1,i));pt.querySelectorAll('button').forEach(function(b,k){b.classList.toggle('on',k===i);});}
+  tr.addEventListener('scroll',function(){window.requestAnimationFrame(marca);});marca();
+  document.querySelector('.ck-ant').onclick=function(){tr.scrollBy({left:-passo(),behavior:'smooth'});};
+  document.querySelector('.ck-prox').onclick=function(){tr.scrollBy({left:passo(),behavior:'smooth'});};
+  var luz=document.getElementById('ckLuz'),li=document.getElementById('ckLuzImg');
+  document.querySelectorAll('.ck-depo').forEach(function(b){b.onclick=function(){li.src=b.getAttribute('data-src');li.alt=b.querySelector('img').alt;luz.classList.add('on');ev('abriu_depoimento');};});
+  luz.onclick=function(e){if(e.target!==li)luz.classList.remove('on');};
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')luz.classList.remove('on');});
+
   // rolagem suave até a oferta
   document.querySelectorAll('a[href="#oferta"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();document.getElementById('oferta').scrollIntoView({behavior:'smooth'});ev('clique_cta');});});
 })();
