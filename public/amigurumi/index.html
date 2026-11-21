@@ -130,10 +130,17 @@ h2{font-size:clamp(24px,5.4vw,34px);margin-bottom:10px}
 .pos{color:var(--tinta2);font-size:12.5px;margin-top:12px}
 
 /* 9. garantia */
-.gar{padding:28px 20px}
-.gar svg{width:46px;height:46px;margin:0 auto 10px;stroke:var(--salvia);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.gar h3{font-size:22px;margin-bottom:8px}
-.gar p{color:var(--tinta2);font-size:15px}
+.gar{padding:32px 22px 28px}
+.selo-gar{width:118px;height:118px;margin:0 auto 18px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFF6E3 0,#F6DCA8 70%);border:5px solid #E3A86A;box-shadow:0 10px 28px rgba(227,168,106,.45),inset 0 0 0 4px #fff;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;color:#8A4B1E;position:relative}
+.selo-gar::after{content:"";position:absolute;inset:8px;border:2px dashed rgba(201,138,75,.55);border-radius:50%}
+.selo-gar b{font-size:54px;font-weight:900}.selo-gar span{font-size:14px;font-weight:900;letter-spacing:1.5px;margin-top:2px}
+.gar h3{font-size:clamp(22px,6vw,28px);margin-bottom:10px;line-height:1.15}
+.gar p{color:var(--tinta2);font-size:16px;line-height:1.65}
+.gar p b{color:var(--tinta)}
+.gar-lista{list-style:none;display:grid;gap:8px;margin:16px auto 22px;max-width:300px;text-align:left}
+.gar-lista li{display:flex;gap:9px;font-weight:800;font-size:15px}
+.gar-lista li::before{content:"✓";flex:none;width:22px;height:22px;border-radius:50%;background:var(--salvia);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
+.btn-gar{font-size:clamp(14px,4vw,16px);letter-spacing:0;padding:17px 12px;white-space:nowrap;background:linear-gradient(135deg,#D9603A 0%,#B8441F 100%)}
 .garantia{background:var(--creme2)}
 
 /* 10. faq */
@@ -342,9 +349,11 @@ footer details p{margin-top:8px;font-size:13px}
 <section class="garantia">
   <div class="wrap">
     <div class="card gar">
-      <svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
-      <h3>Garantia de 7 dias</h3>
-      <p>Abra o manual, escolha seu primeiro bichinho e confira como as receitas são explicadas. Se o material não for o que você esperava, solicite o reembolso em até 7 dias após a compra para receber o valor integral.</p>
+      <div class="selo-gar"><b>7</b><span>DIAS</span></div>
+      <h3>Garantia Incondicional<br>de 7 Dias</h3>
+      <p>Baixe o manual, escolha seu primeiro bichinho e faça com calma. Se você não amar as receitas, <b>por qualquer motivo</b>, basta um e-mail em até 7 dias para receber <b>100% do seu dinheiro de volta</b>, sem perguntas e sem complicação.</p>
+      <ul class="gar-lista"><li>Sem burocracia: é só um e-mail</li><li>Você recebe o valor integral</li><li>O risco é todo nosso</li></ul>
+      <a class="btn btn-cta btn-gar" data-checkout href="https://pay.cakto.com.br/4oivh26_1346555">QUERO APROVEITAR A GARANTIA</a>
     </div>
   </div>
 </section>
