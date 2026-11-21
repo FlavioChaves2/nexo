@@ -70,6 +70,11 @@ h2{font-size:clamp(24px,5.4vw,34px);margin-bottom:10px}
 
 /* 3. modelos */
 .modelos{background:var(--creme)}
+.meio-cta{margin-top:30px;text-align:center}
+.meio-cta p{margin-top:12px;color:var(--tinta2);font-size:14.5px}.meio-cta b{color:var(--terra)}
+.btn-eu{position:relative;overflow:hidden;font-size:20px;letter-spacing:1px;background:linear-gradient(135deg,#D9603A 0%,#B8441F 100%);box-shadow:0 6px 0 var(--terra2),0 12px 26px rgba(194,80,47,.35);animation:pulsa 2.4s ease-in-out infinite}
+.btn-eu::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:brilha 3s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.btn-eu,.btn-eu::after{animation:none}}
 .mod{padding:12px 12px 20px;margin-top:20px}
 .mod img{border-radius:14px;aspect-ratio:1/1;object-fit:cover;width:100%}
 .mod h3{font-size:19px;margin:14px 0 4px}
@@ -246,6 +251,10 @@ footer details p{margin-top:8px;font-size:13px}
       <figure class="card mod"><img loading="lazy" src="/amigurumi/img/m2.webp" width="800" height="800" alt="Página do Modelo 02, Coelhinho de Laço, com a peça pronta"><h3>Modelo 02 — Coelhinho de Laço</h3><p>Acompanhe a montagem das orelhas compridas e escolha um laço nas cores do chá de bebê.</p></figure>
       <figure class="card mod"><img loading="lazy" src="/amigurumi/img/m3.webp" width="800" height="800" alt="Página do Ursinho Mel com o focinho bordado e outros mini bichinhos"><h3>Ursinho Mel e outros mini bichinhos</h3><p>Veja como o focinho bordado dá expressão ao ursinho. Depois, compare os modelos e escolha a lembrancinha da vez.</p></figure>
     </div>
+    <div class="meio-cta" id="meioCta">
+      <a class="btn btn-cta btn-eu" href="#oferta">EU QUERO 🧸</a>
+      <p>50 receitas + bônus de Natal por <b>R$ 10,00</b></p>
+    </div>
   </div>
 </section>
 
@@ -417,7 +426,11 @@ footer details p{margin-top:8px;font-size:13px}
   fl.addEventListener('click',fecharFlash);
   if('IntersectionObserver' in window&&!flVisto){
     var flObs=new IntersectionObserver(function(e){if(e[0].isIntersecting){abrirFlash();flObs.disconnect();}},{rootMargin:'0px 0px -35% 0px'});
-    flObs.observe(document.querySelector('.quem'));
+    flObs.observe(document.getElementById('meioCta'));
+  }
+  // botão do meio: rola suave até a oferta e registra no Clarity
+  var bEu=document.querySelector('.btn-eu');
+  if(bEu){bEu.addEventListener('click',function(e){e.preventDefault();document.getElementById('oferta').scrollIntoView({behavior:'smooth',block:'start'});try{if(window.clarity)clarity('event','clique_eu_quero');}catch(x){}});
   }
 
   // eventos no Clarity
