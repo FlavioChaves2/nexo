@@ -23,7 +23,8 @@
 <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck data-utmify-prevent-subids async defer></script>
 <!-- Utmify: pixel -->
 <script>window.pixelId = "6aff6ad1bcd7f3020cbd0c4c"; var a = document.createElement("script"); a.setAttribute("async", ""); a.setAttribute("defer", ""); a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js"); document.head.appendChild(a);</script>
-<!-- Meta Pixel (navegador): necessário para o Meta contar visualização da página de destino e IC por anúncio -->
+<!-- Meta Pixel (navegador): só o PageView. A Utmify já manda ViewContent e InitiateCheckout pelo navegador (com eventID),
+     mas não manda PageView, e sem ele o Meta não conta "visualizações da página de destino". Não adicionar IC aqui (duplicaria). -->
 <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1807381186986749');fbq('track','PageView');</script>
 <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1807381186986749&ev=PageView&noscript=1"/></noscript>
 <!-- Clarity -->
@@ -448,10 +449,7 @@ footer details p{margin-top:8px;font-size:13px}
 
   // eventos no Clarity
   document.querySelectorAll('[data-checkout]').forEach(function(a){
-    a.addEventListener('click',function(){
-      try{if(window.clarity)clarity('event','clique_checkout');}catch(e){}
-      try{if(window.fbq)fbq('track','InitiateCheckout',{value:10,currency:'BRL',content_name:'50 Mini Bichinhos de Amigurumi'});}catch(e){}
-    });
+    a.addEventListener('click',function(){try{if(window.clarity)clarity('event','clique_checkout');}catch(e){}});
   });
   document.querySelectorAll('.faq details').forEach(function(d){
     d.addEventListener('toggle',function(){if(d.open){try{if(window.clarity)clarity('event','abriu_faq');}catch(e){}}});
