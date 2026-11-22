@@ -71,7 +71,21 @@ body.tem-fixo{padding-bottom:84px}
 @media(min-width:768px){body.tem-fixo{padding-bottom:0}}
 .ck-ficha{display:block;width:100%;max-width:560px;padding:0;border:none;background:none;cursor:zoom-in;position:relative;text-align:center}
 .ck-ficha img{display:block;width:100%;height:auto;border-radius:18px;box-shadow:0 14px 34px rgba(10,24,60,.16)}
-.ck-ficha-dica{display:inline-block;margin-top:12px;font-weight:700;font-size:15px;color:var(--primary);background:var(--accent);padding:9px 16px;border-radius:999px}
+.ck-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:20px auto 0;max-width:560px;padding:0;list-style:none}
+.ck-tags li{background:#fff;border:1px solid var(--border);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;color:var(--foreground)}
+.ck-fcar{max-width:560px}
+.ck-fcar .ck-slide{flex:0 0 100%;padding:0 4px}
+.ck-fslide{display:flex;flex-direction:column;gap:10px}
+.ck-fil{display:block;width:100%;max-width:340px;margin:0 auto;aspect-ratio:4/5;object-fit:cover;border-radius:18px;box-shadow:0 10px 26px rgba(10,24,60,.12)}
+.ck-fcard{display:block;width:100%;height:auto;border-radius:18px;box-shadow:0 12px 30px rgba(10,24,60,.14)}
+.ck-fcar .ck-seta{top:30%}
+.ck-plano{max-width:560px;background:#fff;border:1px solid var(--border);border-radius:20px;padding:18px 16px;box-shadow:0 10px 26px rgba(10,24,60,.08)}
+.ck-plano ol{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
+.ck-plano li{display:flex;align-items:center;gap:10px;font-size:14px;border-radius:12px;padding:6px;line-height:1.25}
+.ck-plano li span{flex:none;color:#fff;font-weight:800;font-size:12px;border-radius:8px;padding:6px 8px;min-width:56px;text-align:center}
+.ck-plano li b{display:block;font-size:11px;color:var(--muted-foreground);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.ck-plano-on{background:#F3EAF9;outline:2px solid #8E44AD}
+.ck-ficha-dica{border:none;cursor:pointer;display:inline-block;margin-top:12px;font-weight:700;font-size:15px;color:var(--primary);background:var(--accent);padding:9px 16px;border-radius:999px}
 .ck-fbox{position:relative;width:100%;max-width:560px;max-height:94vh;overflow:auto;-webkit-overflow-scrolling:touch;background:#fff;border-radius:16px;padding:10px 10px 14px}
 .ck-fbox img{display:block;width:100%;height:auto;border-radius:8px}
 .ck-x-claro{position:sticky;float:right;top:0;z-index:2;background:rgba(10,24,60,.8);color:#fff;border-radius:999px;width:40px;height:40px;padding:0;margin:-2px -2px -40px 0}
@@ -108,18 +122,51 @@ body.tem-fixo{padding-bottom:84px}
 </ul>
 </section>
 
-<!-- 1b. FICHA REAL (Nº 079 Bobinho) -->
+<!-- 1b. FICHAS REAIS DO MATERIAL -->
 <section class="px-5 pb-6 pt-14">
 <div class="mx-auto max-w-3xl text-center">
 <p class="text-xs font-bold tracking-widest text-primary">VEJA UMA FICHA DO MATERIAL</p>
 <h2 class="mt-2 font-display text-3xl font-extrabold leading-tight text-foreground md:text-4xl">Como trabalhar passe com a sua turma?</h2>
 <p class="mt-4 text-lg text-muted-foreground">Veja a ficha do Bobinho: como organizar a roda, a regra do jogo e como aumentar a dificuldade.</p>
 </div>
-<button type="button" id="ckFichaBtn" class="ck-ficha mx-auto mt-8" aria-label="Ampliar a página do material com a dinâmica Nº 079 Bobinho">
-<img src="/futebol-kids/img/ficha-079-card.webp" width="1080" height="620" alt="Ficha Nº 079 Bobinho: 7 a 12 anos, passe sob pressão. Material: 1 bola e cones para o círculo. Como fazer: em roda, as crianças trocam passes enquanto um ou dois bobinhos no meio tentam interceptar; quem errar o passe vai para o meio. Variação: limitar a dois toques por criança." loading="lazy" decoding="async">
-<span class="ck-ficha-dica">🔍 Toque para ampliar a ficha</span>
-</button>
-<p class="mx-auto mt-4 max-w-2xl text-center text-sm text-muted-foreground">São 200 fichas assim, separadas por idade e por objetivo.</p>
+<ul class="ck-tags" aria-label="O que toda ficha traz">
+<li>✓ Idade</li><li>✓ Objetivo</li><li>✓ Material</li><li>✓ Passo a passo</li><li>✓ Variação</li>
+</ul>
+<div class="ck-car ck-fcar mx-auto mt-6" aria-roledescription="carrossel">
+<button type="button" class="ck-seta ck-ant" aria-label="Ficha anterior">‹</button>
+<div class="ck-trilho">
+<div class="ck-slide ck-fslide" role="group" aria-roledescription="slide" aria-label="1 de 3">
+<img src="/futebol-kids/img/ilu04.webp" alt="Ilustração da dinâmica Nº 079 Bobinho" width="900" height="1125" loading="lazy" decoding="async" class="ck-fil">
+<img src="/futebol-kids/img/ficha-079-card.webp" alt="Ficha Nº 079 Bobinho: 7 a 12 anos, passe sob pressão. Material: 1 bola e cones para o círculo. Como fazer: em roda, as crianças trocam passes enquanto um ou dois bobinhos no meio tentam interceptar; quem errar o passe vai para o meio. Variação: limitar a dois toques por criança." width="1080" height="595" loading="lazy" decoding="async" class="ck-fcard">
+</div>
+<div class="ck-slide ck-fslide" role="group" aria-roledescription="slide" aria-label="2 de 3">
+<img src="/futebol-kids/img/ilu01.webp" alt="Ilustração da dinâmica Nº 003 Rabo do Macaco" width="900" height="1125" loading="lazy" decoding="async" class="ck-fil">
+<img src="/futebol-kids/img/ficha-003-card.webp" alt="Ficha Nº 003 Rabo do Macaco: 5 a 12 anos, agilidade e mudança de direção. Material: coletes ou fitas presos na cintura. Como fazer: cada criança prende um colete atrás do short e todos tentam pegar o rabo dos outros sem perder o seu. Variação: com bola no pé." width="1080" height="708" loading="lazy" decoding="async" class="ck-fcard">
+</div>
+<div class="ck-slide ck-fslide" role="group" aria-roledescription="slide" aria-label="3 de 3">
+<img src="/futebol-kids/img/ilu03.webp" alt="Ilustração da dinâmica Nº 058 Pirata e o Tesouro" width="900" height="1125" loading="lazy" decoding="async" class="ck-fil">
+<img src="/futebol-kids/img/ficha-058-card.webp" alt="Ficha Nº 058 Pirata e o Tesouro: 6 a 10 anos, proteger a bola. Material: 1 bola por criança e coletes para os piratas. Como fazer: as crianças conduzem a bola enquanto dois piratas tentam roubar. Variação: quem perde vira pirata." width="1080" height="643" loading="lazy" decoding="async" class="ck-fcard">
+</div>
+</div>
+<button type="button" class="ck-seta ck-prox" aria-label="Próxima ficha">›</button>
+</div>
+<div class="ck-pontos"></div>
+<div class="mt-4 text-center"><button type="button" id="ckFichaBtn" class="ck-ficha-dica" aria-label="Ampliar a página do material com a dinâmica Nº 079 Bobinho">🔍 Ver a página do Bobinho no material</button></div>
+
+<div class="ck-plano mx-auto mt-10">
+<p class="text-xs font-bold tracking-widest text-primary">ONDE O BOBINHO ENTRA NO TREINO</p>
+<h3 class="mt-1 font-display text-xl font-extrabold">Plano de aula 09 · Roda de passes</h3>
+<p class="text-sm text-muted-foreground">7 a 9 anos · Passe e comunicação · 60 minutos</p>
+<ol>
+<li><span style="background:#F2A93B">10 min</span><b>Aquecimento</b> Batata Quente com os Pés</li>
+<li><span style="background:#2E86DE">15 min</span><b>Parte principal 1</b> Roda de Passes</li>
+<li class="ck-plano-on"><span style="background:#8E44AD">15 min</span><b>Parte principal 2</b> Bobinho</li>
+<li><span style="background:#1ABC9C">15 min</span><b>Jogo</b> Gol de Ouro</li>
+<li><span style="background:#7F8C8D">5 min</span><b>Volta à calma</b> Craque da Atitude</li>
+</ol>
+<p class="mt-3 text-sm font-semibold">São 20 planos assim no <span class="text-primary">Plano Completo</span>.</p>
+</div>
+<p class="mx-auto mt-6 max-w-2xl text-center text-sm text-muted-foreground">São 200 fichas como estas, separadas por idade e por objetivo.</p>
 </section>
 
 <!-- 2. REPERTÓRIO -->
