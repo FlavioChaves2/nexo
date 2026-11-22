@@ -69,24 +69,25 @@ footer.ck-rod p{margin-top:8px}
 @media(min-width:768px){.ck-fixo{display:none}}
 body.tem-fixo{padding-bottom:84px}
 @media(min-width:768px){body.tem-fixo{padding-bottom:0}}
-.ck-video .ck-play{width:84px;height:84px}
+.ck-som{position:absolute;left:50%;top:18px;transform:translateX(-50%);white-space:nowrap;border:none;border-radius:999px;background:rgba(10,24,60,.82);color:#fff;font-weight:700;font-size:15px;padding:11px 18px;box-shadow:0 6px 18px rgba(0,0,0,.3);cursor:pointer;animation:ckPulsa 1.6s ease-in-out infinite}
+@keyframes ckPulsa{50%{transform:translateX(-50%) scale(1.06)}}
+.ck-video.com-som .ck-som{display:none}
 </style>
 </head>
 <body>
 <main class="font-sans text-foreground">
 
 <!-- 1. TOPO -->
-<section class="bg-hero px-5 pb-16 pt-14 text-center">
-<p class="font-display text-3xl font-extrabold text-primary md:text-4xl">Craque Kids</p>
-<span class="mt-6 inline-block rounded-full bg-accent px-4 py-1.5 text-xs font-semibold tracking-wider text-accent-foreground">PARA PROFESSORES E TREINADORES DE FUTEBOL KIDS</span>
-<h1 class="mx-auto mt-6 max-w-4xl font-display text-4xl font-extrabold leading-[1.1] tracking-tight md:text-6xl">Biblioteca de 200 Jogos e Dinâmicas de <span class="text-primary">Futebol Infantil</span></h1>
-<p class="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">Planeje suas aulas de futebol kids com jogos e dinâmicas para cada turma, faixa etária e objetivo — mais variedade para envolver as crianças e menos tempo procurando ideias.</p>
-<div class="ck-video relative mx-auto mt-9 w-[300px] rounded-[2.5rem] border-[10px] border-navy bg-navy shadow-soft" id="ckVideo">
-<video src="/futebol-kids/img/vsl.mp4?v=4" poster="/futebol-kids/img/vsl-capa.jpg" playsinline preload="none" class="aspect-[9/16] w-full rounded-[1.8rem] object-cover" aria-label="Vídeo de apresentação do Craque Kids"></video>
-<button type="button" aria-label="Reproduzir vídeo do Craque Kids" class="ck-play absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-background text-3xl text-primary shadow-soft">▶</button>
+<section class="bg-hero px-5 pb-16 pt-8 text-center">
+<p class="font-display text-2xl font-extrabold text-primary md:text-4xl">Craque Kids</p>
+<h1 class="mx-auto mt-4 max-w-4xl font-display font-extrabold leading-[1.1] tracking-tight md:text-6xl" style="font-size:clamp(1.9rem,8vw,3.75rem)">200 jogos de futebol infantil <span class="text-primary">prontos para o seu próximo treino</span></h1>
+<p class="mx-auto mt-4 max-w-2xl text-base text-muted-foreground md:text-lg">Escolha a idade da turma e o que quer trabalhar: passe, drible ou finalização. Abra a ficha no celular ou imprima para levar ao campo.</p>
+<div class="mt-6 flex justify-center">
+<a href="#oferta" class="btn-cta text-base md:text-lg">Ver os planos a partir de R$&nbsp;10</a>
 </div>
-<div class="mt-10 flex justify-center">
-<a href="#oferta" class="btn-cta text-base md:text-lg">Quero transformar minhas aulas</a>
+<div class="ck-video relative mx-auto mt-8 w-[280px] rounded-[2.5rem] border-[10px] border-navy bg-navy shadow-soft" id="ckVideo">
+<video src="/futebol-kids/img/vsl.mp4?v=4" poster="/futebol-kids/img/vsl-capa.jpg" playsinline muted autoplay loop preload="metadata" class="aspect-[9/16] w-full rounded-[1.8rem] object-cover" aria-label="Vídeo de apresentação do Craque Kids"></video>
+<button type="button" aria-label="Ativar o som do vídeo" class="ck-som">🔊 Toque para ouvir</button>
 </div>
 <ul class="mx-auto mt-8 flex max-w-3xl flex-col justify-center gap-3 text-sm font-medium text-muted-foreground md:flex-row md:gap-8">
 <li class="flex items-center justify-center gap-2"><span class="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cta text-xs font-bold text-cta-foreground">✓</span>200 jogos e dinâmicas de 4 a 12 anos</li>
@@ -322,7 +323,12 @@ body.tem-fixo{padding-bottom:84px}
   function ev(n){try{if(window.clarity)clarity('event',n);}catch(e){}}
   // vídeo do topo: toca ao clicar
   var box=document.getElementById('ckVideo'),vid=box.querySelector('video');
-  box.addEventListener('click',function(){if(vid.paused){vid.play();box.classList.add('tocando');ev('video_play');}else{vid.pause();box.classList.remove('tocando');}});
+  // começa sozinho sem som; o primeiro toque recomeça do início com som; depois, toque pausa/retoma
+  var p0=vid.play();if(p0&&p0.catch)p0.catch(function(){});
+  box.addEventListener('click',function(){
+    if(!box.classList.contains('com-som')){box.classList.add('com-som');vid.muted=false;vid.loop=false;vid.currentTime=0;vid.play();ev('video_som');return;}
+    if(vid.paused){vid.play();}else{vid.pause();}
+  });
   // perguntas frequentes
   document.querySelectorAll('#faq button').forEach(function(b){
     b.addEventListener('click',function(){var r=b.nextElementSibling,ab=r.hidden;r.hidden=!ab;b.setAttribute('aria-expanded',ab);b.querySelector('span:last-child').textContent=ab?'−':'+';if(ab)ev('abriu_faq');});
