@@ -71,6 +71,11 @@ body.tem-fixo{padding-bottom:84px}
 @media(min-width:768px){body.tem-fixo{padding-bottom:0}}
 .ck-ficha{display:block;width:100%;max-width:560px;padding:0;border:none;background:none;cursor:zoom-in;position:relative;text-align:center}
 .ck-ficha img{display:block;width:100%;height:auto;border-radius:18px;box-shadow:0 14px 34px rgba(10,24,60,.16)}
+.ck-stats{display:grid;grid-template-columns:repeat(3,1fr);max-width:420px;margin:28px auto 0;background:#fff;border:1px solid var(--border);border-radius:20px;box-shadow:0 10px 28px rgba(10,24,60,.08);overflow:hidden}
+.ck-stats div{padding:16px 6px 14px;text-align:center}
+.ck-stats div+div{border-left:1px solid var(--border)}
+.ck-stats strong{display:block;font-family:Poppins,sans-serif;font-weight:800;font-size:24px;line-height:1;color:var(--primary)}
+.ck-stats span{display:block;margin-top:6px;font-size:12px;line-height:1.3;color:var(--muted-foreground);font-weight:600}
 .ck-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:20px auto 0;max-width:560px;padding:0;list-style:none}
 .ck-tags li{background:#fff;border:1px solid var(--border);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;color:var(--foreground)}
 .ck-fcar{max-width:560px}
@@ -115,11 +120,11 @@ body.tem-fixo{padding-bottom:84px}
 <video src="/futebol-kids/img/vsl.mp4?v=4" poster="/futebol-kids/img/vsl-capa.jpg" playsinline muted autoplay loop preload="metadata" class="aspect-[9/16] w-full rounded-[1.8rem] object-cover" aria-label="Vídeo de apresentação do Craque Kids"></video>
 <button type="button" aria-label="Ativar o som do vídeo" class="ck-som">🔊 Toque para ouvir</button>
 </div>
-<ul class="mx-auto mt-8 flex max-w-3xl flex-col justify-center gap-3 text-sm font-medium text-muted-foreground md:flex-row md:gap-8">
-<li class="flex items-center justify-center gap-2"><span class="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cta text-xs font-bold text-cta-foreground">✓</span>200 jogos e dinâmicas de 4 a 12 anos</li>
-<li class="flex items-center justify-center gap-2"><span class="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cta text-xs font-bold text-cta-foreground">✓</span>Separadas por idade e por objetivo</li>
-<li class="flex items-center justify-center gap-2"><span class="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cta text-xs font-bold text-cta-foreground">✓</span>No celular, no tablet ou impresso</li>
-</ul>
+<div class="ck-stats" role="list" aria-label="Resumo do material">
+<div role="listitem"><strong>200</strong><span>jogos e dinâmicas</span></div>
+<div role="listitem"><strong>4–12</strong><span>anos, separados por idade</span></div>
+<div role="listitem"><strong>PDF</strong><span>no celular ou impresso</span></div>
+</div>
 </section>
 
 <!-- 1b. FICHAS REAIS DO MATERIAL -->
