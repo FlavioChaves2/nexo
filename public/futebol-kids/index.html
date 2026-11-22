@@ -69,9 +69,21 @@ footer.ck-rod p{margin-top:8px}
 @media(min-width:768px){.ck-fixo{display:none}}
 body.tem-fixo{padding-bottom:84px}
 @media(min-width:768px){body.tem-fixo{padding-bottom:0}}
+.ck-ficha{display:block;width:100%;max-width:560px;padding:0;border:none;background:none;cursor:zoom-in;position:relative;text-align:center}
+.ck-ficha img{display:block;width:100%;height:auto;border-radius:18px;box-shadow:0 14px 34px rgba(10,24,60,.16)}
+.ck-ficha-dica{display:inline-block;margin-top:12px;font-weight:700;font-size:15px;color:var(--primary);background:var(--accent);padding:9px 16px;border-radius:999px}
+.ck-fbox{position:relative;width:100%;max-width:560px;max-height:94vh;overflow:auto;-webkit-overflow-scrolling:touch;background:#fff;border-radius:16px;padding:10px 10px 14px}
+.ck-fbox img{display:block;width:100%;height:auto;border-radius:8px}
+.ck-x-claro{position:sticky;float:right;top:0;z-index:2;background:rgba(10,24,60,.8);color:#fff;border-radius:999px;width:40px;height:40px;padding:0;margin:-2px -2px -40px 0}
 .ck-som{position:absolute;left:50%;top:18px;transform:translateX(-50%);white-space:nowrap;border:none;border-radius:999px;background:rgba(10,24,60,.82);color:#fff;font-weight:700;font-size:15px;padding:11px 18px;box-shadow:0 6px 18px rgba(0,0,0,.3);cursor:pointer;animation:ckPulsa 1.6s ease-in-out infinite}
 @keyframes ckPulsa{50%{transform:translateX(-50%) scale(1.06)}}
-.ck-video.com-som .ck-som{display:none}
+.ck-video.com-som .ck-ficha{display:block;width:100%;max-width:560px;padding:0;border:none;background:none;cursor:zoom-in;position:relative;text-align:center}
+.ck-ficha img{display:block;width:100%;height:auto;border-radius:18px;box-shadow:0 14px 34px rgba(10,24,60,.16)}
+.ck-ficha-dica{display:inline-block;margin-top:12px;font-weight:700;font-size:15px;color:var(--primary);background:var(--accent);padding:9px 16px;border-radius:999px}
+.ck-fbox{position:relative;width:100%;max-width:560px;max-height:94vh;overflow:auto;-webkit-overflow-scrolling:touch;background:#fff;border-radius:16px;padding:10px 10px 14px}
+.ck-fbox img{display:block;width:100%;height:auto;border-radius:8px}
+.ck-x-claro{position:sticky;float:right;top:0;z-index:2;background:rgba(10,24,60,.8);color:#fff;border-radius:999px;width:40px;height:40px;padding:0;margin:-2px -2px -40px 0}
+.ck-som{display:none}
 </style>
 </head>
 <body>
@@ -94,6 +106,20 @@ body.tem-fixo{padding-bottom:84px}
 <li class="flex items-center justify-center gap-2"><span class="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cta text-xs font-bold text-cta-foreground">✓</span>Separadas por idade e por objetivo</li>
 <li class="flex items-center justify-center gap-2"><span class="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cta text-xs font-bold text-cta-foreground">✓</span>No celular, no tablet ou impresso</li>
 </ul>
+</section>
+
+<!-- 1b. FICHA REAL (Nº 079 Bobinho) -->
+<section class="px-5 pb-6 pt-14">
+<div class="mx-auto max-w-3xl text-center">
+<p class="text-xs font-bold tracking-widest text-primary">VEJA UMA FICHA DO MATERIAL</p>
+<h2 class="mt-2 font-display text-3xl font-extrabold leading-tight text-foreground md:text-4xl">Como trabalhar passe com a sua turma?</h2>
+<p class="mt-4 text-lg text-muted-foreground">Veja a ficha do Bobinho: como organizar a roda, a regra do jogo e como aumentar a dificuldade.</p>
+</div>
+<button type="button" id="ckFichaBtn" class="ck-ficha mx-auto mt-8" aria-label="Ampliar a página do material com a dinâmica Nº 079 Bobinho">
+<img src="/futebol-kids/img/ficha-079-card.webp" width="1080" height="620" alt="Ficha Nº 079 Bobinho: 7 a 12 anos, passe sob pressão. Material: 1 bola e cones para o círculo. Como fazer: em roda, as crianças trocam passes enquanto um ou dois bobinhos no meio tentam interceptar; quem errar o passe vai para o meio. Variação: limitar a dois toques por criança." loading="lazy" decoding="async">
+<span class="ck-ficha-dica">🔍 Toque para ampliar a ficha</span>
+</button>
+<p class="mx-auto mt-4 max-w-2xl text-center text-sm text-muted-foreground">São 200 fichas assim, separadas por idade e por objetivo.</p>
 </section>
 
 <!-- 2. REPERTÓRIO -->
@@ -142,13 +168,13 @@ body.tem-fixo{padding-bottom:84px}
 <!-- 5. BÔNUS -->
 <section class="px-5 py-20">
 <div class="mx-auto max-w-3xl text-center">
-<h2 class="font-display text-3xl font-extrabold leading-tight text-foreground md:text-4xl">E Para Completar Seu Material, Você Ainda Recebe 3 Bônus Especiais!</h2>
+<h2 class="font-display text-3xl font-extrabold leading-tight text-foreground md:text-4xl">O Plano Completo Inclui Estes 3 Bônus</h2>
 <p class="mt-4 text-lg text-muted-foreground">Recursos complementares para planejar o mês inteiro e acompanhar a evolução de cada aluno.</p>
 </div>
 <div class="mx-auto mt-12 grid max-w-6xl gap-6 md:grid-cols-3">
-<div class="relative overflow-hidden rounded-2xl border bg-card shadow-soft"><span class="absolute left-3 top-3 rounded-full bg-gold px-3 py-1 text-xs font-bold text-navy">BÔNUS INCLUSO</span><img src="/futebol-kids/img/mk-bonus1.webp" alt="Bônus 20 Planos de Aula Prontos" width="900" height="900" loading="lazy" class="aspect-square w-full object-contain" style="padding:18px 18px 0;background:linear-gradient(180deg,#EEF4FF,#fff)"><div class="p-6"><p class="text-xs font-bold tracking-widest text-primary">BÔNUS 1</p><h3 class="mt-2 font-display text-xl font-bold">20 Planos de Aula Prontos</h3><p class="mt-2 text-muted-foreground">Treinos de 60 minutos já montados com as dinâmicas do material, do aquecimento à volta à calma, para 4 a 6, 7 a 9 e 10 a 12 anos.</p></div></div>
-<div class="relative overflow-hidden rounded-2xl border bg-card shadow-soft"><span class="absolute left-3 top-3 rounded-full bg-gold px-3 py-1 text-xs font-bold text-navy">BÔNUS INCLUSO</span><img src="/futebol-kids/img/mk-bonus2.webp" alt="Bônus Guia de Adaptação de Atividades" width="900" height="900" loading="lazy" class="aspect-square w-full object-contain" style="padding:18px 18px 0;background:linear-gradient(180deg,#EEF4FF,#fff)"><div class="p-6"><p class="text-xs font-bold tracking-widest text-primary">BÔNUS 2</p><h3 class="mt-2 font-display text-xl font-bold">Guia de Adaptação de Atividades</h3><p class="mt-2 text-muted-foreground">Como ajustar qualquer dinâmica à idade, ao espaço pequeno, à falta de material e ao tamanho da turma.</p></div></div>
-<div class="relative overflow-hidden rounded-2xl border bg-card shadow-soft"><span class="absolute left-3 top-3 rounded-full bg-gold px-3 py-1 text-xs font-bold text-navy">BÔNUS INCLUSO</span><img src="/futebol-kids/img/mk-bonus3.webp" alt="Bônus Fichas para Imprimir" width="900" height="900" loading="lazy" class="aspect-square w-full object-contain" style="padding:18px 18px 0;background:linear-gradient(180deg,#EEF4FF,#fff)"><div class="p-6"><p class="text-xs font-bold tracking-widest text-primary">BÔNUS 3</p><h3 class="mt-2 font-display text-xl font-bold">Fichas Para Imprimir</h3><p class="mt-2 text-muted-foreground">Lista de chamada, campo para desenhar a jogada, plano de aula, planejamento do mês, avaliação do aluno e controle de material.</p></div></div>
+<div class="relative overflow-hidden rounded-2xl border bg-card shadow-soft"><span class="absolute left-3 top-3 rounded-full bg-gold px-3 py-1 text-xs font-bold text-navy">NO PLANO COMPLETO</span><img src="/futebol-kids/img/mk-bonus1.webp" alt="Bônus 20 Planos de Aula Prontos" width="900" height="900" loading="lazy" class="aspect-square w-full object-contain" style="padding:18px 18px 0;background:linear-gradient(180deg,#EEF4FF,#fff)"><div class="p-6"><p class="text-xs font-bold tracking-widest text-primary">BÔNUS 1</p><h3 class="mt-2 font-display text-xl font-bold">20 Planos de Aula Prontos</h3><p class="mt-2 text-muted-foreground">Treinos de 60 minutos já montados com as dinâmicas do material, do aquecimento à volta à calma, para 4 a 6, 7 a 9 e 10 a 12 anos.</p></div></div>
+<div class="relative overflow-hidden rounded-2xl border bg-card shadow-soft"><span class="absolute left-3 top-3 rounded-full bg-gold px-3 py-1 text-xs font-bold text-navy">NO PLANO COMPLETO</span><img src="/futebol-kids/img/mk-bonus2.webp" alt="Bônus Guia de Adaptação de Atividades" width="900" height="900" loading="lazy" class="aspect-square w-full object-contain" style="padding:18px 18px 0;background:linear-gradient(180deg,#EEF4FF,#fff)"><div class="p-6"><p class="text-xs font-bold tracking-widest text-primary">BÔNUS 2</p><h3 class="mt-2 font-display text-xl font-bold">Guia de Adaptação de Atividades</h3><p class="mt-2 text-muted-foreground">Como ajustar qualquer dinâmica à idade, ao espaço pequeno, à falta de material e ao tamanho da turma.</p></div></div>
+<div class="relative overflow-hidden rounded-2xl border bg-card shadow-soft"><span class="absolute left-3 top-3 rounded-full bg-gold px-3 py-1 text-xs font-bold text-navy">NO PLANO COMPLETO</span><img src="/futebol-kids/img/mk-bonus3.webp" alt="Bônus Fichas para Imprimir" width="900" height="900" loading="lazy" class="aspect-square w-full object-contain" style="padding:18px 18px 0;background:linear-gradient(180deg,#EEF4FF,#fff)"><div class="p-6"><p class="text-xs font-bold tracking-widest text-primary">BÔNUS 3</p><h3 class="mt-2 font-display text-xl font-bold">Fichas Para Imprimir</h3><p class="mt-2 text-muted-foreground">Lista de chamada, campo para desenhar a jogada, plano de aula, planejamento do mês, avaliação do aluno e controle de material.</p></div></div>
 </div>
 <div class="mt-10 flex justify-center"><a href="#oferta" class="btn-cta text-base md:text-lg">Quero meu material de futebol kids</a></div>
 </section>
@@ -303,6 +329,15 @@ body.tem-fixo{padding-bottom:84px}
 
 <div class="ck-fixo" id="ckFixo" aria-hidden="true"><a href="#oferta" class="btn-cta" tabindex="-1">Quero o Craque Kids · R$ 10</a></div>
 
+<!-- ficha ampliada -->
+<div class="ck-modal" id="ckFichaModal" role="dialog" aria-modal="true" aria-label="Página do material com a dinâmica Nº 079 Bobinho" aria-hidden="true">
+<div class="ck-fbox">
+<button type="button" class="ck-x ck-x-claro" id="ckFichaFechar" aria-label="Fechar">×</button>
+<img data-src="/futebol-kids/img/ficha-079-pagina.webp" width="2382" height="3369" alt="Página 36 do material Craque Kids, categoria Passe e Recepção, com a dinâmica Nº 079 Bobinho">
+<a href="#oferta" class="btn-cta mt-4 w-full text-base" id="ckFichaCta">Quero as 200 fichas · a partir de R$&nbsp;10</a>
+</div>
+</div>
+
 <!-- pop-up ao escolher o básico -->
 <div class="ck-modal" id="ckModal" role="dialog" aria-modal="true" aria-labelledby="ckTit" aria-hidden="true">
 <div class="ck-mbox">
@@ -329,6 +364,16 @@ body.tem-fixo{padding-bottom:84px}
     if(!box.classList.contains('com-som')){box.classList.add('com-som');vid.muted=false;vid.loop=false;vid.currentTime=0;vid.play();ev('video_som');return;}
     if(vid.paused){vid.play();}else{vid.pause();}
   });
+  // ficha ampliada (a imagem grande só carrega quando a pessoa toca)
+  var fm=document.getElementById('ckFichaModal'),fimg=fm.querySelector('img');
+  function abrirFicha(){if(!fimg.src)fimg.src=fimg.getAttribute('data-src');fm.classList.add('on');fm.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';ev('abriu_ficha');}
+  function fecharFicha(){fm.classList.remove('on');fm.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+  document.getElementById('ckFichaBtn').addEventListener('click',abrirFicha);
+  document.getElementById('ckFichaFechar').addEventListener('click',fecharFicha);
+  fm.addEventListener('click',function(e){if(e.target===fm)fecharFicha();});
+  document.getElementById('ckFichaCta').addEventListener('click',function(e){e.preventDefault();fecharFicha();document.getElementById('oferta').scrollIntoView({behavior:'smooth'});ev('cta_ficha');});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')fecharFicha();});
+
   // perguntas frequentes
   document.querySelectorAll('#faq button').forEach(function(b){
     b.addEventListener('click',function(){var r=b.nextElementSibling,ab=r.hidden;r.hidden=!ab;b.setAttribute('aria-expanded',ab);b.querySelector('span:last-child').textContent=ab?'−':'+';if(ab)ev('abriu_faq');});
