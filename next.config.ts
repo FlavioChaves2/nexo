@@ -52,6 +52,7 @@ const nextConfig: NextConfig = {
       { source: "/futebol-kids/oferta-especial", destination: "/futebol-kids/oferta-especial.html" },
       { source: "/futebol-kids/ultima-chance", destination: "/futebol-kids/ultima-chance.html" },
       { source: "/caderno-inclusao/politicas", destination: "/caderno-inclusao/politicas.html" },
+      { source: "/expedicao", destination: "/expedicao/index.html" },
       { source: "/ceia-natal", destination: "/ceia-natal/index.html" },
       { source: "/ceia-natal/janeiro", destination: "/ceia-natal/janeiro.html" },
       { source: "/ceia-natal/listas-janeiro", destination: "/ceia-natal/listas-janeiro.html" },
