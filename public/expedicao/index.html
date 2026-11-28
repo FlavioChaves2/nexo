@@ -76,6 +76,7 @@ radial-gradient(700px 380px at 90% 20%,rgba(46,125,79,.18),transparent 60%),var(
 /* hero visual: treasure map board */
 .board{position:relative;width:min(760px,94vw);margin:44px auto 40px}
 .mapbg{position:relative;background:linear-gradient(135deg,#F3DFAE,#E7C886);border-radius:22px;padding:28px 22px 30px;box-shadow:0 30px 60px -20px rgba(60,40,5,.55),inset 0 0 0 6px rgba(255,255,255,.35),inset 0 0 60px rgba(140,90,20,.35);overflow:hidden}
+.mapimg{padding:0}.mapimg img{display:block;width:100%;height:auto;border-radius:18px}
 .mapbg svg.trail{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .sheets{position:relative;display:flex;justify-content:center;align-items:flex-end;gap:14px}
 .flag{position:absolute;font-family:'Caveat',cursive;font-weight:700;font-size:22px;color:var(--coral-d)}
@@ -336,17 +337,10 @@ radial-gradient(700px 380px at 90% 20%,rgba(46,125,79,.18),transparent 60%),var(
 
 <div class="board">
 <span class="stamp">🧭 PÁGINAS DO MATERIAL</span>
-<div class="mapbg">
-<svg class="trail" viewBox="0 0 700 360" preserveAspectRatio="none" aria-hidden="true"><path d="M30 320 C 140 250, 160 340, 260 280 S 420 200, 480 260 S 620 320, 660 300" fill="none" stroke="#A9741A" stroke-width="4" stroke-dasharray="10 10" opacity=".55"/></svg>
-<span class="flag f1">início da trilha →</span>
-<span class="flag f2">tesouro à vista!</span>
-<span class="xmark">✕</span>
-<div class="sheets">
-<div class="ws a"><div class="hd t-sea"><b>A Ilha dos Papagaios</b><span>MAPA 07</span></div><div class="ill">🦜</div><p class="txt">Lia encontrou um papagaio que repetia: “<mark>Norte</mark> depois da pedra grande”...</p><p class="q">🔎 Pista 1: Para onde o papagaio mandou ir?</p><div class="opt"><i></i>Sul</div><div class="opt ok"><i></i>Norte</div><div class="foot"><span>2º ANO</span><span>🧭 Localizar informação</span></div></div>
-<div class="ws b"><div class="hd t-forest"><b>O Baú da Vovó Celeste</b><span>MAPA 01</span></div><div class="ill">🗝️📦</div><p class="txt">No sótão, Davi achou um baú com um bilhete: “<mark>Quem ler com calma</mark> vai descobrir onde está a chave.”</p><p class="q">🔎 Pista 1: Quem escreveu o bilhete?</p><div class="opt"><i></i>O Davi</div><div class="opt ok"><i></i>A vovó Celeste</div><div class="ln"></div><p class="q">🗝️ Monte a palavra-chave:</p><div class="key"><span>C</span><span>H</span><span>A</span><span>V</span><span>E</span></div><div class="foot"><span>3º ANO</span><span>✕ = tesouro</span></div></div>
-<div class="ws c"><div class="hd t-coral"><b>A Caverna do Eco</b><span>MAPA 23</span></div><div class="ill">🏔️🔦</div><p class="txt">“Se o eco responder três vezes, <mark>volte</mark>.” Tomás ouviu só duas...</p><p class="q">🔎 Pista 2: Tomás deve voltar? Por quê?</p><div class="ln"></div><div class="ln"></div><div class="foot"><span>5º ANO</span><span>🧠 Inferência</span></div></div>
-</div>
-</div>
+<div class="mapbg mapimg"><picture>
+<source media="(max-width:600px)" srcset="/expedicao/img/hero-mapas-mobile.webp" width="640" height="759">
+<img src="/expedicao/img/hero-mapas.webp" srcset="/expedicao/img/hero-mapas-800.webp 800w, /expedicao/img/hero-mapas.webp 1200w" sizes="(max-width:800px) 94vw, 760px" width="1200" height="675" alt="Páginas da Expedição da Leitura: Mapa 07 da Trilha da Ilha, Mapa 01 e Mapa 66 da Trilha da Montanha" fetchpriority="high" decoding="async">
+</picture></div>
 </div>
 
 <div class="hero-cta">
