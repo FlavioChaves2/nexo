@@ -12,7 +12,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Nunito:wght@400;600;700;800;900&family=Caveat:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Nunito:wght@400;700;800;900&family=Caveat:wght@700&display=swap">
 <style>
 :root{
 --forest:#17402F;--forest2:#0F2C20;--leaf:#2E7D4F;--sea:#1F6F8B;
@@ -298,7 +298,11 @@ radial-gradient(700px 380px at 90% 20%,rgba(46,125,79,.18),transparent 60%),var(
 .sticky-cta{display:block}
 .section{padding:62px 0}
 .focus{grid-template-columns:1fr;text-align:center}
-.ws.a,.ws.c{display:none}.ws.b{transform:none}
+.ws.b{transform:none}
+.ws.a,.ws.c{position:absolute;bottom:14px;z-index:1;opacity:.92}
+.ws.a{left:50%;margin-left:-215px;transform:rotate(-9deg) scale(.84)}
+.ws.c{right:50%;margin-right:-215px;transform:rotate(9deg) scale(.84)}
+.flag{display:none}.mapbg{padding-top:34px}
 }
 @media(max-width:520px){
 .bonus-grid{grid-template-columns:1fr}
@@ -533,17 +537,17 @@ radial-gradient(700px 380px at 90% 20%,rgba(46,125,79,.18),transparent 60%),var(
 <div class="bonus-grid">
 <div class="bonus-card bonus-hero">
 <div class="b-tag"><span class="b-val">Valor normal: <s>R$ 37,90</s></span><span class="b-free">HOJE: GRÁTIS</span></div>
-<div class="b-art pic"><img src="/expedicao/img/bonus-diario.webp" alt="Diário do Explorador: +50 missões de escrita" loading="lazy" width="720" height="724"></div>
+<div class="b-art pic"><img src="/expedicao/img/bonus-diario.webp" decoding="async" alt="Diário do Explorador: +50 missões de escrita" loading="lazy" width="560" height="563"></div>
 <div class="b-cap"><span class="pill">BÔNUS PRINCIPAL</span><h4>Diário do Explorador</h4>
 <p>Todo explorador registra a sua jornada. São 50 missões que levam a criança do “entendi” para o “sei explicar”, fechando o ciclo da interpretação.</p>
 <ul><li>📝 Relato da Expedição: recontar a aventura com as próprias palavras</li><li>🔚 Complete o final: continuar a história a partir das pistas</li><li>🗺️ Crie seu mapa: inventar um tesouro para a família encontrar</li><li>📚 Organizado do 2º ao 5º ano, com sugestões de correção</li></ul></div>
 </div>
-<div class="bonus-card"><div class="b-tag"><span class="b-val">Valor normal: <s>R$ 19,90</s></span><span class="b-free">HOJE: GRÁTIS</span></div><div class="b-art pic"><img src="/expedicao/img/bonus-gabarito.webp" alt="Mapa-Gabarito" loading="lazy" width="720" height="540"></div><div class="b-cap"><h4>Mapa-Gabarito</h4><p>Todas as respostas organizadas para pais e professores corrigirem em minutos.</p></div></div>
-<div class="bonus-card"><div class="b-tag"><span class="b-val">Valor normal: <s>R$ 14,90</s></span><span class="b-free">HOJE: GRÁTIS</span></div><div class="b-art pic"><img src="/expedicao/img/bonus-cartao.webp" alt="Cartão de Explorador" loading="lazy" width="720" height="540"></div><div class="b-cap"><h4>Cartão de Explorador</h4><p>A criança recebe sua identificação oficial e entra para a equipe da Expedição da Leitura.</p></div></div>
-<div class="bonus-card"><div class="b-tag"><span class="b-val">Valor normal: <s>R$ 14,90</s></span><span class="b-free">HOJE: GRÁTIS</span></div><div class="b-art pic"><img src="/expedicao/img/bonus-bussola.webp" alt="Bússola de Conquistas" loading="lazy" width="720" height="540"></div><div class="b-cap"><h4>Bússola de Conquistas</h4><p>A cada mapa concluído, ela pinta um ponto da bússola e vê a própria evolução.</p></div></div>
-<div class="bonus-card"><div class="b-tag"><span class="b-val">Valor normal: <s>R$ 14,90</s></span><span class="b-free">HOJE: GRÁTIS</span></div><div class="b-art pic"><img src="/expedicao/img/bonus-medalha.webp" alt="Medalha de Explorador" loading="lazy" width="720" height="540"></div><div class="b-cap"><h4>Medalha de Explorador</h4><p>Certificado-medalha para celebrar o fim da expedição e reconhecer cada conquista.</p></div></div>
-<div class="bonus-card"><div class="b-tag"><span class="b-val">Valor normal: <s>R$ 19,90</s></span><span class="b-free">HOJE: GRÁTIS</span></div><div class="b-art pic"><img src="/expedicao/img/bonus-pistas.webp" alt="20 Pistas Relâmpago" loading="lazy" width="720" height="540"></div><div class="b-cap"><h4>20 Pistas Relâmpago</h4><p>Desafios rápidos de leitura para resolver em 5 minutos, ideais para o começo da aula.</p></div></div>
-<div class="bonus-card"><div class="b-tag"><span class="b-val">Valor normal: <s>R$ 24,90</s></span><span class="b-free">HOJE: GRÁTIS</span></div><div class="b-art pic"><img src="/expedicao/img/bonus-tesouro.webp" alt="O Grande Tesouro Final" loading="lazy" width="720" height="540"></div><div class="b-cap"><h4>O Grande Tesouro Final</h4><p>O mapa mais desafiador, em que a criança usa tudo o que aprendeu para abrir o baú final.</p></div></div>
+<div class="bonus-card"><div class="b-tag"><span class="b-val">Valor normal: <s>R$ 19,90</s></span><span class="b-free">HOJE: GRÁTIS</span></div><div class="b-art pic"><img src="/expedicao/img/bonus-gabarito.webp" alt="Mapa-Gabarito" loading="lazy" decoding="async" width="560" height="420"></div><div class="b-cap"><h4>Mapa-Gabarito</h4><p>Todas as respostas organizadas para pais e professores corrigirem em minutos.</p></div></div>
+<div class="bonus-card"><div class="b-tag"><span class="b-val">Valor normal: <s>R$ 14,90</s></span><span class="b-free">HOJE: GRÁTIS</span></div><div class="b-art pic"><img src="/expedicao/img/bonus-cartao.webp" alt="Cartão de Explorador" loading="lazy" decoding="async" width="560" height="420"></div><div class="b-cap"><h4>Cartão de Explorador</h4><p>A criança recebe sua identificação oficial e entra para a equipe da Expedição da Leitura.</p></div></div>
+<div class="bonus-card"><div class="b-tag"><span class="b-val">Valor normal: <s>R$ 14,90</s></span><span class="b-free">HOJE: GRÁTIS</span></div><div class="b-art pic"><img src="/expedicao/img/bonus-bussola.webp" alt="Bússola de Conquistas" loading="lazy" decoding="async" width="560" height="420"></div><div class="b-cap"><h4>Bússola de Conquistas</h4><p>A cada mapa concluído, ela pinta um ponto da bússola e vê a própria evolução.</p></div></div>
+<div class="bonus-card"><div class="b-tag"><span class="b-val">Valor normal: <s>R$ 14,90</s></span><span class="b-free">HOJE: GRÁTIS</span></div><div class="b-art pic"><img src="/expedicao/img/bonus-medalha.webp" alt="Medalha de Explorador" loading="lazy" decoding="async" width="560" height="420"></div><div class="b-cap"><h4>Medalha de Explorador</h4><p>Certificado-medalha para celebrar o fim da expedição e reconhecer cada conquista.</p></div></div>
+<div class="bonus-card"><div class="b-tag"><span class="b-val">Valor normal: <s>R$ 19,90</s></span><span class="b-free">HOJE: GRÁTIS</span></div><div class="b-art pic"><img src="/expedicao/img/bonus-pistas.webp" alt="20 Pistas Relâmpago" loading="lazy" decoding="async" width="560" height="420"></div><div class="b-cap"><h4>20 Pistas Relâmpago</h4><p>Desafios rápidos de leitura para resolver em 5 minutos, ideais para o começo da aula.</p></div></div>
+<div class="bonus-card"><div class="b-tag"><span class="b-val">Valor normal: <s>R$ 24,90</s></span><span class="b-free">HOJE: GRÁTIS</span></div><div class="b-art pic"><img src="/expedicao/img/bonus-tesouro.webp" alt="O Grande Tesouro Final" loading="lazy" decoding="async" width="560" height="420"></div><div class="b-cap"><h4>O Grande Tesouro Final</h4><p>O mapa mais desafiador, em que a criança usa tudo o que aprendeu para abrir o baú final.</p></div></div>
 </div>
 <div class="total-box"><div class="t1">Somando tudo, os bônus valeriam <s>R$ 147,30</s></div><div class="t2">No Kit Completo: <b>R$ 17,90</b></div></div>
 <div class="cta-wrap"><a href="#kits" class="btn btn-primary">🎒 GARANTIR O KIT COMPLETO + BÔNUS →</a><span class="cta-sub">150 atividades por R$ 17,90 · pagamento único · PDF</span></div>
@@ -653,7 +657,7 @@ radial-gradient(700px 380px at 90% 20%,rgba(46,125,79,.18),transparent 60%),var(
 <p><strong>2. Acesso e entrega.</strong> O acesso é liberado após a confirmação do pagamento, seguindo as instruções da plataforma de compra.</p>
 <p><strong>3. Uso do material.</strong> O comprador pode baixar e imprimir os arquivos para uso próprio ou nas atividades educacionais que conduz. É proibido revender, redistribuir, compartilhar publicamente ou comercializar os arquivos sem autorização.</p>
 <p><strong>4. Pagamento e garantia.</strong> Os valores e itens incluídos são os apresentados na oferta e no checkout. A garantia de 7 dias e os reembolsos seguem as condições informadas na compra e a legislação aplicável.</p>
-<p><strong>5. Suporte.</strong> Dúvidas sobre o produto ou o acesso: <a href="mailto:contato@leituradigital.com">contato@leituradigital.com</a>.</p>
+<p><strong>5. Suporte.</strong> Dúvidas sobre o produto ou o acesso: <a href="mailto:contato@nexopoint.com.br">contato@nexopoint.com.br</a>.</p>
 </div>
 </div>
 </section>
@@ -662,7 +666,7 @@ radial-gradient(700px 380px at 90% 20%,rgba(46,125,79,.18),transparent 60%),var(
 <strong>🗺️ EXPEDIÇÃO DA LEITURA</strong><br>
 Uma aventura de leitura, compreensão e descobertas.<br>
 Material digital em PDF · Pronto para imprimir<br><br>
-Suporte: <a href="mailto:contato@leituradigital.com">contato@leituradigital.com</a><br><br>
+Suporte: <a href="mailto:contato@nexopoint.com.br">contato@nexopoint.com.br</a><br><br>
 <a href="#termos-de-uso">Termos de Uso</a><br><br>
 © <span id="anoAtual">2026</span> · Todos os direitos reservados.
 </footer>
