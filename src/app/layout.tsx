@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     apple: "/app/apple-touch-icon.png",
   },
   // Prova para a Meta de que o domínio é da Nexo (Configurações do negócio → Domínios).
-  other: { "facebook-domain-verification": "qelrkfr8iwzyzejr751jwqgyostare" },
+  other: { "facebook-domain-verification": "9i060o4dqg1xsu6m2bfn8b6cy97o85" },
 };
 
 export const viewport: Viewport = { themeColor: "#111311" };
